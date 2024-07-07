@@ -1,0 +1,54 @@
+.busi{
+  margin-top: 160px;
+}
+  .card-row {
+    display: flex;
+    overflow-x: auto;
+  } 
+  .card {
+    flex: 0 0 auto; /* Prevent cards from shrinking */
+  }
+  .startup{
+    height: 28vh;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.308);
+    backdrop-filter: blur(2px);
+    margin-top: 145px;
+    border-radius: 10px;
+    color: white;
+    padding: 15px;
+  }
+  .start{
+    font-size: 25px;
+  }
+  .tim{
+    font-size: small;
+  }
+  .btnticket{
+    background-color: rgba(255, 255, 255, 0.418);
+    color: white;
+    border: none;
+    width: 140px;
+    padding: 10px;
+    border-radius: 30px;
+  }
+  .btnshare{
+    background-color: rgba(255, 255, 255, 0.418);
+    color: white;
+    border: none;
+    width: 70px;
+    padding: 10px;
+    border-radius: 30px;
+  }
+  .arrange{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    row-gap: 5px;
+  
+            
+}
+  
+.card_bottom{
+    margin-bottom: 10px;
+}

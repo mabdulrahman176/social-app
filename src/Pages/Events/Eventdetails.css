@@ -1,0 +1,45 @@
+
+.eventimg1{
+    height: 45vh;
+    width: 100%;
+    border-radius: 5px;
+    border: 15px solid rgb(159, 142, 232);
+}
+.risk{
+    height: auto;
+    /* width: 60%; */
+    color: black;
+    margin-top: 10px;
+}
+.ticketstarting{
+  
+    border-top: 1px solid rgb(172, 170, 170);
+    border-left: 1px solid rgb(172, 170, 170);
+    box-shadow: 7px 7px  3px 1px rgb(159, 142, 232);
+    text-align: center;
+}
+.buyticket{
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+    color: white;
+    width: 95%;
+    display: block;
+    margin: auto;
+    background: linear-gradient(90deg, rgb(119, 191, 224), rgb(144, 161, 229), rgb(200, 93, 240));
+}
+.partiimg1{
+    height: 40px;
+    width: 40px;
+    border-radius: 100%;
+}
+.parti2{
+    height: 40px;
+    width: 40px;
+    background-color: black;
+    border-radius: 100%;
+    color: white;
+    display: flex;
+    align-items: center;
+    text-align: center;
+}
