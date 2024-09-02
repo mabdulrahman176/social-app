@@ -93,31 +93,39 @@ function Message() {
 
   return (
     <>
-      <div className="h-full w-full bg-white">
-        <div className="w-[90%] h-full m-[auto]">
-          <div className="flex justify-between py-4">
-            <h4 className="flex items-center gap-3 ms-4 pt-3">Messages</h4>
+      <div className="h-full w-full bg-white overflow-hidden">
+        <div className="w-[90%] h-full m-auto">
+          <div className="flex flex-col lg:flex-row justify-between py-4 items-center">
+            <h4 className="flex items-center gap-3 ms-4 pt-3 text-lg font-semibold">Messages</h4>
             <input
               type="text"
               placeholder="Search"
-              className="h-[6vh] w-[25%] p-3  rounded-lg outline-none bg-[#f7f5f5]"
+              className="h-[6vh] w-full sm:w-[30%] md:w-[25%] p-3 rounded-lg outline-none bg-[#f7f5f5]"
             />
           </div>
-          <div className="flex justify-between h-[80%]">
-            <div className="div h-full Podcast_Top_Videos overflow-y-scroll w-[35%]">
+          <div className="flex flex-col lg:flex-row h-[80%]">
+            {/* Messages List */}
+            <div
+              className="h-full overflow-y-scroll lg:w-[35%] border-r border-gray-200"
+              style={{
+                'WebkitOverflowScrolling': 'touch',
+                'WebkitScrollbar': {
+                  display: 'none'
+                },
+                '-msOverflowStyle': 'none',
+                'scrollbarWidth': 'none'
+              }}
+            >
               {messages.map((message, ind) => (
-                <Link to={`user${ind + 1}`}>
-                  <div
-                    key={message.id}
-                    className="flex justify-between items-end py-3 border-b"
-                  >
+                <Link to={`user${ind + 1}`} key={message.id}>
+                  <div className="flex justify-between items-center py-3 border-b px-2 md:px-4 hover:bg-gray-100">
                     <div className="flex items-center gap-2">
                       <img
                         src={message.image}
                         alt=""
                         className="h-[30px] w-[30px] rounded-full"
                       />
-                      <div className="div">
+                      <div>
                         <p className="text-md font-medium">{message.name}</p>
                         <p className="text-[gray] text-sm">{message.message}</p>
                       </div>
@@ -128,8 +136,15 @@ function Message() {
               ))}
             </div>
 
-            <div className="w-[60%]">
-              {location === "/messages" ? <MessageDefault/> : <Outlet />}
+            {/* Message Details or Default View */}
+            <div className="flex-1 lg:w-[60%] p-4">
+              {location === "/messages" ? (
+                <div className="hidden lg:block">
+                  <MessageDefault />
+                </div>
+              ) : (
+                <Outlet />
+              )}
             </div>
           </div>
         </div>
@@ -139,3 +154,4 @@ function Message() {
 }
 
 export default Message;
+

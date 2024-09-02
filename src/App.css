@@ -1,10 +1,16 @@
 .linear_gradient{
   background: linear-gradient(to right, #6bcddd ,  #de42f5);
 }
-.Right_Side_Selected{
-  background-color: #000000;
-  opacity: .5;
+.linear_gradient_text {
+  background: linear-gradient(to right, #6bcddd ,  #de42f5); 
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent; 
+  border: 2px solid;
+  border-image: linear-gradient(to right, #6bcddd ,  #de42f5); 
+  border-image-slice: 1; 
+  border-radius: 3rem;
 }
+
 .Left_Side_Selected{
   background-color: #CCCCCC;
 }

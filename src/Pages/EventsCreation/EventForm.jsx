@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import AddSpeaker from "../PodcastCreation/AddSpeaker";
 import { useNavigate } from "react-router-dom";
 import { myContext } from "../../Context/CreateContext";
@@ -7,16 +7,56 @@ import { LuImagePlus } from "react-icons/lu";
 
 const EventForm = () => {
   const navigate = useNavigate();
-  let { EventStates } = useContext(myContext);
+  const { EventStates } = useContext(myContext);
+  const [coverImage, setCoverImage] = useState(null);
+  const [coverImageFile, setCoverImageFile] = useState(null);
+  const [state, setState] = useState({});
 
-  const handleSubmit = () => {
-    navigate("/podcast");
-    EventStates.setEventSubmitted(!EventStates.eventSubmitted);
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // Prevent default form submission behavior
+
+    const formData = new FormData();
+    if (coverImageFile) {
+      formData.append('coverImage', coverImageFile);
+    }
+    Object.keys(state).forEach((key) => {
+      formData.append(key, state[key]);
+    });
+
+    try {
+      const response = await fetch('http://localhost:5000/events/', {
+        method: 'POST',
+        body: formData,
+      });
+      const data = await response.json();
+      console.log(data);
+
+      EventStates.setEventSubmitted(!EventStates.eventSubmitted);
+      navigate("/events"); // Navigate to the events page or wherever you need
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  const onChange = (e) => {
+    const { name, value } = e.target;
+    setState((prev) => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setCoverImageFile(file);
+      setCoverImage(URL.createObjectURL(file));
+    }
   };
 
   return (
     <>
-      <h4 className="flex items-center bg-white  gap-3 ps-4 h-[10%]">
+      <h4 className="flex items-center bg-white gap-3 ps-4 h-[10%]">
         <FaAngleLeft
           className="cursor-pointer"
           onClick={() => navigate("/events")}
@@ -24,248 +64,176 @@ const EventForm = () => {
         Create Event
       </h4>
       <div className="w-full h-[90%] bg-white overflow-y-scroll Podcast_Top_Videos">
-        <div className="flex sm:w-[80%] w-[95%] justify-between mx-auto h-full">
+        <form onSubmit={handleSubmit} className="flex sm:w-[80%] w-[95%] justify-between mx-auto h-full">
           <div className="sm:w-[40%] w-[45%]">
             <div className="mt-2 mb-2">
-              <h1>Cutomize Cover</h1>
-              <div className="bg-[#f0f0fe] w-full h-[25vh] rounded-lg flex items-center">
-                <LuImagePlus className=" text-blue-800 ms-8 text-3xl" />
+              <h1>Customize Cover</h1>
+              <div className="bg-[#f0f0fe] w-full h-[25vh] rounded-lg flex items-center justify-center relative overflow-hidden">
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="absolute w-full h-full opacity-0 cursor-pointer"
+                  onChange={handleImageUpload}
+                />
+                {coverImage ? (
+                  <img
+                    src={coverImage}
+                    alt="Cover"
+                    className="w-full h-full object-cover rounded-lg"
+                  />
+                ) : (
+                  <LuImagePlus className="text-blue-800 ms-8 text-3xl" />
+                )}
               </div>
             </div>
+            {/* Form fields */}
             <div className="my-4">
-              <label
-                className="block text-gray-600 text-sm font-bold "
-                htmlFor=""
-              >
-                Events Title
-              </label>
+              <label className="block text-gray-600 text-sm font-bold">Event Title</label>
               <input
-                className=" w-full border py-2 ps-3 rounded-lg  text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
-                id="username"
+                className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
+                onChange={onChange}
+                name="eventTitle"
                 type="text"
                 placeholder="Enter Title"
               />
             </div>
-            <div className="">
-              <label
-                className="block text-gray-600 text-sm font-bold"
-                htmlFor=""
-              >
-                Events description
-              </label>
+            <div className="my-4">
+              <label className="block text-gray-600 text-sm font-bold">Event Description</label>
               <input
-                className=" w-full border py-2 ps-3 rounded-lg  text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
-                id="username"
+                className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
+                onChange={onChange}
+                name="eventDescription"
                 type="text"
-                placeholder="Enter description "
+                placeholder="Enter description"
               />
             </div>
             <div className="my-4">
-              <label
-                className="block text-gray-600 text-sm font-bold"
-                htmlFor="category"
-              >
-                Podcast Category*
-              </label>
-              <select
-                className=" w-full border py-2 ps-3 rounded-lg  text-gray-600 leading-tight focus:outline-none text-xs focus:shadow-outline"
-                id="category"
-                type="category"
-                name="category"
-                required
-              >
-                <option value="">Slect Event category</option>
-                <option value="category1">Category 1</option>
-                <option value="category2">Category 2</option>
-                <option value="category3">Category 3</option>
-              </select>
+              <label className="block text-gray-600 text-sm font-bold">Event Category</label>
+              <input
+                className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
+                onChange={onChange}
+                name="eventCategory"
+                type="text"
+                placeholder="Enter category"
+              />
             </div>
             <div className="my-4">
-              <label
-                className="block text-gray-600 text-sm font-bold"
-                htmlFor="date"
-              >
-                Select Date*
-              </label>
+              <label className="block text-gray-600 text-sm font-bold">Select Date</label>
               <input
-                className=" w-full border py-2 ps-3 rounded-lg  text-gray-600 leading-tight focus:outline-none text-xs focus:shadow-outline"
+                className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none text-xs focus:shadow-outline"
                 type="date"
-                id="date"
-                placeholder="select Date"
+                onChange={onChange}
+                name="eventDate"
               />
             </div>
-            <div className="">
-              <label
-                htmlFor="country"
-                className="block text-gray-600 text-sm font-bold"
-              >
-                Select Location*
-              </label>
+            <div className="my-4">
+              <label className="block text-gray-600 text-sm font-bold">Select Location</label>
+              <input
+                className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
+                onChange={onChange}
+                name="eventLocation"
+                type="text"
+                placeholder="Enter location"
+              />
+            </div>
+            <div className="my-4">
+              <label className="block text-gray-600 text-sm font-bold">Add Tickets Type</label>
               <select
-                className=" w-full border py-2 ps-3 rounded-lg  text-gray-600 leading-tight focus:outline-none text-xs focus:shadow-outline"
-                id="country"
-                name="country"
+                className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none text-xs focus:shadow-outline"
+                onChange={onChange}
+                name="eventTicketType"
                 required
               >
-                <option value="">Select Country and City</option>
-                <option value="USA">United States</option>
-                <option value="CAN">Canada</option>
-                <option value="UK">United Kingdom</option>
+                <option value="">Select Tickets Type</option>
+                <option value="Premium">Premium</option>
+                <option value="VIP">VIP</option>
+                <option value="General">General</option>
               </select>
             </div>
             <div className="my-4">
-              <label
-                htmlFor=""
-                className="block text-gray-600 text-sm font-bold"
-              >
-                Add Tickets Type *
-              </label>
-              <select
-                className=" w-full border py-2 ps-3 rounded-lg  text-gray-600 leading-tight focus:outline-none text-xs focus:shadow-outline"
-                id=""
-                name=""
-                required
-              >
-                <option value="">Select Event Formate</option>
-              </select>
-            </div>
-            <div className="">
-              <label
-                className="block text-gray-600 text-sm font-bold"
-                htmlFor=""
-              >
-                Basic <span className="text-2xl">×</span>
-              </label>
+              <label className="block text-gray-600 text-sm font-bold">Basic Price</label>
               <input
-                className=" w-full border py-2 ps-3 rounded-lg  text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
-                type="text"
-                id=""
+                className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
+                type="number"
+                onChange={onChange}
+                name="eventPrice"
                 placeholder="Enter price $35.00"
               />
             </div>
-            <br />
           </div>
 
           <div className="sm:w-[40%] w-[45%]">
             <div className="my-4">
-              <label
-                htmlFor=""
-                className="block text-gray-600 text-sm font-bold"
-              >
-                Event Type *
-              </label>
-              <select
-                className=" w-full border py-2 ps-3 rounded-lg  text-gray-600 leading-tight focus:outline-none text-xs focus:shadow-outline"
-                id=""
-                name=""
-                required
-              >
-                <option value="">Select event type</option>
-              </select>
-            </div>
-            <div className="">
-              <label
-                className="block text-gray-600 text-sm font-bold"
-                htmlFor="date"
-              >
-                Duration*
-              </label>
+              <label className="block text-gray-600 text-sm font-bold">Event Type</label>
               <input
-                className=" w-full border py-2 ps-3 rounded-lg  text-gray-600 leading-tight focus:outline-none text-xs focus:shadow-outline"
-                type="date"
-                id="date"
-                placeholder="select Date"
+                className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
+                type="text"
+                onChange={onChange}
+                name="eventType"
+                placeholder="Enter event type"
               />
             </div>
             <div className="my-4">
-              <label
-                htmlFor=""
-                className="block text-gray-600 text-sm font-bold"
-              >
-                Event Formate *
-              </label>
-              <select
-                className=" w-full border py-2 ps-3 rounded-lg  text-gray-600 leading-tight focus:outline-none text-xs focus:shadow-outline"
-                id=""
-                name=""
-                required
-              >
-                <option value="">Select event type</option>
-              </select>
+              <label className="block text-gray-600 text-sm font-bold">Duration</label>
+              <input
+                className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
+                type="text"
+                onChange={onChange}
+                name="eventDuration"
+                placeholder="Enter duration"
+              />
             </div>
-            <div className="">
-              <label
-                htmlFor=""
-                className="block text-gray-600 text-sm font-bold"
-              >
-                Network opportun *
-              </label>
-              <select
-                className=" w-full border py-2 ps-3 rounded-lg  text-gray-600 leading-tight focus:outline-none text-xs focus:shadow-outline"
-                id=""
-                name=""
-                required
-              >
-                <option value="">Select type</option>
-              </select>
+            <div className="my-4">
+              <label className="block text-gray-600 text-sm font-bold">Event Format</label>
+              <input
+                className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
+                type="text"
+                onChange={onChange}
+                name="eventFormat"
+                placeholder="Enter format"
+              />
+            </div>
+            <div className="my-4">
+              <label className="block text-gray-600 text-sm font-bold">Network Opportunities</label>
+              <input
+                className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
+                type="text"
+                onChange={onChange}
+                name="eventNetworkOps"
+                placeholder="Enter network opportunities"
+              />
             </div>
             <div className="my-4">
               <AddSpeaker />
             </div>
             <div className="my-4">
-              <label
-                className="block text-gray-600 text-sm font-bold"
-                htmlFor="media"
-              >
-                Add Media
-              </label>
+              <label className="block text-gray-600 text-sm font-bold">Manage Privacy Settings</label>
               <input
-                className=" w-full border py-2 ps-3 rounded-lg  text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
-                type="media"
-                id=""
-                placeholder="Add imges and Vidoes"
+                className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
+                type="text"
+                onChange={onChange}
+                name="eventPrivacySettings"
+                placeholder="Enter privacy settings"
               />
             </div>
-            <div className="">
-              <label
-                htmlFor=""
-                className="block text-gray-600 text-sm font-bold"
-              >
-                Manage Privacy Settings *
-              </label>
-              <select
-                className=" w-full border py-2 ps-3 rounded-lg  text-gray-600 leading-tight focus:outline-none text-xs focus:shadow-outline"
-                id=""
-                name=""
-                required
-              >
-                <option value="">Select event type</option>
-              </select>
-            </div>
-            <div className="mt-4">
-              <label
-                htmlFor=""
-                className="block text-gray-600 text-sm font-bold"
-              >
-                Number of People *
-              </label>
-              <select
-                className=" w-full border py-2 ps-3 rounded-lg  text-gray-600 leading-tight focus:outline-none text-xs focus:shadow-outline"
-                id=""
-                name=""
-                required
-              >
-                <option value="">Select event type</option>
-              </select>
+            <div className="my-4">
+              <label className="block text-gray-600 text-sm font-bold">Number of People</label>
+              <input
+                className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
+                type="number"
+                onChange={onChange}
+                name="eventNO_of_People"
+                placeholder="Enter number of people"
+              />
             </div>
             <button
-              className=" w-full h-12  mt-14 border rounded-3xl buyticket text-white  py-2 px-3 leading-tight focus:outline-none text-sm focus:shadow-outline"
-              onClick={handleSubmit}
+              className="w-full h-12 mt-14 border rounded-3xl bg-blue-800 text-white py-2 px-3 leading-tight focus:outline-none text-sm focus:shadow-outline"
+              type="submit"
             >
               Publish Now
             </button>
           </div>
-        </div>
+        </form>
       </div>
     </>
   );

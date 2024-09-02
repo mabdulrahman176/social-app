@@ -1,50 +1,33 @@
-// Single Video Section from Videos
-
 import React, { Fragment, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import vid1 from "./video1.mp4";
-import vid2 from "./video2.mp4";
-import vid3 from "./video3.mp4";
 import { BsInfoSquare } from "react-icons/bs";
 import { FaChevronLeft, FaTiktok } from "react-icons/fa";
 import { CiStar } from "react-icons/ci";
 import { FaRegShareFromSquare } from "react-icons/fa6";
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-
 import Model from "../ModalReport/Model";
 import Review from "../Podcast/Review";
 
 const Video = () => {
   let navigate = useNavigate();
-
-  // State for Open Report-Model
+  const { src } = useParams();
   const [repModOpen, setRepModOpen] = useState(false);
   const [revModOpen, setRevModOpen] = useState(false);
 
-  let scr = useParams();
-  let source;
-  if (scr.src === "video3.mp4") {
-    source = vid3;
-  } else if (scr.src === "video1.mp4") {
-    source = vid1;
-  } else if (scr.src === "video2.mp4") {
-    source = vid2;
-  }
-
-  // Single Video Section from Videos
+  // Decode the video URL from params
+  const videoUrl = decodeURIComponent(src);
 
   return (
     <Fragment>
       <section className="h-full w-full relative flex items-center bg-white">
         {revModOpen && (
-          <div className="h-[95%] left-0 w-full absolute top-0 z-20 flex  justify-center items-center">
+          <div className="h-[95%] left-0 w-full absolute top-0 z-20 flex justify-center items-center">
             <Review setRevModOpen={setRevModOpen} />
           </div>
         )}
         {repModOpen && (
-          <div className="h-full w-full absolute top-0 z-20 flex  justify-center items-center">
+          <div className="h-full w-full absolute top-0 z-20 flex justify-center items-center">
             <Model setRepModOpen={setRepModOpen} />
           </div>
         )}
@@ -62,17 +45,15 @@ const Video = () => {
                 @azita-darvishi
               </a>
               <p className="py-1 w-[80%] text-sm">
-                checking out new apple vision pro. Its amazing
+                Checking out new Apple Vision Pro. It's amazing.
               </p>
               <div className="flex">
                 <p className="p-1 px-2 gap-2 rounded-lg flex items-center text-xs SVTBottom">
-                  {/* <FontAwesomeIcon icon={faTicket} /> */}
                   <FaTiktok />
-                  see you again
+                  See you again
                 </p>
               </div>
             </div>
-
             <div className="absolute bottom-3 z-10 right-2 text-white">
               <div className="relative cursor-pointer rounded-full flex justify-center">
                 <img
@@ -83,21 +64,18 @@ const Video = () => {
                 />
                 <FontAwesomeIcon
                   icon={faPlus}
-                  className="absolute -bottom-2   p-1 text-xs bg-blue-700 rounded-full"
+                  className="absolute -bottom-2 p-1 text-xs bg-blue-700 rounded-full"
                 />
               </div>
-
               <div
                 className="text-center cursor-pointer mt-5"
                 onClick={() => setRepModOpen(true)}
               >
                 <p className="text-xs">
-                  {/* <RiGitRepositoryCommitsFill  /> */}
                   <BsInfoSquare className="block text-lg mx-auto" />
                   Report
                 </p>
               </div>
-
               <div
                 className="text-center cursor-pointer mt-5"
                 onClick={() => setRevModOpen(true)}
@@ -107,7 +85,6 @@ const Video = () => {
                   Reviews
                 </p>
               </div>
-
               <div className="text-center cursor-pointer mt-5 mb-3">
                 <p className="text-xs m-0">
                   <FaRegShareFromSquare className="block text-lg mx-auto" />
@@ -116,11 +93,11 @@ const Video = () => {
               </div>
             </div>
           </div>
-
           <video
-            src={source}
+            src={videoUrl}
             autoPlay
             className="h-full relative z-0 rounded-xl w-full bg-slate-300 object-fill"
+            controls
           ></video>
         </div>
       </section>

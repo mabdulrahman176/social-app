@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { useNavigate } from 'react-router-dom'
+import {  useNavigate } from 'react-router-dom'
 import { CiVideoOn } from "react-icons/ci";
 import { LuPodcast } from "react-icons/lu";
 import { BsCalendar4Event, BsSuitcaseLg } from "react-icons/bs";
@@ -12,13 +12,9 @@ const Podcastitems = () => {
   // const [inputData, setInpData] = useState()
 
 
-  const handleInputFile = (e) =>{
-    // let inpURL = URL.createObjectURL(e.target.files)
-    // console.log(e.target.files)
-    // setInpData(inpURL)
-    navigate('/createvideo', {state : { data : e.target.files}})
+  const handleInputFile = () =>{
     CreationStates.setCreationPodcast(false)
-
+    navigate('/createvideo')
   }
 
   const handlePodcastChange = () =>{
@@ -43,8 +39,7 @@ const Podcastitems = () => {
          <h1 className='text-center py-2 pb-5'>Create</h1>
            <div className=''>
           <hr  className='text-[#dddddd]'/>
-            <div className='flex py-5  items-center cursor-pointer relative'>
-              <input type="file" className='absolute w-full h-full cursor-pointer opacity-0' onChange={handleInputFile} />
+            <div className='flex py-5  items-center cursor-pointer relative' onClick={handleInputFile}>
             <CiVideoOn className='text-[20px] ms-3 me-2'/>
             <p className='text-[17px]'>Vidoes</p>
             </div>

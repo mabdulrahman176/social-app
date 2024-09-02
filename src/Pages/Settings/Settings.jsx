@@ -2,11 +2,11 @@ import React from "react";
 import { CiCreditCard1, CiSearch } from "react-icons/ci";
 import { HiMiniDevicePhoneMobile } from "react-icons/hi2";
 import { GoHistory } from "react-icons/go";
-import { IoNotificationsOutline } from "react-icons/io5";
+// import { IoNotificationsOutline } from "react-icons/io5";
 import { RiContactsBook2Line } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 import { BsBagCheck } from "react-icons/bs";
-import { PiBasketThin, PiBookOpenText, PiChatCircleSlashLight, PiChatCircleTextThin } from "react-icons/pi";
+import { PiBasketThin, PiBookOpenText, PiChatCircleSlashLight } from "react-icons/pi";
 import { LuScrollText } from "react-icons/lu";
 import { SlLock } from "react-icons/sl";
 import { FiLogOut } from "react-icons/fi";
@@ -35,19 +35,18 @@ const Setting = () => {
             <p className="py-5 border-b border-gray-200 flex items-center gap-2 cursor-pointer" onClick={()=>navigate('/appliedjobs')}><BsBagCheck className="text-2xl text-gray-500"/> Applied Jobs</p>
             <p className="py-5 border-b border-gray-200 flex items-center gap-2 cursor-pointer" onClick={()=>navigate('/mytickets')}><PiBasketThin className="text-2xl text-gray-500"/> Tickets Bought</p>
             <p className="py-5 border-b border-gray-200 flex items-center gap-2 cursor-pointer" onClick={()=>navigate('/watchhistory')}><GoHistory className="text-2xl text-gray-500"/> Watch History</p>
-            <p className="py-5 border-b border-gray-200 cursor-pointer flex items-center gap-2" onClick={()=>navigate('/notifications')}><IoNotificationsOutline className="text-2xl text-gray-500"/> Notifications</p>
-            <p className="py-5 border-b border-gray-200 cursor-pointer flex items-center gap-2" onClick={()=>navigate('/messages')}><PiChatCircleTextThin className="text-2xl text-gray-500"/> Messages</p>
+          
             <p className="py-5 border-b border-gray-200 cursor-pointer flex items-center gap-2" onClick={()=>navigate('/contactaccess')}><RiContactsBook2Line className="text-2xl text-gray-500"/> Access to your Contacts</p>
             <p className="py-5 border-b border-gray-200 cursor-pointer flex items-center gap-2"  onClick={()=>navigate('/blocklist')}><PiChatCircleSlashLight className="text-2xl text-gray-500"/> Blocked user list</p>
-
+            <p className="py-5 border-b border-gray-200 flex items-center gap-2"><FiLogOut className="text-2xl text-gray-500"/> Logout</p>
           </div>
           <div className="sm:w-[40%] w-[45%]">
-          <p className="py-5 border-b border-gray-200 flex items-center gap-2"><HiMiniDevicePhoneMobile className="text-2xl text-gray-500"/> Devise Permissions</p>
+          <p className="py-5 border-b border-gray-200 flex items-center gap-2 cursor-pointer" onClick={()=>navigate('/devicepermission')}><HiMiniDevicePhoneMobile className="text-2xl text-gray-500"/> Device Permissions</p>
           <p className="py-5 border-b border-gray-200 flex items-center gap-2 cursor-pointer" onClick={()=>navigate('/paymentmethod')}><CiCreditCard1 className="text-2xl text-gray-500"/> Cards</p>
           <p className="py-5 border-b border-gray-200 cursor-pointer flex items-center gap-2" onClick={()=>navigate('/privacy')}><LuScrollText className="text-2xl text-gray-500"/> Privacy policy</p>
           <p className="py-5 border-b border-gray-200 cursor-pointer flex items-center gap-2" onClick={()=>navigate('/terms')}><PiBookOpenText className="text-2xl text-gray-500"/> Terms of Use</p>
           <p className="py-5 border-b border-gray-200 cursor-pointer flex items-center gap-2" onClick={()=>navigate('/changepassword')}><SlLock className="text-2xl text-gray-500"/> Change Password</p>
-          <p className="py-5 border-b border-gray-200 flex items-center gap-2"><FiLogOut className="text-2xl text-gray-500"/> Logout</p>
+         
             
           </div>
       </div>

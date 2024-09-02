@@ -7,6 +7,36 @@ const Signup = () => {
 
   const [signUp, setSignUp] = useState(true);
 
+
+  const [state, setstate] = useState({})
+
+
+
+  const handleSubmit = async()=>{
+    const req = await fetch('http://localhost:5000/users/',{
+      credentials:'include',
+      method:"POST",
+      headers:{
+        'Content-type':'application/json'
+      },
+      body:JSON.stringify(state)
+    })
+    const d = await req.json()
+    console.log(d)
+    console.log(state)
+    // navigate('/jobs')
+    // JobStates.setJobSubmitted(!JobStates.jobSubmitted)
+  }
+
+  const _onChange_=(e)=>{
+    setstate((prev)=>{
+      return {
+        ...prev,
+        [e.target.name]:e.target.value
+      }
+    })
+  }
+
   useEffect(() => {
     if (location.pathname === "/signin") {
       setSignUp(false);
@@ -47,13 +77,15 @@ const Signup = () => {
               type="text"
               placeholder="Email"
               name="email"
-              id=""
+              onChange={_onChange_}
+              id="email"
               className="py-1 px-2 rounded outline-none border-[1px] border-gray-200 placeholder:text-xs "
             />
             <input
               type="password"
               placeholder="Password"
-              name="password"
+              name=" password"
+              onChange={_onChange_}
               id=""
               className="py-1 px-2 rounded outline-none border-[1px] border-gray-200 placeholder:text-xs "
             />
@@ -61,13 +93,14 @@ const Signup = () => {
             {!signUp && <u className="text-sm text-end text-blue-400">Forget password?</u>}
             {signUp && <h2 className="text-xs font-semibold">Select your Role</h2>}
             <section className={`flex justify-center gap-4 max-w-full ${signUp===false?"h-0 opacity-0":""}`}>
-              <button className="linear_gradient rounded text-xs text-white px-2 py-2 font-semibold">
+              <button className="linear_gradient rounded text-xs text-white px-2 py-2 font-semibold" name=" role" id=" role"  onChange={_onChange_}>
+                
                 Enterpreneur
               </button>
-              <button className="bg-[#f1f1f1] rounded text-xs text-black px-2 py-2 font-semibold">
+              <button className="bg-[#f1f1f1] rounded text-xs text-black px-2 py-2 font-semibold" name=" role" id=" role"  onChange={_onChange_}>
                 Investor
               </button>
-              <button className="bg-[#f1f1f1] rounded text-xs text-black px-2 py-2 font-semibold">
+              <button className="bg-[#f1f1f1] rounded text-xs text-black px-2 py-2 font-semibold" name=" role" id=" role"  onChange={_onChange_}>
                 Viewer
               </button>
             </section>
@@ -78,7 +111,7 @@ const Signup = () => {
                 Remember me
               </label>
             </section>
-            <button className="w-full mb-4 py-2 rounded-3xl text-xs linear_gradient text-white">
+            <button className="w-full mb-4 bg-purple-800 py-2 rounded-3xl text-xs linear_gradient text-white" onClick={()=>window.open('http://localhost:5000/auth/google')} >
               {`${signUp===true?"Sign up":"Sign in"}`}
             </button>
           </form>

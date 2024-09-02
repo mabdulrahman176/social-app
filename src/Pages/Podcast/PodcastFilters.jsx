@@ -6,13 +6,8 @@ import {
   RiArrowDropDownLine,
   RiArrowDropUpLine,
 } from "react-icons/ri";
-
-let categData = [
-  "Tech & Enterpreneurship",
-  "Finance",
-  "Tech & Investor",
-  "Teamwork",
-];
+import {Link} from 'react-router-dom';
+let categData = ["Tech & Enterpreneurship","Finance","Tech & Investor","Teamwork",];
 let durData = ["15 min", "30 min", "1 hour", "3 hour"];
 let revData = ["All", "Finance", "Tech & Investor", "Teamwork"];
 let subData = ["All", "Top", "Popular", "Subscribers"];
@@ -40,10 +35,10 @@ function PodcastFilters() {
   return (
     <Fragment>
         <div className="flex items-center bg-white h-[10%] px-3">
-          <p className="m-0 flex gap-2 items-center">
+          <Link to='/filterpodcast' className="m-0 flex gap-2 items-center">
             <LuSettings2 /> |{" "}
-          </p>
-          <p className="px-4 py-1 m-0  ms-2 rounded-3xl flex items-center relative cursor-pointer Video_Nav_Filters">All</p>
+          </Link>
+          <Link to='/filterpodcast' className="px-4 py-1 m-0  ms-2 rounded-3xl flex items-center relative cursor-pointer Video_Nav_Filters">All</Link>
           <p
             className="px-4 py-1 ms-2 m-0 rounded-3xl flex items-center relative cursor-pointer Video_Nav_Filters"
             onMouseOver={() => setCatDrop(true)}

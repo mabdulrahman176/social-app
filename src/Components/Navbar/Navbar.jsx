@@ -11,7 +11,7 @@ const Navbar = ({state}) => {
         <FontAwesomeIcon icon={faBars} className="lg:hidden" onClick={()=>state.setRightSidebar(!state.rightSidebar)} />
       </div>
       <div className="flex gap-2 w-[80%]  justify-center">
-        <div className="flex justify-center  w-1/2">
+        <div className="flex justify-center  lg:w-1/2 w-full mx-2 ">
           <input
             type="text"
             placeholder="search"
@@ -28,7 +28,7 @@ const Navbar = ({state}) => {
         </div>
       </div>
 
-      <div className="flex gap-4 items-center">
+      <div className="flex gap-4 items-center mx-1">
         <RiNotification2Line />
         <img className="w-5 h-5 rounded-full" src="/insta.png" alt="" />
       </div>

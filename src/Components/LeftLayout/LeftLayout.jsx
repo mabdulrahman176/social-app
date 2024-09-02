@@ -7,7 +7,7 @@ import { CiLocationOn, CiSettings, CiSquarePlus } from 'react-icons/ci';
 import { myContext } from '../../Context/CreateContext';
 import { RiMessengerLine } from 'react-icons/ri';
 import { IoMdHeartEmpty } from 'react-icons/io';
-
+import { IoIosNotificationsOutline } from "react-icons/io";
 
 
 
@@ -57,6 +57,13 @@ const LeftLayout = () => {
          >
             <CiLocationOn className="md:mr-2 text-2xl" />
             <span className="text-sm md:block hidden">Map</span>
+          </Link>
+        </li>
+        <li className="mb-2">
+          <Link to="/subscribe" className={`flex items-center opacity-70 ${locationPath === '/subscribe' ? 'Left_Side_Selected' : ''} py-2 px-2 rounded-lg  transition-all duration-200 transform` }
+         >
+           <IoIosNotificationsOutline className="md:mr-2 text-2xl" />
+            <span className="text-sm md:block hidden">Subscribe</span>
           </Link>
         </li>
         <li className="mb-2">

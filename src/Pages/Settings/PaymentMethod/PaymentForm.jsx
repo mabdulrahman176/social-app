@@ -79,7 +79,7 @@ function PaymentForm() {
               className="cursor-pointer"
               onClick={() => navigate("/paymentmethod")}
             />{" "}
-            Watched Content
+            Add Card
           </h4>
           <form onSubmit={handleFormSubmit} className="h-[90%]" ref={formRef}>
             <div className="w-[75%] mx-auto h-full flex justify-between">

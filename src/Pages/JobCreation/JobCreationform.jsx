@@ -1,21 +1,51 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { FaAngleLeft } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { json, useNavigate } from "react-router-dom";
 import { myContext } from "../../Context/CreateContext";
 
 
 const JobCreationform = () => {
   const navigate = useNavigate();
   let { JobStates} = useContext(myContext)
+  const [state, setstate] = useState({})
 
 
 
-  const handleSubmit = ()=>{
-    navigate('/jobs')
-    JobStates.setJobSubmitted(!JobStates.jobSubmitted)
+  const handleSubmit = async()=>{
+    const req = await fetch('http://localhost:5000/jobs/',{
+      credentials:'include',
+      method:"POST",
+      headers:{
+        'Content-type':'application/json'
+      },
+      body:JSON.stringify(state)
+    })
+    const d = await req.json()
+    console.log(d)
+    console.log(state)
+    // navigate('/jobs')
+    // JobStates.setJobSubmitted(!JobStates.jobSubmitted)
   }
 
+  const _onChange_=(e)=>{
+    setstate((prev)=>{
+      return {
+        ...prev,
+        [e.target.name]:e.target.value
+      }
+    })
+  }
 
+  function convertStringToArray(str) {
+    // Use the split method to separate the string by commas
+    return str.split(',');
+  }
+  
+  // Example usage:
+  const str = "apple,banana,orange";
+  const array = convertStringToArray(str);
+  console.log(array); // Output: ["apple", "banana", "orange"]
+  
 
   return (
     <div className=" bg-white h-full w-full ">
@@ -33,7 +63,9 @@ const JobCreationform = () => {
           </label>
           <input
             type="text"
+            onChange={_onChange_}
             id="jobtitle"
+            name="jobTitle"
             placeholder="Enter title"
             className=" w-full border py-2 ps-3 rounded-lg  text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
           />
@@ -44,7 +76,9 @@ const JobCreationform = () => {
             Education Level *
           </label>
           <select
+            onChange={_onChange_}
             id="education"
+            name="educationLevel"
             className=" w-full border py-2 ps-3 rounded-lg  text-gray-600 leading-tight focus:outline-none text-xs focus:shadow-outline"
           >
             <option value="$30,300-$90,000">$30,300-$90,000</option>
@@ -60,7 +94,9 @@ const JobCreationform = () => {
             Job description *
           </label>
           <textarea
+            onChange={_onChange_}
             id="jobdescription"
+            name="jobDescription"
             rows="4"
             className="w-full md:w-80 rounded-md border focus:outline-none focus:ring-2 focus:ring-slate-600"
             placeholder="Enter description"
@@ -72,7 +108,10 @@ const JobCreationform = () => {
             Company Size *
           </label>
           <select
+            onChange={_onChange_}
             id="companysize"
+            name="companySize"
+           
             className=" w-full border py-2 ps-3 rounded-lg  text-gray-600 leading-tight focus:outline-none text-xs focus:shadow-outline"
           >
             <option value="$30,300-$90,000">$30,300-$90,000</option>
@@ -86,7 +125,9 @@ const JobCreationform = () => {
             Job Category *
           </label>
           <select
+            onChange={_onChange_}
             id="category"
+            name="jobCategory"
             className=" w-full border py-2 ps-3 rounded-lg  text-gray-600 leading-tight focus:outline-none text-xs focus:shadow-outline"
           >
             <option value="full-time">Full time</option>
@@ -101,7 +142,9 @@ const JobCreationform = () => {
             Workplace type *
           </label>
           <select
+            onChange={_onChange_}
             id="workplace"
+            name="workplaceType"
             className=" w-full border py-2 ps-3 rounded-lg  text-gray-600 leading-tight focus:outline-none text-xs focus:shadow-outline"
           >
             <option value="on-site">On-site</option>
@@ -117,13 +160,17 @@ const JobCreationform = () => {
           <div className="">
             <input
               type="text"
+              onChange={_onChange_}
               id="location"
+              name="location"
               placeholder="Select location"
               className=" w-full border py-2 ps-3 rounded-lg  text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
             />
             <input
               type="text"
+              onChange={_onChange_}
               id="location"
+              name="location"
               placeholder="Write location"
               className=" w-full mt-2 border py-2 ps-3 rounded-lg  text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
             />
@@ -136,7 +183,9 @@ const JobCreationform = () => {
           </label>
           <input
             type="text"
+            onChange={_onChange_}
             id="skills"
+            name="skills"
             placeholder="Enter skills"
             className=" w-full border py-2 ps-3 rounded-lg  text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
           />
@@ -147,7 +196,9 @@ const JobCreationform = () => {
             Job type *
           </label>
           <select
+            onChange={_onChange_}
             id="jobtype"
+            name="jobType"
             className=" w-full border py-2 ps-3 rounded-lg  text-gray-600 leading-tight focus:outline-none text-xs focus:shadow-outline"
           >
             <option value="full-time">Full time</option>
@@ -160,7 +211,9 @@ const JobCreationform = () => {
             Application Deadline *
           </label>
           <select
+            onChange={_onChange_}
             id="deadline"
+            name="applicationDeadline"
             className=" w-full border py-2 ps-3 rounded-lg  text-gray-600 leading-tight focus:outline-none text-xs focus:shadow-outline"
           >
             <option value="1-week">1 week</option>
@@ -173,7 +226,9 @@ const JobCreationform = () => {
             Experience Level *
           </label>
           <select
+            onChange={_onChange_}
             id="experience"
+            name="experienceLevel"
             className=" w-full border py-2 ps-3 rounded-lg  text-gray-600 leading-tight focus:outline-none text-xs focus:shadow-outline"
           >
             <option value="entry-level">Entry-Level</option>
@@ -187,7 +242,9 @@ const JobCreationform = () => {
             Language *
           </label>
           <select
+            onChange={_onChange_}
             id="language"
+            name="languages"
             className=" w-full border py-2 ps-3 rounded-lg  text-gray-600 leading-tight focus:outline-none text-xs focus:shadow-outline"
           >
             <option value="english">English</option>
@@ -200,7 +257,9 @@ const JobCreationform = () => {
             Salary Range *
           </label>
           <select
+            onChange={_onChange_}
             id="salary"
+            name="salaryRange"
             className=" w-full border py-2 ps-3 rounded-lg  text-gray-600 leading-tight focus:outline-none text-xs focus:shadow-outline"
           >
             <option value="$30,000-$50,000">$30,000-$50,000</option>
@@ -213,7 +272,9 @@ const JobCreationform = () => {
             Job Shift *
           </label>
           <select
+            onChange={_onChange_}
             id="jobshift"
+            name="jobShift"
             className=" w-full border py-2 ps-3 rounded-lg  text-gray-600 leading-tight focus:outline-none text-xs focus:shadow-outline"
           >
             <option value="programming">Programming</option>
@@ -226,7 +287,9 @@ const JobCreationform = () => {
             Travel Requirement *
           </label>
           <select
+            onChange={_onChange_}
             id="Travel"
+            name="travelRequirement"
             className=" w-full border py-2 ps-3 rounded-lg  text-gray-600 leading-tight focus:outline-none text-xs focus:shadow-outline"
           >
             <option value="Travel">Programming</option>
@@ -239,7 +302,8 @@ const JobCreationform = () => {
             Workplace type *
           </label>
           <select
-            id="workplacetype"
+            onChange={_onChange_}
+            id="workplaceType"
             className=" w-full border py-2 ps-3 rounded-lg  text-gray-600 leading-tight focus:outline-none text-xs focus:shadow-outline"
           >
             <option value="on-site">On-site</option>

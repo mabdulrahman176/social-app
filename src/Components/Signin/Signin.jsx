@@ -10,10 +10,10 @@ const Signup = () => {
       <div className=" w-full h-full md:h-[95vh] md:w-[27vw] bg-white flex flex-col justify-between items-center md:items-start px-10 py-4">
         <section className="flex flex-col gap-2 items-start py-[1px]">
           <div className="flex justify-center items-center border-[1px] border-gray-300 rounded w-full">
-            <button onClick={()=>navigate("/")} className="linear_gradient w-full py-[10px] text-xs font-semibold text-white rounded">
-              Sign up
+            <button onClick={()=>window.open('http://localhost:5000/auth/google')} className="linear_gradient w-full py-[10px] text-xs font-semibold text-white rounded">
+              Sign up text
             </button>
-            <button onClick={()=>navigate("/signin")} className="text-black w-full py-[10px] text-xs font-semibold  rounded">
+            <button onClick={()=>window.open('http://localhost:5000/auth/google')} className="text-black w-full py-[10px] text-xs font-semibold  rounded">
               Sign in
             </button>
           </div>
@@ -54,9 +54,9 @@ const Signup = () => {
                 Remember me
               </label>
             </section>
-            <button className="w-full mb-4 py-2 rounded-3xl text-xs linear_gradient text-white">
+            <button className="w-full mb-4 py-2 rounded-3xl text-xs linear_gradient text-white" onClick={window.open('http://localhost:5000/auth/google')}>
               {" "}
-              Sign up
+              Sign up with google
             </button>
           </form>
         </section>

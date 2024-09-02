@@ -1,7 +1,7 @@
 import React from "react";
 import { FaAngleLeft } from "react-icons/fa";
 import { TbBrandNeteaseMusic } from "react-icons/tb";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useLocation } from "react-router-dom";
 
 let SearchData = [
   {
@@ -104,7 +104,9 @@ let SearchData = [
 
 function Calendar2() {
   let navigate = useNavigate();
+  let location = useLocation();
 
+  const {title} = location.state;
   return (
     <>
       <div className=" h-full w-full  bg-white">
@@ -113,7 +115,7 @@ function Calendar2() {
             className="cursor-pointer"
             onClick={() => navigate("/jobs")}
           />{" "}
-          Jobs
+          {title}
         </h4>
         <div className="overflow-y-scroll  Podcast_Top_Videos h-[90%] px-4">
           <div>

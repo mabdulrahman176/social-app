@@ -6,6 +6,7 @@ import {
   RiArrowDropDownLine,
   RiArrowDropUpLine,
 } from "react-icons/ri";
+import { Link } from "react-router-dom";
 
 let categData = [
   "Tech & Enterpreneurship",
@@ -76,11 +77,11 @@ function JobFilters() {
 
   return (
     <Fragment>
-      <div className="flex items-center overflow-x-auto overflow-y-visible  JobFilScr bg-white w-full h-[10%] px-3">
-        <p className="m-0 flex gap-2 items-center">
+      <div className="flex items-center  overflow-y-visible  JobFilScr bg-white w-full h-[10%] px-3">
+        <Link to='/filterjob' className="m-0 flex gap-2 items-center">
         <LuSettings2/> |{" "}
-        </p>
-        <p className="px-4 py-1 ms-2 m-0 rounded-3xl cursor-pointer Video_Nav_Filters">All</p>
+        </Link>
+        <Link to='/filterjob' className="px-4 py-1 ms-2 m-0 rounded-3xl cursor-pointer Video_Nav_Filters">All</Link>
         <div
           className="px-4 py-1 flex-shrink-0 w-auto ms-2 m-0 rounded-3xl flex items-center  cursor-pointer Video_Nav_Filters text-sm"
           onMouseOver={() => setCatDrop(true)}
@@ -280,7 +281,7 @@ function JobFilters() {
           )}
         </div>
 
-        <div
+        {/* <div
           className="px-4 py-1 flex-shrink-0 w-auto ms-2 m-0 rounded-3xl flex items-center relative cursor-pointer Video_Nav_Filters text-sm"
           onMouseOver={() => setCompDrop(true)}
           onMouseLeave={() => setCompDrop(false)}
@@ -365,7 +366,7 @@ function JobFilters() {
               </div>
             </div>
           )}
-        </div>
+        </div> */}
       </div>
     </Fragment>
   );

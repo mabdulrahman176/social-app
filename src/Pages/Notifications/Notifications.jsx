@@ -101,11 +101,13 @@ function Notification() {
               className="flex justify-between py-3 mt-2 border-b"
             >
               <div className="flex gap-2">
-                <img
+              <Link to='/profile'>
+              <img
                   src={notification.imgSrc}
                   alt=""
                   className="h-[50px] w-[50px] rounded-full"
                 />
+              </Link>
                 <div>
                   <p className="text-[15px] opacity-75">{notification.message}</p>
                   <p>
