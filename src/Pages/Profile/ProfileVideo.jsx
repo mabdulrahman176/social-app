@@ -3,8 +3,8 @@
 import React, { Fragment, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import vid1 from "./video1.mp4";
-import vid2 from "./video2.mp4";
-import vid3 from "./video3.mp4";
+import vid2 from "./video1.mp4";
+import vid3 from "./video1.mp4";
 import { BsInfoSquare } from "react-icons/bs";
 import { FaChevronLeft, FaTiktok } from "react-icons/fa";
 import { CiStar } from "react-icons/ci";

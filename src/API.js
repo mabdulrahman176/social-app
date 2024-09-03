@@ -34,14 +34,19 @@ export const fetchEvent = async () => {
   }
 };
 
-export const fetchDetail = async () => {
-  try {
-    const response = await axios.get(`${API_BASE_URL}/users`);
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching data:', error);
-    throw error;
+export const fetchDetail = async (id) => {
+  const response = await fetch(`http://localhost:5000/users/${id}`, {
+    credentials: 'include',
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  if (!response.ok) {
+    throw new Error('Network response was not ok');
   }
+  const data = await response.json();
+  return data;
 };
 
 

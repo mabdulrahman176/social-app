@@ -1,41 +1,58 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const Signup = () => {
-  const location = useLocation();
   const navigate = useNavigate();
-
   const [signUp, setSignUp] = useState(true);
 
+  const location = useLocation();
+ 
+  const [state, setState] = useState({});
+  const [selectedRole, setSelectedRole] = useState("");
 
-  const [state, setstate] = useState({})
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // Prevent default form submission behavior
 
+    console.log("Submitting data:", { ...state, role: selectedRole });
 
+    try {
+      const req = await fetch('http://localhost:5000/users/', {
+        credentials: 'include',
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ ...state, role: selectedRole })
+      });
 
-  const handleSubmit = async()=>{
-    const req = await fetch('http://localhost:5000/users/',{
-      credentials:'include',
-      method:"POST",
-      headers:{
-        'Content-type':'application/json'
-      },
-      body:JSON.stringify(state)
-    })
-    const d = await req.json()
-    console.log(d)
-    console.log(state)
-    // navigate('/jobs')
-    // JobStates.setJobSubmitted(!JobStates.jobSubmitted)
-  }
-
-  const _onChange_=(e)=>{
-    setstate((prev)=>{
-      return {
-        ...prev,
-        [e.target.name]:e.target.value
+      if (!req.ok) {
+        throw new Error(`HTTP error! status: ${req.status}`);
       }
-    })
-  }
+
+      const d = await req.json();
+      console.log("Response data:", d);
+
+      // Clear form fields
+      setState({});
+      setSelectedRole("");
+
+      // Navigate to home page
+      navigate("/videos");
+    } catch (error) {
+      console.error('Error during fetch:', error);
+    }
+  };
+
+  const _onChange_ = (e) => {
+    setState((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value
+    }));
+  };
+
+  const handleRoleSelect = (role) => {
+    setSelectedRole(role);
+  };
 
   useEffect(() => {
     if (location.pathname === "/signin") {
@@ -46,74 +63,91 @@ const Signup = () => {
   }, [location]);
 
   return (
-    <div className="w-[100vw] h-[100vh] grid place-items-center bg-blue-400">
+    <div className="w-[100vw] h-[100vh] grid place-items-center bg-blue-200">
       <div className=" w-full h-full md:h-[95vh] md:w-[27vw] bg-white flex flex-col justify-between items-center md:items-start px-10 py-4">
         <section className="flex flex-col gap-2 items-start py-[1px]">
           <div className="flex justify-center items-center border-[1px] border-gray-300 rounded w-full">
             <button
               onClick={() => navigate("/signup")}
               className={`${
-                signUp === true ? "linear_gradient" : "text-black "
-              }  w-full py-[10px] text-xs font-semibold  rounded`}
+                signUp ? "linear_gradient" : "text-black"
+              } w-full py-[10px] text-xs font-semibold rounded`}
             >
               Sign up
             </button>
             <button
               onClick={() => navigate("/signin")}
               className={`${
-                signUp === false ? "linear_gradient" : ""
-              } text-black w-full py-[10px] text-xs font-semibold  rounded`}
+                !signUp ? "linear_gradient" : ""
+              } text-black w-full py-[10px] text-xs font-semibold rounded`}
             >
               Sign in
             </button>
           </div>
 
-          <h1 className="text font-bold text-start">{`${
-            signUp === true ? `Let's get started !` : `Welcome back!`
-          }`}</h1>
+          <h1 className="text font-bold text-start">Let's get started!</h1>
 
-          <form className="flex flex-col gap-2">
+          <form className="flex flex-col gap-2" onSubmit={handleSubmit}>
             <input
               type="text"
               placeholder="Email"
               name="email"
+              value={state.email || ""}
               onChange={_onChange_}
               id="email"
-              className="py-1 px-2 rounded outline-none border-[1px] border-gray-200 placeholder:text-xs "
+              required
+              className="py-1 px-2 rounded outline-none border-[1px] border-gray-200 placeholder:text-xs"
             />
+          
             <input
               type="password"
               placeholder="Password"
-              name=" password"
+              name="password"
+              value={state.password || ""}
               onChange={_onChange_}
-              id=""
-              className="py-1 px-2 rounded outline-none border-[1px] border-gray-200 placeholder:text-xs "
+              id="password"
+              required
+              className="py-1 px-2 rounded outline-none border-[1px] border-gray-200 placeholder:text-xs"
             />
-
-            {!signUp && <u className="text-sm text-end text-blue-400">Forget password?</u>}
-            {signUp && <h2 className="text-xs font-semibold">Select your Role</h2>}
-            <section className={`flex justify-center gap-4 max-w-full ${signUp===false?"h-0 opacity-0":""}`}>
-              <button className="linear_gradient rounded text-xs text-white px-2 py-2 font-semibold" name=" role" id=" role"  onChange={_onChange_}>
-                
+            <h2 className="text-xs font-semibold">Select your Role</h2>
+            <section className={`flex justify-center gap-4 max-w-full ${!signUp ? "h-0 opacity-0" : ""}`}>
+              <button
+                type="button"
+                className={`${
+                  selectedRole === "Enterpreneur" ? "linear_gradient" : "bg-[#f1f1f1]"
+                } rounded text-xs text-black px-2 py-2 font-semibold`}
+                onClick={() => handleRoleSelect("Enterpreneur")}
+              >
                 Enterpreneur
               </button>
-              <button className="bg-[#f1f1f1] rounded text-xs text-black px-2 py-2 font-semibold" name=" role" id=" role"  onChange={_onChange_}>
+              <button
+                type="button"
+                className={`${
+                  selectedRole === "Investor" ? "linear_gradient" : "bg-[#f1f1f1]"
+                } rounded text-xs text-black px-2 py-2 font-semibold`}
+                onClick={() => handleRoleSelect("Investor")}
+              >
                 Investor
               </button>
-              <button className="bg-[#f1f1f1] rounded text-xs text-black px-2 py-2 font-semibold" name=" role" id=" role"  onChange={_onChange_}>
+              <button
+                type="button"
+                className={`${
+                  selectedRole === "Viewer" ? "linear_gradient" : "bg-[#f1f1f1]"
+                } rounded text-xs text-black px-2 py-2 font-semibold`}
+                onClick={() => handleRoleSelect("Viewer")}
+              >
                 Viewer
               </button>
             </section>
 
-            <section className="flex items-center gap-2 justify-center">
-              <input type="checkbox" id="check" />
-              <label htmlFor="check" className="text-sm py-2">
-                Remember me
-              </label>
+            <section className="flex items-center mt-6 justify-center ">
+              <button
+                type="submit"
+                className="w-full mb-4 bg-purple-800 py-2 rounded-3xl text-xs linear_gradient text-white"
+              >
+                {`${signUp ? "Sign up" : "Sign in"}`}
+              </button>
             </section>
-            <button className="w-full mb-4 bg-purple-800 py-2 rounded-3xl text-xs linear_gradient text-white" onClick={()=>window.open('http://localhost:5000/auth/google')} >
-              {`${signUp===true?"Sign up":"Sign in"}`}
-            </button>
           </form>
         </section>
 
@@ -124,17 +158,23 @@ const Signup = () => {
         </div>
 
         <section className="flex items-center justify-between w-full md:my-2">
-          <div className="flex justify-center items-center bg-[#f1f1f1] px-2 py-2 rounded-full">
-            <img className="w-5 h-5" src="/insta.png" alt="" />
+          <div
+            className="flex justify-center items-center bg-[#f1f1f1] px-2 py-2 rounded-full"
+            onClick={() => window.open("http://localhost:5000/auth/google")}
+          >
+            <img className="w-5 h-5" src="/google.png" alt="Google" />
           </div>
           <div className="flex justify-center items-center bg-[#f1f1f1] px-2 py-2 rounded-full">
-            <img className="w-5 h-5" src="/youtube.png" alt="" />
+            <img className="w-5 h-5" src="/insta.png" alt="Instagram" />
           </div>
           <div className="flex justify-center items-center bg-[#f1f1f1] px-2 py-2 rounded-full">
-            <img className="w-5 h-5" src="/facebook.png" alt="" />
+            <img className="w-5 h-5" src="/youtube.png" alt="YouTube" />
           </div>
           <div className="flex justify-center items-center bg-[#f1f1f1] px-2 py-2 rounded-full">
-            <img className="w-5 h-5" src="/linkedin.png" alt="" />
+            <img className="w-5 h-5" src="/facebook.png" alt="Facebook" />
+          </div>
+          <div className="flex justify-center items-center bg-[#f1f1f1] px-2 py-2 rounded-full">
+            <img className="w-5 h-5" src="/linkedin.png" alt="LinkedIn" />
           </div>
           <div className="flex justify-center items-center bg-[#f1f1f1] px-2 py-2 rounded-full">
             <svg
@@ -155,7 +195,7 @@ const Signup = () => {
           </div>
         </section>
 
-       {signUp &&  <section className="w-full flex flex-col items-center">
+        <section className="w-full flex flex-col items-center">
           <p className="text-sm text-center md:w-[15vw] font-[450]">
             By proceeding you agree to investors{" "}
           </p>
@@ -163,20 +203,14 @@ const Signup = () => {
           <p className="text-sm text-center md:w-[15vw] text-blue-400">
             Terms of use <span className="text-black">&</span> Privacy policy
           </p>
-        </section>}
+        </section>
 
-       {signUp && <p className="text-sm text-center w-full pt-8">
+        <p className="text-sm text-center w-full pt-8">
           Already have an account?{" "}
           <Link to="/signin" className="text-blue-400">
             Log in
           </Link>
-        </p>}
-        {!signUp && <p className="text-sm text-center w-full pt-8">
-          Create a new account?{" "}
-          <Link to="/signup" className="text-blue-400">
-            Signup
-          </Link>
-        </p>}
+        </p>
       </div>
     </div>
   );

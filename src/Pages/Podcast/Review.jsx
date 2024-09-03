@@ -7,53 +7,59 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { faStar as faStarRegular } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { RiCloseLine } from "react-icons/ri";
-// import ReactStars from "react-rating-stars-component";
-
-const data = [
-  {
-    id: 1,
-    name: "Sofia-jene",
-    img: "/VideoBoy.jpeg",
-    text: "Lorme Ipsum is a simply dummy text of the printing and typesetting industry",
-  },
-  {
-    id: 2,
-    name: "Sofia-jene",
-    img: "/profile.png",
-    text: "Lorme Ipsum is a simply dummy text of the printing and typesetting industry",
-  },
-  {
-    id: 2,
-    name: "Sofia-jene",
-    img: "/VideoBoy.jpeg",
-    text: "Lorme Ipsum is a simply dummy text of the printing and typesetting industry",
-  },
-  {
-    id: 2,
-    name: "Sofia-jene",
-    img: "/profile.png",
-    text: "Lorme Ipsum is a simply dummy text of the printing and typesetting industry",
-  },
-];
+import axios from 'axios'; // Make sure axios is installed
 
 const Review = (props) => {
   const [isWritingReview, setIsWritingReview] = useState(false);
+  const [comments, setComments] = useState([]);
+  const [rating, setRating] = useState(4); // Default rating
+  const [reviewText, setReviewText] = useState('');
 
-  const handleWriteReviewClick = () => {
-    setIsWritingReview(true);
-  };
+  // Fetch comments from the backend
+  useEffect(() => {
+    const fetchComments = async () => {
+      if (!props.videoId) {
+        console.error('No videoId provided');
+        return;
+      }
+      try {
+        const response = await axios.get(`/comments/${props.videoId}`);
+        setComments(response.data.data || []);
+      } catch (error) {
+        console.error('Error fetching comments:', error);
+      }
+    };
 
-  // const handleRatingChange = (newRating) => {
-  //   console.log(newRating);
-  // };
+    fetchComments();
+  }, [props.videoId]);
 
-  const handleFormSubmit = (e) => {
+  // Handle the form submission for adding a new review
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
-    // handle form submission logic here
-    console.log("Review submitted");
-    setIsWritingReview(false);
+    if (!props.videoId) {
+      console.error('No videoId provided');
+      return;
+    }
+    if (reviewText.split(' ').length > 100) {
+      alert('Review cannot exceed 100 words.');
+      return;
+    }
+    try {
+      await axios.post(`/comments/${props.videoId}`, {
+        postedByUserId: props.userId, // Pass the current user's ID
+        message: reviewText,
+        rating // Include rating if needed
+      });
+      // Fetch updated comments
+      const response = await axios.get(`/comments/${props.videoId}`);
+      setComments(response.data.data || []);
+      setReviewText('');
+      setIsWritingReview(false);
+    } catch (error) {
+      console.error('Error submitting review:', error);
+    }
   };
 
   return (
@@ -62,18 +68,20 @@ const Review = (props) => {
         <FontAwesomeIcon
           className="absolute w-4 h-4 rounded-full top-[50%] translate-y-[-50%] left-2 cursor-pointer"
           icon={faAngleLeft}
+          aria-label="Previous"
         />
       </section>
 
-      <div className=" flex flex-wrap md:flex-nowrap md:w-[67%] w-[50%]  md:h-[75%] h-[90%] bg-white relative shadow-lg">
+      <div className="flex flex-wrap md:flex-nowrap md:w-[67%] w-[50%] md:h-[75%] h-[90%] bg-white relative shadow-lg">
         <RiCloseLine
           className="absolute right-2 top-2 cursor-pointer"
           onClick={() => props.setRevModOpen(false)}
+          aria-label="Close"
         />
         <img
           className="md:w-[45%] w-full md:h-full h-[40%] object-fill"
           src="/VideoBoy.jpeg"
-          alt=""
+          alt="Video Thumbnail"
         />
         <section className="flex flex-col py-4 md:w-[55%] w-full h-[60%] md:h-full overflow-y-scroll revOverFlow font-[450] text-xs px-4">
           <h1 className="font-semibold text-center">Reviews</h1>
@@ -84,6 +92,7 @@ const Review = (props) => {
                   icon={faChevronLeft}
                   onClick={() => setIsWritingReview(false)}
                   className="cursor-pointer"
+                  aria-label="Back"
                 />
               )}
               <h1 className="font-semibold">
@@ -102,43 +111,38 @@ const Review = (props) => {
                 <h1 className="font-semibold">Rate your Experience</h1>
                 <div className="flex items-center gap-4">
                   <div>
-                    <FontAwesomeIcon
-                      className="text-yellow-400 w-5 h-5"
-                      icon={faStar}
-                    />
-                    <FontAwesomeIcon
-                      className="text-yellow-400 w-5 h-5 "
-                      icon={faStar}
-                    />
-                    <FontAwesomeIcon
-                      className="text-yellow-400 w-5 h-5"
-                      icon={faStar}
-                    />
-                    <FontAwesomeIcon
-                      className="text-yellow-400 w-5 h-5"
-                      icon={faStar}
-                    />
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <FontAwesomeIcon
+                        key={star}
+                        className={`w-5 h-5 ${star <= rating ? 'text-yellow-400' : 'text-gray-300'}`}
+                        icon={faStar}
+                        onClick={() => setRating(star)}
+                        aria-label={`${star} star`}
+                      />
+                    ))}
                     <FontAwesomeIcon
                       className="text-gray-300 w-5 h-5"
                       icon={faStarRegular}
+                      aria-label="Star"
                     />
                   </div>
-                  <h1 className="font-semibold">(4.0)</h1>
+                  <h1 className="font-semibold">({rating.toFixed(1)})</h1>
                 </div>
                 <div className="flex flex-col gap-1">
                   <h1 className="font-semibold">Write your Review</h1>
-
                   <textarea
+                    value={reviewText}
+                    onChange={(e) => setReviewText(e.target.value)}
                     className="w-full h-28 p-2 border-none outline-none bg-gray-100 rounded"
                     placeholder="Write your review here"
                     required
                   ></textarea>
                 </div>
-                <h1 className="text-end opacity-70">Max 100 word</h1>
+                <h1 className="text-end opacity-70">Max 100 words</h1>
               </div>
               <button
                 type="submit"
-                className="w-full self-center linear_gradient rounded-2xl text-white py-2 "
+                className="w-full self-center linear_gradient rounded-2xl text-white py-2"
               >
                 Submit
               </button>
@@ -151,86 +155,67 @@ const Review = (props) => {
                   <div className="flex items-center gap-4">
                     <h1 className="text-xl text-violet-500">4.7</h1>
                     <div>
-                      <FontAwesomeIcon
-                        className="text-gray-300 w-5 h-5"
-                        icon={faStarRegular}
-                      />
-                      <FontAwesomeIcon
-                        className="text-gray-300 w-5 h-5"
-                        icon={faStarRegular}
-                      />
-                      <FontAwesomeIcon
-                        className="text-gray-300 w-5 h-5"
-                        icon={faStarRegular}
-                      />
-                      <FontAwesomeIcon
-                        className="text-gray-300 w-5 h-5"
-                        icon={faStarRegular}
-                      />
-                      <FontAwesomeIcon
-                        className="text-gray-300 w-5 h-5"
-                        icon={faStarRegular}
-                      />
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <FontAwesomeIcon
+                          key={star}
+                          className="text-gray-300 w-5 h-5"
+                          icon={faStarRegular}
+                          aria-label={`${star} star`}
+                        />
+                      ))}
                     </div>
                   </div>
                   <u
                     className="text-violet-500 cursor-pointer"
-                    onClick={handleWriteReviewClick}
+                    onClick={() => setIsWritingReview(true)}
+                    aria-label="Write a review"
                   >
-                    write a review
+                    Write a review
                   </u>
                 </div>
                 <h1 className="opacity-60">352 Total reviews</h1>
                 <h1 className="text-center">
-                  <FontAwesomeIcon icon={faChevronDown} />
+                  <FontAwesomeIcon icon={faChevronDown} aria-label="Expand reviews" />
                 </h1>
               </div>
               <hr />
               <div>
-                {data.map((value) => (
-                  <div key={value.id} className="flex flex-col gap-3 mb-4">
-                    <div className="flex gap-1 items-center">
-                      <img
-                        src={value.img}
-                        alt="img"
-                        className="rounded-full w-5 h-5"
-                      />
-                      <h1>{value.name}</h1>
-                    </div>
-                    <div className="flex gap-1 items-center">
-                      <div>
-                        <FontAwesomeIcon
-                          className="text-yellow-400 w-5 h-5"
-                          icon={faStar}
+                {comments.length === 0 ? (
+                  <p className="text-center text-gray-500">No reviews yet.</p>
+                ) : (
+                  comments.map((value) => (
+                    <div key={value._id} className="flex flex-col gap-3 mb-4">
+                      <div className="flex gap-1 items-center">
+                        <img
+                          src={value.img || '/default-avatar.png'}
+                          alt="Profile"
+                          className="rounded-full w-5 h-5"
                         />
-                        <FontAwesomeIcon
-                          className="text-yellow-400 w-5 h-5"
-                          icon={faStar}
-                        />
-                        <FontAwesomeIcon
-                          className="text-yellow-400 w-5 h-5"
-                          icon={faStar}
-                        />
-                        <FontAwesomeIcon
-                          className="text-yellow-400 w-5 h-5"
-                          icon={faStar}
-                        />
-                        <FontAwesomeIcon
-                          className="text-yellow-400 w-5 h-5"
-                          icon={faStar}
-                        />
+                        <h1>{value.name}</h1>
                       </div>
-                      <h1 className="font-normal opacity-90">(5.0)</h1>
+                      <div className="flex gap-1 items-center">
+                        <div>
+                          {[1, 2, 3, 4, 5].map((star) => (
+                            <FontAwesomeIcon
+                              key={star}
+                              className={`w-5 h-5 ${star <= value.rating ? 'text-yellow-400' : 'text-gray-300'}`}
+                              icon={faStar}
+                              aria-label={`${star} star`}
+                            />
+                          ))}
+                        </div>
+                        <h1 className="font-normal opacity-90">({value.rating.toFixed(1)})</h1>
+                      </div>
+                      <h1 className="font-normal opacity-90">{value.message}</h1>
+                      <div className="flex items-center justify-between">
+                        <h1 className="text-blue-500 font-normal cursor-pointer" aria-label="View replies">
+                          View 5 replies
+                        </h1>
+                        <h1 className="opacity-90 cursor-pointer" aria-label="Report comment">Report</h1>
+                      </div>
                     </div>
-                    <h1 className="font-normal opacity-90">{value.text}</h1>
-                    <div className="flex items-center justify-between">
-                      <h1 className="text-blue-500 font-normal cursor-pointer">
-                        view 5 replies
-                      </h1>
-                      <h1 className="opacity-90 cursor-pointer">Report</h1>
-                    </div>
-                  </div>
-                ))}
+                  ))
+                )}
               </div>
             </div>
           )}
@@ -241,6 +226,7 @@ const Review = (props) => {
         <FontAwesomeIcon
           className="absolute top-[50%] translate-y-[-50%] right-2 cursor-pointer"
           icon={faAngleRight}
+          aria-label="Next"
         />
       </section>
     </React.Fragment>

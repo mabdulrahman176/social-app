@@ -50,6 +50,7 @@ import ProfileVideo from './Pages/Profile/ProfileVideo.jsx';
 import Personaldetail from './Pages/Profile/Personaldetail.jsx';
 import DevicePermissions from './Pages/Settings/DevicePermissions.jsx';
 import Personaldetail2 from './Pages/Profile/Personaldetail2.jsx';
+import Signin from './Components/Signin/Signin.jsx';
 // import { fetchData } from './API.js';
 
 const App = () => {
@@ -72,7 +73,7 @@ const App = () => {
       <Routes>
         {/* Login and Signup Routes */}
         <Route path="/signup" element={<Signup />} />
-        <Route path="/signin" element={<Signup />} />
+        <Route path="/signin" element={<Signin />} />
 
         {/* Routes with Layout */}
         <Route element={<Layout />}>
