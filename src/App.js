@@ -97,7 +97,7 @@ const App = () => {
           <Route path="/subscribe" element={<Subscribe />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/podcast" element={<Podcast />} />
-          <Route path="/podcastdetails/:img" element={<SinglePodcastDetails />} />
+          <Route path="/podcastdetails" element={<SinglePodcastDetails />} />
           <Route path="/events" element={<Event />} />
           <Route path="/eventdetail" element={<Eventdetail />} />
           <Route path="/ticket" element={<Ticket />} />
