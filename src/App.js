@@ -34,7 +34,6 @@ import WatchHistory from './Pages/Settings/WatchHistory.jsx';
 import PaymentMethod from './Pages/Settings/PaymentMethod/PaymentMethod.jsx';
 import PaymentForm from './Pages/Settings/PaymentMethod/PaymentForm.jsx';
 import MyCards from './Pages/Settings/PaymentMethod/MyCards.jsx';
-// import User2 from './Pages/Messages/User2.jsx';
 import Contactaccess from './Pages/Settings/ContactAccess.jsx';
 import Changepassword from './Pages/Settings/ChangePassword.jsx';
 import Blocklist from './Pages/Settings/Blocklist.jsx';
@@ -87,9 +86,6 @@ const App = () => {
 
           <Route path="/messages/" element={<Messages />}>
             <Route path="user1" element={<User1 />} />
-            {/* <Route path="user2" element={<User2 />} /> */}
-            <Route path="user3" element={<User1 />} />
-            {/* <Route path="user4" element={<User2 />} /> */}
           </Route>
           <Route path="/createmeeting" element={<Zoommeeting />} />
           <Route path="/map" element={<Map />} />

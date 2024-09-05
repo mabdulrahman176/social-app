@@ -24,6 +24,7 @@ function Message2() {
   const [sender, setSender] = useState({})
   const [roomId, setRoomId] = useState({})
   const [render, setRender] = useState(false);
+  const [acessToken, setToken] = useState('');
 
   const cardRef = useRef(null);
 
@@ -83,8 +84,12 @@ function Message2() {
   };
 
   useEffect(() => {
-    fetchChatroom(loc.state.id.room)
-    joinRoom(loc.state.id.room)
+    const params = new URLSearchParams(window.location.search);
+    const accessToken = params.get('access_token');
+    setToken(accessToken)
+
+    // loc.state.id.room && fetchChatroom(loc.state.id.room)
+    // loc.state.id.room && joinRoom(loc.state.id.room)
     socket.on('connection',(socket_)=>{console.log("working well")})
     socket.on('receiveMessage', (message) => {
       console.log("receving message")
@@ -96,9 +101,7 @@ function Message2() {
       console.log(previousMessages)
       setChatroom(previousMessages);
     });
-
-   
-   
+     
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       socket.off('receiveMessage');
@@ -109,7 +112,40 @@ function Message2() {
   const handleInputChange = (e) => {
     setMessage(e.target.value);
   };
+
+  const zoomAUth = () => {
+    // if (roomId && userId) {
+      socket.emit('zoomAuth');
+      socket.on('receiveAuthUrl',(url)=>{
+        console.log({url})
+        window.location.href = url
+      });
+      // socket.on('zoomAccessToken',(token)=>{
+      //   console.log("on access token")
+      //   setToken(()=>token)
+      //   console.log({token})
+      // });
+    // }
+  };
+
+  const meeting_ =()=>{
+    console.log("meeting")
+    console.log({acessToken})
+    socket.emit('sendMeetingUrl',acessToken)
+    socket.on('receive_url',(data)=>{
+        console.log({data})
+        console.log("not working")
+        // console.log(data.sender)
+        if(data.sender){
+          console.log("working")
+          // window.location.href= data.sender
+        }
+    })
+  }
+
+
   const handleSchedule = () => {
+    zoomAUth()
     setSchedule(!schedule);
     setMeeting(false); // Reset meeting state when schedule is toggled
     setShowCalendar(false); // Hide calendar if visible
@@ -151,6 +187,7 @@ function Message2() {
               </div>
             )}
             <CiVideoOn className="text-2xl cursor-pointer" onClick={handleSchedule} />
+            <CiVideoOn className="text-2xl cursor-pointer" onClick={meeting_} />
             {schedule && (
               <div
                 className="absolute w-[200px] cursor-pointer right-4 top-14 px-3 py-1 z-30 bg-white shadow-lg border"
