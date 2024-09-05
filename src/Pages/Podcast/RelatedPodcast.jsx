@@ -31,7 +31,7 @@ const RelatedPodcast = () => {
       state={{ id: elm._id }}
         key={ind}
         className="cursor-pointer lg:h-[42vh] h-[25vh] lg:w-[22.33vw] md:w-[33.33vw] sm:w-[33.33vw] w-[33.33vw] flex-shrink-0 rounded-lg relative"
-        onClick={() => navigate(`/podcastdetails/${elm.customizeCover}`)}
+        onClick={() => navigate(`/podcastdetails`)}
       >
         <div className="absolute h-full w-full ShadedBG rounded-lg">
           <IoBookmarkOutline className="absolute right-1 top-1" />
