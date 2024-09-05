@@ -62,7 +62,7 @@ const req = await fetch('http://localhost:5000/users/13be212c-271f-419a-adc7-0ed
             ...result
           }
         });
-        console.log("[profile]")
+        console.log("[profile")
         console.log(profile)
       } catch (error) {
         console.error("Fetching data error", error);
