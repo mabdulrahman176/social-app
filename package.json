@@ -20,6 +20,7 @@
     "react-scripts": "5.0.1",
     "react-toastify": "^10.0.5",
     "remixicon": "^4.3.0",
+    "socket.io-client": "^4.7.5",
     "tapable": "^2.2.1",
     "web-vitals": "^2.1.4"
   },
