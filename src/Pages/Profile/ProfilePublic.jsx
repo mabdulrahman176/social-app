@@ -75,7 +75,7 @@ const ProfilePublic = ({ userId }) => { // Accept userId as a prop
               <label htmlFor="fileInput" className="cursor-pointer">
                 <img
                   className="rounded-full w-[100px] h-[100px] md:w-[120px] md:h-[120px] object-cover"
-                  src={profile.picUrl || "https://via.placeholder.com/120"} // Fallback URL
+                  src={profile.picUrl} // Fallback URL
                   alt="Profile"
                 />
                 <FaPlus className="absolute lg:bottom-2 -bottom-3 md:bottom-1 text-white text-xl p-1 bg-blue-700 rounded-full" />

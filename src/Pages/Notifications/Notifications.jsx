@@ -3,8 +3,12 @@ import axios from "axios";
 import { CiMenuKebab } from "react-icons/ci";
 import { Link } from "react-router-dom";
 
-
-const API_URL = 'http://localhost:5000/notifications/48402292-1bd9-48cf-b2c7-04b4d944d097';
+const getUserId = () => {
+  const str = document.cookie
+  const userKey = str.split('=')[1];
+  return userKey
+}
+const API_URL = `http://localhost:5000/notifications/${getUserId()}`;
 
 function Notification() {
   const [notifications, setNotifications] = useState([]);

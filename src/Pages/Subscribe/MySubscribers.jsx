@@ -6,12 +6,21 @@ function MySubscribers(props) {
   const [subscribers, setSubscribers] = useState([]);
   const [able, setAble] = useState(null);
 
+  const getUserId = () => {
+    const str = document.cookie
+    const userKey = str.split('=')[1];
+    return userKey
+  }
+
   useEffect(() => {
    
     const fetchSubscribers = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/subscriptions/${props.userId}`);
+        const response = await fetch(`http://localhost:5000/Subscribe/${getUserId()}`);
         const data = await response.json();
+        console.log("sydv")
+        console.log(data)
+
         setSubscribers(data);
       } catch (error) {
         console.error("Error fetching subscribers:", error);
