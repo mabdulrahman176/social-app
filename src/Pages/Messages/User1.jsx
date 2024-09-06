@@ -87,9 +87,14 @@ function Message2() {
     const params = new URLSearchParams(window.location.search);
     const accessToken = params.get('access_token');
     setToken(accessToken)
+    const interval = setInterval(() => {
+      setRender((prev)=>!prev)
+    }, 5000);
 
     // loc.state.id.room && fetchChatroom(loc.state.id.room)
-    // loc.state.id.room && joinRoom(loc.state.id.room)
+    // loc.state.id.room && fetchChatroom(loc.state.id.room)
+   fetchChatroom(loc.state.id.room)
+   joinRoom(loc.state.id.room)
     socket.on('connection',(socket_)=>{console.log("working well")})
     socket.on('receiveMessage', (message) => {
       console.log("receving message")
@@ -106,6 +111,7 @@ function Message2() {
     return () => {
       socket.off('receiveMessage');
       socket.off('previousMessages');
+      clearInterval(interval);
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);  // Depend on the user PK
