@@ -88,6 +88,7 @@ function Message2() {
     const accessToken = params.get('access_token');
     setToken(accessToken)
     const interval = setInterval(() => {
+      console.log("interval")
       setRender((prev)=>!prev)
     }, 5000);
 
