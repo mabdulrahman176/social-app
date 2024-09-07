@@ -119,7 +119,7 @@ const Signin = () => {
             <img className="w-5 h-5" src="/insta.png" alt="Instagram" />
           </div>
           <div className="flex justify-center items-center bg-[#f1f1f1] px-2 py-2 rounded-full">
-            <img className="w-5 h-5" src="/youtube.png" alt="YouTube" />
+            <img className="w-5 h-5" src="insta.png" alt="YouTube" />
           </div>
           <div className="flex justify-center items-center bg-[#f1f1f1] px-2 py-2 rounded-full">
             <img className="w-5 h-5" src="/facebook.png" alt="Facebook" />
