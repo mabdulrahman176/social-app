@@ -167,8 +167,10 @@ const Signup = () => {
           <div className="flex justify-center items-center bg-[#f1f1f1] px-2 py-2 rounded-full">
             <img className="w-5 h-5" src="/insta.png" alt="Instagram" />
           </div>
-          <div className="flex justify-center items-center bg-[#f1f1f1] px-2 py-2 rounded-full">
-            <img className="w-5 h-5" src="/youtube.png" alt="YouTube" />
+          <div className="flex justify-center items-center bg-[#f1f1f1] p-[.3rem] rounded-full"
+          onClick={() => window.open("http://localhost:5000/auth/github")}
+          >
+            <img className="w-[2rem] h-8" src="/Github.png" alt="Github" />
           </div>
           <div className="flex justify-center items-center bg-[#f1f1f1] px-2 py-2 rounded-full">
             <img className="w-5 h-5" src="/facebook.png" alt="Facebook" />

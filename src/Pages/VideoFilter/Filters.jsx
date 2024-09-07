@@ -74,7 +74,7 @@ const Filters = () => {
   return (
     <Fragment>
       <FilterNav activeFilter={activeFilter} setActiveFilter={setActiveFilter} />
-      <div className="bg-white px-2 md:px-4 mt-2 overflow-y-auto" style={{ WebkitOverflowScrolling: 'touch', WebkitScrollbar: { display: 'none' }, '-msOverflowStyle': 'none', scrollbarWidth: 'none' }}>
+      <div className="bg-white px-2 md:px-4 mt-2 overflow-y-auto h-[21.5rem]" style={{ WebkitOverflowScrolling: 'touch', WebkitScrollbar: { display: 'none' }, '-msOverflowStyle': 'none', scrollbarWidth: 'none' }}>
         <div className="flex flex-wrap gap-4 justify-between">
           {filteredEntrepreneurs.map((entrepreneur, index) => (
             <div
