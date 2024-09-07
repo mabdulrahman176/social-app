@@ -17,8 +17,8 @@ function Jobdetail() {
     const getData = async () => {
       try {
         if (loc.state) {
-          const result = await getJob(loc.state.id);
-          setResult(result);
+          const result_ = await getJob(loc.state.id);
+          setResult(result_);
           setData([result]);
         }
       } catch (error) {
@@ -33,6 +33,7 @@ function Jobdetail() {
       method: "GET",
     });
     const d = await req.json();
+    console.log("job data is",d)
     return d;
   };
 
@@ -47,8 +48,8 @@ function Jobdetail() {
           Jobs Details
         </h4>
         <div className="w-[95%] mx-auto h-[90%] overflow-y-scroll Podcast_Top_Videos">
-          {data.map((item) => (
-            <div key={item._id} className="flex justify-between flex-wrap lg:flex-nowrap">
+          {/* {data.map((item,i) => ( */}
+            <div className="flex justify-between flex-wrap lg:flex-nowrap">
               <div className="marketing lg:w-[49%] w-[90%] mx-auto">
                 <p className="text-xl font-bold">{item.jobTitle}</p>
                 <div className="lg:block sm:flex justify-between">
@@ -153,7 +154,6 @@ function Jobdetail() {
                 </button>
               </div>
             </div>
-          ))}
           <br />
         </div>
       </div>

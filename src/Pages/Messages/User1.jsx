@@ -10,7 +10,11 @@ import io from 'socket.io-client';
 
 
 function Message2() {
+<<<<<<< HEAD
   const socket = io(process.env.REACT_APP_API_BASE_URL); 
+=======
+  const socket = io("http://localhost:5000"); 
+>>>>>>> bb5315b611395afc33c0e028d3ff562f37312d00
   const loc = useLocation()
   const [able, setAble] = useState(false);
   const [schedule, setSchedule] = useState(false);
@@ -89,13 +93,22 @@ function Message2() {
     setToken(accessToken)
     const interval = setInterval(() => {
       console.log("interval")
+<<<<<<< HEAD
       setRender((prev)=>!prev)
+=======
+      // setRender((prev)=>!prev)
+      joinRoom(loc.state.id.room)
+>>>>>>> bb5315b611395afc33c0e028d3ff562f37312d00
     }, 5000);
 
     // loc.state.id.room && fetchChatroom(loc.state.id.room)
     // loc.state.id.room && fetchChatroom(loc.state.id.room)
    fetchChatroom(loc.state.id.room)
+<<<<<<< HEAD
    joinRoom(loc.state.id.room)
+=======
+  //  joinRoom(loc.state.id.room)
+>>>>>>> bb5315b611395afc33c0e028d3ff562f37312d00
     socket.on('connection',(socket_)=>{console.log("working well")})
     socket.on('receiveMessage', (message) => {
       console.log("receving message")

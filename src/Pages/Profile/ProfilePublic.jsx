@@ -4,54 +4,55 @@ import { CiVideoOn } from "react-icons/ci";
 import { FaStar } from "react-icons/fa6";
 import { LuPodcast } from "react-icons/lu";
 import { MdKeyboardArrowRight } from "react-icons/md";
-
+import { FaPlus } from "react-icons/fa";
+import { Link } from "react-router-dom";
+import { fetchProfile } from "../../API";
 import PublicProfileVideos from "./PublicProfileVideos";
 import PublicProfilePodcats from "./PublicProfilePodcats";
 import PublicProfileEvents from "./PublicProfileEvents";
 import PublicProfileJobs from "./PublicProfileJobs";
-import { FaPlus } from "react-icons/fa";
-import { Link } from "react-router-dom";
-import { fetchProfile } from "../../API";
 
-const ProfilePublic = () => {
-  // useEffect(()=>{handleSubmit()},[])
+const API_BASE_URL = 'http://localhost:5000/users';
+
+const ProfilePublic = ({ userId }) => { // Accept userId as a prop
   const [activeTab, setActiveTab] = useState("Video");
   const [profile, setProfile] = useState({});
   const [file, setFile] = useState(null);
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
-    console.log('file is ',file)
   };
 
   const handleSubmit = async () => {
-    const formData = new FormData(); 
-    // formData.append('profileData', JSON.stringify(profile)); // Appending profile data as a string
+    const formData = new FormData();
     if (file) {
-      formData.append('profilePic', file); // Appending the file
+      formData.append('profilePic', file);
     }
-console.log(formData)
-const req = await fetch('http://localhost:5000/users/13be212c-271f-419a-adc7-0ed309af052b', {
-  credentials: 'include',
-  method: "PUT",
-  body: formData,
-});
-    const d = await req.json();
-    console.log(d);
-    // navigate('/jobs')
-    // JobStates.setJobSubmitted(!JobStates.jobSubmitted)
+    try {
+      const response = await fetch(`${API_BASE_URL}/${userId}`, { // Use userId dynamically
+        credentials: 'include',
+        method: "PUT",
+        body: formData,
+      });
+      const data = await response.json();
+      console.log('Profile updated:', data);
+      await fetchProfileData(); // Refresh profile data after upload
+    } catch (error) {
+      console.error('Error updating profile:', error);
+    }
   };
 
-  const _onChange_ = (e) => {
-    setProfile((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value
-    }));
+  const fetchProfileData = async () => {
+    try {
+      const result = await fetchProfile(userId); // Use userId dynamically
+      setProfile(result);
+    } catch (error) {
+      console.error("Fetching profile data error:", error);
+    }
   };
-
-
 
   useEffect(() => {
+<<<<<<< HEAD
     const getprofileData = async () => {
       try {
         const result = await fetchProfile('13be212c-271f-419a-adc7-0ed309af052b'); // Use the function 
@@ -71,6 +72,12 @@ const req = await fetch('http://localhost:5000/users/13be212c-271f-419a-adc7-0ed
     getprofileData();
   }, []);
 
+=======
+    if (userId) { // Check if userId is provided
+      fetchProfileData();
+    }
+  }, [userId]);
+>>>>>>> bb5315b611395afc33c0e028d3ff562f37312d00
 
   return (
     <Fragment>
@@ -78,7 +85,6 @@ const req = await fetch('http://localhost:5000/users/13be212c-271f-419a-adc7-0ed
         <div className="w-full md:w-[25%] h-auto md:h-[6%] flex items-center gap-3 ps-3">
           <p className="text-lg flex items-center px-3">Profile</p>
         </div>
-
         <div className="flex flex-col md:flex-row justify-center h-auto md:h-[32%] mt-4 md:mt-0">
           <div className="flex flex-col md:flex-row gap-2 w-full md:w-[75%] items-center">
             <div className="rounded-full flex justify-center md:justify-end w-[60%] md:w-[40%] relative">
@@ -90,10 +96,9 @@ const req = await fetch('http://localhost:5000/users/13be212c-271f-419a-adc7-0ed
               />
               <label htmlFor="fileInput" className="cursor-pointer">
                 <img
-                // loading="lazy"
                   className="rounded-full w-[100px] h-[100px] md:w-[120px] md:h-[120px] object-cover"
-                  src={profile.picUrl}
-                  alt=""
+                  src={profile.picUrl} // Fallback URL
+                  alt="Profile"
                 />
                 <FaPlus className="absolute lg:bottom-2 -bottom-3 md:bottom-1 text-white text-xl p-1 bg-blue-700 rounded-full" />
               </label>
@@ -120,15 +125,14 @@ const req = await fetch('http://localhost:5000/users/13be212c-271f-419a-adc7-0ed
                 >
                   Save
                 </button>
-                <button onClick={()=>console.log(profile)} className="px-6 py-2 rounded-2xl text-xs bg-[#F6F6FF]">
+                <button onClick={() => console.log(profile)} className="px-6 py-2 rounded-2xl text-xs bg-[#F6F6FF]">
                   Message
                 </button>
               </div>
             </div>
           </div>
         </div>
-
-        <div className=" flex text-[25px] items-center justify-center border-t-[2px] h-[8%]">
+        <div className="flex text-[25px] items-center justify-center border-t-[2px] h-[8%]">
           <div className="w-[50%] flex justify-between py-2">
             <CiVideoOn
               className="cursor-pointer opacity-70"

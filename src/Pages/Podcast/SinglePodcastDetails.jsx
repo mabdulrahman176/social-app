@@ -1,24 +1,17 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import Review from './Review'
-import img1 from './image1.jpeg'
 import img2 from './img2.jpeg'
-import img3 from './img3.jpeg'
 import img4 from './img4.jpeg'
 import img5 from './img5.jpeg'
-
-
-
-
-
-import {
-  RiPlayCircleLine,
-} from "react-icons/ri";
-import { useNavigate, useParams } from "react-router-dom";
-import { CiPlay1, CiSquareInfo, CiStar } from "react-icons/ci";
+import {RiPlayCircleLine,} from "react-icons/ri";
+import { useLocation, useNavigate,  } from "react-router-dom";
+import {  CiSquareInfo, CiStar } from "react-icons/ci";
 import { FaRegShareFromSquare } from "react-icons/fa6";
-import { IoBookmarkOutline } from "react-icons/io5";
+// import { IoBookmarkOutline } from "react-icons/io5";
 import Model from "../ModalReport/Model";
 import { FaAngleLeft } from "react-icons/fa";
+import RelatedPodcast from "./RelatedPodcast";
+// import { fetchPodcast } from "../../API";
 
 let guestData = [
   {
@@ -39,107 +32,41 @@ let guestData = [
   },
 ];
 
-let similarPodcastData = [
-  {
-    img: img1,
-    id: 1,
-    categ: "Politics",
-    userName: "Lily Williams",
-    mint:'35 Mins'
-  },
-  {
-    img: img4,
-    id: 1,
-    categ: "Politics",
-    userName: "Lily Williams",
-    mint:'35 Mins'
 
-  },
-  {
-    img: img2,
-    id: 1,
-    categ: "Politics",
-    userName: "Lily Williams",
-    mint:'35 Mins'
-
-  },
-  {
-    img: img3,
-    id: 1,
-    categ: "Politics",
-    userName: "Lily Williams",
-    mint:'35 Mins'
-
-  },
-  {
-    img: img2,
-    id: 1,
-    categ: "Politics",
-    userName: "Lily Williams",
-    mint:'35 Mins'
-
-  },
-  {
-    img: img5,
-    id: 1,
-    categ: "Politics",
-    userName: "Lily Williams",
-    mint:'35 Mins'
-
-  },
-  {
-    img: img1,
-    id: 1,
-    categ: "Politics",
-    userName: "Lily Williams",
-    mint:'35 Mins'
-
-  },
-  {
-    img: img1,
-    id: 1,
-    categ: "Politics",
-    userName: "Lily Williams",
-    mint:'35 Mins'
-
-  },
-  {
-    img: img1,
-    id: 1,
-    categ: "Politics",
-    userName: "Lily Williams",
-    mint:'35 Mins'
-
-  },
-];
 
 function SinglePodcastDetails() {
   let navigate = useNavigate();
-  let data = useParams()
-  let src ;
-
-
-  if(data.img === 'image1.jpeg'){
-    src = img1
-  }
-  else if(data.img === 'img2.jpeg'){
-    src = img2
-  }
-  else if(data.img === 'img3.jpeg'){
-    src = img3
-  }
-  else if(data.img === 'img4.jpeg'){
-    src = img4
-  }
-  else if(data.img === 'img5.jpeg'){
-    src = img5
-  }
-
+  const loc = useLocation();
+ 
 
   const [revModOpen, setRevModOpen] = useState(false)
   const [repModOpen, setRepModOpen] = useState(false)
+  const [recentdata, setRecentData] = useState([]);
+  const [result, setResult] = useState('');
 
-
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        if(loc.state){
+          const result = await getPodcast(loc.state.id); 
+          console.log({result});
+          setResult(result);
+          setRecentData([result]);
+        }
+      
+      } catch (error) {
+        console.error("Fetching data error", error);
+      }
+    };
+    getData();
+  }, [loc.state]);
+const getPodcast = async (id) => {
+  const req = await fetch(`http://localhost:5000/podcasts/${id}`, {
+    method: "GET",
+  });
+  const d = await req.json();
+  return d;
+}
 
   return (
     <Fragment>
@@ -159,31 +86,35 @@ function SinglePodcastDetails() {
           Podcast
         </h4>
         </div>
-        <div className="flex w-full PCS_Flex sm:ps-6 gap-6">
-          <img
-            src={src}
-            className="md:h-[35vh] h-[39vh] md:w-[33%] w-[40%]  sm:mx-auto rounded-xl"
-            alt=""
-          />
-          <div className="w-[60%]  mx-auto PCS_Child1">
-            <h1 className="text-xl font-semibold">Finance</h1>
-            <p className="py-1 opacity-65">75 mins</p>
-            <button className="flex items-center gap-3 border border-black px-3 pe-7 my-2 rounded-3xl">
-              <RiPlayCircleLine /> 1 hr left
-            </button>
-            <div className="flex items-center gap-4">
-              <CiSquareInfo className="text-2xl cursor-pointer" onClick={()=>setRepModOpen(true)}/>
-              <FaRegShareFromSquare className="text-xl opacity-45 cursor-pointer" />
-              <CiStar className="text-2xl cursor-pointer" onClick={()=>setRevModOpen(true)} />
-              <p className="opacity-50">4.7 (571)</p>
-            </div>
-            <p className="lg:w-[75%] w-full opacity-50 text-[15px]">
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Optio
-              nam quo amet, inventore iste aspernatur accusantium dolorem
-              blanditiis laboriosam, atquati provident!
-            </p>
-          </div>
-        </div>
+       {recentdata.map((elm,index)=>(
+         <div key={index} className="flex w-full PCS_Flex sm:ps-6 gap-6">
+         <img
+           src={elm.img ? elm.img : img2}
+           className="md:h-[35vh] h-[39vh] md:w-[33%] w-[40%]  sm:mx-auto rounded-xl"
+           alt=""
+         />
+         <div className="w-[60%]  mx-auto PCS_Child1">
+           <h1 className="text-xl font-semibold">{elm.episodeTitle}</h1>
+           <h2 className="">Podcast Type:</h2>
+           <p className="py-1 opacity-65">{elm.podcastType}</p>
+           <p className="opacity-50">Season Number ={elm.seasonNumber} Episode Number = ({elm.episodeNumber})</p>
+           <p className="">AudioName:</p>
+           <p className="opacity-50">{elm.audioName}</p>
+           <button className="flex items-center gap-3 border border-black px-3 pe-7 my-2 rounded-3xl">
+           {elm.audioUrl}
+           </button>
+           <div className="flex items-center gap-4">
+             <CiSquareInfo className="text-2xl cursor-pointer" onClick={()=>setRepModOpen(true)}/>
+             <FaRegShareFromSquare className="text-xl opacity-45 cursor-pointer" />
+             <CiStar className="text-2xl cursor-pointer" onClick={()=>setRevModOpen(true)} />
+            
+           </div>
+           <p className="lg:w-[75%] w-full opacity-50 text-[15px]">
+           {elm.episodeDescription}
+           </p>
+         </div>
+       </div>
+       ))}
         <div className="flex gap-2 md:ps-6 mt-3 w-full overflow-x-scroll Podcast_Top_Videos">
           {guestData.map((elm, ind) => (
             <div
@@ -201,7 +132,7 @@ function SinglePodcastDetails() {
         </div>
 
           <p className="md:ps-6">Similar podcasts</p>
-        <div className="md:ps-6 h-[40%] w-full">
+        {/* <div className="md:ps-6 h-[40%] w-full">
             <div className="flex flex-wrap sm:justify-center justify-between sm:gap-1 gap-y-2 h-full w-full Podcast_Top_Videos mt-4">
               {similarPodcastData.map((elm, ind) => (
                 <div
@@ -230,8 +161,8 @@ function SinglePodcastDetails() {
               ))}
             </div>
         <br />
-        </div>
-
+        </div> */}
+<RelatedPodcast/>
       </section>
     </Fragment>
   );

@@ -79,9 +79,38 @@ const newCardData = [
 function Eventdetails() {
   // const location = useLocation();
   const navigate = useNavigate();
+<<<<<<< HEAD
 
   // const [cardDetail, setcardDetail] = useState(location.state.card)
 
+=======
+const [newcard, setNewCard] = useState([]);
+const [result,setResult] = useState({});
+useEffect(() => {
+  const getData = async () => {
+    try {
+      if(loc.state){
+        const result = await getEvent(loc.state.id);
+        console.log({result});
+        setResult(result);
+        setNewCard([result]);
+      }
+    } catch (error) {
+      console.error("Fetching data error", error);
+    }
+  };
+  getData();
+}, [loc.state.id]);
+
+const getEvent = async (id) => {
+  const req = await fetch(`http://localhost:5000/events/${id}`, {
+    method: "GET",
+  });
+  const d = await req.json();
+  setResult(d);
+  return d;
+};
+>>>>>>> bb5315b611395afc33c0e028d3ff562f37312d00
   return (
     <>
       <div className="main h-full w-full bg-white">
@@ -92,6 +121,7 @@ function Eventdetails() {
           />{" "}
           Event Detail
         </h4>
+<<<<<<< HEAD
         <div className="overflow-y-scroll w-[93%] Podcast_Top_Videos mx-auto h-[90%]">
           <img src={img} alt="" className="eventimg1" />
           <div className="sm:flex mt-2">
@@ -111,12 +141,36 @@ function Eventdetails() {
                 Marty travels back in time using an eccentric scientist's time
                 machine. However, he must make his high-school-aged parents fall
                 in love in order to return to the present.
+=======
+      {/* {newcard.map(( data,index)=>( */}
+          <div className="overflow-y-scroll w-[93%] Podcast_Top_Videos mx-auto h-[90%]">
+          <img src={result.imgSrc ? result.imgSrc : img} alt="" className="eventimg1" />
+          <div className="sm:flex mt-2">
+            <div className="risk sm:w-[60%]">
+              <h3 className="text-xl font-bold">
+              {result.eventTitle}
+              </h3>
+              <p className="flex items-center gap-2 py-2 text-sm">
+                <CiLocationOn className="me-1" />
+              {result.eventLocation}
+              </p>
+              <p className="flex items-center gap-2 py-2 text-sm">
+                <IoCalendarOutline className="me-1" />
+          {result.eventDate}
+              </p>
+              <p className="sm:w-[80%] opacity-80 text-[16px] mt-3">
+              {result.eventCatagory}
+>>>>>>> bb5315b611395afc33c0e028d3ff562f37312d00
               </p>
             </div>
             <div className="sm:w-[40%] pt-5">
               <div className="ticketstarting py-3 rounded w-[80%] mx-auto  ">
                 <small className="text-gray-500">Tickets starting at</small>
+<<<<<<< HEAD
                 <h5 className="text-lg pb-2 font-bold">Rp. 212.000</h5>
+=======
+                <h5 className="text-lg pb-2 font-bold">{result.eventTicketPrice}</h5>
+>>>>>>> bb5315b611395afc33c0e028d3ff562f37312d00
                 <button
                   className="buyticket  text-white rounded-lg px-4 py-2 mt-2"
                   onClick={() => navigate("/ticket")}
@@ -134,7 +188,11 @@ function Eventdetails() {
               <div>
                 <h5 className="text-sm font-bold">Duration</h5>
                 <p className="text-sm">
+<<<<<<< HEAD
                     20.00 - 21.56 WIB <br /> 1 hour 56 minutes
+=======
+                   {result.eventDuration}
+>>>>>>> bb5315b611395afc33c0e028d3ff562f37312d00
                 </p>
               </div>
             </div>
@@ -184,17 +242,22 @@ function Eventdetails() {
 
           <h4 className="text-xl font-bold mt-6">Description</h4>
           <p className="opacity-80 text-[16px] mt-4">
+<<<<<<< HEAD
             Drive-In Senja memberikan retro drive-in experience yang dikemas
             secara modern. Penggunaan transmisi radio kit , mengintegrasikan
             suara film ke dalam radio mobil, ditambah proyektor resolusi tinggi
             yang menyediakan pengala man visual terbaik. Acara ini merupakan
             sarana yang aman untuk menghabiskan waktu bersama keluarga, pasang
             an, maupun komunitas
+=======
+           {result.eventDescription}
+>>>>>>> bb5315b611395afc33c0e028d3ff562f37312d00
           </p>
           <div className="h-[30vh] w-full mt-5">
           <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13905.02928760363!2d71.71692598390551!3d29.392027599969865!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x393b904fe67dd47b%3A0x33075b928acd331e!2sTibba%20Badar%20Sher%20Bahawalpur%2C%20Punjab%2C%20Pakistan!5e0!3m2!1sen!2s!4v1720097793875!5m2!1sen!2s"  allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade" title="Map2" className="h-full w-full rounded-lg"></iframe>
           </div>
 
+<<<<<<< HEAD
           <div className="mt-7 flex flex-wrap justify-center gap-1 sm:w-[93%] mx-auto">
             {newCardData.map((data, i) => (
               <div key={i} className="m-0 text-white md:w-[32.4%] w-[49.4%] h-[45vh] relative">
@@ -226,9 +289,17 @@ function Eventdetails() {
               </div>
             ))}
           </div>
+=======
+        
+          <RelatedEvent/>
+>>>>>>> bb5315b611395afc33c0e028d3ff562f37312d00
           <br />
-          
+
         </div>
+<<<<<<< HEAD
+=======
+      {/* ))} */}
+>>>>>>> bb5315b611395afc33c0e028d3ff562f37312d00
       </div>
     </>
   );

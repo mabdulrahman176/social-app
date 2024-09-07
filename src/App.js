@@ -34,6 +34,10 @@ import WatchHistory from './Pages/Settings/WatchHistory.jsx';
 import PaymentMethod from './Pages/Settings/PaymentMethod/PaymentMethod.jsx';
 import PaymentForm from './Pages/Settings/PaymentMethod/PaymentForm.jsx';
 import MyCards from './Pages/Settings/PaymentMethod/MyCards.jsx';
+<<<<<<< HEAD
+=======
+// import User2 from './Pages/Messages/User2.jsx';
+>>>>>>> bb5315b611395afc33c0e028d3ff562f37312d00
 import Contactaccess from './Pages/Settings/ContactAccess.jsx';
 import Changepassword from './Pages/Settings/ChangePassword.jsx';
 import Blocklist from './Pages/Settings/Blocklist.jsx';
@@ -86,13 +90,19 @@ const App = () => {
 
           <Route path="/messages/" element={<Messages />}>
             <Route path="user1" element={<User1 />} />
+<<<<<<< HEAD
+=======
+            {/* <Route path="user2" element={<User2 />} /> */}
+            <Route path="user3" element={<User1 />} />
+            {/* <Route path="user4" element={<User2 />} /> */}
+>>>>>>> bb5315b611395afc33c0e028d3ff562f37312d00
           </Route>
           <Route path="/createmeeting" element={<Zoommeeting />} />
           <Route path="/map" element={<Map />} />
           <Route path="/subscribe" element={<Subscribe />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/podcast" element={<Podcast />} />
-          <Route path="/podcastdetails/:img" element={<SinglePodcastDetails />} />
+          <Route path="/podcastdetails/" element={<SinglePodcastDetails />} />
           <Route path="/events" element={<Event />} />
           <Route path="/eventdetail" element={<Eventdetail />} />
           <Route path="/ticket" element={<Ticket />} />
