@@ -12,7 +12,7 @@ const AllVideos = () => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/videos/all`);
+        const response = await axios.get(`${API_BASE_URL}/upload/videos/all`);
         const result = response.data;
         console.log("fetched data:", result);
         const updatedData = result.data.map(user => ({
