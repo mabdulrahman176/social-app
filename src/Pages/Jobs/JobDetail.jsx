@@ -10,16 +10,20 @@ import { myContext } from "../../Context/CreateContext";
 function Jobdetail() {
   const loc = useLocation();
   const navigate = useNavigate();
-  const [data, setData] = useState([]);
-  const [result, setResult] = useState('');
+  const [job, setJob] = useState({});
 
   useEffect(() => {
     const getData = async () => {
       try {
         if (loc.state) {
           const result_ = await getJob(loc.state.id);
-          setResult(result_);
-          setData([result]);
+          // console.log({jobIs:result_.job})
+         setJob(()=>{
+          return {
+            ...result_.job
+          }
+         })
+         console.log({job})
         }
       } catch (error) {
         console.error("Fetching data error", error);
@@ -33,7 +37,6 @@ function Jobdetail() {
       method: "GET",
     });
     const d = await req.json();
-    console.log("job data is",d)
     return d;
   };
 
@@ -51,7 +54,7 @@ function Jobdetail() {
           {/* {data.map((item,i) => ( */}
             <div className="flex justify-between flex-wrap lg:flex-nowrap">
               <div className="marketing lg:w-[49%] w-[90%] mx-auto">
-                <p className="text-xl font-bold">{item.jobTitle}</p>
+                <p className="text-xl font-bold">{job.jobTitle}</p>
                 <div className="lg:block sm:flex justify-between">
                   <div className="lg:w-full sm:w-[45%]">
                     <div className="flex gap-3 my-4">
@@ -61,39 +64,39 @@ function Jobdetail() {
                         className="h-[40px] w-[40px] rounded-full"
                       />
                       <div>
-                        <p className="text-sm">{item.jobCategory}</p>
+                        <p className="text-sm">{job.jobCategory}</p>
                         <p className="text-[gray] text-sm">
-                          {item.location} ({item.workplaceType}) {item.jobType}
+                          {job.location} ({job.workplaceType}) {job.jobType}
                         </p>
                       </div>
                     </div>
-                    <p className="text-[gray] mb-5 text-xs">{item.applicationDeadline}</p>
+                    <p className="text-[gray] mb-5 text-xs">{job.applicationDeadline}</p>
                     <div className="flex gap-3">
                       <CiCalendar className="text-xl" />
                       <div className="text-sm">
-                        <p>{item.salaryRange}</p>
-                        <p>{item.experienceLevel}</p>
+                        <p>{job.salaryRange}</p>
+                        <p>{job.experienceLevel}</p>
                       </div>
                     </div>
                     <div className="flex gap-3 text-sm my-3">
                       <FaBuilding className="text-[gray] text-lg" />
-                      <p>{item.companySize}</p>
+                      <p>{job.companySize}</p>
                     </div>
                   </div>
                   <div className="lg:w-full sm:w-[45%]">
                     <div className="flex items-center gap-3 text-sm">
                       <CiClock1 className="text-lg" />
-                      <p>{item.jobShift}</p>
+                      <p>{job.jobShift}</p>
                     </div>
                     <div className="flex gap-3 text-sm my-3">
                       <GiSkills className="text-xl text-[gray]" />
                       <div>
-                        <p>{item.skills}</p>
+                        <p>{job.skills}</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-3 text-sm">
                       <FaBookReader className="text-lg text-[gray]" />
-                      <p>{item.educationLevel}</p>
+                      <p>{job.educationLevel}</p>
                     </div>
                     <div className="flex items-center gap-3 text-sm my-3">
                       <BsFillBrightnessAltHighFill className="text-lg text-[gray]" />
@@ -130,21 +133,21 @@ function Jobdetail() {
                 </div>
                 <div className="text-[15px] text-[gray] h-auto overflow-y-scroll Podcast_Top_Videos">
                   <p className="text-lg font-bold text-black">About The Role</p>
-                  <p>{item.jobDescription}</p>
+                  <p>{job.jobDescription}</p>
                   <p className="text-lg font-bold text-black">Travel Requirement</p>
-                  <p>{item.travelRequirement}</p>
+                  <p>{job.travelRequirement}</p>
                 </div>
                 <div className="text-[15px] h-auto overflow-y-scroll Podcast_Top_Videos">
                   <p className="text-lg font-bold">Languages</p>
-                  <p className="text-lg my-2">
-                    {item.languages && item.languages.length > 0 ? (
-                      item.languages.map((e, i) => <p key={i}>{e}</p>)
+                  <div className="text-lg my-2">
+                    {job.languages && job.languages.length > 0 ? (
+                      job.languages.map((e, i) => <p key={i}>{e}</p>)
                     ) : (
                       "No languages specified"
                     )}
-                  </p>
+                  </div>
                   <p className="text-lg font-bold">Job Category</p>
-                  <p className="text-lg my-3">{item.jobCategory}</p>
+                  <p className="text-lg my-3">{job.jobCategory}</p>
                 </div>
                 <button
                   className="h-[7vh] w-full linear_gradient rounded-3xl mt-6 btn1"
