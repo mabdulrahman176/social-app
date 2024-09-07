@@ -19,14 +19,21 @@ const loc = useLocation();
   const navigate = useNavigate();
 const [newcard, setNewCard] = useState([]);
 const [result,setResult] = useState({});
+const [event , setEvent] = useState({});
 useEffect(() => {
   const getData = async () => {
     try {
       if(loc.state){
-        const result = await getEvent(loc.state.id);
-        console.log({result});
-        setResult(result);
-        setNewCard([result]);
+        const result_ = await getEvent(loc.state.id);
+        console.log({result_});
+        setResult(result_);
+        setEvent(()=>{
+            return {
+              ...result_.event
+            }
+        }
+      )
+     
       }
     } catch (error) {
       console.error("Fetching data error", error);
@@ -44,6 +51,7 @@ const getEvent = async (id) => {
   return d;
 };
   return (
+ 
     <>
       <div className="main h-full w-full bg-white">
         <h4 className="flex items-center gap-3 ms-4 h-[10%]">
@@ -55,28 +63,28 @@ const getEvent = async (id) => {
         </h4>
       {/* {newcard.map(( data,index)=>( */}
           <div className="overflow-y-scroll w-[93%] Podcast_Top_Videos mx-auto h-[90%]">
-          <img src={result.imgSrc ? result.imgSrc : img} alt="" className="eventimg1" />
+          <img src={event.imgSrc ? event.imgSrc : img} alt="" className="eventimg1" />
           <div className="sm:flex mt-2">
             <div className="risk sm:w-[60%]">
               <h3 className="text-xl font-bold">
-              {result.eventTitle}
+              {event.eventTitle}
               </h3>
               <p className="flex items-center gap-2 py-2 text-sm">
                 <CiLocationOn className="me-1" />
-              {result.eventLocation}
+              {event.eventLocation}
               </p>
               <p className="flex items-center gap-2 py-2 text-sm">
                 <IoCalendarOutline className="me-1" />
-          {result.eventDate}
+          {event.eventDate}
               </p>
               <p className="sm:w-[80%] opacity-80 text-[16px] mt-3">
-              {result.eventCatagory}
+              {event.eventCatagory}
               </p>
             </div>
             <div className="sm:w-[40%] pt-5">
               <div className="ticketstarting py-3 rounded w-[80%] mx-auto  ">
                 <small className="text-gray-500">Tickets starting at</small>
-                <h5 className="text-lg pb-2 font-bold">{result.eventTicketPrice}</h5>
+                <h5 className="text-lg pb-2 font-bold">{event.eventTicketPrice}</h5>
                 <button
                   className="buyticket  text-white rounded-lg px-4 py-2 mt-2"
                   onClick={() => navigate("/ticket")}
@@ -94,7 +102,7 @@ const getEvent = async (id) => {
               <div>
                 <h5 className="text-sm font-bold">Duration</h5>
                 <p className="text-sm">
-                   {result.eventDuration}
+                   {event.eventDuration}
                 </p>
               </div>
             </div>
@@ -144,7 +152,7 @@ const getEvent = async (id) => {
 
           <h4 className="text-xl font-bold mt-6">Description</h4>
           <p className="opacity-80 text-[16px] mt-4">
-           {result.eventDescription}
+           {event.eventDescription}
           </p>
           <div className="h-[30vh] w-full mt-5">
           <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13905.02928760363!2d71.71692598390551!3d29.392027599969865!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x393b904fe67dd47b%3A0x33075b928acd331e!2sTibba%20Badar%20Sher%20Bahawalpur%2C%20Punjab%2C%20Pakistan!5e0!3m2!1sen!2s!4v1720097793875!5m2!1sen!2s"  allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade" title="Map2" className="h-full w-full rounded-lg"></iframe>
