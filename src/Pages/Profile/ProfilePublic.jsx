@@ -12,7 +12,7 @@ import PublicProfilePodcats from "./PublicProfilePodcats";
 import PublicProfileEvents from "./PublicProfileEvents";
 import PublicProfileJobs from "./PublicProfileJobs";
 
-const API_BASE_URL = 'http://localhost:5000/users';
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL
 
 const ProfilePublic = ({ userId }) => { // Accept userId as a prop
   const [activeTab, setActiveTab] = useState("Video");
@@ -22,16 +22,22 @@ const ProfilePublic = ({ userId }) => { // Accept userId as a prop
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
   };
+  const getUserId = () => {
+    const str = document.cookie
+    const userKey = str.split('=')[1];
+    return userKey
+  }
 
   const handleSubmit = async () => {
     const formData = new FormData();
+    console.log({file})
     if (file) {
       formData.append('profilePic', file);
     }
     try {
-      const response = await fetch(`${API_BASE_URL}/${userId}`, { // Use userId dynamically
+      const response = await fetch(`${API_BASE_URL}/users/profilepic/${getUserId()}`, { // Use userId dynamically
         credentials: 'include',
-        method: "PUT",
+        method: "POST",
         body: formData,
       });
       const data = await response.json();
@@ -41,21 +47,21 @@ const ProfilePublic = ({ userId }) => { // Accept userId as a prop
       console.error('Error updating profile:', error);
     }
   };
+  const createChatRoom = ()=>{console.log("creating chatroom")}
 
   const fetchProfileData = async () => {
     try {
-      const result = await fetchProfile(userId); // Use userId dynamically
-      setProfile(result);
+      const result = await fetchProfile(getUserId()); // Use userId dynamically
+      setProfile(result.user);
+      console.log({result:result.user})
     } catch (error) {
       console.error("Fetching profile data error:", error);
     }
   };
 
   useEffect(() => {
-    if (userId) { // Check if userId is provided
       fetchProfileData();
-    }
-  }, [userId]);
+  }, []);
 
   return (
     <Fragment>
@@ -82,7 +88,7 @@ const ProfilePublic = ({ userId }) => { // Accept userId as a prop
               </label>
             </div>
             <div className="py-3 px-4 md:px-6 w-full md:w-[60%]">
-              <h1 className="text-lg md:text-xl">Profile reviews</h1>
+              <h1 className="text-lg md:text-xl">{profile.name}</h1>
               <div className="flex py-1 space-x-2">
                 <FaStar className="text-[#FFDD55] text-sm md:text-lg" />
                 <FaStar className="text-[#FFDD55] text-sm md:text-lg" />

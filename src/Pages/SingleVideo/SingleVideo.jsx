@@ -78,6 +78,7 @@ const Video = () => {
               </div>
               <div
                 className="text-center cursor-pointer mt-5"
+                // onClick={() =>console.log("opening reviews")}
                 onClick={() => setRevModOpen(true)}
               >
                 <p className="text-xs">
