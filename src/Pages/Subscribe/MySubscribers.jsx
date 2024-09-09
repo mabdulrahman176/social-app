@@ -16,7 +16,7 @@ function MySubscribers(props) {
    
     const fetchSubscribers = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/Subscribe/${getUserId()}`);
+        const response = await fetch(`http://localhost:5000/subscribe/my/${getUserId()}`);
         const data = await response.json();
         console.log("sydv")
         console.log(data)

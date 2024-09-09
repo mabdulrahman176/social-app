@@ -82,7 +82,7 @@ const ProfilePublic = ({ userId }) => { // Accept userId as a prop
                 <img
                   className="rounded-full w-[100px] h-[100px] md:w-[120px] md:h-[120px] object-cover"
                   src={profile.picUrl} // Fallback URL
-                  alt="Profile"
+                  alt="img"
                 />
                 <FaPlus className="absolute lg:bottom-2 -bottom-3 md:bottom-1 text-white text-xl p-1 bg-blue-700 rounded-full" />
               </label>
