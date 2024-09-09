@@ -1,8 +1,40 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import MySubscribers from "./MySubscribers";
+import { useEffect } from "react";
 
 const Subscribe = () => {
-  const userId = "38'929urowoqoq"; 
+  const [subscribers, setsubscribers] = useState({})
+  const [subscribedTo, setSubscribedTo] = useState({})
+
+  const getUserId = () => {
+    const str = document.cookie
+    const userKey = str.split('=')[1];
+    return userKey
+  }
+  const getMySubscriber = async ()=>{
+    const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/subscribe/my/${getUserId()}`,{
+      method:"GET",
+      credentials:'include'
+      
+    })
+    const data = await req.json()
+     setsubscribers(data)
+  }
+  const getPeopleISubscibedTo = async ()=>{
+    const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/subscribe/${getUserId()}`,{
+      method:"GET",
+      credentials:'include'
+      
+    })
+    const data = await req.json()
+   setSubscribedTo(data)
+
+  }
+useEffect(() => {
+  getMySubscriber()
+  getPeopleISubscibedTo()
+}, [])
+
 
   return (
     <Fragment>
@@ -31,8 +63,8 @@ const Subscribe = () => {
           <MySubscribers
             name="My Subscribers"
             sub="Total Subscribers"
-            total={2000}
-            userId={userId}
+            total={subscribers.length}
+            userId={subscribers}
           />
         </div>
         <div
@@ -49,8 +81,8 @@ const Subscribe = () => {
           <MySubscribers
             name="Subscribed"
             sub="Total Subscribed"
-            total={20000}
-            userId={userId}
+            total={subscribedTo.length}
+            userId={subscribedTo}
           />
         </div>
       </div>

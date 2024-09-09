@@ -25,7 +25,8 @@ const Review = (props) => {
         return;
       }
       try {
-        const response = await axios.get(`/comments/${props.videoId}`);
+        const response = await axios.get(`http://localhost:5000/comments/${props.videoId}`);
+        // console.log("fetching comments")
         setComments(response.data.data || []);
       } catch (error) {
         console.error('Error fetching comments:', error);

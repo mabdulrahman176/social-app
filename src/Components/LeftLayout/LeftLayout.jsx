@@ -1,7 +1,7 @@
     // Left Side Bar Section
 
 
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { CiLocationOn, CiSettings, CiSquarePlus } from 'react-icons/ci';
 import { myContext } from '../../Context/CreateContext';
@@ -10,14 +10,34 @@ import { IoMdHeartEmpty } from 'react-icons/io';
 import { IoIosNotificationsOutline } from "react-icons/io";
 
 
-
+const getUserId = () => {
+  const str = document.cookie
+  const userKey = str.split('=')[1];
+  return userKey
+}
     // Left Side Bar Section
 const LeftLayout = () => {
   let { CreationStates } = useContext(myContext)
-
-
   let locationPath = useLocation().pathname;
+  const [profilePic ,setProfilePic] = useState('')
 
+
+
+
+const getProfilePic = async()=>{
+  const req= await fetch(`${process.env.REACT_APP_API_BASE_URL}/users/${getUserId()}`,{
+    method:"GET",
+    credentials:'include'
+  })
+
+  const data = await req.json()
+ console.log("profile pic data") 
+  console.log({data:data.user.picUrl})
+  setProfilePic(data.user.picUrl)
+}
+useEffect(() => {
+getProfilePic()
+}, [])
 
 
   return (
@@ -26,7 +46,7 @@ const LeftLayout = () => {
         <li className="mb-2">
           <Link to="/profile" className={`flex items-center  ${locationPath === '/profile' ? 'Left_Side_Selected' : ''} py-2 px-2 rounded-lg  transition-all duration-200 transform` }
           >
-            <img src="/profile.png" className='rounded-full h-[25px] w-[25px] md:mr-2' alt="" />
+            <img src={profilePic} className='rounded-full h-[25px] w-[25px] md:mr-2' alt="" />
             <span className='text-sm opacity-70 md:block hidden'>Profile</span>
           </Link>
         </li>
