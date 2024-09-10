@@ -8,7 +8,7 @@ const getUserId = () => {
   const userKey = str.split('=')[1];
   return userKey
 }
-const API_URL = `http://localhost:5000/notifications/${getUserId()}`;
+const API_URL = `${process.env.REACT_APP_API_BASE_URL}/notifications/${getUserId()}`;
 
 function Notification() {
   const [notifications, setNotifications] = useState([]);

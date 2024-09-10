@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { BsInfoSquare } from "react-icons/bs";
 import { FaChevronLeft, FaTiktok } from "react-icons/fa";
@@ -14,9 +14,21 @@ const Video = () => {
   const { src } = useParams();
   const [repModOpen, setRepModOpen] = useState(false);
   const [revModOpen, setRevModOpen] = useState(false);
-
+  const [video, setVideo] = useState();
+  
   // Decode the video URL from params
-  const videoUrl = decodeURIComponent(src);
+  const videoId = decodeURIComponent(src);  
+
+  const getVideo=async()=>{
+    const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/upload/${videoId}`)
+    const data = await req.json()
+    setVideo(data)
+  }
+
+
+  useEffect(() => {
+        getVideo()
+  }, [videoId])
 
   return (
     <Fragment>
@@ -42,10 +54,10 @@ const Video = () => {
             </div>
             <div className="absolute z-10 bottom-3 w-[60%] sm:w-[43%] p-3 text-white">
               <a href="/#" className="text-xl font-semibold">
-                @azita-darvishi
+                {video && video.user.name}
               </a>
               <p className="py-1 w-[80%] text-sm">
-                Checking out new Apple Vision Pro. It's amazing.
+                {video && video.data.videoDesc}
               </p>
               <div className="flex">
                 <p className="p-1 px-2 gap-2 rounded-lg flex items-center text-xs SVTBottom">
@@ -57,7 +69,7 @@ const Video = () => {
             <div className="absolute bottom-3 z-10 right-2 text-white">
               <div className="relative cursor-pointer rounded-full flex justify-center">
                 <img
-                  src="/profile.png"
+                  src={video && video.user.picUrl}
                   style={{ height: "40px", width: "40px" }}
                   className="rounded-full"
                   alt=""
@@ -95,7 +107,8 @@ const Video = () => {
             </div>
           </div>
           <video
-            src={videoUrl}
+            src={video && video.data.videoUrl}
+            // src={videoId}
             autoPlay
             className="h-full relative z-0 rounded-xl w-full bg-slate-300 object-fill"
             controls

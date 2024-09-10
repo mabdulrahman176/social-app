@@ -7,7 +7,7 @@ function Personaldetail2() {
 
   const handleSubmit = async () => {
     try {
-      const req = await fetch('http://localhost:5000/users/', {
+      const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/users/`, {
         credentials: 'include',
         method: "POST",
         headers: {

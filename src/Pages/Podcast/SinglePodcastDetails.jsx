@@ -61,7 +61,7 @@ function SinglePodcastDetails() {
     getData();
   }, [loc.state]);
 const getPodcast = async (id) => {
-  const req = await fetch(`http://localhost:5000/podcasts/${id}`, {
+  const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/podcasts/${id}`, {
     method: "GET",
   });
   const d = await req.json();

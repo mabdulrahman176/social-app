@@ -21,6 +21,8 @@ const [newcard, setNewCard] = useState([]);
 const [result,setResult] = useState({});
 const [event , setEvent] = useState({});
 useEffect(() => {
+  console.log("single event detail")
+  console.log(loc.state)
   const getData = async () => {
     try {
       if(loc.state){
@@ -43,7 +45,7 @@ useEffect(() => {
 }, [loc.state.id]);
 
 const getEvent = async (id) => {
-  const req = await fetch(`http://localhost:5000/events/${id}`, {
+  const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/events/${id}`, {
     method: "GET",
   });
   const d = await req.json();
@@ -63,7 +65,7 @@ const getEvent = async (id) => {
         </h4>
       {/* {newcard.map(( data,index)=>( */}
           <div className="overflow-y-scroll w-[93%] Podcast_Top_Videos mx-auto h-[90%]">
-          <img src={event.imgSrc ? event.imgSrc : img} alt="" className="eventimg1" />
+          <img src={event.eventCoverUrl?event.eventCoverUrl : img} alt="" className="eventimg1" />
           <div className="sm:flex mt-2">
             <div className="risk sm:w-[60%]">
               <h3 className="text-xl font-bold">

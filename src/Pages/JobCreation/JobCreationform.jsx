@@ -12,7 +12,7 @@ const JobCreationform = () => {
 
 
   const handleSubmit = async()=>{
-    const req = await fetch('http://localhost:5000/jobs/',{
+    const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/jobs/`,{
       credentials:'include',
       method:"POST",
       headers:{

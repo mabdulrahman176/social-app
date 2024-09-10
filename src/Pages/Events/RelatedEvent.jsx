@@ -26,7 +26,7 @@ const RelatedEvent = () => {
     {newcard.map((data, i) => (
       <div key={i} className="m-0 text-white md:w-[33%] w-[49.4%] h-[42vh] relative">
         <img
-          src={data.imgSrc ? data.imgSrc : Image}
+          src={data.eventCoverUrl? data.eventCoverUrl: Image}
           alt="Card Img2"
           className="h-full w-full rounded-lg cursor-pointer"
         />

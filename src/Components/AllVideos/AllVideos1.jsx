@@ -6,14 +6,12 @@ import { Link, useNavigate } from 'react-router-dom';
 const AllVideos = () => {
   const [videos, setVideos] = useState([]);
   const navigate = useNavigate();
-  // const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000/upload';
-  const API_BASE_URL = 'http://localhost:5000/upload';
-
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL
   // Fetch video data
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/videos/all`);
+        const response = await axios.get(`${API_BASE_URL}upload/videos/all`);
         const result = response.data;
         console.log("fetched data:", result);
         const updatedData = result.data.map(user => ({
