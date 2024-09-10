@@ -24,7 +24,7 @@ const Signin = () => {
     console.log("Submitting data:", state);
 
     try {
-      const response = await fetch('http://localhost:5000/users/signin', { // Update the endpoint if needed
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/users/signin`, { // Update the endpoint if needed
         method: "POST",
         headers: {
           'Content-Type': 'application/json'
@@ -111,7 +111,7 @@ const Signin = () => {
         <section className="flex items-center justify-between w-full md:my-2">
           <div
             className="flex justify-center items-center bg-[#f1f1f1] px-2 py-2 rounded-full"
-            onClick={() => window.open('http://localhost:5000/auth/google')}
+            onClick={() => window.open(`${process.env.REACT_APP_API_BASE_URL}/auth/google`)}
           >
             <img className="w-5 h-5" src="/google.png" alt="Google" />
           </div>

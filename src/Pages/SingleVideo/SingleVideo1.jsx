@@ -24,17 +24,8 @@ const Video = () => {
   // State for Open Report-Model
   const [repModOpen, setRepModOpen] = useState(false);
   const [revModOpen, setRevModOpen] = useState(false);
-  const [source, setsource] = useState('')
+  const [video, setvideo] = useState('')
 
-  // let scr = useParams();
-  // let source;
-  // if (scr.src === "video3.mp4") {
-  //   source = vid3;
-  // } else if (scr.src === "video1.mp4") {
-  //   source = vid1;
-  // } else if (scr.src === "video2.mp4") {
-  //   source = vid2;
-  // }
   useEffect(() => {
     setsource(()=>loc.state.url)
     console.log(loc.state.url)

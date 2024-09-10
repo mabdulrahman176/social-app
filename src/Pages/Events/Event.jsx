@@ -24,6 +24,7 @@ function Event() {
     const getData = async () => {
       try {
         const result = await fetchEvent(); // Use the function from api.js
+        console.log("events results")
         console.log(result);
         setNewCard(result.data);
       } catch (error) {
@@ -43,7 +44,8 @@ function Event() {
         <div className="h-full w-[95%] mx-auto">
           <div className="flex w-full overflow-x-scroll gap-1 Podcast_Top_Videos">
             {newcard.map((data, i) => (
-              <CardComponent key={i} title={data.eventTitle} imgSrc={data.imgSrc} />
+              <CardComponent key={i} title={data.eventTitle} imgSrc={data.eventCoverUrl
+} />
             ))}
           </div>
         <RelatedEvent/>

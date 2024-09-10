@@ -3,7 +3,7 @@ import { FaAngleLeft } from "react-icons/fa";
 import { TbBrandNeteaseMusic } from "react-icons/tb";
 import { useNavigate,useLocation } from "react-router-dom";
 
-let SearchData = [
+let SearchData_ = [
   {
     id: 1,
     categ: "Marketing head",
@@ -101,6 +101,7 @@ let SearchData = [
     button: "Apply Now Now",
   },
 ];
+let SearchData=[]
 
 function Calendar2() {
   let navigate = useNavigate();
@@ -120,7 +121,7 @@ function Calendar2() {
         <div className="overflow-y-scroll  Podcast_Top_Videos h-[90%] px-4">
           <div>
             <div className="flex gap-1 flex-wrap w-full Podcast_Top_Videos  ">
-              {SearchData.map((elm, ind) => (
+              {/* {SearchData && SearchData.map((elm, ind) => (
                 <div
                   key={ind}
                   className="h-[40vh] sm:w-[32.4%] w-[49.3%] gap-1 flex-shrink-0 shadow rounded-lg border relative "
@@ -156,7 +157,7 @@ function Calendar2() {
                     )}
                   </div>
                 </div>
-              ))}
+              ))} */}
             </div>
           </div>
 

@@ -33,7 +33,7 @@ function Jobdetail() {
   }, [loc.state]);
 
   const getJob = async (id) => {
-    const req = await fetch(`http://localhost:5000/jobs/${id}`, {
+    const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/jobs/${id}`, {
       method: "GET",
     });
     const d = await req.json();

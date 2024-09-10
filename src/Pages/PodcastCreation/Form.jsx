@@ -28,7 +28,7 @@ const Form = ({ audioFile, coverImage, formState, setFormState }) => {
     }
 
     try {
-      const response = await fetch('http://localhost:5000/podcasts/', {
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/podcasts/`, {
         credentials: 'include',
         method: 'POST',
         body: formData,

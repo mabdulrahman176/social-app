@@ -40,7 +40,7 @@ function Message2() {
   }
   const fetchChatroom = async (id) => {
 
-    let url = `http://localhost:5000/chatrooms/room/${id[0]}`
+    let url = `${process.env.REACT_APP_API_BASE_URL}/chatrooms/room/${id[0]}`
     const req = await fetch(url)
     const d = await req.json()
     let sender = d.users.filter((e) => e !== getUserId())

@@ -12,6 +12,12 @@ const EventForm = () => {
   const [coverImageFile, setCoverImageFile] = useState(null);
   const [state, setState] = useState({});
 
+  const getUserId = () => {
+    const str = document.cookie
+    const userKey = str.split('=')[1];
+    return userKey
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent default form submission behavior
 
@@ -22,9 +28,9 @@ const EventForm = () => {
     Object.keys(state).forEach((key) => {
       formData.append(key, state[key]);
     });
-
+     formData.append('eventCreatedBy',getUserId())
     try {
-      const response = await fetch('http://localhost:5000/events/', {
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/events/`, {
         method: 'POST',
         body: formData,
       });

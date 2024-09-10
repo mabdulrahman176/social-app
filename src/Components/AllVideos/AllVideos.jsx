@@ -38,7 +38,7 @@ const AllVideos = () => {
             <div
               key={i} // Use unique video ID as key
               className="w-[32%] cursor-pointer grid place-items-center relative h-[30vh] sm:h-[40vh]"
-              onClick={() => navigate(`/video/${encodeURIComponent(video.videoUrl)}`)} // Navigate using video URL
+              onClick={() => navigate(`/video/${encodeURIComponent(video._id)}`)} // Navigate using video URL
             >
               <video
                 src={video.videoUrl}

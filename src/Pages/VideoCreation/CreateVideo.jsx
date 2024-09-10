@@ -16,6 +16,7 @@ const Video = () => {
   const [inputData, setInpData] = useState("");
   const [inpType, setInpType] = useState("");
   const [step, setStep] = useState("upload");
+  const [videoDesc, setDesc] = useState('');
   const [postPriv, setPostPriv] = useState("Anyone");
   const [postPrivShow, setPostPrivShow] = useState(false);
   const [vidPostSucc, setVidPostSucc] = useState(false);
@@ -54,15 +55,16 @@ const Video = () => {
 
     const formData = new FormData();
     formData.append("video", file);
+    formData.append("videoDesc", videoDesc);
+    formData.append("videoVisibility", postPriv);
 
     try {
-      const userId = 1; // Replace with actual user ID
-      const response = await axios.post(`http://localhost:5000/upload/${userId}`, formData, {
+      const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/upload/${getUserId()}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-
+        console.log({response})
       setVidPostSucc(true);
     } catch (error) {
       setErrorMessage("Failed to upload video.");
@@ -70,10 +72,20 @@ const Video = () => {
     }
   };
 
+  const getUserId = () => {
+    const str = document.cookie
+    const userKey = str.split('=')[1];
+    return userKey
+  }
+
+  const descOnChange=(e)=>{setDesc(e.target.value)
+    console.log(e.target.value)
+  }
+
   useEffect(() => {
     if (vidPostSucc) {
       const timer = setTimeout(() => {
-        navigate("/success"); // Navigate to success page after successful post
+        // navigate("/success"); // Navigate to success page after successful post
       }, 3000); // Delay before navigation
       return () => clearTimeout(timer); // Cleanup timeout on component unmount
     }
@@ -190,6 +202,7 @@ const Video = () => {
               </button>
             </div>
             <input
+            onChange={descOnChange}
               type="text"
               className="mb-2 py-1 text-gray-400 ps-3 text-sm outline-none border-none"
               placeholder="Add Description ........"

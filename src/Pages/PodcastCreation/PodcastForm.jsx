@@ -10,6 +10,13 @@ const PodcastForm = () => {
   const [formState, setFormState] = useState({});
   let navigate = useNavigate();
 
+
+  const getUserId = () => {
+    const str = document.cookie
+    const userKey = str.split('=')[1];
+    return userKey
+  }
+
   const handleSubmit = async () => {
     const formData = new FormData();
 
@@ -26,7 +33,8 @@ const PodcastForm = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:5000/podcasts/", {
+      formData.append('userID', getUserId());
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/podcasts/`, {
         credentials: "include",
         method: "POST",
         body: formData,

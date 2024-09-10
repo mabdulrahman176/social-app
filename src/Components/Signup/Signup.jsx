@@ -16,7 +16,7 @@ const Signup = () => {
     console.log("Submitting data:", { ...state, role: selectedRole });
 
     try {
-      const req = await fetch('http://localhost:5000/users/', {
+      const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/users/`, {
         credentials: 'include',
         method: "POST",
         headers: {
@@ -160,7 +160,7 @@ const Signup = () => {
         <section className="flex items-center justify-between w-full md:my-2">
           <div
             className="flex justify-center items-center bg-[#f1f1f1] px-2 py-2 rounded-full"
-            onClick={() => window.open("http://localhost:5000/auth/google")}
+            onClick={() => window.open(`${process.env.REACT_APP_API_BASE_URL}/auth/google`)}
           >
             <img className="w-5 h-5" src="/google.png" alt="Google" />
           </div>
@@ -168,7 +168,7 @@ const Signup = () => {
             <img className="w-5 h-5" src="/insta.png" alt="Instagram" />
           </div>
           <div className="flex justify-center items-center bg-[#f1f1f1] p-[.3rem] rounded-full"
-          onClick={() => window.open("http://localhost:5000/auth/github")}
+          onClick={() => window.open(`${process.env.REACT_APP_API_BASE_URL}/auth/github`)}
           >
             <img className="w-[2rem] h-8" src="/Github.png" alt="Github" />
           </div>
