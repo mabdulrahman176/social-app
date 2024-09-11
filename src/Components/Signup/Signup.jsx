@@ -8,7 +8,7 @@ const Signup = () => {
   const location = useLocation();
  
   const [state, setState] = useState({});
-  const [selectedRole, setSelectedRole] = useState("");
+  const [selectedRole, setSelectedRole] = useState("viewer");
 
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent default form submission behavior
@@ -114,27 +114,27 @@ const Signup = () => {
               <button
                 type="button"
                 className={`${
-                  selectedRole === "Enterpreneur" ? "linear_gradient" : "bg-[#f1f1f1]"
+                  selectedRole === "entrepreneur" ? "linear_gradient" : "bg-[#f1f1f1]"
                 } rounded text-xs text-black px-2 py-2 font-semibold`}
-                onClick={() => handleRoleSelect("Enterpreneur")}
+                onClick={() => handleRoleSelect("entrepreneur")}
               >
-                Enterpreneur
+                Entrepreneur
               </button>
               <button
                 type="button"
                 className={`${
-                  selectedRole === "Investor" ? "linear_gradient" : "bg-[#f1f1f1]"
+                  selectedRole === "invester" ? "linear_gradient" : "bg-[#f1f1f1]"
                 } rounded text-xs text-black px-2 py-2 font-semibold`}
-                onClick={() => handleRoleSelect("Investor")}
+                onClick={() => handleRoleSelect("invester")}
               >
                 Investor
               </button>
               <button
                 type="button"
                 className={`${
-                  selectedRole === "Viewer" ? "linear_gradient" : "bg-[#f1f1f1]"
+                  selectedRole === "viewer" ? "linear_gradient" : "bg-[#f1f1f1]"
                 } rounded text-xs text-black px-2 py-2 font-semibold`}
-                onClick={() => handleRoleSelect("Viewer")}
+                onClick={() => handleRoleSelect("viewer")}
               >
                 Viewer
               </button>
