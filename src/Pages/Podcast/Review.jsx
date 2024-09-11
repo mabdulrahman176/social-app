@@ -17,23 +17,81 @@ const Review = (props) => {
   const [rating, setRating] = useState(4); // Default rating
   const [reviewText, setReviewText] = useState('');
 
+
+  const getUserId = () => {
+    const str = document.cookie
+    const userKey = str.split('=')[1];
+    return userKey
+  }
+
+  function calculateMean(com) {
+    console.log("calculation mean")
+    let arr = com.map((e)=>e.reviewRatings)
+
+    if (arr.length === 0) return 0;  // Handle empty array case
+  
+    const sum = arr.reduce((acc, curr) => acc + curr, 0);  // Sum up all elements
+    const mean = sum / arr.length;  // Calculate the mean
+  console.log({arr})
+    return mean;
+  }
+
+  const postReview = async () => {
+    console.log("posting review")
+    console.log({
+      reviewItemId: props.videoId,
+      reviewRatings: rating,
+      reviewMessage: reviewText,
+      userId:getUserId()
+  })
+    const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/reviews`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include',
+      body: JSON.stringify({
+        reviewItemId: props.videoId,
+        reviewRatings: rating,
+        reviewMessage: reviewText,
+        userId:getUserId()
+      })
+
+    }
+    )
+    const data = await req.json()
+    console.log({ data })
+
+  }
+  const getReview = async () => {
+    const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/reviews/${props.videoId}`)
+    const data = await req.json()
+    console.log({ data })
+
+  }
+  const fetchComments = async () => {
+    console.log('video id in reviews', props.videoId)
+    if (!props.videoId) {
+      console.error('No videoId provided');
+      return;
+    }
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/reviews/${props.videoId}`)
+      const data = await response.json()
+      console.log("fetching comments")
+      console.log( data )
+      setComments(data);
+      
+    } catch (error) {
+      console.error('Error fetching comments:', error);
+    }
+  };
+
   // Fetch comments from the backend
   useEffect(() => {
-    const fetchComments = async () => {
-      if (!props.videoId) {
-        console.error('No videoId provided');
-        return;
-      }
-      try {
-        const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/comments/${props.videoId}`);
-        // console.log("fetching comments")
-        setComments(response.data.data || []);
-      } catch (error) {
-        console.error('Error fetching comments:', error);
-      }
-    };
-
+  
     fetchComments();
+    console.log({comments})
   }, [props.videoId]);
 
   // Handle the form submission for adding a new review
@@ -104,8 +162,8 @@ const Review = (props) => {
           <hr className="bg-gray-300 w-full h-[1px]" />
 
           {isWritingReview ? (
-            <form
-              onSubmit={handleFormSubmit}
+            <div
+              // onSubmit={handleFormSubmit}
               className="flex flex-col justify-between h-full"
             >
               <div className="flex flex-col gap-4 p-4">
@@ -142,19 +200,20 @@ const Review = (props) => {
                 <h1 className="text-end opacity-70">Max 100 words</h1>
               </div>
               <button
-                type="submit"
+              onClick={postReview}
+                // type="submit"
                 className="w-full self-center linear_gradient rounded-2xl text-white py-2"
               >
                 Submit
               </button>
-            </form>
+            </div>
           ) : (
             <div className="flex flex-col gap-2 p-4 font-semibold">
               <div className="flex flex-col gap-2">
                 <h1>Average rating</h1>
                 <div className="flex flex-wrap md:flex-nowrap justify-between items-center">
                   <div className="flex items-center gap-4">
-                    <h1 className="text-xl text-violet-500">4.7</h1>
+                    <h1 className="text-xl text-violet-500">{calculateMean(comments)}</h1>
                     <div>
                       {[1, 2, 3, 4, 5].map((star) => (
                         <FontAwesomeIcon
@@ -174,7 +233,7 @@ const Review = (props) => {
                     Write a review
                   </u>
                 </div>
-                <h1 className="opacity-60">352 Total reviews</h1>
+                <h1 className="opacity-60">{comments.length} Total reviews</h1>
                 <h1 className="text-center">
                   <FontAwesomeIcon icon={faChevronDown} aria-label="Expand reviews" />
                 </h1>
@@ -184,33 +243,33 @@ const Review = (props) => {
                 {comments.length === 0 ? (
                   <p className="text-center text-gray-500">No reviews yet.</p>
                 ) : (
-                  comments.map((value) => (
-                    <div key={value._id} className="flex flex-col gap-3 mb-4">
+                  comments.map((value,i) => (
+                    <div key={i} className="flex flex-col gap-3 mb-4">
                       <div className="flex gap-1 items-center">
                         <img
-                          src={value.img || '/default-avatar.png'}
+                          src={value.sender.picUrl || '/default-avatar.png'}
                           alt="Profile"
                           className="rounded-full w-5 h-5"
                         />
-                        <h1>{value.name}</h1>
+                        <h1>{value.sender.name}</h1>
                       </div>
                       <div className="flex gap-1 items-center">
                         <div>
                           {[1, 2, 3, 4, 5].map((star) => (
                             <FontAwesomeIcon
                               key={star}
-                              className={`w-5 h-5 ${star <= value.rating ? 'text-yellow-400' : 'text-gray-300'}`}
+                              className={`w-5 h-5 ${star <= value.reviewRatings ? 'text-yellow-400' : 'text-gray-300'}`}
                               icon={faStar}
                               aria-label={`${star} star`}
                             />
                           ))}
                         </div>
-                        <h1 className="font-normal opacity-90">({value.rating.toFixed(1)})</h1>
+                        <h1 className="font-normal opacity-90">({value.reviewRatings.toFixed(1)})</h1>
                       </div>
-                      <h1 className="font-normal opacity-90">{value.message}</h1>
+                      <h1 className="font-normal opacity-90">{value.reviewMessage}</h1>
                       <div className="flex items-center justify-between">
                         <h1 className="text-blue-500 font-normal cursor-pointer" aria-label="View replies">
-                          View 5 replies
+                          no replies
                         </h1>
                         <h1 className="opacity-90 cursor-pointer" aria-label="Report comment">Report</h1>
                       </div>

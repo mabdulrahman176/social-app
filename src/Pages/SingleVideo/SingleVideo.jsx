@@ -35,14 +35,14 @@ const Video = () => {
       <section className="h-full w-full relative flex items-center bg-white">
         {revModOpen && (
           <div className="h-[95%] left-0 w-full absolute top-0 z-20 flex justify-center items-center">
-            <Review setRevModOpen={setRevModOpen} />
+            <Review videoId={videoId} setRevModOpen={setRevModOpen} />
           </div>
         )}
-        {repModOpen && (
+        {/* {repModOpen && (
           <div className="h-full w-full absolute top-0 z-20 flex justify-center items-center">
             <Model setRepModOpen={setRepModOpen} />
           </div>
-        )}
+        )} */}
         <div className="w-[80%] sm:w-[65%] md:w-[55%] h-[95%] mx-auto rounded-xl relative">
           <div className="absolute z-10 rounded-lg left-0 top-0 h-full w-full ShadedBG">
             <div
