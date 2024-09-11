@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { GrCut } from "react-icons/gr";
-import { BsCcCircle } from "react-icons/bs";
-import { GrGallery } from "react-icons/gr";
+// import { GrCut } from "react-icons/gr";
+// import { BsCcCircle } from "react-icons/bs";
+// import { GrGallery } from "react-icons/gr";
 import { useNavigate } from "react-router-dom";
 import { FaCaretLeft, FaShareFromSquare } from "react-icons/fa6";
 import { MdArrowDropDown, MdDone } from "react-icons/md";
