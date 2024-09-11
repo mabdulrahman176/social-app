@@ -25,6 +25,7 @@ const LeftLayout = () => {
 
 
 const getProfilePic = async()=>{
+  console.log(`${process.env.REACT_APP_API_BASE_URL}/users/${getUserId()}`)
   const req= await fetch(`${process.env.REACT_APP_API_BASE_URL}/users/${getUserId()}`,{
     method:"GET",
     credentials:'include'
@@ -32,8 +33,10 @@ const getProfilePic = async()=>{
 
   const data = await req.json()
  console.log("profile pic data") 
-  console.log({data:data.user.picUrl})
-  setProfilePic(data.user.picUrl)
+ console.log(data)
+
+  console.log({datapic:data.user.picUrl})
+  setProfilePic(()=> data.user.picUrl && data.user.picUrl)
 }
 useEffect(() => {
 getProfilePic()

@@ -8,7 +8,7 @@ const Signup = () => {
   const location = useLocation();
  
   const [state, setState] = useState({});
-  const [selectedRole, setSelectedRole] = useState("");
+  const [selectedRole, setSelectedRole] = useState("viewer");
 
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent default form submission behavior
@@ -118,7 +118,7 @@ const Signup = () => {
                 } rounded text-xs text-black px-2 py-2 font-semibold`}
                 onClick={() => handleRoleSelect("entrepreneur")}
               >
-                Enterpreneur
+                Entrepreneur
               </button>
               <button
                 type="button"
