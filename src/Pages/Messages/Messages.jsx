@@ -103,9 +103,10 @@ function Message() {
   const fetchAllChatrooms = async () => {
     const req = await fetch(`http://localhost:5000/chatrooms/${getUserId()}`)
     const d = await req.json()
-    // console.log({ d })
+    console.log({ d })
     console.log("user is",getUserId())
-    const roomIds = d.data.map((e) => e._id);
+    console.log(d.data===0 && d.data==null )
+    const roomIds = d.data!==0?d.data.map((e) => e._id):''
     setRooms(roomIds);
     senderData()
     let user = await senderData();

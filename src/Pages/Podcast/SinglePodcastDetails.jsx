@@ -42,13 +42,14 @@ function SinglePodcastDetails() {
   const [revModOpen, setRevModOpen] = useState(false)
   const [repModOpen, setRepModOpen] = useState(false)
   const [recentdata, setRecentData] = useState([]);
-  const [result, setResult] = useState('');
+  const [result, setResult] = useState({});
 
   useEffect(() => {
     const getData = async () => {
       try {
         if(loc.state){
-          const result = await getPodcast(loc.state.id); 
+          const result = await getPodcast(loc.state.id);
+          console.log('result is') 
           console.log({result});
           setResult(result);
           setRecentData([result]);
@@ -86,22 +87,22 @@ const getPodcast = async (id) => {
           Podcast
         </h4>
         </div>
-       {recentdata.map((elm,index)=>(
-         <div key={index} className="flex w-full PCS_Flex sm:ps-6 gap-6">
+       {/* {recentdata.map((elm,index)=>( */}
+         <div  className="flex w-full PCS_Flex sm:ps-6 gap-6">
          <img
-           src={elm.img ? elm.img : img2}
+           src={result.picUrl ? result.picUrl : img2}
            className="md:h-[35vh] h-[39vh] md:w-[33%] w-[40%]  sm:mx-auto rounded-xl"
            alt=""
          />
          <div className="w-[60%]  mx-auto PCS_Child1">
-           <h1 className="text-xl font-semibold">{elm.episodeTitle}</h1>
+           <h1 className="text-xl font-semibold">{result.episodeTitle || 'N/A'}</h1>
            <h2 className="">Podcast Type:</h2>
-           <p className="py-1 opacity-65">{elm.podcastType}</p>
-           <p className="opacity-50">Season Number ={elm.seasonNumber} Episode Number = ({elm.episodeNumber})</p>
+           <p className="py-1 opacity-65">{result.podcastType || 'N/A'}</p>
+           <p className="opacity-50">Season Number ={result.seasonNumber || 'N/A'} Episode Number = ({result.episodeNumber || 'N/A'})</p>
            <p className="">AudioName:</p>
-           <p className="opacity-50">{elm.audioName}</p>
+           <p className="opacity-50">{result.audioName}</p>
            <button className="flex items-center gap-3 border border-black px-3 pe-7 my-2 rounded-3xl">
-           {elm.audioUrl}
+           {result.audioUrl}
            </button>
            <div className="flex items-center gap-4">
              <CiSquareInfo className="text-2xl cursor-pointer" onClick={()=>setRepModOpen(true)}/>
@@ -110,11 +111,11 @@ const getPodcast = async (id) => {
             
            </div>
            <p className="lg:w-[75%] w-full opacity-50 text-[15px]">
-           {elm.episodeDescription}
+           {result.episodeDescription}
            </p>
          </div>
        </div>
-       ))}
+       {/* } */}
         <div className="flex gap-2 md:ps-6 mt-3 w-full overflow-x-scroll Podcast_Top_Videos">
           {guestData.map((elm, ind) => (
             <div
