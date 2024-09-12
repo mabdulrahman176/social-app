@@ -40,13 +40,13 @@ function Message2() {
   }
   const fetchChatroom = async (id) => {
 
-    let url = `${process.env.REACT_APP_API_BASE_URL}/chatrooms/room/${id[0]}`
+    let url = `${process.env.REACT_APP_API_BASE_URL}/chatrooms/room/${id}`
     const req = await fetch(url)
     const d = await req.json()
     let sender = d.users.filter((e) => e !== getUserId())
     getSenderName(sender[0])
-    console.log("roomId," ,id[0])
-    setRoomId(id[0])
+    console.log("roomId," ,id)
+    setRoomId(id)
     // setRoomId(d._id)
     // const mess = d.messages
     // setChatroom(mess)
@@ -71,7 +71,7 @@ function Message2() {
       console.log("join room rrom id")
          console.log(id[0])
       socket.on('connection',(socket_)=>{console.log("propbaly working")})
-      socket.emit('joinRoom', { roomId:id[0],userId:getUserId() });
+      socket.emit('joinRoom', { roomId:id,userId:getUserId() });
       socket.on('pos', (socket)=>{console.log("room joinded",socket);});
     // }
   };
@@ -84,19 +84,11 @@ function Message2() {
   };
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const accessToken = params.get('access_token');
-    setToken(accessToken)
-    const interval = setInterval(() => {
-      console.log("interval")
-      // setRender((prev)=>!prev)
-      joinRoom(loc.state.id.room)
-    }, 5000);
-
-    // loc.state.id.room && fetchChatroom(loc.state.id.room)
-    // loc.state.id.room && fetchChatroom(loc.state.id.room)
-   fetchChatroom(loc.state.id.room)
-  //  joinRoom(loc.state.id.room)
+    // const params = new URLSearchParams(window.location.search);
+    // const accessToken = params.get('access_token');
+    fetchChatroom(loc.state.id)
+    // setToken(accessToken)
+    joinRoom(loc.state.id)
     socket.on('connection',(socket_)=>{console.log("working well")})
     socket.on('receiveMessage', (message) => {
       console.log("receving message")
@@ -109,11 +101,10 @@ function Message2() {
       setChatroom(previousMessages);
     });
      
-    document.addEventListener("mousedown", handleClickOutside);
     return () => {
+      document.addEventListener("mousedown", handleClickOutside);
       socket.off('receiveMessage');
       socket.off('previousMessages');
-      clearInterval(interval);
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);  // Depend on the user PK
