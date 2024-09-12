@@ -1,5 +1,5 @@
 
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { CiPlay1 } from "react-icons/ci";
 import { FaRegShareFromSquare } from "react-icons/fa6";
 import { IoBookmarkOutline } from "react-icons/io5";
@@ -69,8 +69,13 @@ let similarPodcastData = [
     mint: "35 Mins",
   },
 ];
-
-const ApplePodcast = () => {
+const ApplePodcast = (props) => {
+  const [podcast, setpodcast] = useState([])
+  useEffect(()=>{
+    console.log("podcasts")
+    setpodcast(props.podcasts)
+    console.log(props.podcasts)
+  },[props.podcast])
   return (
     <Fragment>
     <div className=" overflow-y-scroll  Podcast_Top_Videos h-full">

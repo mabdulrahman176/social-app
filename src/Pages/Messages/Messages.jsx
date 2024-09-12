@@ -105,8 +105,8 @@ function Message() {
     const d = await req.json()
     console.log({ d })
     console.log("user is",getUserId())
-    console.log(d.data===0 && d.data==null )
-    const roomIds = d.data!==0?d.data.map((e) => e._id):''
+    const roomIds =d.data.map((e) =>e && e._id )
+
     setRooms(roomIds);
     senderData()
     let user = await senderData();

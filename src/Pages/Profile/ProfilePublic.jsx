@@ -15,7 +15,8 @@ import PublicProfileJobs from "./PublicProfileJobs";
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL
 
 const ProfilePublic = ({ userId }) => { // Accept userId as a prop
-  const [activeTab, setActiveTab] = useState("Video");
+  const [data_, setDATA] = useState({});
+  const [activeTab, setActiveTab] = useState("");
   const [profile, setProfile] = useState({});
   const [file, setFile] = useState(null);
 
@@ -52,15 +53,18 @@ const ProfilePublic = ({ userId }) => { // Accept userId as a prop
   const fetchProfileData = async () => {
     try {
       const result = await fetchProfile(getUserId()); // Use userId dynamically
-      setProfile(result.user);
-      console.log({result:result.user})
+      setProfile(result.user)
+      setDATA(result.data)
+      console.log({data_})
+      return result
     } catch (error) {
       console.error("Fetching profile data error:", error);
     }
   };
 
   useEffect(() => {
-      fetchProfileData();
+     fetchProfileData();
+     
   }, []);
 
   return (
@@ -137,18 +141,18 @@ const ProfilePublic = ({ userId }) => { // Accept userId as a prop
           </div>
         </div>
         <section className="h-[54%] w-full overflow-y-scroll Podcast_Top_Videos">
-          <div style={{ display: activeTab === "Video" ? "block" : "none" }}>
-            <PublicProfileVideos />
-          </div>
-          <div style={{ display: activeTab === "Podcast" ? "block" : "none" }}>
-            <PublicProfilePodcats />
-          </div>
-          <div style={{ display: activeTab === "Event" ? "block" : "none" }}>
-            <PublicProfileEvents />
-          </div>
-          <div style={{ display: activeTab === "Job" ? "block" : "none" }}>
-            <PublicProfileJobs />
-          </div>
+          {/* <div style={{ display: activeTab === "Video" ? "block" : "none" }}> */}
+         { activeTab === "Video"?<PublicProfileVideos videos={data_.videos} />:''}
+          {/* </div> */}
+          {/* <div style={{ display: activeTab === "Podcast" ? "block" : "none" }}> */}
+           {activeTab === "Podcast"? <PublicProfilePodcats  podcast={data_.podcast}/>:''}
+          {/* </div> */}
+          {/* <div style={{ display: activeTab === "Event" ? "block" : "none" }}> */}
+           { activeTab === "Event"?<PublicProfileEvents  events={data_.events}/>:''}
+          {/* </div> */}
+          {/* <div style={{ display: activeTab === "Job" ? "block" : "none" }}> */}
+           {activeTab === "Job"? <PublicProfileJobs  jobs={data_.jobs} />:''}
+          {/* </div> */}
         </section>
       </div>
     </Fragment>
