@@ -4,122 +4,82 @@ import {
   faChevronDown,
   faChevronLeft,
   faStar,
+  faTrashAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import { faStar as faStarRegular } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState, useEffect } from "react";
 import { RiCloseLine } from "react-icons/ri";
-import axios from 'axios'; // Make sure axios is installed
+import axios from "axios";
 
 const Review = (props) => {
   const [isWritingReview, setIsWritingReview] = useState(false);
   const [comments, setComments] = useState([]);
   const [rating, setRating] = useState(4); // Default rating
-  const [reviewText, setReviewText] = useState('');
-
+  const [reviewText, setReviewText] = useState("");
 
   const getUserId = () => {
-    const str = document.cookie
-    const userKey = str.split('=')[1];
-    return userKey
-  }
+    const str = document.cookie;
+    const userKey = str.split("=")[1];
+    return userKey;
+  };
 
   function calculateMean(com) {
-    console.log("calculation mean")
-    let arr = com.map((e)=>e.reviewRatings)
+    let arr = com.map((e) => e.reviewRatings);
 
-    if (arr.length === 0) return 0;  // Handle empty array case
-  
-    const sum = arr.reduce((acc, curr) => acc + curr, 0);  // Sum up all elements
-    const mean = sum / arr.length;  // Calculate the mean
-  console.log({arr})
+    if (arr.length === 0) return 0; // Handle empty array case
+
+    const sum = arr.reduce((acc, curr) => acc + curr, 0); // Sum up all elements
+    const mean = sum / arr.length; // Calculate the mean
+
     return mean;
   }
 
   const postReview = async () => {
-    console.log("posting review")
-    console.log({
-      reviewItemId: props.videoId,
-      reviewRatings: rating,
-      reviewMessage: reviewText,
-      userId:getUserId()
-  })
+    console.log("posting review");
     const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/reviews`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
-      credentials: 'include',
+      credentials: "include",
       body: JSON.stringify({
         reviewItemId: props.videoId,
         reviewRatings: rating,
         reviewMessage: reviewText,
-        userId:getUserId()
-      })
-
-    }
-    )
-    const data = await req.json()
-    console.log({ data })
-
-  }
-  const getReview = async () => {
-    const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/reviews/${props.videoId}`)
-    const data = await req.json()
-    console.log({ data })
-
-  }
-  const fetchComments = async () => {
-    console.log('video id in reviews', props.videoId)
-    if (!props.videoId) {
-      console.error('No videoId provided');
-      return;
-    }
-    try {
-      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/reviews/${props.videoId}`)
-      const data = await response.json()
-      console.log("fetching comments")
-      console.log( data )
-      setComments(data);
-      
-    } catch (error) {
-      console.error('Error fetching comments:', error);
-    }
+        userId: getUserId(),
+      }),
+    });
+    const data = await req.json();
+    console.log({ data });
   };
 
-  // Fetch comments from the backend
-  useEffect(() => {
-  
-    fetchComments();
-    console.log({comments})
-  }, [props.videoId]);
-
-  // Handle the form submission for adding a new review
-  const handleFormSubmit = async (e) => {
-    e.preventDefault();
-    if (!props.videoId) {
-      console.error('No videoId provided');
-      return;
-    }
-    if (reviewText.split(' ').length > 100) {
-      alert('Review cannot exceed 100 words.');
-      return;
-    }
+  const deleteComment = async (commentId) => {
     try {
-      await axios.post(`/comments/${props.videoId}`, {
-        postedByUserId: props.userId, // Pass the current user's ID
-        message: reviewText,
-        rating // Include rating if needed
+      await fetch(`${process.env.REACT_APP_API_BASE_URL}/reviews/${commentId}`, {
+        method: "DELETE",
       });
-      // Fetch updated comments
-      const response = await axios.get(`/comments/${props.videoId}`);
-      setComments(response.data.data || []);
-      setReviewText('');
-      setIsWritingReview(false);
+      setComments(comments.filter((comment) => comment.id !== commentId)); // Remove deleted comment from state
     } catch (error) {
-      console.error('Error submitting review:', error);
+      console.error("Error deleting comment:", error);
     }
   };
+
+  const fetchComments = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_API_BASE_URL}/reviews/${props.videoId}`
+      );
+      const data = await response.json();
+      setComments(data);
+    } catch (error) {
+      console.error("Error fetching comments:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchComments();
+  }, [props.videoId]);
 
   return (
     <React.Fragment>
@@ -162,10 +122,7 @@ const Review = (props) => {
           <hr className="bg-gray-300 w-full h-[1px]" />
 
           {isWritingReview ? (
-            <div
-              // onSubmit={handleFormSubmit}
-              className="flex flex-col justify-between h-full"
-            >
+            <div className="flex flex-col justify-between h-full">
               <div className="flex flex-col gap-4 p-4">
                 <h1 className="font-semibold">Rate your Experience</h1>
                 <div className="flex items-center gap-4">
@@ -173,7 +130,9 @@ const Review = (props) => {
                     {[1, 2, 3, 4, 5].map((star) => (
                       <FontAwesomeIcon
                         key={star}
-                        className={`w-5 h-5 ${star <= rating ? 'text-yellow-400' : 'text-gray-300'}`}
+                        className={`w-5 h-5 ${
+                          star <= rating ? "text-yellow-400" : "text-gray-300"
+                        }`}
                         icon={faStar}
                         onClick={() => setRating(star)}
                         aria-label={`${star} star`}
@@ -200,8 +159,7 @@ const Review = (props) => {
                 <h1 className="text-end opacity-70">Max 100 words</h1>
               </div>
               <button
-              onClick={postReview}
-                // type="submit"
+                onClick={postReview}
                 className="w-full self-center linear_gradient rounded-2xl text-white py-2"
               >
                 Submit
@@ -213,7 +171,9 @@ const Review = (props) => {
                 <h1>Average rating</h1>
                 <div className="flex flex-wrap md:flex-nowrap justify-between items-center">
                   <div className="flex items-center gap-4">
-                    <h1 className="text-xl text-violet-500">{calculateMean(comments)}</h1>
+                    <h1 className="text-xl text-violet-500">
+                      {calculateMean(comments)}
+                    </h1>
                     <div>
                       {[1, 2, 3, 4, 5].map((star) => (
                         <FontAwesomeIcon
@@ -235,7 +195,10 @@ const Review = (props) => {
                 </div>
                 <h1 className="opacity-60">{comments.length} Total reviews</h1>
                 <h1 className="text-center">
-                  <FontAwesomeIcon icon={faChevronDown} aria-label="Expand reviews" />
+                  <FontAwesomeIcon
+                    icon={faChevronDown}
+                    aria-label="Expand reviews"
+                  />
                 </h1>
               </div>
               <hr />
@@ -243,11 +206,11 @@ const Review = (props) => {
                 {comments.length === 0 ? (
                   <p className="text-center text-gray-500">No reviews yet.</p>
                 ) : (
-                  comments.map((value,i) => (
+                  comments.map((value, i) => (
                     <div key={i} className="flex flex-col gap-3 mb-4">
                       <div className="flex gap-1 items-center">
                         <img
-                          src={value.sender.picUrl || '/default-avatar.png'}
+                          src={value.sender.picUrl || "/default-avatar.png"}
                           alt="Profile"
                           className="rounded-full w-5 h-5"
                         />
@@ -258,21 +221,31 @@ const Review = (props) => {
                           {[1, 2, 3, 4, 5].map((star) => (
                             <FontAwesomeIcon
                               key={star}
-                              className={`w-5 h-5 ${star <= value.reviewRatings ? 'text-yellow-400' : 'text-gray-300'}`}
+                              className={`w-5 h-5 ${
+                                star <= value.reviewRatings
+                                  ? "text-yellow-400"
+                                  : "text-gray-300"
+                              }`}
                               icon={faStar}
                               aria-label={`${star} star`}
                             />
                           ))}
                         </div>
-                        <h1 className="font-normal opacity-90">({value.reviewRatings.toFixed(1)})</h1>
-                      </div>
-                      <h1 className="font-normal opacity-90">{value.reviewMessage}</h1>
-                      <div className="flex items-center justify-between">
-                        <h1 className="text-blue-500 font-normal cursor-pointer" aria-label="View replies">
-                          no replies
+                        <h1 className="font-normal opacity-90">
+                          ({value.reviewRatings.toFixed(1)})
                         </h1>
-                        <h1 className="opacity-90 cursor-pointer" aria-label="Report comment">Report</h1>
                       </div>
+                      <h1 className="font-normal opacity-90">
+                        {value.reviewMessage}
+                      </h1>
+                      <button
+                        className="text-red-500 flex items-center gap-1 cursor-pointer"
+                        onClick={() => deleteComment(value.id)}
+                        aria-label="Delete review"
+                      >
+                        <FontAwesomeIcon icon={faTrashAlt} />
+                        <span>Delete</span>
+                      </button>
                     </div>
                   ))
                 )}
@@ -284,7 +257,7 @@ const Review = (props) => {
 
       <section>
         <FontAwesomeIcon
-          className="absolute top-[50%] translate-y-[-50%] right-2 cursor-pointer"
+          className="absolute w-4 h-4 rounded-full top-[50%] translate-y-[-50%] right-2 cursor-pointer"
           icon={faAngleRight}
           aria-label="Next"
         />
