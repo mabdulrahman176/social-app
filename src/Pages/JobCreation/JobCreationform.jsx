@@ -258,7 +258,7 @@ const JobCreationform = () => {
           <label className="block text-gray-600 text-sm font-bold mt-4" htmlFor="salary">
             Salary Range *
           </label>
-          <select
+          {/* <select
             onChange={_onChange_}
             id="salary"
             name="salaryRange"
@@ -266,14 +266,22 @@ const JobCreationform = () => {
           >
             <option value="$30,000-$50,000">$30,000-$50,000</option>
             <option value="$30,000-$70,000">$30,000-$70,000</option>
-          </select>
+          </select> */}
+             <input
+            type="text"
+            onChange={_onChange_}
+             id="salary"
+            name="salaryRange"
+            placeholder="Enter Salary Range"
+            className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
+          />
         </div>
 
         <div className="sm:w-[40%] w-[45%]">
           <label className="block text-gray-600 text-sm font-bold mt-4" htmlFor="jobshift">
             Job Shift *
           </label>
-          <select
+          {/* <select
             onChange={_onChange_}
             id="jobshift"
             name="jobShift"
@@ -281,7 +289,15 @@ const JobCreationform = () => {
           >
             <option value="programming">Programming</option>
             <option value="design">UI Designer</option>
-          </select>
+          </select> */}
+             <input
+            type="text"
+            onChange={_onChange_}
+            id="jobshift"
+            name="jobShift"
+            placeholder="Job Shift Type"
+            className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
+          />
         </div>
 
         <div className="sm:w-[40%] w-[45%]">
