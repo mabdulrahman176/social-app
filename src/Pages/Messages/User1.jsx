@@ -62,7 +62,7 @@ function Message2() {
     setRoomId(id)
   }
   const getSenderName = async (id) => {
-    const req = await fetch(`http://localhost:5000/users/${id}`)
+    const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/users/${id}`)
     const d = await req.json()
     console.log("setting sender")
     console.log(d.user)
@@ -71,7 +71,7 @@ function Message2() {
 
   }
   const getReceiver = async () => {
-    const req = await fetch(`http://localhost:5000/users/${getUserId()}`)
+    const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/users/${getUserId()}`)
     const d = await req.json()
 
     setReceiver(d.user)
