@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { CiPlay1 } from "react-icons/ci";
+import { CiPlay1 ,CiTrash} from "react-icons/ci";
 
 import { FaRegShareFromSquare } from "react-icons/fa6";
 import { IoBookmarkOutline } from "react-icons/io5";

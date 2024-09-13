@@ -28,6 +28,19 @@ function Message2() {
 
   const cardRef = useRef(null);
 
+  const __Time__= (isoString )=>{
+    const date = new Date(isoString);
+    let hours = date.getHours();
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const seconds = date.getSeconds().toString().padStart(2, '0');
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12 || 12; // Convert to 12-hour format, handling the case where 0 hours means 12 AM
+    // const timeString = `${hours}:${minutes}:${seconds} ${ampm}`;
+    const timeString = `${hours}:${minutes} ${ampm}`;
+    return timeString 
+      }
+    
+
   const handleClickOutside = (event) => {
     if (cardRef.current && !cardRef.current.contains(event.target)) {
       setShowCard(false);
@@ -45,25 +58,23 @@ function Message2() {
     const d = await req.json()
     let sender = d.users.filter((e) => e !== getUserId())
     getSenderName(sender[0])
-    console.log("roomId," ,id)
+    // console.log("roomId," ,id)
     setRoomId(id)
-    // setRoomId(d._id)
-    // const mess = d.messages
-    // setChatroom(mess)
-
   }
   const getSenderName = async (id) => {
     const req = await fetch(`http://localhost:5000/users/${id}`)
     const d = await req.json()
+    console.log("setting sender")
+    console.log(d.user)
     getReceiver()
-    setSender(d)
+    setSender(d.user)
 
   }
   const getReceiver = async () => {
     const req = await fetch(`http://localhost:5000/users/${getUserId()}`)
     const d = await req.json()
-    setReceiver(d)
 
+    setReceiver(d.user)
   }
   const joinRoom = (id) => {
     // if (roomId && userId) {
@@ -247,7 +258,7 @@ function Message2() {
                   </div>
                 </div>
               </div>
-              <p className="text-[gray] text-[10px]">6:42PM</p>
+              <p className="text-[gray] text-[10px]">{__Time__(e.timestamp)}</p>
             </div>
           })}
           {/* message component */}
