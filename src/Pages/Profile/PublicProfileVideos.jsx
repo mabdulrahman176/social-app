@@ -31,6 +31,7 @@ const navigate = useNavigate();
   // };
 }
 const AllVideos = () => {
+  const [video, setVideo] = useState([]);
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [visibleId, setVisibleId] = useState(null); // State for showing icons menu
@@ -101,16 +102,16 @@ const AllVideos = () => {
                     className="text-white text-3xl cursor-pointer hover:text-gray-300"
                     onClick={(e) => handleIconClick(e, "edit")} // Trigger edit action
                   /> 
-                  <CiTrash 
+                  {/* <CiTrash 
                     className="text-white text-3xl cursor-pointer hover:text-gray-300"
                     onClick={(e) => handleIconClick(e, "delete")} // Trigger delete action
-                  />
+                  /> */}
                 </div>
               )}
-            </div>
-          ))}
-        </div>
-      </div>
+            {/* </div> */}
+          ))
+        {/* </div> */}
+      {/* </div> */}
 
       {/* Video Modal */}
       {isVideoModalOpen && selectedVideo && (
@@ -185,7 +186,7 @@ const AllVideos = () => {
 
           </div>
         </div>
-      )} */}
+      )} 
     </React.Fragment>
   );
 };
