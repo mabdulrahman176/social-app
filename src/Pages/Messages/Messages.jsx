@@ -42,7 +42,7 @@ return timeString
   }
   useEffect(() => {
     fetchAllChatrooms()
-    console.log({chats})
+    // console.log({chats})
     // logger()
   }, [])
   let location = useLocation().pathname;
@@ -89,7 +89,7 @@ return timeString
                       />
                       <div>
                         <p className="text-md font-medium">{message.sender.name}</p>
-                        <p className="text-[gray] text-sm">{message.messages.at(-1).message}</p>
+                        <p className="text-[gray] text-sm">{message.messages.length>0 &&  message.messages.at(-1).message}</p>
                       </div>
                     </div>
                     <p className="text-xs">{__Time__(message.updatedAt)}</p>

@@ -73,37 +73,39 @@ const __view__ = async()=>{
   // console.log({searchTerm})
   // console.log("search data is",data)
 }
-const __subscribe__ = async()=>{
+const __subscribe__ = async(id)=>{
   console.log("subscribing")
-  // const search = {"name":searchTerm}
-  // const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/users/search`,{
-  //   method:"POST",
-  //   headers:{
-  //     "Content-type":"application/json"
-  //   },
-  //   body:JSON.stringify(search)
-  // })
-  // const data = await req.json()
-  // setData(data.data)
-  // console.log("searching")
-  // console.log({searchTerm})
-  // console.log("search data is",data)
+  
+  const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/subscribe`,{
+    method:"POST",
+    headers:{
+      "Content-type":"application/json"
+    },
+    body:JSON.stringify({
+      subscriberId:getUserId(),
+      subscribedToId:id,
+  })
+  })
+  const data = await req.json()
+  console.log("subscribe data is",data)
 }
-const __message__ = async()=>{
-  console.log("texting")
-  // const search = {"name":searchTerm}
-  // const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/users/search`,{
-  //   method:"POST",
-  //   headers:{
-  //     "Content-type":"application/json"
-  //   },
-  //   body:JSON.stringify(search)
-  // })
-  // const data = await req.json()
-  // setData(data.data)
-  // console.log("searching")
-  // console.log({searchTerm})
-  // console.log("search data is",data)
+const getUserId = () => {
+    const str = document.cookie
+    const userKey = str.split('=')[1];
+    return userKey
+  }
+const __message__ = async(id)=>{
+  console.log("texting",id)
+  const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/chatrooms/${getUserId()}`,{
+    method:"POST",
+    headers:{
+      "Content-type":"application/json"
+    },
+    body:JSON.stringify({user:id})
+  })
+  const data = await req.json()
+  console.log("texting completed")
+  console.log({data})
 }
 
   return (
@@ -180,8 +182,8 @@ const __message__ = async()=>{
         </div>
         <div className="flex">
         <button onClick={__view__} className="px-5 py-3 mx-1  flex items-center justify-center relative cursor-pointer bg-[#F1F1F1] rounded-lg text-base md:text-xl Video_Nav_Filters transition-all ">view</button>
-        <button onClick={__message__} className="px-5 py-3  flex items-center justify-center relative cursor-pointer bg-[#F1F1F1] rounded-lg text-base md:text-xl Video_Nav_Filters transition-all  ">message</button>
-        <button onClick={__subscribe__} className="px-5 py-3 mx-1 flex items-center justify-center relative cursor-pointer bg-[#F1F1F1] rounded-lg text-base md:text-xl Video_Nav_Filters transition-all ">Subscribe</button>
+        <button onClick={()=>__message__(e.Users_PK)} className="px-5 py-3  flex items-center justify-center relative cursor-pointer bg-[#F1F1F1] rounded-lg text-base md:text-xl Video_Nav_Filters transition-all  ">message</button>
+        <button onClick={()=> __subscribe__(e.Users_PK)} className="px-5 py-3 mx-1 flex items-center justify-center relative cursor-pointer bg-[#F1F1F1] rounded-lg text-base md:text-xl Video_Nav_Filters transition-all ">Subscribe</button>
         </div>
       </div>)}
   </div>
