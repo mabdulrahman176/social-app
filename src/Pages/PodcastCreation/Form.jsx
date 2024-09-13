@@ -8,7 +8,16 @@ const Form = ({ audioFile, coverImage, formState, setFormState }) => {
   const navigate = useNavigate();
   const [speakerState, setSpeakerState] = useState({});
 
+
+  const getUserId = () => {
+    const str = document.cookie
+    const userKey = str.split('=')[1];
+    return userKey
+  }
+
+
   const handleSubmit = async () => {
+    console.log("submitting")
     const formData = new FormData();
 
     if (audioFile) {
@@ -27,6 +36,8 @@ const Form = ({ audioFile, coverImage, formState, setFormState }) => {
       formData.append(key, value);
     }
 
+   formData.append('userID', getUserId());
+
     try {
       const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/podcasts/`, {
         credentials: 'include',
@@ -38,9 +49,9 @@ const Form = ({ audioFile, coverImage, formState, setFormState }) => {
         const result = await response.json();
         console.log(result);
         // Set podcast submitted state
-        if (PodcastStates && PodcastStates.setPodcastSubmitted) {
-          PodcastStates.setPodcastSubmitted(true);
-        }
+        // if (PodcastStates && PodcastStates.setPodcastSubmitted) {
+        //   PodcastStates.setPodcastSubmitted(true);
+        // }
         // Navigate to the Success page
         navigate('/success');
       } else {

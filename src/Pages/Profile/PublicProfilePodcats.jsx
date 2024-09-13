@@ -1,5 +1,6 @@
-import React, { Fragment, useState } from "react";
-import { CiPlay1, CiTrash } from "react-icons/ci";
+import React, { Fragment, useEffect, useState } from "react";
+import { CiPlay1 } from "react-icons/ci";
+
 import { FaRegShareFromSquare } from "react-icons/fa6";
 import { IoBookmarkOutline } from "react-icons/io5";
 
@@ -36,6 +37,14 @@ let similarPodcastData = [
  
 ];
 
+const ApplePodcast_ = (props) => {
+  const [podcast, setpodcast] = useState([])
+  useEffect(()=>{
+    console.log("podcasts")
+    setpodcast(props.podcasts)
+    console.log(props.podcasts)
+  },[props.podcast])}
+
 const ApplePodcast = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteItemId, setDeleteItemId] = useState(null);
@@ -57,7 +66,6 @@ const ApplePodcast = () => {
     setIsDeleteModalOpen(false);
     setDeleteItemId(null);
   };
-
   return (
     <Fragment>
       <div className="overflow-y-scroll Podcast_Top_Videos h-full">
