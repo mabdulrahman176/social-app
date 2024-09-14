@@ -64,16 +64,13 @@ function Message2() {
   const getSenderName = async (id) => {
     const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/users/${id}`)
     const d = await req.json()
-    console.log("setting sender")
-    console.log(d.user)
-    getReceiver()
     setSender(d.user)
+    getReceiver()
 
   }
   const getReceiver = async () => {
     const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/users/${getUserId()}`)
     const d = await req.json()
-
     setReceiver(d.user)
   }
   const joinRoom = (id) => {
@@ -95,6 +92,7 @@ function Message2() {
   };
 
   useEffect(() => {
+  
     // const params = new URLSearchParams(window.location.search);
     // const accessToken = params.get('access_token');
     fetchChatroom(loc.state.id)
@@ -114,6 +112,8 @@ function Message2() {
      
     return () => {
       document.addEventListener("mousedown", handleClickOutside);
+      setReceiver('')
+      setSender('')
       socket.off('receiveMessage');
       socket.off('previousMessages');
       document.removeEventListener("mousedown", handleClickOutside);

@@ -10,13 +10,23 @@ const JobCreationform = () => {
     languages: [],
     skills: [],
   });
+  const getUserId = () => {
+    const str = document.cookie
+    const userKey = str.split('=')[1];
+    return userKey
+  }
 
   const handleSubmit = async () => {
     // Convert languages and skills strings to arrays
+  //  Null check if sent empty
+   const languages= state.languages.length>0?convertStringToArray(state.languages):[]
+   const skills=  state.skills.length>0?convertStringToArray(state.skills):[]
+   console.log({languages,skills})
     const dataToSubmit = {
       ...state,
-      languages: convertStringToArray(state.languages),
-      skills: convertStringToArray(state.skills),
+      languages,
+      skills,
+      userId:getUserId()
     };
 
     const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/jobs/`, {
@@ -36,7 +46,7 @@ const JobCreationform = () => {
     JobStates.setJobSubmitted(!JobStates.jobSubmitted);
 
     // Navigate to another page if needed
-    navigate("/jobs");
+    // navigate("/jobs");
   };
 
   const _onChange_ = (e) => {

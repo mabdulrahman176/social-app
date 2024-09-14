@@ -43,7 +43,7 @@ const PodcastForm = () => {
       if (response.ok) {
         const result = await response.json();
         console.log(result);
-        navigate('/podcasts');
+        // navigate('/podcasts');
       } else {
         console.error("Failed to submit podcast");
       }

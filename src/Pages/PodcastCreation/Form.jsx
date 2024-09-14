@@ -53,7 +53,7 @@ const Form = ({ audioFile, coverImage, formState, setFormState }) => {
         //   PodcastStates.setPodcastSubmitted(true);
         // }
         // Navigate to the Success page
-        navigate('/success');
+        // navigate('/success');
       } else {
         console.error("Failed to submit podcast");
       }

@@ -61,24 +61,25 @@ let similarPodcastData = [
   };
   useEffect(()=>{
     console.log("podcasts single user section")
-    console.log(props)
-    setpodcast(props.podcasts)
+    console.log(props.podcast)
+    setpodcast(props.podcast)
+    console.log({podcast})
   },[props.podcast])
   return (
     <Fragment>
       <div className="overflow-y-scroll Podcast_Top_Videos h-full">
         <div className="flex flex-wrap gap-1 w-[95%] mx-auto Podcast_Top_Videos pt-2">
-          {similarPodcastData.map((elm, ind) => (
+          {podcast && podcast.map((elm, ind) => (
             <div
               key={ind}
               className="md:h-[45vh] h-[37vh] w-[32.4%] rounded-lg border relative text-white PPPodcast"
-              onMouseEnter={() => setVisibleId(elm.id)}
+              onMouseEnter={() => setVisibleId(elm._id)}
               onMouseLeave={() => setVisibleId(null)}
             >
               <IoBookmarkOutline className="absolute right-2 top-4 text-2xl" />
               <div className="absolute bottom-1 px-2 w-full">
                 <div className="VideosBgBlured rounded-lg px-3 pt-5">
-                  <p className="text-2xl font-medium">{elm.categ}</p>
+                  <p className="text-2xl font-medium">{elm.podcastTitle}</p>
                   <p className="text-lg opacity-60">{elm.userName}</p>
                   <div className="flex justify-between">
                     <p className="flex items-center gap-1 text-md">
@@ -91,15 +92,15 @@ let similarPodcastData = [
                 </div>
               </div>
               <img
-                src={elm.img}
+                src={elm.picUrl}
                 alt={`Img-${ind}`}
                 className="h-full w-full rounded-lg"
               />
-              {visibleId === elm.id && (
+              {visibleId === elm._id && (
                 <div className="absolute top-14 right-2 flex flex-col space-y-2">
                   <CiTrash
                     className="text-white text-3xl cursor-pointer hover:text-gray-300"
-                    onClick={() => handleDeleteClick(elm.id)}
+                    onClick={() => handleDeleteClick(elm._id)}
                   />
                 </div>
               )}
