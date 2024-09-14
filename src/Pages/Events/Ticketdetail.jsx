@@ -2,7 +2,7 @@ import React from "react";
 import { FaAngleLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import img from './Img2.png'
-import img2 from './Img3.png'
+import img2 from './Img1.png'
 
 
 function Ticketdetail() {

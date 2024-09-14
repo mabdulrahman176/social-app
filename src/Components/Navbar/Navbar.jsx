@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate for navigation
+import { useNavigate } from "react-router-dom"; 
 import { faBars, faMicrophone } from "@fortawesome/free-solid-svg-icons";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons/faMagnifyingGlass";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -7,7 +7,7 @@ import { RiNotification2Line } from "react-icons/ri";
 import "remixicon/fonts/remixicon.css";
 
 const Navbar = ({ state }) => {
-  const navigate = useNavigate(); // Hook to navigate to the Search component
+  const navigate = useNavigate(); 
 
   return (
     <nav className="w-full overflow-x-hidden flex justify-between px-2 items-center py-1">

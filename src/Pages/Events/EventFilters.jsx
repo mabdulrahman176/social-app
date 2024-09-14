@@ -2,10 +2,7 @@
 
 import React, { Fragment, useState } from "react";
 import { LuSettings2 } from "react-icons/lu";
-import {
-  RiArrowDropDownLine,
-  RiArrowDropUpLine,
-} from "react-icons/ri";
+import { RiArrowDropDownLine, RiArrowDropUpLine } from "react-icons/ri";
 import { Link } from "react-router-dom";
 
 let categData = [
@@ -78,38 +75,43 @@ function JobFilters() {
   return (
     <Fragment>
       <div className="flex items-center  overflow-y-visible JobFilScr bg-white w-full h-full px-3">
-        <Link to='/filterevent' className="m-0 flex gap-2 items-center">
-        <LuSettings2/> |{" "}
+        <Link to="/filterevent" className="m-0 flex gap-2 items-center">
+          <LuSettings2 /> |{" "}
         </Link>
-        <Link to='/filterevent' className="px-4 py-1 ms-2 m-0 rounded-3xl cursor-pointer Video_Nav_Filters">All</Link>
+        <Link
+          to="/filterevent"
+          className="px-4 py-1 ms-2 m-0 rounded-3xl cursor-pointer Video_Nav_Filters"
+        >
+          All
+        </Link>
         <p
-            className="px-4 py-1 ms-2 m-0 rounded-3xl flex items-center relative cursor-pointer Video_Nav_Filters"
-            onMouseOver={() => setCatDrop(true)}
-            onMouseLeave={() => setCatDrop(false)}
-          >
-            Categories <RiArrowDropDownLine />
-            {catDrop && (
-              <div
-                className="absolute w-[40vh] top-6 z-10"
-                onClick={() => setCatDrop(false)}
-              >
-                <p className="bg-white p-3 shadow-lg rounded-lg flex justify-between items-center">
-                  {catSelectData} <RiArrowDropUpLine />
-                </p>
-                <div className="bg-white p-3 shadow-lg rounded-lg mt-2">
-                  {categData.map((elm, ind) => (
-                    <p
-                      key={ind}
-                      className="py-2"
-                      onClick={(e) => setCatSelectData(e.target.textContent)}
-                    >
-                      {elm}
-                    </p>
-                  ))}
-                </div>
+          className="px-4 py-1 ms-2 m-0 rounded-3xl flex items-center relative cursor-pointer Video_Nav_Filters"
+          onMouseOver={() => setCatDrop(true)}
+          onMouseLeave={() => setCatDrop(false)}
+        >
+          Categories <RiArrowDropDownLine />
+          {catDrop && (
+            <div
+              className="absolute w-[40vh] top-6 z-10"
+              onClick={() => setCatDrop(false)}
+            >
+              <p className="bg-white p-3 shadow-lg rounded-lg flex justify-between items-center">
+                {catSelectData} <RiArrowDropUpLine />
+              </p>
+              <div className="bg-white p-3 shadow-lg rounded-lg mt-2">
+                {categData.map((elm, ind) => (
+                  <p
+                    key={ind}
+                    className="py-2"
+                    onClick={(e) => setCatSelectData(e.target.textContent)}
+                  >
+                    {elm}
+                  </p>
+                ))}
               </div>
-            )}
-          </p>
+            </div>
+          )}
+        </p>
         <p
           className="px-4 py-1 flex-shrink-0 w-auto ms-2 m-0 rounded-3xl flex items-center  cursor-pointer Video_Nav_Filters text-sm relative"
           onMouseOver={() => setLocDrop(true)}

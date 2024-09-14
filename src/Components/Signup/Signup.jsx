@@ -6,7 +6,7 @@ const Signup = () => {
   const [signUp, setSignUp] = useState(true);
 
   const location = useLocation();
- 
+
   const [state, setState] = useState({});
   const [selectedRole, setSelectedRole] = useState("viewer");
 
@@ -17,12 +17,12 @@ const Signup = () => {
 
     try {
       const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/users/`, {
-        credentials: 'include',
+        credentials: "include",
         method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({ ...state, role: selectedRole })
+        body: JSON.stringify({ ...state, role: selectedRole }),
       });
 
       if (!req.ok) {
@@ -39,14 +39,14 @@ const Signup = () => {
       // Navigate to home page
       navigate("/videos");
     } catch (error) {
-      console.error('Error during fetch:', error);
+      console.error("Error during fetch:", error);
     }
   };
 
   const _onChange_ = (e) => {
     setState((prev) => ({
       ...prev,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     }));
   };
 
@@ -98,7 +98,7 @@ const Signup = () => {
               required
               className="py-1 px-2 rounded outline-none border-[1px] border-gray-200 placeholder:text-xs"
             />
-          
+
             <input
               type="password"
               placeholder="Password"
@@ -110,11 +110,17 @@ const Signup = () => {
               className="py-1 px-2 rounded outline-none border-[1px] border-gray-200 placeholder:text-xs"
             />
             <h2 className="text-xs font-semibold">Select your Role</h2>
-            <section className={`flex justify-center gap-4 max-w-full ${!signUp ? "h-0 opacity-0" : ""}`}>
+            <section
+              className={`flex justify-center gap-4 max-w-full ${
+                !signUp ? "h-0 opacity-0" : ""
+              }`}
+            >
               <button
                 type="button"
                 className={`${
-                  selectedRole === "entrepreneur" ? "linear_gradient" : "bg-[#f1f1f1]"
+                  selectedRole === "entrepreneur"
+                    ? "linear_gradient"
+                    : "bg-[#f1f1f1]"
                 } rounded text-xs text-black px-2 py-2 font-semibold`}
                 onClick={() => handleRoleSelect("entrepreneur")}
               >
@@ -123,7 +129,9 @@ const Signup = () => {
               <button
                 type="button"
                 className={`${
-                  selectedRole === "invester" ? "linear_gradient" : "bg-[#f1f1f1]"
+                  selectedRole === "invester"
+                    ? "linear_gradient"
+                    : "bg-[#f1f1f1]"
                 } rounded text-xs text-black px-2 py-2 font-semibold`}
                 onClick={() => handleRoleSelect("invester")}
               >
@@ -160,15 +168,20 @@ const Signup = () => {
         <section className="flex items-center justify-between w-full md:my-2">
           <div
             className="flex justify-center items-center bg-[#f1f1f1] px-2 py-2 rounded-full"
-            onClick={() => window.open(`${process.env.REACT_APP_API_BASE_URL}/auth/google`)}
+            onClick={() =>
+              window.open(`${process.env.REACT_APP_API_BASE_URL}/auth/google`)
+            }
           >
             <img className="w-5 h-5" src="/google.png" alt="Google" />
           </div>
           <div className="flex justify-center items-center bg-[#f1f1f1] px-2 py-2 rounded-full">
             <img className="w-5 h-5" src="/insta.png" alt="Instagram" />
           </div>
-          <div className="flex justify-center items-center bg-[#f1f1f1] p-[.3rem] rounded-full"
-          onClick={() => window.open(`${process.env.REACT_APP_API_BASE_URL}/auth/github`)}
+          <div
+            className="flex justify-center items-center bg-[#f1f1f1] p-[.3rem] rounded-full"
+            onClick={() =>
+              window.open(`${process.env.REACT_APP_API_BASE_URL}/auth/github`)
+            }
           >
             <img className="w-[2rem] h-8" src="/Github.png" alt="Github" />
           </div>

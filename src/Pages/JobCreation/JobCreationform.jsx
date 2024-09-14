@@ -20,10 +20,10 @@ const JobCreationform = () => {
     };
 
     const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/jobs/`, {
-      credentials: 'include',
+      credentials: "include",
       method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(dataToSubmit),
     });
@@ -36,7 +36,7 @@ const JobCreationform = () => {
     JobStates.setJobSubmitted(!JobStates.jobSubmitted);
 
     // Navigate to another page if needed
-    navigate('/jobs');
+    navigate("/jobs");
   };
 
   const _onChange_ = (e) => {
@@ -49,7 +49,10 @@ const JobCreationform = () => {
 
   function convertStringToArray(str) {
     // Split the string by commas and trim any whitespace
-    return str.split(',').map(item => item.trim()).filter(item => item !== '');
+    return str
+      .split(",")
+      .map((item) => item.trim())
+      .filter((item) => item !== "");
   }
 
   return (
@@ -63,7 +66,10 @@ const JobCreationform = () => {
       </h4>
       <div className="flex flex-wrap justify-between overflow-y-scroll Podcast_Top_Videos h-[90%] w-[90%] mx-auto">
         <div className="sm:w-[40%] w-[45%]">
-          <label className="block text-gray-600 text-sm font-bold mt-4" htmlFor="jobtitle">
+          <label
+            className="block text-gray-600 text-sm font-bold mt-4"
+            htmlFor="jobtitle"
+          >
             Job title *
           </label>
           <input
@@ -77,7 +83,10 @@ const JobCreationform = () => {
         </div>
 
         <div className="sm:w-[40%] w-[45%]">
-          <label className="block text-gray-600 text-sm font-bold mt-4" htmlFor="education">
+          <label
+            className="block text-gray-600 text-sm font-bold mt-4"
+            htmlFor="education"
+          >
             Education Level *
           </label>
           <input
@@ -91,7 +100,10 @@ const JobCreationform = () => {
         </div>
 
         <div className="sm:w-[40%] w-[45%]">
-          <label className="block text-gray-600 text-sm font-bold mt-4" htmlFor="jobdescription">
+          <label
+            className="block text-gray-600 text-sm font-bold mt-4"
+            htmlFor="jobdescription"
+          >
             Job description *
           </label>
           <textarea
@@ -105,7 +117,10 @@ const JobCreationform = () => {
         </div>
 
         <div className="sm:w-[40%] w-[45%]">
-          <label className="block text-gray-600 text-sm font-bold mt-4" htmlFor="companysize">
+          <label
+            className="block text-gray-600 text-sm font-bold mt-4"
+            htmlFor="companysize"
+          >
             Company Size *
           </label>
           <input
@@ -119,7 +134,10 @@ const JobCreationform = () => {
         </div>
 
         <div className="sm:w-[40%] w-[45%]">
-          <label className="block text-gray-600 text-sm font-bold mt-4" htmlFor="category">
+          <label
+            className="block text-gray-600 text-sm font-bold mt-4"
+            htmlFor="category"
+          >
             Job Category *
           </label>
           <select
@@ -134,7 +152,10 @@ const JobCreationform = () => {
         </div>
 
         <div className="sm:w-[40%] w-[45%]">
-          <label className="block text-gray-600 text-sm font-bold mt-4" htmlFor="workplace">
+          <label
+            className="block text-gray-600 text-sm font-bold mt-4"
+            htmlFor="workplace"
+          >
             Workplace type *
           </label>
           <select
@@ -150,7 +171,10 @@ const JobCreationform = () => {
         </div>
 
         <div className="sm:w-[40%] w-[45%]">
-          <label className="block text-gray-600 text-sm font-bold mt-4" htmlFor="location">
+          <label
+            className="block text-gray-600 text-sm font-bold mt-4"
+            htmlFor="location"
+          >
             Select Location*
           </label>
           <div className="">
@@ -162,19 +186,14 @@ const JobCreationform = () => {
               placeholder="Select location"
               className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
             />
-            {/* <input
-              type="text"
-              onChange={_onChange_}
-              id="location"
-              name="location"
-              placeholder="Write location"
-              className="w-full mt-2 border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
-            /> */}
           </div>
         </div>
 
         <div className="sm:w-[40%] w-[45%]">
-          <label className="block text-gray-600 text-sm font-bold mt-4" htmlFor="skills">
+          <label
+            className="block text-gray-600 text-sm font-bold mt-4"
+            htmlFor="skills"
+          >
             Add Skills *
           </label>
           <input
@@ -188,7 +207,10 @@ const JobCreationform = () => {
         </div>
 
         <div className="sm:w-[40%] w-[45%]">
-          <label className="block text-gray-600 text-sm font-bold mt-4" htmlFor="jobtype">
+          <label
+            className="block text-gray-600 text-sm font-bold mt-4"
+            htmlFor="jobtype"
+          >
             Job type *
           </label>
           <select
@@ -203,19 +225,14 @@ const JobCreationform = () => {
         </div>
 
         <div className="sm:w-[40%] w-[45%]">
-          <label className="block text-gray-600 text-sm font-bold mt-4" htmlFor="deadline">
+          <label
+            className="block text-gray-600 text-sm font-bold mt-4"
+            htmlFor="deadline"
+          >
             Application Deadline *
           </label>
-          {/* <select
-            onChange={_onChange_}
-            id="deadline"
-            name="applicationDeadline"
-            className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none text-xs focus:shadow-outline"
-          >
-            <option value="1-week">1 week</option>
-            <option value="2-weeks">2 weeks</option>
-          </select> */}
-            <input
+
+          <input
             type="date"
             onChange={_onChange_}
             id="deadline"
@@ -225,7 +242,10 @@ const JobCreationform = () => {
           />
         </div>
         <div className="sm:w-[40%] w-[45%]">
-          <label className="block text-gray-600 text-sm font-bold mt-4" htmlFor="experience">
+          <label
+            className="block text-gray-600 text-sm font-bold mt-4"
+            htmlFor="experience"
+          >
             Experience Level *
           </label>
           <select
@@ -241,7 +261,10 @@ const JobCreationform = () => {
         </div>
 
         <div className="sm:w-[40%] w-[45%]">
-          <label className="block text-gray-600 text-sm font-bold mt-4" htmlFor="language">
+          <label
+            className="block text-gray-600 text-sm font-bold mt-4"
+            htmlFor="language"
+          >
             Language *
           </label>
           <input
@@ -255,22 +278,17 @@ const JobCreationform = () => {
         </div>
 
         <div className="sm:w-[40%] w-[45%]">
-          <label className="block text-gray-600 text-sm font-bold mt-4" htmlFor="salary">
+          <label
+            className="block text-gray-600 text-sm font-bold mt-4"
+            htmlFor="salary"
+          >
             Salary Range *
           </label>
-          {/* <select
-            onChange={_onChange_}
-            id="salary"
-            name="salaryRange"
-            className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none text-xs focus:shadow-outline"
-          >
-            <option value="$30,000-$50,000">$30,000-$50,000</option>
-            <option value="$30,000-$70,000">$30,000-$70,000</option>
-          </select> */}
-             <input
+
+          <input
             type="text"
             onChange={_onChange_}
-             id="salary"
+            id="salary"
             name="salaryRange"
             placeholder="Enter Salary Range"
             className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
@@ -278,19 +296,14 @@ const JobCreationform = () => {
         </div>
 
         <div className="sm:w-[40%] w-[45%]">
-          <label className="block text-gray-600 text-sm font-bold mt-4" htmlFor="jobshift">
+          <label
+            className="block text-gray-600 text-sm font-bold mt-4"
+            htmlFor="jobshift"
+          >
             Job Shift *
           </label>
-          {/* <select
-            onChange={_onChange_}
-            id="jobshift"
-            name="jobShift"
-            className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none text-xs focus:shadow-outline"
-          >
-            <option value="programming">Programming</option>
-            <option value="design">UI Designer</option>
-          </select> */}
-             <input
+
+          <input
             type="text"
             onChange={_onChange_}
             id="jobshift"
@@ -301,7 +314,10 @@ const JobCreationform = () => {
         </div>
 
         <div className="sm:w-[40%] w-[45%]">
-          <label className="block text-gray-600 text-sm font-bold mt-4" htmlFor="travel">
+          <label
+            className="block text-gray-600 text-sm font-bold mt-4"
+            htmlFor="travel"
+          >
             Travel Requirement *
           </label>
           <select
@@ -325,12 +341,11 @@ const JobCreationform = () => {
           </button>
         </div>
 
-        <br /><br />
+        <br />
+        <br />
       </div>
     </div>
   );
 };
 
 export default JobCreationform;
-
-        
