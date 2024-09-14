@@ -31,7 +31,7 @@ const ProfilePublic = ({ userId }) => { // Accept userId as a prop
 
   const handleSubmit = async () => {
     const formData = new FormData();
-    console.log({file})
+    console.log({ file })
     if (file) {
       formData.append('profilePic', file);
     }
@@ -48,15 +48,15 @@ const ProfilePublic = ({ userId }) => { // Accept userId as a prop
       console.error('Error updating profile:', error);
     }
   };
-  const createChatRoom = ()=>{console.log("creating chatroom")}
+  const createChatRoom = () => { console.log("creating chatroom") }
 
   const fetchProfileData = async () => {
     try {
       const result = await fetchProfile(getUserId()); // Use userId dynamically
       setProfile(result.user)
       setDATA(result.data)
-      console.log("single user data",result)
-      console.log({data_})
+      console.log("single user data", result)
+      console.log({ data_ })
       return result
     } catch (error) {
       console.error("Fetching profile data error:", error);
@@ -64,8 +64,8 @@ const ProfilePublic = ({ userId }) => { // Accept userId as a prop
   };
 
   useEffect(() => {
-     fetchProfileData();
-     
+    fetchProfileData();
+
   }, []);
 
   return (
@@ -142,18 +142,10 @@ const ProfilePublic = ({ userId }) => { // Accept userId as a prop
           </div>
         </div>
         <section className="h-[54%] w-full overflow-y-scroll Podcast_Top_Videos">
-          {/* <div style={{ display: activeTab === "Video" ? "block" : "none" }}> */}
-         { activeTab === "Video"?<PublicProfileVideos videos={data_.videos} />:''}
-          {/* </div> */}
-          {/* <div style={{ display: activeTab === "Podcast" ? "block" : "none" }}> */}
-           {activeTab === "Podcast"? <PublicProfilePodcats  podcast={data_.podcast}/>:''}
-          {/* </div> */}
-          {/* <div style={{ display: activeTab === "Event" ? "block" : "none" }}> */}
-           { activeTab === "Event"?<PublicProfileEvents  events={data_.events}/>:''}
-          {/* </div> */}
-          {/* <div style={{ display: activeTab === "Job" ? "block" : "none" }}> */}
-           {activeTab === "Job"? <PublicProfileJobs  jobs={data_.jobs} />:''}
-          {/* </div> */}
+          {activeTab === "Video" ? <PublicProfileVideos videos={data_.videos} /> : ''}
+          {activeTab === "Podcast" ? <PublicProfilePodcats podcast={data_.podcast} /> : ''}
+          {activeTab === "Event" ? <PublicProfileEvents events={data_.events} /> : ''}
+          {activeTab === "Job" ? <PublicProfileJobs jobs={data_.jobs} /> : ''}
         </section>
       </div>
     </Fragment>

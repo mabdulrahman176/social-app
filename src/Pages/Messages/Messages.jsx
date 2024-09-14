@@ -76,7 +76,7 @@ return timeString
 
               {/* message lists */}
               {chats.map((message, ind) => (
-               <Link to={`user1`} key={ind}
+              message &&  <Link to={`user1`} key={ind}
                   state={{ id: message._id }}
                 >
                   <div className="flex justify-between bg-[#9b8d8d] items-center py-3 border-b px-2 md:px-4 hover:bg-gray-100">

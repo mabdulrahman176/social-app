@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from "react";
+import React, { useState, Fragment, useEffect } from "react";
 import { TbBrandNeteaseMusic } from "react-icons/tb";
 import { IoTrashOutline } from "react-icons/io5"; // Import the delete icon
 
@@ -45,7 +45,8 @@ let SearchData = [
   },
 ];
 
-const CalendarSearch = () => {
+const CalendarSearch = (props) => {
+  const [jobs, setjobs] = useState([])
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteItemId, setDeleteItemId] = useState(null);
   const [visibleId, setVisibleId] = useState(null);
@@ -67,27 +68,33 @@ const CalendarSearch = () => {
     setDeleteItemId(null);
   };
 
+ useEffect(() => {
+  console.log("in single job s component")
+  console.log(props.jobs)
+  setjobs(props.jobs)
+ }, [])
+
   return (
     <Fragment>
       <div className="ps-6 overflow-y-scroll Podcast_Top_Videos h-full w-full">
         <div className="flex gap-1 flex-wrap w-full Podcast_Top_Videos">
-          {SearchData.map((elm) => (
+          {jobs.map((elm,i) => (
             <div
-              key={elm.id}
+              key={i}
               className="h-[37vh] w-[32.4%] flex-shrink-0 shadow rounded-lg border relative PPJob"
-              onMouseEnter={() => setVisibleId(elm.id)}
+              onMouseEnter={() => setVisibleId(elm._id)}
               onMouseLeave={() => setVisibleId(null)}
             >
               <div className="w-full">
                 <div className="flex gap-2 mt-2">
                   <TbBrandNeteaseMusic className="bg-red-500 rounded-2xl text-white top-3 m-2 mb-0 text-3xl" />
                   <div>
-                    <h1 className="font-semibold">{elm.categ}</h1>
-                    <p className="font-light text-md">{elm.ago}</p>
+                    <h1 className="font-semibold">{elm.jobTitle}</h1>
+                    <p className="font-light text-md">{elm.jobDescription.slice(0,14)+"..."}</p>
                   </div>
                 </div>
-                <p className="mt-7 ps-4 text-md opacity-65">{elm.state}</p>
-                <p className="ps-4 text-sm opacity-65 mt-3">{elm.price}</p>
+                <p className="mt-7 ps-4 text-md opacity-65">{elm.jobType}</p>
+                <p className="ps-4 text-sm opacity-65 mt-3">{elm.salaryRange}</p>
                 {elm.button === 'Apply' ? (
                   <button
                     className="w-[90%] mx-auto block text-xs mt-7 bg-[#EEEEEE] h-10 rounded-3xl hover:bg-[#6166f331] hover:text-[#6165F3]"

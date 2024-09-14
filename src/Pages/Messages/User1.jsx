@@ -64,16 +64,13 @@ function Message2() {
   const getSenderName = async (id) => {
     const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/users/${id}`)
     const d = await req.json()
-    console.log("setting sender")
-    console.log(d.user)
-    getReceiver()
     setSender(d.user)
+    getReceiver()
 
   }
   const getReceiver = async () => {
     const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/users/${getUserId()}`)
     const d = await req.json()
-
     setReceiver(d.user)
   }
   const joinRoom = (id) => {
@@ -95,6 +92,7 @@ function Message2() {
   };
 
   useEffect(() => {
+  
     // const params = new URLSearchParams(window.location.search);
     // const accessToken = params.get('access_token');
     fetchChatroom(loc.state.id)
@@ -114,11 +112,13 @@ function Message2() {
      
     return () => {
       document.addEventListener("mousedown", handleClickOutside);
+      setReceiver('')
+      setSender('')
       socket.off('receiveMessage');
       socket.off('previousMessages');
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);  // Depend on the user PK
+  }, [loc.state.id]);  // Depend on the user PK
   const handleInputChange = (e) => {
     setMessage(e.target.value);
   };
@@ -240,7 +240,7 @@ function Message2() {
 
           {/* message component */}
           {chatroom && chatroom.map((e, i) => {
-            return <div key={i} className="flex items-end justify-between py-2">
+            return sender.name && <div key={i} className="flex items-end justify-between py-2">
               <div className="flex  gap-2">
                 <img
                   src={(getUserId() !== e.sender) ? sender.picUrl : receiver && receiver.picUrl}
