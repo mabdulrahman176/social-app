@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useEffect } from 'react';
 import { FaRegShareFromSquare } from 'react-icons/fa6';
 import { IoBookmarkOutline, IoTrashOutline } from 'react-icons/io5'; // Import the delete icon
 import { useNavigate } from 'react-router-dom';
@@ -42,7 +43,8 @@ let similarPodcastData = [
   },
 ];
 
-const Calendar = () => {
+const Calendar = (props) => {
+  const [event, setEvents] = useState([]);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteItemId, setDeleteItemId] = useState(null);
   const [visibleId, setVisibleId] = useState(null);
@@ -64,32 +66,37 @@ const Calendar = () => {
     setIsDeleteModalOpen(false);
     setDeleteItemId(null);
   };
+  useEffect(() => {
+    console.log("single event user comp",props.events)
+    setEvents(props.events)
+    
+  }, [])
 
   return (
     <div className="overflow-y-scroll Podcast_Top_Videos w-full h-full">
       <div className="flex flex-wrap text-white gap-1 w-[95%] mx-auto Podcast_Top_Videos pt-2">
-        {similarPodcastData.map((elm) => (
+        {event.map((elm) => (
           <div
-            key={elm.id}
+            key={elm._id}
             className="md:h-[45vh] h-[37vh] w-[32.4%] rounded-lg border relative PPEvent"
-            onMouseEnter={() => setVisibleId(elm.id)}
+            onMouseEnter={() => setVisibleId(elm._id)}
             onMouseLeave={() => setVisibleId(null)}
           >
             <IoBookmarkOutline className="absolute right-2 top-4 text-2xl" />
                 {/* Add delete icon */}
-                {visibleId === elm.id && (
+                {visibleId === elm._id && (
                     <button
                       className="absolute top-14 right-2 text-white text-xl cursor-pointer"
-                      onClick={() => handleDeleteClick(elm.id)}
+                      onClick={() => handleDeleteClick(elm._id)}
                     >
                       <IoTrashOutline />
                     </button>
                   )}
             <div className="absolute bottom-1 w-full">
               <div className="SVTBottom w-[95%] mx-auto px-3 py-2 rounded-lg">
-                <small className="block text-xl">{elm.categ}</small>
-                <p className="text-xs py-2">{elm.time}</p>
-                <p className="text-sm pb-2">{elm.userName}</p>
+                <small className="block text-xl">{elm.eventTitle}</small>
+                <p className="text-xs py-2">{elm.eventDate}</p>
+                <p className="text-sm pb-2">{elm.eventDescription}</p>
                 <div className='flex items-center'>
                   <button
                     className="me-2 w-[80%] py-2 JobButtonBgBlur text-xs text-white rounded-full"
@@ -105,7 +112,7 @@ const Calendar = () => {
               </div>
             </div>
             <img
-              src={elm.img}
+              src={elm.eventCoverUrl}
               alt={`Img-${elm.id}`}
               className="h-full w-full rounded-lg"
             />

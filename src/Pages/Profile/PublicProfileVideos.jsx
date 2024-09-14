@@ -7,30 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 // Main ProfileVideo Section for All Videos
 
-const AllVideos_ = (props) => {
-  // const [selectedVideo, setSelectedVideo] = useState(null);
-  const [video, setVideo] = useState([]);
-  // const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
-
-  // const openVideoModal = (video) => {
-  //   setSelectedVideo(video);
-  //   setIsVideoModalOpen(true);
-  // };
-  useEffect(() => {
-    setVideo(props.videos)
-    console.log("in videos")
-    console.log(props.videos)
-    return ()=>{
-      setVideo([])
-    }
-  }, [props.video])
-const navigate = useNavigate();
-  // const closeVideoModal = () => {
-  //   setIsVideoModalOpen(false);
-  //   setSelectedVideo(null);
-  // };
-}
-const AllVideos = () => {
+const AllVideos = (props) => {
   const [video, setVideo] = useState([]);
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
@@ -59,6 +36,14 @@ const AllVideos = () => {
       setIsDeleteModalOpen(true); // Open the delete modal
     }
   };
+  useEffect(() => {
+    setVideo(props.videos)
+    console.log("in videos")
+    console.log(props.videos)
+    return ()=>{
+      setVideo([])
+    }
+  }, [props.video])
 
   return (
     <React.Fragment>
