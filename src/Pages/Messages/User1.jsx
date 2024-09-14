@@ -118,7 +118,7 @@ function Message2() {
       socket.off('previousMessages');
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);  // Depend on the user PK
+  }, [loc.state.id]);  // Depend on the user PK
   const handleInputChange = (e) => {
     setMessage(e.target.value);
   };
@@ -240,7 +240,7 @@ function Message2() {
 
           {/* message component */}
           {chatroom && chatroom.map((e, i) => {
-            return <div key={i} className="flex items-end justify-between py-2">
+            return sender.name && <div key={i} className="flex items-end justify-between py-2">
               <div className="flex  gap-2">
                 <img
                   src={(getUserId() !== e.sender) ? sender.picUrl : receiver && receiver.picUrl}
