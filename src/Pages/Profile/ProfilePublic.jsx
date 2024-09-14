@@ -55,6 +55,7 @@ const ProfilePublic = ({ userId }) => { // Accept userId as a prop
       const result = await fetchProfile(getUserId()); // Use userId dynamically
       setProfile(result.user)
       setDATA(result.data)
+      console.log("single user data",result)
       console.log({data_})
       return result
     } catch (error) {

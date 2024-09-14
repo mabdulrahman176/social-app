@@ -36,16 +36,9 @@ let similarPodcastData = [
   },
  
 ];
-
-const ApplePodcast_ = (props) => {
+  
+  const ApplePodcast = (props) => {
   const [podcast, setpodcast] = useState([])
-  useEffect(()=>{
-    console.log("podcasts")
-    setpodcast(props.podcasts)
-    console.log(props.podcasts)
-  },[props.podcast])}
-
-const ApplePodcast = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteItemId, setDeleteItemId] = useState(null);
   const [visibleId, setVisibleId] = useState(null);
@@ -66,6 +59,11 @@ const ApplePodcast = () => {
     setIsDeleteModalOpen(false);
     setDeleteItemId(null);
   };
+  useEffect(()=>{
+    console.log("podcasts single user section")
+    console.log(props)
+    setpodcast(props.podcasts)
+  },[props.podcast])
   return (
     <Fragment>
       <div className="overflow-y-scroll Podcast_Top_Videos h-full">
