@@ -1,9 +1,8 @@
 import React, { Fragment, useEffect, useState } from "react";
 import Review from './Review'
 import img2 from './img2.jpeg'
-import img4 from './img4.jpeg'
-import img5 from './img5.jpeg'
-import {RiPlayCircleLine,} from "react-icons/ri";
+
+// import {RiPlayCircleLine,} from "react-icons/ri";
 import { useLocation, useNavigate,  } from "react-router-dom";
 import {  CiSquareInfo, CiStar } from "react-icons/ci";
 import { FaRegShareFromSquare } from "react-icons/fa6";
@@ -13,24 +12,24 @@ import { FaAngleLeft } from "react-icons/fa";
 import RelatedPodcast from "./RelatedPodcast";
 // import { fetchPodcast } from "../../API";
 
-let guestData = [
-  {
-    img: img5,
-    title: "Host",
-  },
-  {
-    img: img2,
-    title: "Guest",
-  },
-  {
-    img: img5,
-    title: "Guest",
-  },
-  {
-    img: img4,
-    title: "Guest",
-  },
-];
+// let guestData = [
+//   {
+//     img: img5,
+//     title: "Host",
+//   },
+//   {
+//     img: img2,
+//     title: "Guest",
+//   },
+//   {
+//     img: img5,
+//     title: "Guest",
+//   },
+//   {
+//     img: img4,
+//     title: "Guest",
+//   },
+// ];
 
 
 
@@ -100,10 +99,19 @@ const getPodcast = async (id) => {
            <p className="py-1 opacity-65">{result.podcastType || 'N/A'}</p>
            <p className="opacity-50">Season Number ={result.seasonNumber || 'N/A'} Episode Number = ({result.episodeNumber || 'N/A'})</p>
            <p className="">AudioName:</p>
-           <p className="opacity-50">{result.audioName}</p>
-           <button className="flex items-center gap-3 border border-black px-3 pe-7 my-2 rounded-3xl">
-           {result.audioUrl}
-           </button>
+           <p className="opacity-50">
+  {result.audioName.replace(/[0-9]/g, "").length > 30 
+    ? result.audioName.replace(/[0-9]/g, "").slice(0, 30) + "..." 
+    : result.audioName.replace(/[0-9]/g, "")}
+</p>
+
+           {/* <button className="flex items-center gap-3 border border-black px-3 pe-7 my-2 rounded-3xl">
+  
+</button> */}
+<audio controls>
+    <source src={result.audioUrl} type="audio/mpeg" />
+    Your browser does not support the audio element.
+  </audio>
            <div className="flex items-center gap-4">
              <CiSquareInfo className="text-2xl cursor-pointer" onClick={()=>setRepModOpen(true)}/>
              <FaRegShareFromSquare className="text-xl opacity-45 cursor-pointer" />
@@ -116,7 +124,7 @@ const getPodcast = async (id) => {
          </div>
        </div>
        {/* } */}
-        <div className="flex gap-2 md:ps-6 mt-3 w-full overflow-x-scroll Podcast_Top_Videos">
+        {/* <div className="flex gap-2 md:ps-6 mt-3 w-full overflow-x-scroll Podcast_Top_Videos">
           {guestData.map((elm, ind) => (
             <div
               key={ind}
@@ -130,39 +138,9 @@ const getPodcast = async (id) => {
               <h1 className="text-md">{elm.title}</h1>
             </div>
           ))}
-        </div>
+        </div> */}
 
           <p className="md:ps-6">Similar podcasts</p>
-        {/* <div className="md:ps-6 h-[40%] w-full">
-            <div className="flex flex-wrap sm:justify-center justify-between sm:gap-1 gap-y-2 h-full w-full Podcast_Top_Videos mt-4">
-              {similarPodcastData.map((elm, ind) => (
-                <div
-                  key={ind}
-                  className="h-[40vh] sm:w-[32.4%] w-[49%] rounded-lg border relative"
-                >
-                <IoBookmarkOutline className="absolute text-white right-2 top-4 text-3xl"/>
-                <div className="absolute bottom-1 text-white px-1 w-full">
-                    {
-                      <div className="VideosBgBlured rounded-lg px-3 py-3">
-                      <p className="text-xl font-medium">{elm.categ}</p>
-                      <p className="text-md opacity-60">{elm.userName}</p>
-                      <div className="flex justify-between">
-                      <p className="flex items-center gap-1 text-md"><CiPlay1/> {elm.mint}</p>
-                      <p><FaRegShareFromSquare className="text-xl -mt-3"/></p>
-                      </div>
-                      </div>
-                    }
-                  </div>
-                  <img
-                    src={elm.img}
-                    alt={`Img-${ind}`}
-                    className="h-full w-full rounded-lg"
-                  />
-                </div>
-              ))}
-            </div>
-        <br />
-        </div> */}
 <RelatedPodcast/>
       </section>
     </Fragment>
