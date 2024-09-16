@@ -3,6 +3,7 @@ import { CiPlay1 ,CiTrash} from "react-icons/ci";
 
 import { FaRegShareFromSquare } from "react-icons/fa6";
 import { IoBookmarkOutline } from "react-icons/io5";
+import { useNavigate } from "react-router-dom";
 
 // // Sample data
 // let similarPodcastData = [
@@ -54,7 +55,7 @@ import { IoBookmarkOutline } from "react-icons/io5";
     setIsDeleteModalOpen(false);
     // You may need to filter the data or make an API call to remove the item
   };
-
+  const navigate = useNavigate();
   const handleDeleteCancel = () => {
     setIsDeleteModalOpen(false);
     setDeleteItemId(null);
@@ -75,6 +76,7 @@ import { IoBookmarkOutline } from "react-icons/io5";
               className="md:h-[45vh] h-[37vh] w-[32.4%] rounded-lg border relative text-white PPPodcast"
               onMouseEnter={() => setVisibleId(elm._id)}
               onMouseLeave={() => setVisibleId(null)}
+              onClick={() => navigate(`/podcastdetails`)}
             >
               <IoBookmarkOutline className="absolute right-2 top-4 text-2xl" />
               <div className="absolute bottom-1 px-2 w-full">

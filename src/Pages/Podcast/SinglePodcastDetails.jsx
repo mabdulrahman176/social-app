@@ -98,20 +98,23 @@ const getPodcast = async (id) => {
            <h2 className="">Podcast Type:</h2>
            <p className="py-1 opacity-65">{result.podcastType || 'N/A'}</p>
            <p className="opacity-50">Season Number ={result.seasonNumber || 'N/A'} Episode Number = ({result.episodeNumber || 'N/A'})</p>
-           <p className="">AudioName:</p>
-           <p className="opacity-50">
-  {result.audioName.replace(/[0-9]/g, "").length > 30 
-    ? result.audioName.replace(/[0-9]/g, "").slice(0, 30) + "..." 
-    : result.audioName.replace(/[0-9]/g, "")}
+           <p className="">Audio Name:</p>
+<p className="opacity-50">
+  {result.audioName && result.audioName.replace(/[0-9]/g, "").length > 30
+    ? result.audioName.replace(/[0-9]/g, "").slice(0, 30) + "..."
+    : result.audioName && result.audioName.replace(/[0-9]/g, "")}
 </p>
 
-           {/* <button className="flex items-center gap-3 border border-black px-3 pe-7 my-2 rounded-3xl">
-  
-</button> */}
-<audio controls>
+{/* Audio player */}
+{result.audioUrl ? (
+  <audio controls>
     <source src={result.audioUrl} type="audio/mpeg" />
     Your browser does not support the audio element.
   </audio>
+) : (
+  <p className="text-red-500">Audio not available</p>
+)}
+
            <div className="flex items-center gap-4">
              <CiSquareInfo className="text-2xl cursor-pointer" onClick={()=>setRepModOpen(true)}/>
              <FaRegShareFromSquare className="text-xl opacity-45 cursor-pointer" />
