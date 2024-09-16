@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { TbBrandNeteaseMusic } from "react-icons/tb";
-import { useNavigate ,Link} from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { fetchData } from "../../API";
 
 const CalendarSearch = () => {
@@ -22,7 +22,7 @@ const CalendarSearch = () => {
   const navigate = useNavigate();
 
   const handleSeeAllClick = (title) => {
-    navigate("/singlecategory", { state: { title } });
+    navigate("/singlecategory", { state: { title, data } });
   };
 
   return (
@@ -38,7 +38,7 @@ const CalendarSearch = () => {
       </div>
       <div>
         <div className="flex gap-2 overflow-x-scroll w-full Podcast_Top_Videos">
-          {data.map((elm, ind) => {
+          {data.slice(0, 4).map((elm, ind) => {
             const isLong = elm.jobTitle && elm.jobTitle.length > 25;
             const truncatedDescription = isLong
               ? elm.jobTitle.substring(0, 25) + "..."
@@ -67,25 +67,23 @@ const CalendarSearch = () => {
                   <p className="mt-7 ps-4 text-md opacity-65">{elm.location}</p>
                   <p className="ps-4 text-sm opacity-65 mt-3">{elm.salaryRange}</p>
                   {elm.jobType === " " ? (
-                  
                     <Link
-                    to={"/jobdetail"}
-                    state={{id:elm._id}}
-                    className="w-[90%] mx-auto block text-xs mt-7 bg-[#EEEEEE] h-10 rounded-3xl hover:bg-[#6166f331] hover:text-[#6165F3]"
-                      // onClick={() => navigate("/jobdetail")}
-                      >Apply Now</Link>
+                      to={"/jobdetail"}
+                      state={{ id: elm._id }}
+                      className="w-[90%] mx-auto block text-xs mt-7 bg-[#EEEEEE] h-10 rounded-3xl hover:bg-[#6166f331] hover:text-[#6165F3]"
+                    >
+                      Apply Now
+                    </Link>
                   ) : (
-                  
-                   <div className="text-center flex items-center">
-                     <Link
-                    to={"/jobdetail"}
-                    state={{id:elm._id}}
-                 
-                     className="w-[90%] mx-auto flex text-xs mt-7  justify-center items-center bg-[#EEEEEE] h-10 rounded-3xl hover:bg-[#6166f331] hover:text-[#6165F3]"
-                      // onClick={() => navigate("/jobdetail")}
-                      >Applied</Link>
-                   </div>
-
+                    <div className="text-center flex items-center">
+                      <Link
+                        to={"/jobdetail"}
+                        state={{ id: elm._id }}
+                        className="w-[90%] mx-auto flex text-xs mt-7 justify-center items-center bg-[#EEEEEE] h-10 rounded-3xl hover:bg-[#6166f331] hover:text-[#6165F3]"
+                      >
+                        Applied
+                      </Link>
+                    </div>
                   )}
                 </div>
               </div>
@@ -104,7 +102,7 @@ const CalendarSearch = () => {
         </button>
       </div>
       <div className="flex gap-2 overflow-x-scroll w-full Podcast_Top_Videos">
-        {data.map((elm, ind) => {
+        {data.slice(0, 4).map((elm, ind) => {
           const isLong = elm.jobTitle && elm.jobTitle.length > 20;
           const truncatedDescription = isLong
             ? elm.jobTitle.substring(0, 25) + "..."
@@ -133,25 +131,20 @@ const CalendarSearch = () => {
                 <p className="mt-7 ps-4 text-md opacity-65">{elm.location}</p>
                 <p className="ps-4 text-sm opacity-65 mt-3">{elm.salaryRange}</p>
                 {elm.jobType === " " ? (
-                    // <button
-                    //   className="w-[90%] mx-auto block text-xs mt-7 bg-[#EEEEEE] h-10 rounded-3xl hover:bg-[#6166f331] hover:text-[#6165F3]"
-                    //   onClick={() => navigate("/jobdetail")}
-                    // >
-                    //   {elm.jobType}
-                    // </button>
-                    <button className="w-[90%] mx-auto block text-xs mt-7 bg-[#EEEEEE] h-10 rounded-3xl hover:bg-[#6166f331] hover:text-[#6165F3]"
-                      onClick={() => navigate("/jobdetail")}>Apply Now</button>
-                  ) : (
-                    // <button
-                    //   disabled={true}
-                    //   className="cursor-not-allowed w-[90%] block text-xs mx-auto bg-[#EEEEEE] mt-7 h-10 rounded-3xl"
-                    // >
-                    //   {elm.jobType}
-                    // </button>
-                    <button className="w-[90%] mx-auto block text-xs mt-7 bg-[#EEEEEE] h-10 rounded-3xl hover:bg-[#6166f331] hover:text-[#6165F3]"
-                      onClick={() => navigate("/jobdetail")}>Applied</button>
-
-                  )}
+                  <button
+                    className="w-[90%] mx-auto block text-xs mt-7 bg-[#EEEEEE] h-10 rounded-3xl hover:bg-[#6166f331] hover:text-[#6165F3]"
+                    onClick={() => navigate("/jobdetail")}
+                  >
+                    Apply Now
+                  </button>
+                ) : (
+                  <button
+                    className="w-[90%] mx-auto block text-xs mt-7 bg-[#EEEEEE] h-10 rounded-3xl hover:bg-[#6166f331] hover:text-[#6165F3]"
+                    onClick={() => navigate("/jobdetail")}
+                  >
+                    Applied
+                  </button>
+                )}
               </div>
             </div>
           );
@@ -168,7 +161,7 @@ const CalendarSearch = () => {
         </button>
       </div>
       <div className="flex gap-2 overflow-x-scroll w-full Podcast_Top_Videos">
-        {data.map((elm, ind) => {
+        {data.slice(0, 4).map((elm, ind) => {
           const isLong = elm.jobTitle && elm.jobTitle.length > 20;
           const truncatedDescription = isLong
             ? elm.jobTitle.substring(0, 25) + "..."
@@ -196,27 +189,22 @@ const CalendarSearch = () => {
                 </div>
                 <p className="mt-7 ps-4 text-md opacity-65">{elm.location}</p>
                 <p className="ps-4 text-sm opacity-65 mt-3">{elm.salaryRange}</p>
+                {elm.jobType === " " ? (
+                  <button
+                    className="w-[90%] mx-auto block text-xs mt-7 bg-[#EEEEEE] h-10 rounded-3xl hover:bg-[#6166f331] hover:text-[#6165F3]"
+                    onClick={() => navigate("/jobdetail")}
+                  >
+                    Apply Now
+                  </button>
+                ) : (
+                  <button
+                    className="w-[90%] mx-auto block text-xs mt-7 bg-[#EEEEEE] h-10 rounded-3xl hover:bg-[#6166f331] hover:text-[#6165F3]"
+                    onClick={() => navigate("/jobdetail")}
+                  >
+                    Applied
+                  </button>
+                )}
               </div>
-              {elm.jobType === " " ? (
-                    // <button
-                    //   className="w-[90%] mx-auto block text-xs mt-7 bg-[#EEEEEE] h-10 rounded-3xl hover:bg-[#6166f331] hover:text-[#6165F3]"
-                    //   onClick={() => navigate("/jobdetail")}
-                    // >
-                    //   {elm.jobType}
-                    // </button>
-                    <button className="w-[90%] mx-auto block text-xs mt-7 bg-[#EEEEEE] h-10 rounded-3xl hover:bg-[#6166f331] hover:text-[#6165F3]"
-                      onClick={() => navigate("/jobdetail")}>Apply Now</button>
-                  ) : (
-                    // <button
-                    //   disabled={true}
-                    //   className="cursor-not-allowed w-[90%] block text-xs mx-auto bg-[#EEEEEE] mt-7 h-10 rounded-3xl"
-                    // >
-                    //   {elm.jobType}
-                    // </button>
-                    <button className="w-[90%] mx-auto block text-xs mt-7 bg-[#EEEEEE] h-10 rounded-3xl hover:bg-[#6166f331] hover:text-[#6165F3]"
-                      onClick={() => navigate("/jobdetail")}>Applied</button>
-
-                  )}
             </div>
           );
         })}
