@@ -88,6 +88,18 @@ const Signup = () => {
           <h1 className="text font-bold text-start">Let's get started!</h1>
 
           <form className="flex flex-col gap-2" onSubmit={handleSubmit}>
+
+          <input
+              type="text"
+              placeholder="Name"
+              name="name"
+              value={state.name || ""}
+              onChange={_onChange_}
+              id="name"
+              required
+              className="py-1 px-2 rounded outline-none border-[1px] border-gray-200 placeholder:text-xs"
+            />
+
             <input
               type="text"
               placeholder="Email"

@@ -1,10 +1,10 @@
 // Single Video Section from Videos
 
 import React, { Fragment, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import vid1 from "./video1.mp4";
-import vid2 from "./video1.mp4";
-import vid3 from "./video1.mp4";
+import { useNavigate } from "react-router-dom";
+// import vid1 from "./video1.mp4";
+// import vid2 from "./video1.mp4";
+// import vid3 from "./video1.mp4";
 import { BsInfoSquare } from "react-icons/bs";
 import { FaChevronLeft, FaTiktok } from "react-icons/fa";
 import { CiStar } from "react-icons/ci";
@@ -23,15 +23,15 @@ const ProfileVideo = () => {
   const [repModOpen, setRepModOpen] = useState(false);
   const [revModOpen, setRevModOpen] = useState(false);
 
-  let scr = useParams();
-  let source;
-  if (scr.src === "video3.mp4") {
-    source = vid3;
-  } else if (scr.src === "video1.mp4") {
-    source = vid1;
-  } else if (scr.src === "video2.mp4") {
-    source = vid2;
-  }
+  // let scr = useParams();
+  // let source;
+  // if (scr.src === "video3.mp4") {
+  //   source = vid3;
+  // } else if (scr.src === "video1.mp4") {
+  //   source = vid1;
+  // } else if (scr.src === "video2.mp4") {
+  //   source = vid2;
+  // }
 
   // Single Video Section from Videos
 
@@ -117,11 +117,11 @@ const ProfileVideo = () => {
             </div>
           </div>
 
-          <video
+          {/* <video
             src={source}
             autoPlay
             className="h-full relative z-0 rounded-xl w-full bg-slate-300 object-fill"
-          ></video>
+          ></video> */}
         </div>
       </section>
     </Fragment>
