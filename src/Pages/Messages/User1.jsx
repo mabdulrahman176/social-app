@@ -77,7 +77,7 @@ function Message2() {
     // if (roomId && userId) {
       socket.off('connection', '');
       console.log("join room rrom id")
-         console.log(id[0])
+         console.log(id)
       socket.on('connection',(socket_)=>{console.log("propbaly working")})
       socket.emit('joinRoom', { roomId:id,userId:getUserId() });
       socket.on('pos', (socket)=>{console.log("room joinded",socket);});

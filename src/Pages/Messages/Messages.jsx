@@ -79,6 +79,7 @@ return timeString
               message &&  <Link to={`user1`} key={ind}
                   state={{ id: message._id }}
                 >
+              {/* message && message.sender.name &&  <Link to={`user1`} key={ind} */}
                   <div className="flex justify-between bg-[#9b8d8d] items-center py-3 border-b px-2 md:px-4 hover:bg-gray-100">
                     <div className="flex items-center gap-2">
                       <img
