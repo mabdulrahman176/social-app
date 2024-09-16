@@ -11,15 +11,18 @@ const EventForm = () => {
   const [coverImage, setCoverImage] = useState(null);
   const [coverImageFile, setCoverImageFile] = useState(null);
   const [state, setState] = useState({});
+  const [loading, setLoading] = useState(false); // Add loading state
 
   const getUserId = () => {
-    const str = document.cookie
+    const str = document.cookie;
     const userKey = str.split('=')[1];
-    return userKey
-  }
+    return userKey;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent default form submission behavior
+
+    setLoading(true); // Show spinner
 
     const formData = new FormData();
     if (coverImageFile) {
@@ -28,7 +31,8 @@ const EventForm = () => {
     Object.keys(state).forEach((key) => {
       formData.append(key, state[key]);
     });
-     formData.append('eventCreatedBy',getUserId())
+    formData.append('eventCreatedBy', getUserId());
+
     try {
       const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/events/`, {
         method: 'POST',
@@ -41,6 +45,8 @@ const EventForm = () => {
       navigate("/events"); // Navigate to the events page or wherever you need
     } catch (error) {
       console.error('Error:', error);
+    } finally {
+      setLoading(false); // Hide spinner
     }
   };
 
@@ -69,6 +75,16 @@ const EventForm = () => {
         />{" "}
         Create Event
       </h4>
+
+      {/* Spinner overlay */}
+      {loading && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center">
+          <div className="spinner-border text-white" role="status">
+            <span className="sr-only">Loading...</span>
+          </div>
+        </div>
+      )}
+
       <div className="w-full h-[90%] bg-white overflow-y-scroll Podcast_Top_Videos">
         <form onSubmit={handleSubmit} className="flex sm:w-[80%] w-[95%] justify-between mx-auto h-full">
           <div className="sm:w-[40%] w-[45%]">
@@ -233,10 +249,17 @@ const EventForm = () => {
               />
             </div>
             <button
-              className="w-full h-12 mt-14 border rounded-3xl bg-blue-800 text-white py-2 px-3 leading-tight focus:outline-none text-sm focus:shadow-outline"
+              className="w-full h-12 mt-14 border rounded-3xl linear_gradient text-white py-2 px-3 leading-tight focus:outline-none text-sm focus:shadow-outline"
               type="submit"
+              disabled={loading} // Disable button when loading
             >
-              Publish Now
+              {loading ? (
+                <div className="spinner-border text-white" role="status">
+                  <span className="sr-only">Loading...</span>
+                </div>
+              ) : (
+                "Publish Now"
+              )}
             </button>
           </div>
         </form>

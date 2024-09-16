@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-// import { GrCut } from "react-icons/gr";
-// import { BsCcCircle } from "react-icons/bs";
-// import { GrGallery } from "react-icons/gr";
 import { useNavigate } from "react-router-dom";
 import { FaCaretLeft, FaShareFromSquare } from "react-icons/fa6";
 import { MdArrowDropDown, MdDone } from "react-icons/md";
@@ -22,6 +19,7 @@ const Video = () => {
   const [vidPostSucc, setVidPostSucc] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [file, setFile] = useState(null);
+  const [loading, setLoading] = useState(false); // New loading state
 
   const navigate = useNavigate();
 
@@ -53,6 +51,7 @@ const Video = () => {
       return;
     }
 
+    setLoading(true); // Start loading spinner
     const formData = new FormData();
     formData.append("video", file);
     formData.append("videoDesc", videoDesc);
@@ -64,28 +63,31 @@ const Video = () => {
           "Content-Type": "multipart/form-data",
         },
       });
-        console.log({response})
+      console.log({ response });
       setVidPostSucc(true);
     } catch (error) {
       setErrorMessage("Failed to upload video.");
       console.error("Error uploading video:", error);
+    } finally {
+      setLoading(false); // End loading spinner
     }
   };
 
   const getUserId = () => {
-    const str = document.cookie
+    const str = document.cookie;
     const userKey = str.split('=')[1];
-    return userKey
-  }
+    return userKey;
+  };
 
-  const descOnChange=(e)=>{setDesc(e.target.value)
-    console.log(e.target.value)
-  }
+  const descOnChange = (e) => {
+    setDesc(e.target.value);
+    console.log(e.target.value);
+  };
 
   useEffect(() => {
     if (vidPostSucc) {
       const timer = setTimeout(() => {
-        // navigate("/success"); // Navigate to success page after successful post
+        navigate("/videos"); // Navigate to videos page after successful post
       }, 3000); // Delay before navigation
       return () => clearTimeout(timer); // Cleanup timeout on component unmount
     }
@@ -100,7 +102,6 @@ const Video = () => {
               className="cursor-pointer absolute top-5 left-3"
               onClick={handleNavigate}
             />
-
             <div className="flex flex-col justify-center">
               <div className="h-[50px] flex justify-center items-center w-[50px] mx-auto border-2 border-solid border-[#6165F3] opacity-85 rounded-3xl bg-[#e1e2fd]">
                 <MdDone className="text-[#333af3] text-[12px]" />
@@ -123,6 +124,14 @@ const Video = () => {
                 <FaShareFromSquare size={20} className="text-white" />
                 <p className="text-white">Share</p>
               </div>
+            </div>
+          </div>
+        )}
+
+        {loading && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center">
+            <div className="spinner-border text-white" role="status">
+              <span className="sr-only">Loading...</span>
             </div>
           </div>
         )}
@@ -197,12 +206,19 @@ const Video = () => {
               <button
                 className="bg-[#eff0fe] w-24 h-8 rounded-xl text-[blue]"
                 onClick={handleSubmit}
+                disabled={loading} // Disable button when loading
               >
-                Post
+                {loading ? (
+                  <div className="spinner-border text-blue-500" role="status">
+                    <span className="sr-only">Loading...</span>
+                  </div>
+                ) : (
+                  "Post"
+                )}
               </button>
             </div>
             <input
-            onChange={descOnChange}
+              onChange={descOnChange}
               type="text"
               className="mb-2 py-1 text-gray-400 ps-3 text-sm outline-none border-none"
               placeholder="Add Description ........"
@@ -213,46 +229,35 @@ const Video = () => {
                   className="w-[90%] h-[60%] absolute bg-white rounded-xl z-30"
                   onClick={() => setPostPrivShow(false)}
                 >
-                  <hr className="w-[13%] bg-black h-[3px] rounded-full mx-auto mt-2" />
-                  <p className="text-sm my-2 text-center">
-                    Who can see this post?
-                  </p>
-                  <hr className="h-[1px] border-[#31313164]" />
-                  <p
-                    className="ps-3 flex items-center gap-2 text-sm p-2 py-5 cursor-pointer"
+                  <div
+                    className="w-full flex justify-between items-center px-4 py-2 border-b border-gray-200 cursor-pointer"
                     onClick={() => setPostPriv("Anyone")}
                   >
-                    <GiWorld className="text-md" /> Anyone
-                  </p>
-                  <hr className="h-[1px] border-[#31313164]" />
-                  <p
-                    className="ps-3 flex items-center gap-2 text-sm p-2 py-5 cursor-pointer"
-                    onClick={() => setPostPriv("Subscribers only")}
+                    <GiWorld />
+                    <p>Anyone</p>
+                  </div>
+                  <div
+                    className="w-full flex justify-between items-center px-4 py-2 border-b border-gray-200 cursor-pointer"
+                    onClick={() => setPostPriv("Friends")}
                   >
-                    <TiGroupOutline className="text-md" /> Subscribers only
-                  </p>
-                  <hr className="h-[1px] border-[#31313164]" />
-                  <p
-                    className="ps-3 flex items-center gap-2 text-sm p-2 py-5 cursor-pointer"
-                    onClick={() => setPostPriv("Archive")}
+                    <TiGroupOutline />
+                    <p>Friends</p>
+                  </div>
+                  <div
+                    className="w-full flex justify-between items-center px-4 py-2 cursor-pointer"
+                    onClick={() => setPostPriv("Only Me")}
                   >
-                    <PiEyeClosed className="text-md" /> Archive
-                  </p>
+                    <PiEyeClosed />
+                    <p>Only Me</p>
+                  </div>
                 </div>
               )}
-
-              {inpType === "video/mp4" || inpType.startsWith("video/") ? (
-                <video
-                  controls
-                  className="w-full h-full rounded-lg bg-gray-200 object-fill"
-                  src={inputData}
-                  alt=""
-                />
-              ) : (
-                <h1 className="h-full w-full flex justify-center items-center bg-gray-200">
-                  No Video Received
-                </h1>
-              )}
+              <video
+                controls
+                className="w-full h-full rounded-lg bg-gray-200 object-fill"
+                src={inputData}
+                alt=""
+              />
             </div>
           </div>
         ) : null}

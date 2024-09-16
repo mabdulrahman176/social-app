@@ -10,6 +10,8 @@ const JobCreationform = () => {
     languages: [],
     skills: [],
   });
+  const [loading, setLoading] = useState(false);
+
   const getUserId = () => {
     const str = document.cookie
     const userKey = str.split('=')[1];
@@ -17,37 +19,45 @@ const JobCreationform = () => {
   }
 
   const handleSubmit = async () => {
+    setLoading(true); // Show spinner
+    console.log("submitting");
+    
     // Convert languages and skills strings to arrays
-  //  Null check if sent empty
-   const languages= state.languages.length>0?convertStringToArray(state.languages):[]
-   const skills=  state.skills.length>0?convertStringToArray(state.skills):[]
-   console.log({languages,skills})
+    const languages = state.languages.length > 0 ? convertStringToArray(state.languages) : [];
+    const skills = state.skills.length > 0 ? convertStringToArray(state.skills) : [];
     const dataToSubmit = {
       ...state,
       languages,
       skills,
-      userId:getUserId()
+      userId: getUserId()
     };
 
-    const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/jobs/`, {
-      credentials: "include",
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(dataToSubmit),
-    });
+    try {
+      const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/jobs/`, {
+        credentials: "include",
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(dataToSubmit),
+      });
 
-    const d = await req.json();
-    console.log(d);
-    console.log(dataToSubmit);
+      const d = await req.json();
+      console.log(d);
+      console.log(dataToSubmit);
 
-    // Update the context state
-    JobStates.setJobSubmitted(!JobStates.jobSubmitted);
+      // Update the context state
+      JobStates.setJobSubmitted(!JobStates.jobSubmitted);
 
-    // Navigate to another page if needed
-    // navigate("/jobs");
+      // Navigate to another page if needed
+      // navigate("/jobs");
+    } catch (error) {
+      console.error("Error submitting job:", error);
+    } finally {
+      setLoading(false); // Hide spinner
+    }
   };
+
 
   const _onChange_ = (e) => {
     const { name, value } = e.target;
@@ -67,6 +77,14 @@ const JobCreationform = () => {
 
   return (
     <div className="bg-white h-full w-full">
+       {/* Spinner overlay */}
+       {loading && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center">
+          <div className="spinner-border text-white" role="status">
+            <span className="sr-only">Loading...</span>
+          </div>
+        </div>
+      )}
       <h4 className="flex items-center gap-3 ps-4 h-[10%]">
         <FaAngleLeft
           className="cursor-pointer"
@@ -346,8 +364,16 @@ const JobCreationform = () => {
           <button
             className="w-64 h-12 rounded-full buyticket text-white text-center"
             onClick={handleSubmit}
+            disabled={loading}
           >
-            Post Job
+             {loading ? (
+              <div className="spinner-border text-white" role="status">
+                <span className="sr-only">Loading...</span>
+              </div>
+            ) : (
+              " Post Job"
+            )}
+           
           </button>
         </div>
 
