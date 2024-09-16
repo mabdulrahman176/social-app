@@ -64,7 +64,7 @@ const Signup = () => {
 
   return (
     <div className="w-[100vw] h-[100vh] grid place-items-center bg-blue-200">
-      <div className=" w-full h-full md:h-[95vh] md:w-[27vw] bg-white flex flex-col justify-between items-center md:items-center px-10 py-4">
+      <div className=" w-full h-full md:h-[95vh] md:w-[27rem] bg-white flex flex-col justify-between items-center md:items-center px-10 py-4">
         <section className="flex flex-col gap-2 items-center py-[1px] w-[19rem]">
           <div className="flex justify-center items-center border-[1px] border-gray-300 rounded w-full">
             <button
@@ -119,7 +119,7 @@ const Signup = () => {
               onChange={_onChange_}
               id="password"
               required
-              className="py-2 px-4 rounded outline-none border-[1px] border-gray-200 placeholder:text-xs"
+              className="py-2 px-4 w-auto rounded outline-none border-[1px] border-gray-200 placeholder:text-xs"
             />
             <h2 className=" font-semibold text-center ">Select your Role</h2>
             <section
