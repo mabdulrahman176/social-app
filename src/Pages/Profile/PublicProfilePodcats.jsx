@@ -4,38 +4,38 @@ import { CiPlay1 ,CiTrash} from "react-icons/ci";
 import { FaRegShareFromSquare } from "react-icons/fa6";
 import { IoBookmarkOutline } from "react-icons/io5";
 
-// Sample data
-let similarPodcastData = [
-  {
-    img: "./image1.jpeg",
-    id: 1,
-    categ: "Politics",
-    userName: "Lily Williams",
-    mint: "35 Mins",
-  },
-  {
-    img: "./img3.jpeg",
-    id: 2,
-    categ: "Politics",
-    userName: "Lily Williams",
-    mint: "35 Mins",
-  },
-  {
-    img: "./img3.jpeg",
-    id: 2,
-    categ: "Politics",
-    userName: "Lily Williams",
-    mint: "35 Mins",
-  },
-  {
-    img: "./img3.jpeg",
-    id: 2,
-    categ: "Politics",
-    userName: "Lily Williams",
-    mint: "35 Mins",
-  },
+// // Sample data
+// let similarPodcastData = [
+//   {
+//     img: "./image1.jpeg",
+//     id: 1,
+//     categ: "Politics",
+//     userName: "Lily Williams",
+//     mint: "35 Mins",
+//   },
+//   {
+//     img: "./img3.jpeg",
+//     id: 2,
+//     categ: "Politics",
+//     userName: "Lily Williams",
+//     mint: "35 Mins",
+//   },
+//   {
+//     img: "./img3.jpeg",
+//     id: 2,
+//     categ: "Politics",
+//     userName: "Lily Williams",
+//     mint: "35 Mins",
+//   },
+//   {
+//     img: "./img3.jpeg",
+//     id: 2,
+//     categ: "Politics",
+//     userName: "Lily Williams",
+//     mint: "35 Mins",
+//   },
  
-];
+// ];
   
   const ApplePodcast = (props) => {
   const [podcast, setpodcast] = useState([])
