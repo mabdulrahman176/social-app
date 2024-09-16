@@ -64,8 +64,8 @@ const Signup = () => {
 
   return (
     <div className="w-[100vw] h-[100vh] grid place-items-center bg-blue-200">
-      <div className=" w-full h-full md:h-[95vh] md:w-[27vw] bg-white flex flex-col justify-between items-center md:items-start px-10 py-4">
-        <section className="flex flex-col gap-2 items-start py-[1px]">
+      <div className=" w-full h-full md:h-[95vh] md:w-[27vw] bg-white flex flex-col justify-between items-center md:items-center px-10 py-4">
+        <section className="flex flex-col gap-2 items-center py-[1px] w-[19rem]">
           <div className="flex justify-center items-center border-[1px] border-gray-300 rounded w-full">
             <button
               onClick={() => navigate("/signup")}
@@ -87,7 +87,7 @@ const Signup = () => {
 
           <h1 className="text font-bold text-start">Let's get started!</h1>
 
-          <form className="flex flex-col gap-2" onSubmit={handleSubmit}>
+          <form className="flex flex-col w-[22rem] gap-2" onSubmit={handleSubmit}>
 
           <input
               type="text"
@@ -97,7 +97,7 @@ const Signup = () => {
               onChange={_onChange_}
               id="name"
               required
-              className="py-1 px-2 rounded outline-none border-[1px] border-gray-200 placeholder:text-xs"
+              className="py-2 px-4 w-full rounded outline-none border-[1px] border-gray-200 placeholder:text-xs"
             />
 
             <input
@@ -108,7 +108,7 @@ const Signup = () => {
               onChange={_onChange_}
               id="email"
               required
-              className="py-1 px-2 rounded outline-none border-[1px] border-gray-200 placeholder:text-xs"
+              className="py-2 px-4 rounded outline-none border-[1px] border-gray-200 placeholder:text-xs"
             />
 
             <input
@@ -119,9 +119,9 @@ const Signup = () => {
               onChange={_onChange_}
               id="password"
               required
-              className="py-1 px-2 rounded outline-none border-[1px] border-gray-200 placeholder:text-xs"
+              className="py-2 px-4 rounded outline-none border-[1px] border-gray-200 placeholder:text-xs"
             />
-            <h2 className="text-xs font-semibold">Select your Role</h2>
+            <h2 className=" font-semibold text-center ">Select your Role</h2>
             <section
               className={`flex justify-center gap-4 max-w-full ${
                 !signUp ? "h-0 opacity-0" : ""
@@ -163,7 +163,7 @@ const Signup = () => {
             <section className="flex items-center mt-6 justify-center ">
               <button
                 type="submit"
-                className="w-full mb-4 bg-purple-800 py-2 rounded-3xl text-xs linear_gradient text-white"
+                className="w-full mb-4 bg-purple-800 py-3 rounded-3xl font-semibold linear_gradient text-white"
               >
                 {`${signUp ? "Sign up" : "Sign in"}`}
               </button>
@@ -171,10 +171,15 @@ const Signup = () => {
           </form>
         </section>
 
-        <div className="h-[1px] md:my-2 relative bg-black w-full">
+        {/* <div className="h-[1px] md:my-2 relative bg-black w-full">
           <p className="absolute -top-[12px] md:left-[77px] left-[99px] px-1 text-black text-sm bg-white">
             or continue with
           </p>
+        </div> */}
+        <div className="flex flex-row w-full items-center">
+          <div className="w-full h-[1px] bg-black"></div>
+          <div className=" px-2 text-black text-sm whitespace-nowrap bg-white">or continue with</div>
+          <div className="w-full h-[1px] bg-black"></div>
         </div>
 
         <section className="flex items-center justify-between w-full md:my-2">
