@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import { CiPlay1, CiEdit, CiTrash } from "react-icons/ci"; // Import icons
 import ProfileVideo from "./ProfileVideo"; // Import the ProfileVideo component
 import { useNavigate } from "react-router-dom";
+import { deleteVideo} from '../../DeleteAPI'
 
 const AllVideos = (props) => {
   const [video, setVideo] = useState([]); // State to hold the video list
   const [selectedVideo, setSelectedVideo] = useState(null); // State for the selected video
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false); // State for the video modal
   const [visibleId, setVisibleId] = useState(null); // State for showing icons on hover
+  const [deleteId, setDeleteId] = useState(''); // State for showing icons on hover
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); // State for delete modal
   const [isEditModalOpen, setIsEditModalOpen] = useState(false); // State for edit modal
   const navigate = useNavigate();
@@ -22,12 +24,13 @@ const AllVideos = (props) => {
     setSelectedVideo(null);
   };
 
-  const handleIconClick = (event, action) => {
+  const handleIconClick = (event, action,item_id) => {
     event.stopPropagation(); // Prevent navigation on icon click
-
+    console.log({item_id})
     if (action === "edit") {
       setIsEditModalOpen(true); // Open the edit modal
     } else if (action === "delete") {
+      setDeleteId(item_id)
       setIsDeleteModalOpen(true); // Open the delete modal
     }
   };
@@ -68,8 +71,9 @@ const AllVideos = (props) => {
                       onClick={(e) => handleIconClick(e, "edit")} // Trigger edit action
                     />
                     <CiTrash
-                      className="text-white text-3xl cursor-pointer hover:text-gray-300"
-                      onClick={(e) => handleIconClick(e, "delete")} // Trigger delete action
+                      className="text-red-700 text-4xl cursor-pointer hover:bg-red-700  hover:text-white"
+                      onClick={(e) => handleIconClick(e, "delete",video._id)} // Trigger delete action
+                      // onClick={(e) =>{console.log()}} // Trigger delete action
                     />
                   </div>
                 )}
@@ -101,6 +105,7 @@ const AllVideos = (props) => {
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center">
           <div className="bg-white p-4 rounded-lg">
             <p>Are you sure you want to delete this video?</p>
+            <p>{deleteId}</p>
             <div className="flex justify-end mt-4">
               <button
                 className="mr-2 bg-gray-500 text-white px-4 py-2 rounded"
@@ -111,7 +116,9 @@ const AllVideos = (props) => {
               <button
                 className="linear_gradient text-white px-4 py-2 rounded"
                 onClick={() => {
+                  // deleteVideo(deleteId)
                   console.log("Deleting video...");
+                  setDeleteId(null)
                   setIsDeleteModalOpen(false); // Close modal after delete action
                 }}
               >
