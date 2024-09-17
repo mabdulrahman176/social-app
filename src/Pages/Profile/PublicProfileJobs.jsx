@@ -1,49 +1,8 @@
 import React, { useState, Fragment, useEffect } from "react";
 import { TbBrandNeteaseMusic } from "react-icons/tb";
 import { IoTrashOutline } from "react-icons/io5"; // Import the delete icon
-
-let SearchData = [
-  {
-    id: 1,
-    categ: "Marketing head",
-    ago: "1 week ago",
-    state: "United States (Hybrid)",
-    price: "$80k/yr-$100k/yr",
-    button: "Applied",
-  },
-  {
-    id: 2,
-    categ: "Marketing head",
-    ago: "1 week ago",
-    state: "United States (Hybrid)",
-    price: "$80k/yr-$100k/yr",
-    button: "Applied",
-  },
-  {
-    id: 3,
-    categ: "Brand Designer",
-    ago: "1 week ago",
-    state: "United States (Hybrid)",
-    price: "$80k/yr-$100k/yr",
-    button: "Apply",
-  },
-  {
-    id: 4,
-    categ: "Marketing head",
-    ago: "1 week ago",
-    state: "United States (Hybrid)",
-    price: "$80k/yr-$100k/yr",
-    button: "Applied",
-  },
-  {
-    id: 5,
-    categ: "Brand Designer",
-    ago: "1 week ago",
-    state: "United States (Hybrid)",
-    price: "$80k/yr-$100k/yr",
-    button: "Apply",
-  },
-];
+import {  CiTrash } from "react-icons/ci";
+import {deleteJob} from '../../DeleteAPI'
 
 const CalendarSearch = (props) => {
   const [jobs, setjobs] = useState([])
@@ -59,6 +18,8 @@ const CalendarSearch = (props) => {
   const handleDeleteConfirm = () => {
     // Logic to delete item by id
     console.log(`Deleting job with id: ${deleteItemId}`);
+    deleteJob(deleteItemId)
+    setDeleteItemId('')
     setIsDeleteModalOpen(false);
     // You may need to filter the data or make an API call to remove the item
   };
@@ -78,10 +39,10 @@ const CalendarSearch = (props) => {
     <Fragment>
       <div className="ps-6 overflow-y-scroll Podcast_Top_Videos h-full w-full">
         <div className="flex gap-1 flex-wrap w-full Podcast_Top_Videos">
-          {jobs.map((elm,i) => (
+          {jobs && jobs.map((elm,i) => (
             <div
               key={i}
-              className="h-[37vh] w-[32.4%] flex-shrink-0 shadow rounded-lg border relative PPJob"
+              className="h-[37vh] w-[32.4%] flex-shrink-0 shadow bg-slate-700 rounded-lg border relative PPJob"
               onMouseEnter={() => setVisibleId(elm._id)}
               onMouseLeave={() => setVisibleId(null)}
             >
@@ -110,10 +71,11 @@ const CalendarSearch = (props) => {
                   </button>
                 )}
                 {/* Add delete icon */}
-                {visibleId === elm.id && (
+                {/* {visibleId === elm.id && ( */}
+                {true && (
                   <button
                     className="absolute top-2 right-2 text-red-600 text-xl cursor-pointer"
-                    onClick={() => handleDeleteClick(elm.id)}
+                    onClick={() => handleDeleteClick(elm._id)}
                   >
                     <IoTrashOutline />
                   </button>

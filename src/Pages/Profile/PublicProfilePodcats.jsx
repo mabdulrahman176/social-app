@@ -80,7 +80,7 @@ const ApplePodcast = (props) => {
               {visibleId === elm._id && (
                 <div className="absolute top-14 right-2 flex flex-col space-y-2">
                   <CiTrash
-                    className="text-white text-3xl cursor-pointer hover:text-gray-300"
+                    className="text-white text-3xl cursor-pointer hover:text-red-600"
                     onClick={(e) => handleDeleteClick(e, elm._id)} // Pass event and id
                   />
                 </div>

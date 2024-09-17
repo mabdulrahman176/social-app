@@ -44,7 +44,7 @@ const Calendar = (props) => {
   return (
     <div className="overflow-y-scroll Podcast_Top_Videos w-full h-full">
       <div className="flex flex-wrap text-white gap-1 w-[95%] mx-auto Podcast_Top_Videos pt-2">
-        {event.map((elm) => (
+        {event && event.map((elm) => (
           <div
             key={elm._id}
             className="md:h-[45vh] h-[37vh] w-[32.4%] rounded-lg border relative PPEvent"
