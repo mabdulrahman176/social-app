@@ -6,16 +6,15 @@ import {
   faStar,
   faTrashAlt,
 } from "@fortawesome/free-solid-svg-icons";
-import { faStar as faStarRegular } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState, useEffect } from "react";
 import { RiCloseLine } from "react-icons/ri";
-import axios from "axios";
+import { deleteReview } from "../../DeleteAPI";
 
 const Review = (props) => {
   const [isWritingReview, setIsWritingReview] = useState(false);
   const [comments, setComments] = useState([]);
-  const [rating, setRating] = useState(4); // Default rating
+  const [rating, setRating] = useState(5); // Default rating
   const [reviewText, setReviewText] = useState("");
 
   const getUserId = () => {
@@ -26,40 +25,48 @@ const Review = (props) => {
 
   function calculateMean(com) {
     let arr = com.map((e) => e.reviewRatings);
-
-    if (arr.length === 0) return 0; // Handle empty array case
-
-    const sum = arr.reduce((acc, curr) => acc + curr, 0); // Sum up all elements
-    const mean = sum / arr.length; // Calculate the mean
-
-    return mean;
+    if (arr.length === 0) return 0;
+    const sum = arr.reduce((acc, curr) => acc + curr, 0);
+    return sum / arr.length;
   }
 
   const postReview = async () => {
     console.log("posting review");
-    const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/reviews`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify({
-        reviewItemId: props.videoId,
-        reviewRatings: rating,
-        reviewMessage: reviewText,
-        userId: getUserId(),
-      }),
-    });
-    const data = await req.json();
-    console.log({ data });
+    try {
+      const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/reviews`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          reviewItemId: props.videoId,
+          reviewRatings: rating,
+          reviewMessage: reviewText,
+          userId: getUserId(),
+        }),
+      });
+      const data = await req.json();
+      console.log({ data });
+
+      // Refresh comments
+      await fetchComments();
+
+      // Clear the review form
+      setRating(5); // Reset rating to default
+      setReviewText(""); // Clear the review text
+      setIsWritingReview(false); // Switch back to the review list view
+    } catch (error) {
+      console.error("Error posting review:", error);
+    }
   };
 
   const deleteComment = async (commentId) => {
     try {
-      await fetch(`${process.env.REACT_APP_API_BASE_URL}/reviews/${commentId}`, {
-        method: "DELETE",
-      });
-      setComments(comments.filter((comment) => comment.id !== commentId)); // Remove deleted comment from state
+      await deleteReview(commentId);
+      setComments((prevComments) =>
+        prevComments.filter((comment) => comment.id !== commentId)
+      );
     } catch (error) {
       console.error("Error deleting comment:", error);
     }
@@ -138,11 +145,6 @@ const Review = (props) => {
                         aria-label={`${star} star`}
                       />
                     ))}
-                    <FontAwesomeIcon
-                      className="text-gray-300 w-5 h-5"
-                      icon={faStarRegular}
-                      aria-label="Star"
-                    />
                   </div>
                   <h1 className="font-semibold">({rating.toFixed(1)})</h1>
                 </div>
@@ -155,8 +157,8 @@ const Review = (props) => {
                     placeholder="Write your review here"
                     required
                   ></textarea>
+                  <h1 className="text-end opacity-70">Max 100 words</h1>
                 </div>
-                <h1 className="text-end opacity-70">Max 100 words</h1>
               </div>
               <button
                 onClick={postReview}
@@ -172,14 +174,18 @@ const Review = (props) => {
                 <div className="flex flex-wrap md:flex-nowrap justify-between items-center">
                   <div className="flex items-center gap-4">
                     <h1 className="text-xl text-violet-500">
-                      {calculateMean(comments)}
+                      {calculateMean(comments).toFixed(1)}
                     </h1>
                     <div>
                       {[1, 2, 3, 4, 5].map((star) => (
                         <FontAwesomeIcon
                           key={star}
-                          className="text-gray-300 w-5 h-5"
-                          icon={faStarRegular}
+                          className={`w-5 h-5 ${
+                            star <= calculateMean(comments)
+                              ? "text-yellow-400"
+                              : "text-gray-300"
+                          }`}
+                          icon={faStar}
                           aria-label={`${star} star`}
                         />
                       ))}
