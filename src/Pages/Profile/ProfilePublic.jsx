@@ -12,9 +12,9 @@ import PublicProfilePodcats from "./PublicProfilePodcats";
 import PublicProfileEvents from "./PublicProfileEvents";
 import PublicProfileJobs from "./PublicProfileJobs";
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
-const ProfilePublic = ({ userId }) => { // Accept userId as a prop
+const ProfilePublic = ({ userId }) => {
   const [data_, setDATA] = useState({});
   const [activeTab, setActiveTab] = useState("");
   const [profile, setProfile] = useState({});
@@ -23,20 +23,21 @@ const ProfilePublic = ({ userId }) => { // Accept userId as a prop
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
   };
+
   const getUserId = () => {
-    const str = document.cookie
+    const str = document.cookie;
     const userKey = str.split('=')[1];
-    return userKey
-  }
+    return userKey;
+  };
 
   const handleSubmit = async () => {
     const formData = new FormData();
-    console.log({ file })
+    console.log({ file });
     if (file) {
       formData.append('profilePic', file);
     }
     try {
-      const response = await fetch(`${API_BASE_URL}/users/profilepic/${getUserId()}`, { // Use userId dynamically
+      const response = await fetch(`${API_BASE_URL}/users/profilepic/${getUserId()}`, {
         credentials: 'include',
         method: "POST",
         body: formData,
@@ -48,16 +49,17 @@ const ProfilePublic = ({ userId }) => { // Accept userId as a prop
       console.error('Error updating profile:', error);
     }
   };
-  const createChatRoom = () => { console.log("creating chatroom") }
+
+  const createChatRoom = () => { console.log("creating chatroom"); };
 
   const fetchProfileData = async () => {
     try {
-      const result = await fetchProfile(getUserId()); // Use userId dynamically
-      setProfile(result.user)
-      setDATA(result.data)
-      console.log("single user data", result)
-      console.log({ data_ })
-      return result
+      const result = await fetchProfile(getUserId());
+      setProfile(result.user);
+      setDATA(result.data);
+      console.log("single user data", result);
+      console.log({ data_ });
+      return result;
     } catch (error) {
       console.error("Fetching profile data error:", error);
     }
@@ -65,8 +67,10 @@ const ProfilePublic = ({ userId }) => { // Accept userId as a prop
 
   useEffect(() => {
     fetchProfileData();
-
   }, []);
+
+  // Check if the current user is viewing their own profile
+  const isCurrentUser = userId === getUserId();
 
   return (
     <Fragment>
@@ -108,15 +112,37 @@ const ProfilePublic = ({ userId }) => { // Accept userId as a prop
                 <MdKeyboardArrowRight className="text-xl md:text-2xl" />
               </div>
               <div className="flex gap-2 flex-wrap">
-                <button
-                  className="px-6 py-2 rounded-2xl text-white text-xs bg-[#6165F3]"
-                  onClick={handleSubmit}
-                >
-                  Save
-                </button>
-                <button onClick={() => console.log(profile)} className="px-6 py-2 rounded-2xl text-xs bg-[#F6F6FF]">
-                  Message
-                </button>
+                {/* Conditionally render buttons */}
+                {isCurrentUser ? (
+                  <>
+                    <button
+                      className="px-6 py-2 rounded-2xl  text-lg bg-[#F6F6FF]"
+                      onClick={handleSubmit}
+                    >
+                      Save Changes
+                    </button>
+                    <button
+                      onClick={() => console.log(profile)}
+                      className="px-6 py-2 rounded-2xl text-lg text-white bg-[#6165F3]"
+                    >
+                      Edit Profile 
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button
+                      className="px-6 py-2 rounded-2xl  text-lg bg-[#F6F6FF]"
+                      onClick={createChatRoom}
+                    >
+                      Message
+                    </button>
+                    <button
+                      className="px-6 py-2 rounded-2xl text-lg text-white bg-[#6165F3]"
+                    >
+                      Subscribe
+                    </button>
+                  </>
+                )}
               </div>
             </div>
           </div>
@@ -142,10 +168,10 @@ const ProfilePublic = ({ userId }) => { // Accept userId as a prop
           </div>
         </div>
         <section className="h-[54%] w-full overflow-y-scroll Podcast_Top_Videos">
-          {activeTab === "Video" ? <PublicProfileVideos videos={data_.videos} /> : ''}
-          {activeTab === "Podcast" ? <PublicProfilePodcats podcast={data_.podcast} /> : ''}
-          {activeTab === "Event" ? <PublicProfileEvents events={data_.events} /> : ''}
-          {activeTab === "Job" ? <PublicProfileJobs jobs={data_.jobs} /> : ''}
+          {activeTab === "Video" && <PublicProfileVideos videos={data_.videos} />}
+          {activeTab === "Podcast" && <PublicProfilePodcats podcast={data_.podcast} />}
+          {activeTab === "Event" && <PublicProfileEvents events={data_.events} />}
+          {activeTab === "Job" && <PublicProfileJobs jobs={data_.jobs} />}
         </section>
       </div>
     </Fragment>
