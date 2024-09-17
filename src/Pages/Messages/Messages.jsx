@@ -80,13 +80,13 @@ return timeString
                   state={{ id: message._id }}
                 >
               {/* message && message.sender.name &&  <Link to={`user1`} key={ind} */}
-                  <div className="flex justify-between bg-[#9b8d8d] items-center py-3 border-b px-2 md:px-4 hover:bg-gray-100">
+                  <div className="flex justify-between  items-center py-3 border-b px-2 md:px-4 hover:bg-gray-100">
                     <div className="flex items-center gap-2">
                       <img
                         // src={''}
                         src={message.sender?.picUrl?message.sender.picUrl:''}
                         alt=""
-                        className="h-[30px] w-[30px] rounded-full"
+                        className="h-[50px] w-[50px] rounded-full"
                       />
                       <div>
                         <p className="text-md font-medium">{message.sender.name}</p>

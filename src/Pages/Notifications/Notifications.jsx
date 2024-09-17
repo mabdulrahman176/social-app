@@ -77,9 +77,9 @@ function Notification() {
                   />
                   {visibleId === notification._id && (
                     <div className="absolute w-[200px] cursor-pointer right-0 px-3 py-2 z-30 bg-white shadow-lg border">
-                      <p className="text-[15px] opacity-75 mb-2">Details</p>
+                      {/* <p className="text-[15px] opacity-75 mb-2">Details</p>
                       <p className="text-[15px] opacity-75 mb-2">Hide</p>
-                      <p className="text-[15px] opacity-75 mb-2">Block and report</p>
+                      <p className="text-[15px] opacity-75 mb-2">Block and report</p> */}
                       <p className="text-[15px] opacity-75 text-[red]" onClick={() => handleDelete(notification._id)}>Delete</p>
                     </div>
                   )}
