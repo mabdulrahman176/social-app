@@ -51,7 +51,7 @@ const CalendarSearch = (props) => {
                   <TbBrandNeteaseMusic className="bg-red-500 rounded-2xl text-white top-3 m-2 mb-0 text-3xl" />
                   <div>
                     <h1 className="font-semibold">{elm.jobTitle}</h1>
-                    <p className="font-light text-md">{elm.jobDescription.slice(0,14)+"..."}</p>
+                    <p className="font-light text-md">{elm.jobDescription && elm.jobDescription.slice(0,14)+"..."}</p>
                   </div>
                 </div>
                 <p className="mt-7 ps-4 text-md opacity-65">{elm.jobType}</p>

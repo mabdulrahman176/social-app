@@ -57,6 +57,7 @@ const req=await fetch(`${API_BASE_URL}/reviews/${id}`,{
     'Content-Type':"application/json"
 },
 })
+console.log("deleting comment")
 const data = await req.json()
 console.log({data})
 }

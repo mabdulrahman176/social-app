@@ -246,7 +246,7 @@ function Message2() {
                   src={(getUserId() !== e.sender) ? sender.picUrl : receiver && receiver.picUrl}
                   // src={(getUserId()!==e.sender)?sender.picUrl:"https://media.istockphoto.com/id/1682296067/photo/happy-studio-portrait-or-professional-man-real-estate-agent-or-asian-businessman-smile-for.webp?b=1&s=170667a&w=0&k=20&c=V-RXoAk73ljzQZd0w_JcCFG-jlYs6sjpcrIZQ1TersQ="}
                   alt=""
-                  className="h-[30px] w-[30px] rounded-full"
+                  className="h-[40px] w-[40px] rounded-full"
                 />
                 <div className="flex ">
                   <div className="div">

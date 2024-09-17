@@ -64,9 +64,10 @@ const Review = (props) => {
   const deleteComment = async (commentId) => {
     try {
       await deleteReview(commentId);
-      setComments((prevComments) =>
-        prevComments.filter((comment) => comment.id !== commentId)
-      );
+      // setComments((prevComments) =>
+      //   prevComments.filter((comment) => comment.id !== commentId)
+      // );
+      fetchComments()
     } catch (error) {
       console.error("Error deleting comment:", error);
     }
@@ -246,7 +247,7 @@ const Review = (props) => {
                       </h1>
                       <button
                         className="text-red-500 flex items-center gap-1 cursor-pointer"
-                        onClick={() => deleteComment(value.id)}
+                        onClick={() => deleteComment(value._id)}
                         aria-label="Delete review"
                       >
                         <FontAwesomeIcon icon={faTrashAlt} />
