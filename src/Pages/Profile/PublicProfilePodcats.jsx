@@ -1,71 +1,50 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { CiPlay1 ,CiTrash} from "react-icons/ci";
-
+import { CiPlay1, CiTrash } from "react-icons/ci";
 import { FaRegShareFromSquare } from "react-icons/fa6";
 import { IoBookmarkOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
+import { deletePodcast } from "../../DeleteAPI";
 
-// // Sample data
-// let similarPodcastData = [
-//   {
-//     img: "./image1.jpeg",
-//     id: 1,
-//     categ: "Politics",
-//     userName: "Lily Williams",
-//     mint: "35 Mins",
-//   },
-//   {
-//     img: "./img3.jpeg",
-//     id: 2,
-//     categ: "Politics",
-//     userName: "Lily Williams",
-//     mint: "35 Mins",
-//   },
-//   {
-//     img: "./img3.jpeg",
-//     id: 2,
-//     categ: "Politics",
-//     userName: "Lily Williams",
-//     mint: "35 Mins",
-//   },
-//   {
-//     img: "./img3.jpeg",
-//     id: 2,
-//     categ: "Politics",
-//     userName: "Lily Williams",
-//     mint: "35 Mins",
-//   },
- 
-// ];
-  
-  const ApplePodcast = (props) => {
-  const [podcast, setpodcast] = useState([])
+const ApplePodcast = (props) => {
+  const [podcast, setpodcast] = useState([]);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteItemId, setDeleteItemId] = useState(null);
   const [visibleId, setVisibleId] = useState(null);
 
-  const handleDeleteClick = (id) => {
+  const handleDeleteClick = (e, id) => {
+    e.stopPropagation(); // Prevent navigation when clicking delete icon
     setDeleteItemId(id);
     setIsDeleteModalOpen(true);
   };
 
-  const handleDeleteConfirm = () => {
-    // Logic to delete item by id
-    console.log(`Deleting podcast with id: ${deleteItemId}`);
-    setIsDeleteModalOpen(false);
-    // You may need to filter the data or make an API call to remove the item
+  const handleDeleteConfirm = async () => {
+    if (deleteItemId) {
+      try {
+        console.log(`Attempting to delete podcast with id: ${deleteItemId}`);
+        await deletePodcast(deleteItemId); // Call deletePodcast with the ID
+        console.log('Podcast deleted successfully.');
+        setpodcast(podcast.filter((item) => item._id !== deleteItemId)); // Remove deleted podcast from state
+      } catch (error) {
+        console.error('Error deleting podcast:', error);
+      }
+      setIsDeleteModalOpen(false); // Close the modal after delete action
+    }
   };
-  const navigate = useNavigate();
+
   const handleDeleteCancel = () => {
     setIsDeleteModalOpen(false);
     setDeleteItemId(null);
   };
-  useEffect(()=>{
-    console.log("podcasts single user section")
-    console.log(props.podcast)
-    setpodcast(props.podcast)
-    console.log({podcast})
-  },[props.podcast])
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log("podcasts single user section");
+    console.log(props.podcast);
+    setpodcast(props.podcast);
+    console.log({ podcast });
+  }, [props.podcast]);
+
   return (
     <Fragment>
       <div className="overflow-y-scroll Podcast_Top_Videos h-full">
@@ -102,7 +81,7 @@ import { useNavigate } from "react-router-dom";
                 <div className="absolute top-14 right-2 flex flex-col space-y-2">
                   <CiTrash
                     className="text-white text-3xl cursor-pointer hover:text-gray-300"
-                    onClick={() => handleDeleteClick(elm._id)}
+                    onClick={(e) => handleDeleteClick(e, elm._id)} // Pass event and id
                   />
                 </div>
               )}
