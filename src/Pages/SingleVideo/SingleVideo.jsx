@@ -22,6 +22,8 @@ const Video = () => {
   const getVideo=async()=>{
     const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/upload/${videoId}`)
     const data = await req.json()
+    console.log("video data")
+    console.log({data})
     setVideo(data)
   }
 
@@ -54,7 +56,7 @@ const Video = () => {
             </div>
             <div className="absolute z-10 bottom-3 w-[60%] sm:w-[43%] p-3 text-white">
               <a href="/#" className="text-xl font-semibold">
-                {video && video.user.name}
+                {video?video.user.name:'NO_NAME'}
               </a>
               <p className="py-1 w-[80%] text-sm">
                 {video && video.data.videoDesc}
