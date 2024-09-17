@@ -163,7 +163,7 @@ const Signup = () => {
             <section className="flex items-center mt-6 justify-center ">
               <button
                 type="submit"
-                className="w-full mb-4 bg-purple-800 py-3 rounded-3xl font-semibold linear_gradient text-white"
+                className="w-full mb-4 bg-purple-800 py-3 rounded-3xl font-semibold linear_gradient text-black"
               >
                 {`${signUp ? "Sign up" : "Sign in"}`}
               </button>
@@ -183,35 +183,32 @@ const Signup = () => {
         </div>
 
         <section className="flex items-center justify-between w-full md:my-2">
-          <div
-            className="flex justify-center items-center bg-[#f1f1f1] px-2 py-2 rounded-full"
+        <div
+            className="flex justify-center items-center bg-[#f1f1f1] px-2 py-2 rounded-full cursor-pointer"
             onClick={() =>
               window.open(`${process.env.REACT_APP_API_BASE_URL}/auth/google`)
             }
           >
-            <img className="w-5 h-5" src="/google.png" alt="Google" />
-          </div>
-          <div className="flex justify-center items-center bg-[#f1f1f1] px-2 py-2 rounded-full">
-            <img className="w-5 h-5" src="/insta.png" alt="Instagram" />
+            <img className="w-10 h-10" src="/google.png" alt="Google" />
           </div>
           <div
-            className="flex justify-center items-center bg-[#f1f1f1] p-[.3rem] rounded-full"
+            className="flex justify-center items-center bg-[#f1f1f1] p-[.3rem] rounded-full cursor-pointer"
             onClick={() =>
               window.open(`${process.env.REACT_APP_API_BASE_URL}/auth/github`)
             }
           >
-            <img className="w-[2rem] h-8" src="/Github.png" alt="Github" />
+            <img className="w-10 h-10" src="/Github.png" alt="Github" />
           </div>
-          <div className="flex justify-center items-center bg-[#f1f1f1] px-2 py-2 rounded-full">
-            <img className="w-5 h-5" src="/facebook.png" alt="Facebook" />
+          <div className="flex justify-center items-center bg-[#f1f1f1] px-2 py-2 rounded-full cursor-pointer">
+            <img className="w-10 h-10" src="/facebook.png" alt="" />
           </div>
-          <div className="flex justify-center items-center bg-[#f1f1f1] px-2 py-2 rounded-full">
-            <img className="w-5 h-5" src="/linkedin.png" alt="LinkedIn" />
-          </div>
-          <div className="flex justify-center items-center bg-[#f1f1f1] px-2 py-2 rounded-full">
+          {/* <div className="flex justify-center items-center bg-[#f1f1f1] px-2 py-2 rounded-full">
+            <img className="w-5 h-5" src="/linkedin.png" alt="" />
+          </div> */}
+          <div className="flex justify-center items-center bg-[#f1f1f1] px-2 py-2 rounded-full cursor-pointer">
             <svg
-              width="24"
-              height="24"
+              width="34"
+              height="34"
               viewBox="0 0 24 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -237,12 +234,18 @@ const Signup = () => {
           </p>
         </section>
 
-        <p className="text-sm text-center w-full pt-8">
+        {signUp && <p className="text-sm text-center w-full pt-8">
           Already have an account?{" "}
           <Link to="/signin" className="text-blue-400">
             Log in
           </Link>
-        </p>
+        </p>}
+        {!signUp && <p className="text-sm text-center w-full pt-8">
+          Create a new account?{" "}
+          <Link to="/signup" className="text-blue-400">
+            Signup
+          </Link>
+        </p>}
       </div>
     </div>
   );

@@ -154,7 +154,7 @@ const Video = () => {
               />
               <label
                 htmlFor="video-upload"
-                className="bg-[#eff0fe] w-28 whitespace-nowrap h-8 rounded-xl text-[blue] text-center cursor-pointer"
+                className="bg-[#eff0fe] w-28 whitespace-nowrap h-8 rounded-xl text-[blue] flex items-center justify-center  cursor-pointer"
               >
                 Upload Video
               </label>

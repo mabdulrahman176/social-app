@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { CiPlay1, CiEdit, CiTrash } from "react-icons/ci"; // Import icons
 import ProfileVideo from "./ProfileVideo"; // Import the ProfileVideo component
 import { useNavigate } from "react-router-dom";
+import { deleteVideo } from '../../DeleteAPI'; // Import the deleteVideo function
 
 const AllVideos = (props) => {
   const [video, setVideo] = useState([]); // State to hold the video list
@@ -10,6 +11,7 @@ const AllVideos = (props) => {
   const [visibleId, setVisibleId] = useState(null); // State for showing icons on hover
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); // State for delete modal
   const [isEditModalOpen, setIsEditModalOpen] = useState(false); // State for edit modal
+  const [videoToDelete, setVideoToDelete] = useState(null); // State for the video to delete
   const navigate = useNavigate();
 
   const openVideoModal = (video) => {
@@ -22,20 +24,34 @@ const AllVideos = (props) => {
     setSelectedVideo(null);
   };
 
-  const handleIconClick = (event, action) => {
+  const handleIconClick = (event, action, video) => {
     event.stopPropagation(); // Prevent navigation on icon click
 
     if (action === "edit") {
+      setSelectedVideo(video);
       setIsEditModalOpen(true); // Open the edit modal
     } else if (action === "delete") {
+      setVideoToDelete(video._id); // Set the video to delete
       setIsDeleteModalOpen(true); // Open the delete modal
+    }
+  };
+
+  const handleDelete = async () => {
+    if (videoToDelete) {
+      try {
+        console.log('Attempting to delete video with ID:', videoToDelete);
+        await deleteVideo(videoToDelete); // Call deleteVideo with the video ID
+        console.log('Video deleted successfully.');
+        setVideo(video.filter((v) => v._id !== videoToDelete)); // Remove deleted video from state
+      } catch (error) {
+        console.error('Error deleting video:', error);
+      }
+      setIsDeleteModalOpen(false); // Close modal after delete action
     }
   };
 
   useEffect(() => {
     setVideo(props.videos); // Set the video list from props
-    console.log("in videos");
-    console.log(props.videos);
     return () => {
       setVideo([]);
     };
@@ -65,11 +81,11 @@ const AllVideos = (props) => {
                   <div className="absolute top-2 right-2 flex flex-col space-y-2">
                     <CiEdit
                       className="text-white text-3xl cursor-pointer hover:text-gray-300"
-                      onClick={(e) => handleIconClick(e, "edit")} // Trigger edit action
+                      onClick={(e) => handleIconClick(e, "edit", video)} // Trigger edit action
                     />
                     <CiTrash
                       className="text-white text-3xl cursor-pointer hover:text-gray-300"
-                      onClick={(e) => handleIconClick(e, "delete")} // Trigger delete action
+                      onClick={(e) => handleIconClick(e, "delete", video)} // Trigger delete action
                     />
                   </div>
                 )}
@@ -110,10 +126,7 @@ const AllVideos = (props) => {
               </button>
               <button
                 className="linear_gradient text-white px-4 py-2 rounded"
-                onClick={() => {
-                  console.log("Deleting video...");
-                  setIsDeleteModalOpen(false); // Close modal after delete action
-                }}
+                onClick={handleDelete} // Call handleDelete on confirmation
               >
                 Delete
               </button>
