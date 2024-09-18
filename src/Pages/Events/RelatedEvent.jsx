@@ -22,7 +22,7 @@ const RelatedEvent = () => {
     }, []);
 
   return (
-    <div className="mt-3 flex flex-wrap justify-between gap-y-1 w-[93%] mx-auto">
+    <div className="mt-3 flex flex-wrap  gap-1 w-[93%] mx-auto">
     {newcard.map((data, i) => (
       <div key={i} className="m-0 text-white md:w-[33%] w-[49.4%] h-[42vh] relative">
         <img

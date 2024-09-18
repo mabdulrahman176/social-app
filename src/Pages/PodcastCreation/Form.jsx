@@ -169,13 +169,14 @@ const Form = ({ audioFile, coverImage, formState, setFormState }) => {
               className="w-full mt-14 border rounded-full buyticket text-center text-white py-3 px-3 leading-tight focus:outline-none focus:shadow-outline"
               disabled={loading}
             >
-              {loading ? (
+              {/* {loading ? (
                 <div className="spinner-border text-white" role="status">
                   <span className="sr-only">Loading...</span>
                 </div>
               ) : (
                 "Publish Now"
-              )}
+              )} */}
+              Publish Now
             </button>
           </div>
         </form>

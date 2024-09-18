@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Signup from './Components/Signup/Signup';
 import Layout from './Pages/Layout/Layout';
@@ -34,7 +34,6 @@ import WatchHistory from './Pages/Settings/WatchHistory.jsx';
 import PaymentMethod from './Pages/Settings/PaymentMethod/PaymentMethod.jsx';
 import PaymentForm from './Pages/Settings/PaymentMethod/PaymentForm.jsx';
 import MyCards from './Pages/Settings/PaymentMethod/MyCards.jsx';
-// import User2 from './Pages/Messages/User2.jsx';
 import Contactaccess from './Pages/Settings/ContactAccess.jsx';
 import Changepassword from './Pages/Settings/ChangePassword.jsx';
 import Blocklist from './Pages/Settings/Blocklist.jsx';
@@ -51,25 +50,13 @@ import Personaldetail from './Pages/Profile/Personaldetail.jsx';
 import DevicePermissions from './Pages/Settings/DevicePermissions.jsx';
 import Personaldetail2 from './Pages/Profile/Personaldetail2.jsx';
 import Search from './Components/Navbar/Saerch.jsx';
-// import { fetchData } from './API.js';
+
 
 const App = () => {
-  // const [data, setData] = useState(null);
-
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     try {
-  //       const result = await fetchData(); // Use the function from api.js
-  //       setData(result);
-  //     } catch (error) {
-  //       console.error('Fetching data error', error);
-  //     }
-  //   };
-  //   getData();
-  // }, []);
+ 
 
   return (
-    <>
+    <Fragment>
       <Routes>
         {/* Login and Signup Routes */}
         <Route path="/signup" element={<Signup />} />
@@ -137,15 +124,8 @@ const App = () => {
         <Route path="*" element={<Navigate to="/signup" />} />
       </Routes>
 
-      {/* Safely render data */}
-      {/* <div>
-        {data ? (
-          <pre>{JSON.stringify(data, null, 2)}</pre>
-        ) : (
-          ""
-        )}
-      </div> */}
-    </>
+
+    </Fragment>
   );
 };
 

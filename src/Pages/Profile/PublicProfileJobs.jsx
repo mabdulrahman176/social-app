@@ -2,6 +2,7 @@ import React, { useState, Fragment, useEffect } from "react";
 import { TbBrandNeteaseMusic } from "react-icons/tb";
 import { IoTrashOutline } from "react-icons/io5"; // Import the delete icon
 import { deleteJob } from '../../DeleteAPI'; // Import deleteJob function
+import { Link } from "react-router-dom";
 
 const CalendarSearch = (props) => {
   const [jobs, setJobs] = useState([]);
@@ -63,17 +64,24 @@ const CalendarSearch = (props) => {
                   </div>
                   <p className="mt-7 ps-4 text-md opacity-65">{elm.jobType}</p>
                   <p className="ps-4 text-sm opacity-65 mt-3">{elm.salaryRange}</p>
-                  {elm.button === "Apply" ? (
-                    <button className="w-[90%] mx-auto block text-xs mt-7 bg-[#EEEEEE] h-10 rounded-3xl hover:bg-[#6166f331] hover:text-[#6165F3]">
-                      {elm.button}
-                    </button>
-                  ) : (
-                    <button
-                      disabled={true}
-                      className="cursor-not-allowed w-[90%] block text-xs mx-auto bg-[#EEEEEE] mt-7 h-10 rounded-3xl"
+                  {elm.jobType === " " ? (
+                    <Link
+                      to={"/jobdetail"}
+                      state={{ id: elm._id }}
+                      className="w-[90%] mx-auto block text-xs mt-7 bg-[#EEEEEE] h-10 rounded-3xl hover:bg-[#6166f331] hover:text-[#6165F3]"
                     >
-                      {elm.button}
-                    </button>
+                      Apply Now
+                    </Link>
+                  ) : (
+                    <div className="text-center flex items-center">
+                      <Link
+                        to={"/jobdetail"}
+                        state={{ id: elm._id }}
+                        className="w-[90%] mx-auto flex text-xs mt-7 justify-center items-center bg-[#EEEEEE] h-10 rounded-3xl hover:bg-[#6166f331] hover:text-[#6165F3]"
+                      >
+                        Applied
+                      </Link>
+                    </div>
                   )}
                   {/* Add delete icon */}
                   {true && (

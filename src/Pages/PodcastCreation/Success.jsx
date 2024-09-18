@@ -5,8 +5,20 @@ import { FaShareFromSquare } from "react-icons/fa6";
 import { RxCross2 } from "react-icons/rx";
 import { myContext } from '../../Context/CreateContext';
 
-const Success = () => {
+const Success = ({ podcastId }) => { // Accept podcastId as a prop
   const { PodcastStates } = useContext(myContext);
+
+  // Generate the podcast link
+  const podcastLink = `${process.env.REACT_APP_BASE_URL}/podcasts/${podcastId}`;
+
+  const handleCopyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(podcastLink);
+      alert("Podcast link copied to clipboard!");
+    } catch (error) {
+      console.error("Failed to copy the link:", error);
+    }
+  };
 
   return (
     <div className="h-full w-full bg-white flex flex-col justify-center relative items-center">
@@ -24,7 +36,10 @@ const Success = () => {
       <div className="flex gap-3 mt-10">
         <div className="PodcastSuccessGradient rounded-full m-0 p-0 flex justify-center items-center">
           <div className="bg-white h-[95%] rounded-full w-[99%] m-0 p-0">
-            <div className="flex items-center PodcastSuccessGradientText justify-center gap-2 rounded-3xl w-40 h-10 ">
+            <div 
+              className="flex items-center PodcastSuccessGradientText justify-center gap-2 rounded-3xl w-40 h-10 cursor-pointer"
+              onClick={handleCopyLink}
+            >
               <IoIosLink className="text-[#69CFDD]" />
               <p>Copy link</p>
             </div>
