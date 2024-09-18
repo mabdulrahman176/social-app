@@ -16,7 +16,7 @@ const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const ProfilePublic = ({ userId }) => {
   const [data_, setDATA] = useState({});
-  const [activeTab, setActiveTab] = useState("");
+  const [activeTab, setActiveTab] = useState("Video");
   const [profile, setProfile] = useState({});
   const [file, setFile] = useState(null);
 

@@ -16,6 +16,10 @@ const Video = () => {
   const [revModOpen, setRevModOpen] = useState(false);
   const [video, setVideo] = useState();
   
+const handleProfile = ()=>{
+  navigate('/profile')
+}
+
   // Decode the video URL from params
   const videoId = decodeURIComponent(src);  
 
@@ -40,11 +44,11 @@ const Video = () => {
             <Review videoId={videoId} setRevModOpen={setRevModOpen} />
           </div>
         )}
-        {/* {repModOpen && (
+        {repModOpen && (
           <div className="h-full w-full absolute top-0 z-20 flex justify-center items-center">
             <Model setRepModOpen={setRepModOpen} />
           </div>
-        )} */}
+        )}
         <div className="w-[80%] sm:w-[65%] md:w-[55%] h-[95%] mx-auto rounded-xl relative">
           <div className="absolute z-10 rounded-lg left-0 top-0 h-full w-full ShadedBG">
             <div
@@ -61,14 +65,14 @@ const Video = () => {
               <p className="py-1 w-[80%] text-sm">
                 {video && video.data.videoDesc}
               </p>
-              <div className="flex">
+              {/* <div className="flex">
                 <p className="p-1 px-2 gap-2 rounded-lg flex items-center text-xs SVTBottom">
                   <FaTiktok />
                   See you again
                 </p>
-              </div>
+              </div> */}
             </div>
-            <div className="absolute bottom-3 z-10 right-2 text-white">
+            <div className="absolute bottom-3 z-10 right-2 text-white" onClick={handleProfile}>
               <div className="relative cursor-pointer rounded-full flex justify-center">
                 <img
                   src={video && video.user.picUrl}

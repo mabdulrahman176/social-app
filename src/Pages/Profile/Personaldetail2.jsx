@@ -24,9 +24,6 @@ function Personaldetail2() {
       console.log(d);
       console.log(user);
 
-      // Uncomment the next line if you want to navigate or update other states
-      // navigate('/jobs');
-      // JobStates.setJobSubmitted(!JobStates.jobSubmitted);
     } catch (error) {
       console.error("Error submitting data:", error);
     }
@@ -48,7 +45,7 @@ function Personaldetail2() {
           </Link>
           <p className="text-2xl font-semibold pl-4">Personal Details</p>
         </div>
-        <Link className="text-[#9595f5] mb-5 block">Edit Detail</Link>
+        {/* <Link className="text-[#9595f5] mb-5 block">Edit Detail</Link> */}
 
         <p className="text-lg font-semibold mt-5">Total Subscriber</p>
         <p className="text-[gray]">53,324 Subscribers</p>
@@ -126,13 +123,15 @@ function Personaldetail2() {
               className="border mt-2 mb-5 w-full md:w-[80%] p-2 rounded-lg"
               onChange={_onChange_}
             />
-            <button
+           <div className="my-10">
+           <button
               type="button"
               className="text-white w-[100px] rounded-md linear_gradient p-1"
               onClick={handleSubmit}
             >
               Save
             </button>
+           </div>
           </div>
         </div>
       </div>
