@@ -72,7 +72,8 @@ const handleProfile = ()=>{
                 </p>
               </div> */}
             </div>
-            <div className="absolute bottom-3 z-10 right-2 text-white" onClick={handleProfile}>
+            {/* <div className="absolute bottom-3 z-10 right-2 text-white" onClick={handleProfile}> */}
+            <div className="absolute bottom-3 z-10 right-2 text-white">
               <div className="relative cursor-pointer rounded-full flex justify-center">
                 <img
                   src={video && video.user.picUrl}
