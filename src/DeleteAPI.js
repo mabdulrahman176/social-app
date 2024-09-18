@@ -50,7 +50,7 @@ const data = await req.json()
 console.log({data})
 }
 const deleteReview = async(id)=>{
-const req=await fetch(`${API_BASE_URL}/reviews/${id}`,{
+const req=await fetch(`${API_BASE_URL}/reviews/delete/${id}`,{
     method:"DELETE",
     credentials:'include',
     headers:{

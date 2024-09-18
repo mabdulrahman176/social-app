@@ -48,7 +48,7 @@ function SinglePodcastDetails() {
       try {
         if(loc.state){
           const result = await getPodcast(loc.state.id);
-          console.log('result is') 
+          console.log('single podcast id is',result) 
           console.log({result});
           setResult(result);
           setRecentData([result]);
@@ -72,7 +72,7 @@ const getPodcast = async (id) => {
     <Fragment>
       <section className="bg-white h-full w-full relative px-6 overflow-y-scroll Podcast_Top_Videos">
       {revModOpen && <div className="h-full left-0 w-full absolute top-0 z-20 flex  justify-center items-center">
-          <Review setRevModOpen={setRevModOpen} />
+          <Review videoId={result._id} setRevModOpen={setRevModOpen} />
         </div>}
         {repModOpen && <div className="h-full w-full absolute top-0 left-0 z-20 flex  justify-center items-center">
           <Model setRepModOpen={setRepModOpen} />
