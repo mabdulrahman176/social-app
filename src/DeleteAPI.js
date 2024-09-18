@@ -51,7 +51,7 @@ console.log({data})
 }
 const deleteReview = async(id)=>{
 const req=await fetch(`${API_BASE_URL}/reviews/delete/${id}`,{
-    method:"DELETE",
+    method:"POST",
     credentials:'include',
     headers:{
     'Content-Type':"application/json"
