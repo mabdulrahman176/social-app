@@ -111,6 +111,7 @@ const Review = (props) => {
   };
 
   useEffect(() => {
+    console.log("review id is ",props.videoId)
     fetchComments();
   }, [props.videoId]);
 
