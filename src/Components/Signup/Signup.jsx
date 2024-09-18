@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { FaFacebookF } from "react-icons/fa";
+import { FaGithub } from "react-icons/fa";
+
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -184,7 +187,7 @@ const Signup = () => {
 
         <section className="flex items-center justify-between w-full md:my-2">
         <div
-            className="flex justify-center items-center bg-[#f1f1f1] px-2 py-2 rounded-full cursor-pointer"
+            className="flex justify-center items-center bg-[#f1f1f1] w-[4rem] h-[4rem] px-2 py-2 rounded-full cursor-pointer"
             onClick={() =>
               window.open(`${process.env.REACT_APP_API_BASE_URL}/auth/google`)
             }
@@ -192,23 +195,25 @@ const Signup = () => {
             <img className="w-10 h-10" src="/google.png" alt="Google" />
           </div>
           <div
-            className="flex justify-center items-center bg-[#f1f1f1] p-[.3rem] rounded-full cursor-pointer"
+            className="flex justify-center items-center bg-[#f1f1f1] p-[.3rem] w-[4rem] h-[4rem] rounded-full cursor-pointer"
             onClick={() =>
               window.open(`${process.env.REACT_APP_API_BASE_URL}/auth/github`)
             }
           >
-            <img className="w-10 h-10" src="/Github.png" alt="Github" />
+            {/* <img className="w-10 h-10" src="/Github.png" alt="Github" /> */}
+            <FaGithub className="text- w-8 h-8"/>
           </div>
-          <div className="flex justify-center items-center bg-[#f1f1f1] px-2 py-2 rounded-full cursor-pointer">
-            <img className="w-10 h-10" src="/facebook.png" alt="" />
+          <div className="flex justify-center items-center bg-[#f1f1f1] w-[4rem] h-[4rem] px-2 py-2 rounded-full cursor-pointer">
+            {/* <img className="w-10 h-10" src="/facebook.png" alt="" /> */}
+            <FaFacebookF className="text-blue-800 w-8 h-8"/>
           </div>
           {/* <div className="flex justify-center items-center bg-[#f1f1f1] px-2 py-2 rounded-full">
             <img className="w-5 h-5" src="/linkedin.png" alt="" />
           </div> */}
-          <div className="flex justify-center items-center bg-[#f1f1f1] px-2 py-2 rounded-full cursor-pointer">
+          <div className="flex justify-center items-center bg-[#f1f1f1] w-[4rem] h-[4rem] px-2 py-2 rounded-full cursor-pointer">
             <svg
-              width="34"
-              height="34"
+              width="28"
+              height="28"
               viewBox="0 0 24 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"

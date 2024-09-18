@@ -1,11 +1,10 @@
 import React, { useState, Fragment, useEffect } from "react";
 import { TbBrandNeteaseMusic } from "react-icons/tb";
 import { IoTrashOutline } from "react-icons/io5"; // Import the delete icon
-import {  CiTrash } from "react-icons/ci";
-import {deleteJob} from '../../DeleteAPI'
+import { deleteJob } from '../../DeleteAPI'; // Import deleteJob function
 
 const CalendarSearch = (props) => {
-  const [jobs, setjobs] = useState([])
+  const [jobs, setJobs] = useState([]);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteItemId, setDeleteItemId] = useState(null);
   const [visibleId, setVisibleId] = useState(null);
@@ -15,13 +14,18 @@ const CalendarSearch = (props) => {
     setIsDeleteModalOpen(true);
   };
 
-  const handleDeleteConfirm = () => {
-    // Logic to delete item by id
-    console.log(`Deleting job with id: ${deleteItemId}`);
-    deleteJob(deleteItemId)
-    setDeleteItemId('')
+  const handleDeleteConfirm = async () => {
+    // Call deleteJob function when delete is confirmed
+    try {
+      await deleteJob(deleteItemId); // Call the deleteJob API with the selected job ID
+      console.log(`Deleted job with id: ${deleteItemId}`);
+      // Optionally, remove the deleted job from the local state
+      setJobs((prevJobs) => prevJobs.filter((job) => job._id !== deleteItemId));
+    } catch (error) {
+      console.error("Error deleting job:", error);
+    }
     setIsDeleteModalOpen(false);
-    // You may need to filter the data or make an API call to remove the item
+    setDeleteItemId(null);
   };
 
   const handleDeleteCancel = () => {
@@ -29,60 +33,60 @@ const CalendarSearch = (props) => {
     setDeleteItemId(null);
   };
 
- useEffect(() => {
-  console.log("in single job s component")
-  console.log(props.jobs)
-  setjobs(props.jobs)
- }, [])
+  useEffect(() => {
+    console.log("in single job s component");
+    console.log(props.jobs);
+    setJobs(props.jobs);
+  }, [props.jobs]);
 
   return (
     <Fragment>
       <div className="ps-6 overflow-y-scroll Podcast_Top_Videos h-full w-full">
         <div className="flex gap-1 flex-wrap w-full Podcast_Top_Videos">
-          {jobs && jobs.map((elm,i) => (
-            <div
-              key={i}
-              className="h-[37vh] w-[32.4%] flex-shrink-0 shadow bg-slate-700 rounded-lg border relative PPJob"
-              onMouseEnter={() => setVisibleId(elm._id)}
-              onMouseLeave={() => setVisibleId(null)}
-            >
-              <div className="w-full">
-                <div className="flex gap-2 mt-2">
-                  <TbBrandNeteaseMusic className="bg-red-500 rounded-2xl text-white top-3 m-2 mb-0 text-3xl" />
-                  <div>
-                    <h1 className="font-semibold">{elm.jobTitle}</h1>
-                    <p className="font-light text-md">{elm.jobDescription && elm.jobDescription.slice(0,14)+"..."}</p>
+          {jobs &&
+            jobs.map((elm, i) => (
+              <div
+                key={i}
+                className="h-[37vh] w-[32.4%] flex-shrink-0 shadow rounded-lg border relative PPJob"
+                onMouseEnter={() => setVisibleId(elm._id)}
+                onMouseLeave={() => setVisibleId(null)}
+              >
+                <div className="w-full">
+                  <div className="flex gap-2 mt-2">
+                    <TbBrandNeteaseMusic className="bg-red-500 rounded-2xl text-white top-3 m-2 mb-0 text-3xl" />
+                    <div>
+                      <h1 className="font-semibold">{elm.jobTitle}</h1>
+                      <p className="font-light text-md">
+                        {elm.jobDescription && elm.jobDescription.slice(0, 14) + "..."}
+                      </p>
+                    </div>
                   </div>
+                  <p className="mt-7 ps-4 text-md opacity-65">{elm.jobType}</p>
+                  <p className="ps-4 text-sm opacity-65 mt-3">{elm.salaryRange}</p>
+                  {elm.button === "Apply" ? (
+                    <button className="w-[90%] mx-auto block text-xs mt-7 bg-[#EEEEEE] h-10 rounded-3xl hover:bg-[#6166f331] hover:text-[#6165F3]">
+                      {elm.button}
+                    </button>
+                  ) : (
+                    <button
+                      disabled={true}
+                      className="cursor-not-allowed w-[90%] block text-xs mx-auto bg-[#EEEEEE] mt-7 h-10 rounded-3xl"
+                    >
+                      {elm.button}
+                    </button>
+                  )}
+                  {/* Add delete icon */}
+                  {true && (
+                    <button
+                      className="absolute top-2 right-2 text-red-600 text-xl cursor-pointer"
+                      onClick={() => handleDeleteClick(elm._id)}
+                    >
+                      <IoTrashOutline />
+                    </button>
+                  )}
                 </div>
-                <p className="mt-7 ps-4 text-md opacity-65">{elm.jobType}</p>
-                <p className="ps-4 text-sm opacity-65 mt-3">{elm.salaryRange}</p>
-                {elm.button === 'Apply' ? (
-                  <button
-                    className="w-[90%] mx-auto block text-xs mt-7 bg-[#EEEEEE] h-10 rounded-3xl hover:bg-[#6166f331] hover:text-[#6165F3]"
-                  >
-                    {elm.button}
-                  </button>
-                ) : (
-                  <button
-                    disabled={true}
-                    className="cursor-not-allowed w-[90%] block text-xs mx-auto bg-[#EEEEEE] mt-7 h-10 rounded-3xl"
-                  >
-                    {elm.button}
-                  </button>
-                )}
-                {/* Add delete icon */}
-                {/* {visibleId === elm.id && ( */}
-                {true && (
-                  <button
-                    className="absolute top-2 right-2 text-red-600 text-xl cursor-pointer"
-                    onClick={() => handleDeleteClick(elm._id)}
-                  >
-                    <IoTrashOutline />
-                  </button>
-                )}
               </div>
-            </div>
-          ))}
+            ))}
         </div>
 
         {/* Delete Modal */}

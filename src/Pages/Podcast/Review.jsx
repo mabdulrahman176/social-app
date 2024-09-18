@@ -16,6 +16,7 @@ const Review = (props) => {
   const [comments, setComments] = useState([]);
   const [rating, setRating] = useState(5); // Default rating
   const [reviewText, setReviewText] = useState("");
+  const [replyText, setReplyText] = useState({}); // State for replies
 
   const getUserId = () => {
     const str = document.cookie;
@@ -64,10 +65,7 @@ const Review = (props) => {
   const deleteComment = async (commentId) => {
     try {
       await deleteReview(commentId);
-      // setComments((prevComments) =>
-      //   prevComments.filter((comment) => comment.id !== commentId)
-      // );
-      fetchComments()
+      fetchComments();
     } catch (error) {
       console.error("Error deleting comment:", error);
     }
@@ -82,6 +80,33 @@ const Review = (props) => {
       setComments(data);
     } catch (error) {
       console.error("Error fetching comments:", error);
+    }
+  };
+
+  const postReply = async (commentId) => {
+    try {
+      const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/replies`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          reviewId: commentId,
+          replyMessage: replyText[commentId] || "",
+          userId: getUserId(),
+        }),
+      });
+      const data = await req.json();
+      console.log({ data });
+
+      // Refresh comments to include new reply
+      await fetchComments();
+
+      // Clear the reply text for that comment
+      setReplyText((prev) => ({ ...prev, [commentId]: "" }));
+    } catch (error) {
+      console.error("Error posting reply:", error);
     }
   };
 
@@ -253,6 +278,36 @@ const Review = (props) => {
                         <FontAwesomeIcon icon={faTrashAlt} />
                         <span>Delete</span>
                       </button>
+
+                      {/* Reply Section */}
+                      <div className="flex flex-col mt-2">
+                        <textarea
+                          value={replyText[value._id] || ""}
+                          onChange={(e) => setReplyText((prev) => ({ ...prev, [value._id]: e.target.value }))}
+                          className="w-full h-12 p-2 border-none outline-none bg-gray-100 rounded"
+                          placeholder="Write your reply here"
+                        />
+                        <button
+                          onClick={() => postReply(value._id)}
+                          className="text-blue-500 mt-1"
+                        >
+                          Reply
+                        </button>
+                      </div>
+
+                      {/* Display Replies */}
+                      {value.replies && value.replies.map((reply, j) => (
+                        <div key={j} className="flex gap-1 items-center ml-4">
+                          <img
+                            src={reply.sender.picUrl || "/default-avatar.png"}
+                            alt="Profile"
+                            className="rounded-full w-4 h-4"
+                          />
+                          <h1 className="font-normal opacity-90">
+                            {reply.replyMessage}
+                          </h1>
+                        </div>
+                      ))}
                     </div>
                   ))
                 )}
