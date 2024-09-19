@@ -366,14 +366,14 @@ const JobCreationform = () => {
             onClick={handleSubmit}
             disabled={loading}
           >
-             {loading ? (
+             {/* {loading ? (
               <div className="spinner-border text-white" role="status">
                 <span className="sr-only">Loading...</span>
               </div>
             ) : (
               " Post Job"
-            )}
-           
+            )} */}
+           Post Job
           </button>
         </div>
 

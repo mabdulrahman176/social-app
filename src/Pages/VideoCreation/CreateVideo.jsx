@@ -14,13 +14,14 @@ const Video = () => {
   const [inpType, setInpType] = useState("");
   const [step, setStep] = useState("upload");
   const [videoDesc, setDesc] = useState('');
+  const [videoTags, setTags] = useState([]);
   const [postPriv, setPostPriv] = useState("Anyone");
   const [postPrivShow, setPostPrivShow] = useState(false);
   const [vidPostSucc, setVidPostSucc] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [file, setFile] = useState(null);
-  const [loading, setLoading] = useState(false); // New loading state
-
+  const [loading, setLoading] = useState(false);
+  const [tagInput, setTagInput] = useState("");
   const navigate = useNavigate();
 
   const handleNavigate = () => {
@@ -51,10 +52,11 @@ const Video = () => {
       return;
     }
 
-    setLoading(true); // Start loading spinner
+    setLoading(true);
     const formData = new FormData();
     formData.append("video", file);
     formData.append("videoDesc", videoDesc);
+    formData.append("videoTag", videoTags.join("#"));
     formData.append("videoVisibility", postPriv);
 
     try {
@@ -69,7 +71,7 @@ const Video = () => {
       setErrorMessage("Failed to upload video.");
       console.error("Error uploading video:", error);
     } finally {
-      setLoading(false); // End loading spinner
+      setLoading(false);
     }
   };
 
@@ -81,15 +83,26 @@ const Video = () => {
 
   const descOnChange = (e) => {
     setDesc(e.target.value);
-    console.log(e.target.value);
+  };
+  const tagOnChange = (e) => {
+    const value = e.target.value;
+    const tagsArray = value.split('#').filter(tag => tag.trim() !== '');
+    
+    if (tagsArray.length <= 6) {
+      setTags(tagsArray);
+      setTagInput(value);
+      setErrorMessage("");
+    } else {
+      setErrorMessage("You can add a maximum of 6 tags.");
+    }
   };
 
   useEffect(() => {
     if (vidPostSucc) {
       const timer = setTimeout(() => {
-        navigate("/videos"); // Navigate to videos page after successful post
-      }, 3000); // Delay before navigation
-      return () => clearTimeout(timer); // Cleanup timeout on component unmount
+        navigate("/videos");
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [vidPostSucc, navigate]);
 
@@ -204,17 +217,11 @@ const Video = () => {
                 </h3>
               </div>
               <button
-                className="bg-[#eff0fe] w-24 h-8 rounded-xl text-[blue]"
+                className="bg-[#eff0fe] w-24 h-8 mt-4 rounded-xl text-[blue]"
                 onClick={handleSubmit}
-                disabled={loading} // Disable button when loading
+                disabled={loading}
               >
-                {loading ? (
-                  <div className="spinner-border text-blue-500" role="status">
-                    <span className="sr-only">Loading...</span>
-                  </div>
-                ) : (
-                  "Post"
-                )}
+                Post
               </button>
             </div>
             <input
@@ -223,10 +230,18 @@ const Video = () => {
               className="mb-2 py-1 text-gray-400 ps-3 text-sm outline-none border-none"
               placeholder="Add Description ........"
             />
-            <div className="w-full flex items-center justify-center h-[80%] rounded-lg relative">
+           <input
+  value={tagInput} // Bind the input value to state
+  onChange={tagOnChange}
+  type="text"
+  className="mb-2 py-1 text-gray-400 ps-3 text-sm outline-none border-none"
+  placeholder="Add Tags (use # to separate) ........"
+  disabled={videoTags.length >= 7} // Disable input if 6 tags are present
+/>
+            <div className="w-full flex items-center justify-center  h-[80%] rounded-lg relative">
               {postPrivShow && (
                 <div
-                  className="w-[90%] h-[60%] absolute bg-white rounded-xl z-30"
+                  className="w-[90%] h-[60%] absolute top-2 bg-white rounded-xl z-30"
                   onClick={() => setPostPrivShow(false)}
                 >
                   <div

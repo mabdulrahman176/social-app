@@ -8,7 +8,7 @@ import "remixicon/fonts/remixicon.css";
 
 const Navbar = ({ state }) => {
   const navigate = useNavigate(); 
-
+  
   return (
     <nav className="w-full overflow-x-hidden flex justify-between px-2 items-center py-1">
       <div>

@@ -9,6 +9,7 @@ import { myContext } from "../../Context/CreateContext";
 import Success from "../PodcastCreation/Success";
 import EventSuccess from "../EventsCreation/EventSuccess";
 import JobSuccess from "../JobCreation/JobSuccess";
+import Search from "../../Components/Navbar/Saerch";
 
 const Layout = () => {
   let { CreationStates, PodcastStates, EventStates, JobStates } = useContext(myContext);
@@ -21,6 +22,7 @@ const Layout = () => {
       {/* Header */}
       <header className="bg-white h-[7%] w-full">
         <Navbar state={{setRightSidebar,rightSidebar}}/>
+        {/* <Search/> */}
       </header>
 
       <div className="flex justify-between h-[82%] lg:h-[93%] mt-1  w-full overflow-x-hidden relative">
