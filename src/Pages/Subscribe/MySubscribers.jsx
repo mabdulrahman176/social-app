@@ -18,7 +18,7 @@ function MySubscribers(props) {
       try {
         const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/subscribe/my/${getUserId()}`);
         const data = await response.json();
-        console.log("sydv")
+        console.log("subscriber data")
         console.log(data)
 
         setSubscribers(data);
@@ -60,14 +60,14 @@ function MySubscribers(props) {
                 <div className="flex items-center gap-3">
                   <Link to="/profile">
                     <img
-                      src={subscriber.imgSrc} 
+                      src={subscriber.user.picUrl?subscriber.user.picUrl:''} 
                       alt=""
                       className="h-[40px] w-[40px] lg:h-[50px] lg:w-[50px] rounded-full"
                     />
                   </Link>
                   <div>
                     <p className="text-sm md:text-base lg:text-lg xl:text-xl opacity-75">
-                      {subscriber.message} 
+                    {subscriber.user.name?subscriber.user.name:''} 
                     </p>
                     <p>
                       <Link
