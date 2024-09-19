@@ -39,8 +39,9 @@ const data = await req.json()
 console.log({data})
 }
 const deleteVideo = async(vidId)=>{
-const req=await fetch(`${API_BASE_URL}/upload/${vidId}`,{
-    method:"DELETE",
+    console.log("deleting video")
+const req=await fetch(`${API_BASE_URL}/upload/delete/${vidId}`,{
+    method:"POSTgit brq",
     credentials:'include',
     headers:{
     'Content-Type':"application/json"
