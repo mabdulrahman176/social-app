@@ -266,22 +266,30 @@ function Message2() {
 
         </div>
         <div className="flex items-center justify-center w-[95%] relative top-4 ">
-          <GrGallery className="text-[#7979ec] text-xl mr-3 cursor-pointer" onClick={toggleCard} />
+  <GrGallery className="text-[#7979ec] text-xl mr-3 cursor-pointer" onClick={toggleCard} />
 
-          <div className="flex-grow">
-            <input
-              type="text"
-              onChange={handleInputChange}
-              placeholder="Write a message"
-              className="h-[5vh] w-full outline-none rounded p-4 bg-transparent border"
-            />
-          </div>
-          {message.trim() ? (
-            <FaPaperPlane onClick={sendMessage} className="text-xl text-[gray] ml-3 cursor-pointer" />
-          ) : (
-            <FaMicrophone className="text-xl text-[gray] ml-3" />
-          )}
-        </div>
+  <div className="flex-grow">
+    <input
+      type="text"
+      value={message} // Set the input value to the state
+      onChange={handleInputChange}
+      placeholder="Write a message"
+      className="h-[5vh] w-full outline-none rounded p-4 bg-transparent border"
+    />
+  </div>
+  {message.trim() ? (
+    <FaPaperPlane 
+      onClick={() => {
+        sendMessage(); // Call sendMessage
+        setMessage(''); // Clear the input field
+      }} 
+      className="text-xl text-[gray] ml-3 cursor-pointer" 
+    />
+  ) : (
+    <FaMicrophone className="text-xl text-[gray] ml-3" />
+  )}
+</div>
+
 
         {showCard && (
           <div ref={cardRef} className="absolute bottom-[8vh] left-5 w-[10vw] p-3 bg-white shadow-lg rounded">

@@ -10,7 +10,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState, useEffect } from "react";
 import { RiCloseLine } from "react-icons/ri";
 import { deleteReview } from "../../DeleteAPI";
-
+import img from './VideoBoy.jpeg';
 const Review = (props) => {
   const [isWritingReview, setIsWritingReview] = useState(false);
   const [comments, setComments] = useState([]);
@@ -133,7 +133,7 @@ const Review = (props) => {
         />
         <img
           className="md:w-[45%] w-full md:h-full h-[40%] object-fill"
-          src="/VideoBoy.jpeg"
+          src={img}
           alt="Video Thumbnail"
         />
         <section className="flex flex-col py-4 md:w-[55%] w-full h-[60%] md:h-full overflow-y-scroll revOverFlow font-[450] text-xs px-4">

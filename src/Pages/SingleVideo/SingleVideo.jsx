@@ -65,6 +65,9 @@ const handleProfile = ()=>{
               <p className="py-1 w-[80%] text-sm">
                 {video && video.data.videoDesc}
               </p>
+              <p className="py-1 w-[80%] text-sm">
+                {video && video.data.videoTags}
+              </p>
               {/* <div className="flex">
                 <p className="p-1 px-2 gap-2 rounded-lg flex items-center text-xs SVTBottom">
                   <FaTiktok />
