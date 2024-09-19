@@ -56,8 +56,10 @@ const Video = () => {
     const formData = new FormData();
     formData.append("video", file);
     formData.append("videoDesc", videoDesc);
-    formData.append("videoTag", videoTags.join("#"));
+    formData.append("videoTags", JSON.stringify(videoTags));
+    // formData.append("videoTags", videoTags.join("#"));
     formData.append("videoVisibility", postPriv);
+    console.log({videoTags})
 
     try {
       const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/upload/${getUserId()}`, formData, {
@@ -87,6 +89,7 @@ const Video = () => {
   const tagOnChange = (e) => {
     const value = e.target.value;
     const tagsArray = value.split('#').filter(tag => tag.trim() !== '');
+    console.log({tagsArray})
     
     if (tagsArray.length <= 6) {
       setTags(tagsArray);
