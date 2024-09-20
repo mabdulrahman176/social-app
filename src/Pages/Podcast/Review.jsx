@@ -20,6 +20,7 @@ const dummyReplies = [
   { reply: "Amazing experience, will buy again!" },
   { reply: "The product arrived damaged, but" }]
 
+
 const Review = (props) => {
   const [isWritingReview, setIsWritingReview] = useState(false);
   const [comments, setComments] = useState([]);
@@ -164,7 +165,7 @@ const Review = (props) => {
         />
         <img
           className="md:w-[45%] w-full md:h-full h-[40%] object-fill"
-          src="/VideoBoy.jpeg"
+          src={img}
           alt="Video Thumbnail"
         />
         <section className="flex flex-col py-4 md:w-[55%] w-full h-[60%] md:h-full overflow-y-scroll revOverFlow font-[450] text-xs px-4">

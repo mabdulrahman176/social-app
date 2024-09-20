@@ -8,10 +8,9 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import io from 'socket.io-client';
 
-
 function Message2() {
-  const socket = io("http://localhost:5000"); 
-  const loc = useLocation()
+  const socket = io("http://localhost:5000");
+  const loc = useLocation();
   const [able, setAble] = useState(false);
   const [schedule, setSchedule] = useState(false);
   const [meeting, setMeeting] = useState(false);
@@ -19,166 +18,156 @@ function Message2() {
   const [showCalendar, setShowCalendar] = useState(false);
   const [message, setMessage] = useState('');
   const [showCard, setShowCard] = useState(false);
-  const [chatroom, setChatroom] = useState()
-  const [receiver, setReceiver] = useState()
-  const [sender, setSender] = useState({})
-  const [roomId, setRoomId] = useState({})
-  const [render, setRender] = useState(false);
-  const [acessToken, setToken] = useState('');
+  const [chatroom, setChatroom] = useState([]); // Chat messages state
+  const [receiver, setReceiver] = useState(); // Receiver user state
+  const [sender, setSender] = useState({}); // Sender user state
+  const [roomId, setRoomId] = useState({}); // Chat room ID state
+  const [acessToken, setToken] = useState(''); // Access token for Zoom
 
   const cardRef = useRef(null);
+  const messagesEndRef = useRef(null); // Reference for scrolling to bottom
 
-  const __Time__= (isoString )=>{
+  // Function to format timestamp
+  const __Time__ = (isoString) => {
     const date = new Date(isoString);
     let hours = date.getHours();
     const minutes = date.getMinutes().toString().padStart(2, '0');
-    const seconds = date.getSeconds().toString().padStart(2, '0');
     const ampm = hours >= 12 ? 'PM' : 'AM';
-    hours = hours % 12 || 12; // Convert to 12-hour format, handling the case where 0 hours means 12 AM
-    // const timeString = `${hours}:${minutes}:${seconds} ${ampm}`;
-    const timeString = `${hours}:${minutes} ${ampm}`;
-    return timeString 
-      }
-    
+    hours = hours % 12 || 12; 
+    return `${hours}:${minutes} ${ampm}`; 
+  };
 
+  // Handle click outside the card to close it
   const handleClickOutside = (event) => {
     if (cardRef.current && !cardRef.current.contains(event.target)) {
       setShowCard(false);
     }
   };
+
+  // Function to get user ID from cookies
   const getUserId = () => {
-    const str = document.cookie
+    const str = document.cookie;
     const userKey = str.split('=')[1];
-    return userKey
-  }
-  const fetchChatroom = async (id) => {
-
-    let url = `${process.env.REACT_APP_API_BASE_URL}/chatrooms/room/${id}`
-    const req = await fetch(url)
-    const d = await req.json()
-    let sender = d.users.filter((e) => e !== getUserId())
-    getSenderName(sender[0])
-    // console.log("roomId," ,id)
-    setRoomId(id)
-  }
-  const getSenderName = async (id) => {
-    const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/users/${id}`)
-    const d = await req.json()
-    setSender(d.user)
-    getReceiver()
-
-  }
-  const getReceiver = async () => {
-    const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/users/${getUserId()}`)
-    const d = await req.json()
-    setReceiver(d.user)
-  }
-  const joinRoom = (id) => {
-    // if (roomId && userId) {
-      socket.off('connection', '');
-      console.log("join room rrom id")
-         console.log(id)
-      socket.on('connection',(socket_)=>{console.log("propbaly working")})
-      socket.emit('joinRoom', { roomId:id,userId:getUserId() });
-      socket.on('pos', (socket)=>{console.log("room joinded",socket);});
-    // }
+    return userKey;
   };
 
+  // Fetch chatroom data based on ID
+  const fetchChatroom = async (id) => {
+    let url = `${process.env.REACT_APP_API_BASE_URL}/chatrooms/room/${id}`;
+    const req = await fetch(url);
+    const d = await req.json();
+    let sender = d.users.filter((e) => e !== getUserId());
+    getSenderName(sender[0]);
+    setRoomId(id);
+  };
+
+  // Get sender's name
+  const getSenderName = async (id) => {
+    const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/users/${id}`);
+    const d = await req.json();
+    setSender(d.user);
+    getReceiver();
+  };
+
+  // Get receiver's details
+  const getReceiver = async () => {
+    const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/users/${getUserId()}`);
+    const d = await req.json();
+    setReceiver(d.user);
+  };
+
+  // Join the chat room
+  const joinRoom = (id) => {
+    socket.off('connection', '');
+    socket.on('connection', (socket_) => { console.log("probably working"); });
+    socket.emit('joinRoom', { roomId: id, userId: getUserId() });
+    socket.on('pos', (socket) => { console.log("room joined", socket); });
+  };
+
+  // Send a message to the chat room
   const sendMessage = () => {
-    // if (message && roomId && userId) {
+    if (message.trim()) {
       socket.emit('sendMessage', { roomId, sender: getUserId(), message });
-      // setMessage('');
-    // }
+      setMessage(''); // Clear the message after sending
+    }
   };
 
   useEffect(() => {
-  
-    // const params = new URLSearchParams(window.location.search);
-    // const accessToken = params.get('access_token');
-    fetchChatroom(loc.state.id)
-    // setToken(accessToken)
-    joinRoom(loc.state.id)
-    socket.on('connection',(socket_)=>{console.log("working well")})
+    fetchChatroom(loc.state.id); // Fetch chatroom on mount
+    joinRoom(loc.state.id); // Join the chat room
     socket.on('receiveMessage', (message) => {
-      console.log("receving message")
-      console.log(message)
-      setChatroom((prevMessages) => [...prevMessages, message]);
+      setChatroom((prevMessages) => [...prevMessages, message]); // Update chatroom with new messages
     });
     socket.on('previousMessages', (previousMessages) => {
-      console.log('precious messages')
-      console.log(previousMessages)
-      setChatroom(previousMessages);
+      setChatroom(previousMessages); // Load previous messages
     });
-     
+
     return () => {
-      document.addEventListener("mousedown", handleClickOutside);
-      setReceiver('')
-      setSender('')
       socket.off('receiveMessage');
       socket.off('previousMessages');
-      document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [loc.state.id]);  // Depend on the user PK
+  }, [loc.state.id]);
+
+  // Scroll to the bottom when chatroom updates
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [chatroom]);
+
   const handleInputChange = (e) => {
     setMessage(e.target.value);
   };
 
-  const zoomAUth = () => {
-    // if (roomId && userId) {
-      socket.emit('zoomAuth');
-      socket.on('receiveAuthUrl',(url)=>{
-        console.log({url})
-        window.location.href = url
-      });
-      // socket.on('zoomAccessToken',(token)=>{
-      //   console.log("on access token")
-      //   setToken(()=>token)
-      //   console.log({token})
-      // });
-    // }
+  // Handle key press for sending message
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault(); // Prevents new line in the input
+      sendMessage(); // Call sendMessage
+    }
   };
 
-  const meeting_ =()=>{
-    console.log("meeting")
-    console.log({acessToken})
-    socket.emit('sendMeetingUrl',acessToken)
-    socket.on('receive_url',(data)=>{
-        console.log({data})
-        console.log("not working")
-        // console.log(data.sender)
-        if(data.sender){
-          console.log("working")
-          // window.location.href= data.sender
-        }
-    })
-  }
+  // Zoom authentication function
+  const zoomAUth = () => {
+    socket.emit('zoomAuth');
+    socket.on('receiveAuthUrl', (url) => {
+      window.location.href = url;
+    });
+  };
 
+  const meeting_ = () => {
+    socket.emit('sendMeetingUrl', acessToken);
+    socket.on('receive_url', (data) => {
+      if (data.sender) {
+        window.location.href = data.sender; // Redirect to Zoom meeting
+      }
+    });
+  };
 
   const handleSchedule = () => {
-    zoomAUth()
+    zoomAUth();
     setSchedule(!schedule);
     setMeeting(false); // Reset meeting state when schedule is toggled
     setShowCalendar(false); // Hide calendar if visible
   };
+
   const handleMeeting = () => {
     setMeeting(!meeting);
   };
+
   const handleCalendar = () => {
     setShowCalendar(!showCalendar);
     setSchedule(false); // Hide schedule card if visible
   };
+
   const toggleCard = () => {
     setShowCard(!showCard);
   };
+
   return (
     <div className="main h-full w-[100%] ">
       <div className="div h-full w-[100%] bg-[#f5f3f3] p-5 relative">
         <div className="flex justify-between items-center mb-8">
           <div>
             <p className="text-base font-medium whitespace-nowrap">{sender.name}</p>
-            {/* <p className="text-[rgb(128,128,128)] text-xs">
-              Last Online 39 min ago
-            </p> */}
           </div>
           <div className="flex gap-5">
             <CiMenuKebab
@@ -236,61 +225,57 @@ function Message2() {
             )}
           </div>
         </div>
-        <div className=" h-[70%] overflow-y-scroll Podcast_Top_Videos">
-
-          {/* message component */}
-          {chatroom && chatroom.map((e, i) => {
-            return sender.name && <div key={i} className="flex items-end justify-between py-2">
-              <div className="flex  gap-2">
+        <div className="h-[70%] overflow-y-scroll Podcast_Top_Videos">
+          {chatroom && chatroom.map((e, i) => (
+            <div key={i} className="flex items-end justify-between py-2">
+              <div className="flex gap-2">
                 <img
                   src={(getUserId() !== e.sender) ? sender.picUrl : receiver && receiver.picUrl}
-                  // src={(getUserId()!==e.sender)?sender.picUrl:"https://media.istockphoto.com/id/1682296067/photo/happy-studio-portrait-or-professional-man-real-estate-agent-or-asian-businessman-smile-for.webp?b=1&s=170667a&w=0&k=20&c=V-RXoAk73ljzQZd0w_JcCFG-jlYs6sjpcrIZQ1TersQ="}
                   alt=""
                   className="h-[40px] w-[40px] rounded-full"
                 />
-                <div className="flex ">
-                  <div className="div">
+                <div className="flex">
+                  <div>
                     <p className="text-sm font-medium">{e.sender !== getUserId() ? sender.name : "You"}</p>
-
-                    <p className="text-[#686868] text-xs mt-3">
-                      {e.message}
-                    </p>
+                    <p className="text-[#686868] text-xs mt-3">{e.message}</p>
                   </div>
                 </div>
               </div>
               <p className="text-[gray] text-[10px]">{__Time__(e.timestamp)}</p>
             </div>
-          })}
-          {/* message component */}
-
-
+          ))}
+          {/* Scroll reference */}
+          <div ref={messagesEndRef} />
         </div>
-        <div className="flex items-center justify-center w-[95%] relative top-4 ">
+        <div className="flex items-center justify-center w-[95%] relative top-4">
           <GrGallery className="text-[#7979ec] text-xl mr-3 cursor-pointer" onClick={toggleCard} />
-
           <div className="flex-grow">
             <input
               type="text"
+              value={message}
               onChange={handleInputChange}
+              onKeyDown={handleKeyDown} // Add onKeyDown handler
               placeholder="Write a message"
               className="h-[5vh] w-full outline-none rounded p-4 bg-transparent border"
             />
           </div>
           {message.trim() ? (
-            <FaPaperPlane onClick={sendMessage} className="text-xl text-[gray] ml-3 cursor-pointer" />
+            <FaPaperPlane 
+              onClick={sendMessage} 
+              className="text-xl text-[gray] ml-3 cursor-pointer" 
+            />
           ) : (
             <FaMicrophone className="text-xl text-[gray] ml-3" />
           )}
         </div>
-
         {showCard && (
           <div ref={cardRef} className="absolute bottom-[8vh] left-5 w-[10vw] p-3 bg-white shadow-lg rounded">
             <ul className="space-y-3">
               <li className="flex items-center">
-                <span className=""><FaCamera className="text-[gray]  cursor-pointer" /></span>
+                <span className=""><FaCamera className="text-[gray] cursor-pointer" /></span>
               </li>
               <li className="flex items-center">
-                <span className="icon"><FaPaperclip className="text-[gray]  cursor-pointer" /></span>
+                <span className="icon"><FaPaperclip className="text-[gray] cursor-pointer" /></span>
               </li>
               <li className="flex items-center">
                 <span className="icon"><FaSmile className="text-[gray] cursor-pointer" /></span>
