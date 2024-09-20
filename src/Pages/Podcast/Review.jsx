@@ -11,12 +11,23 @@ import React, { useState, useEffect } from "react";
 import { RiCloseLine } from "react-icons/ri";
 import { deleteReview } from "../../DeleteAPI";
 
+
+const dummyReplies = [
+    { reply: "This is a great product!" },
+    { reply: "I had some issues with the delivery, but the support was helpful." },
+    { reply: "Would definitely recommend to my friends!" },
+    { reply: "The quality wasn't as expected." },
+    { reply: "Amazing experience, will buy again!" },
+    { reply: "The product arrived damaged, but"}]
+
 const Review = (props) => {
   const [isWritingReview, setIsWritingReview] = useState(false);
   const [comments, setComments] = useState([]);
   const [rating, setRating] = useState(5); // Default rating
   const [reviewText, setReviewText] = useState("");
   const [replyText, setReplyText] = useState({}); // State for replies
+  const [replySection, setReplySection] = useState(false); // State for replies
+  const [reviewReplies, setReviewReplies] = useState([]); 
 
   const getUserId = () => {
     const str = document.cookie;
@@ -85,7 +96,8 @@ const Review = (props) => {
 
   const postReply = async (commentId) => {
     try {
-      const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/replies`, {
+      console.log("posting reply")
+      const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/reply`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -105,14 +117,33 @@ const Review = (props) => {
 
       // Clear the reply text for that comment
       setReplyText((prev) => ({ ...prev, [commentId]: "" }));
+      setReplySection(false)
+    } catch (error) {
+      console.error("Error posting reply:", error);
+    }
+  };
+  const getReply = async (reviewId) => {
+    try {
+      console.log("posting reply",reviewId)
+      const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/reply/${reviewId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+      const data = await req.json();
+      console.log("review reply")
+      setReviewReplies(data.data)
     } catch (error) {
       console.error("Error posting reply:", error);
     }
   };
 
   useEffect(() => {
-    console.log("review id is ",props.videoId)
+    console.log("vid id is ",props.videoId)
     fetchComments();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.videoId]);
 
   return (
@@ -281,6 +312,17 @@ const Review = (props) => {
                       </button>
 
                       {/* Reply Section */}
+                      <button onClick={()=>{
+                      setReplySection((prev)=>!prev)
+                      getReply(value._id)
+                      }
+                      }
+                      >View Replys{value._id}</button>
+
+                      
+                    { replySection && <div className="bg-green-100">
+
+                     
                       <div className="flex flex-col mt-2">
                         <textarea
                           value={replyText[value._id] || ""}
@@ -297,18 +339,22 @@ const Review = (props) => {
                       </div>
 
                       {/* Display Replies */}
-                      {value.replies && value.replies.map((reply, j) => (
+                      {/* {value.replies && dummyReplies.map((reply, j) => ( */}
+                      {reviewReplies.map((reply, j) => (
                         <div key={j} className="flex gap-1 items-center ml-4">
                           <img
-                            src={reply.sender.picUrl || "/default-avatar.png"}
+                            src={"/default-avatar.png"}
+                            // src={reply.sender.picUrl || "/default-avatar.png"}
                             alt="Profile"
                             className="rounded-full w-4 h-4"
                           />
-                          <h1 className="font-normal opacity-90">
-                            {reply.replyMessage}
-                          </h1>
+                          <p className="font-normal opacity-90 text-black">
+                            some text {reply.replyMessage}
+                          </p>
                         </div>
                       ))}
+                      </div>}
+
                     </div>
                   ))
                 )}
