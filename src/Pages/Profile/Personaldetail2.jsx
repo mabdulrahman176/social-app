@@ -5,9 +5,15 @@ import { FaArrowLeftLong } from "react-icons/fa6";
 function Personaldetail2() {
   const [user, setUser] = useState({});
 
+  const getUserId = () => {
+    const str = document.cookie
+    const userKey = str.split('=')[1];
+    return userKey
+  }
+
   const handleSubmit = async () => {
     try {
-      const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/users/`, {
+      const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/users/update/${getUserId()}`, {
         credentials: 'include',
         method: "POST",
         headers: {
@@ -15,11 +21,6 @@ function Personaldetail2() {
         },
         body: JSON.stringify(user)
       });
-
-      if (!req.ok) {
-        throw new Error('Network response was not ok');
-      }
-
       const d = await req.json();
       console.log(d);
       console.log(user);
