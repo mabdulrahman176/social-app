@@ -351,7 +351,6 @@ const Review = (props) => {
                         </div>
 
                         {/* Display Replies */}
-                        {/* {value.replies && dummyReplies.map((reply, j) => ( */}
                         {reviewReplies.map((reply, j) => (
                           <div key={j} className="flex gap-1 items-center ml-4">
                             <img
