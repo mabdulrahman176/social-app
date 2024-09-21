@@ -22,9 +22,6 @@ function Personaldetail2() {
         body: JSON.stringify(user)
       });
       const d = await req.json();
-      console.log(d);
-      console.log(user);
-
     } catch (error) {
       console.error("Error submitting data:", error);
     }
