@@ -165,7 +165,7 @@ const Review = (props) => {
         />
         <img
           className="md:w-[45%] w-full md:h-full h-[40%] object-fill"
-          src={img}
+          src={'/VideoBoy.jpeg'}
           alt="Video Thumbnail"
         />
         <section className="flex flex-col py-4 md:w-[55%] w-full h-[60%] md:h-full overflow-y-scroll revOverFlow font-[450] text-xs px-4">

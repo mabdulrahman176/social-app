@@ -64,20 +64,26 @@ function Personaldetail() {
   const handleShow = (index) => {
     setSelectedindex(selectedindex === index ? null : index);
   };
-
-  useEffect(() => {
-    const getprofileDetail = async () => {
+  const getprofileDetail = async () => {
       try {
-        const result = await fetchDetail(id); // Fetch data by ID
-        setDetail(result);
+        const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/users/${getUserId()}`) 
+        const data = await req.json() 
+        console.log("personal data is",data)
+        setDetail(data.user);
       } catch (error) {
         console.error("Fetching data error", error);
       }
     };
-    if (id) {
+    const getUserId = () => {
+    const str = document.cookie
+    const userKey = str.split('=')[1];
+    return userKey
+  }
+
+  useEffect(() => {
+    console.log("fetching user pernsal info")
       getprofileDetail();
-    }
-  }, [id]);
+  }, []);
 
   return (
     <Fragment>
