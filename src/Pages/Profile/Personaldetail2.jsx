@@ -22,6 +22,8 @@ function Personaldetail2() {
         body: JSON.stringify(user)
       });
       const d = await req.json();
+  
+
     } catch (error) {
       console.error("Error submitting data:", error);
     }
@@ -72,7 +74,7 @@ function Personaldetail2() {
               placeholder="Enter Your First Name"
               className="border mt-2 mb-3 w-full md:w-[80%] p-2 rounded-lg"
               onChange={_onChange_}
-            />
+            /> 
             <label htmlFor="work" className="block text-base font-medium">
               Work Experience
             </label>

@@ -194,3 +194,4 @@ function Personaldetail() {
 }
 
 export default Personaldetail;
+	
