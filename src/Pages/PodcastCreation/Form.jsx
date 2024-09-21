@@ -2,12 +2,64 @@ import React, { useContext, useState } from "react";
 import AddSpeaker from "./AddSpeaker";
 
 import { myContext } from "../../Context/CreateContext";
+const podcastTypes = [
+  "Tech & Entrepreneurship",
+  "Art",
+  "Tech & Investor",
+  "Teamwork",
+  "Finance",
+  "Networking",
+  "Government",
+  "Charity",
+  "Language",
+  "Politics",
+  "Fashion",
+  "History",
+  "Hobbies",
+  "Career & Business",
+  "Travel & Outdoor",
+  "Investors",
+  "News",
+  "Technology",
+  "True Crime",
+  "Comedy",
+  "Music & Dancing",
+  "Sports",
+  "Science",
+  "Leadership",
+  "Sustainability",
+  "Fiction",
+  "Education",
+  "Interviews",
+  "Technology",
+  "Business & Finance",
+  "History",
+  "Health & Wellness",
+  "Self-Improvement",
+  "Religion & Spirituality",
+  "Pop Culture",
+  "Environment",
+  "Music",
+  "Parenting",
+  "Fashion",
+  "Gaming",
+  "Food & Cooking",
+  "Relationship & Books",
+  "Personal Stories",
+  "Pets & Animals",
+  "Travel & Outdoor",
+  "TV & Film",
+  "Social Activities",
+  "Subscribed"
+];
+
 
 const Form = ({ audioFile, coverImage, formState, setFormState }) => {
   const { PodcastStates } = useContext(myContext);
- 
+
   const [speakerState, setSpeakerState] = useState({});
   const [loading, setLoading] = useState(false);
+  const [selectedType, setSelectedType] = useState('');
 
   const getUserId = () => {
     const str = document.cookie;
@@ -40,6 +92,7 @@ const Form = ({ audioFile, coverImage, formState, setFormState }) => {
     }
 
     formData.append('userID', getUserId());
+    formData.append('podcastType',selectedType);
 
     try {
       const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/podcasts/`, {
@@ -115,10 +168,11 @@ const Form = ({ audioFile, coverImage, formState, setFormState }) => {
               ></textarea>
             </div>
             <div className="pt-5">
+              {/* podcast type select */}
               <label className="block text-gray-600 text-sm font-bold" htmlFor="podcastType">
                 Podcast Type<span className="text-red-800">*</span>
               </label>
-              <input
+              {/* <input
                 className="w-full border rounded-lg py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline placeholder:text-xs"
                 id="podcastType"
                 name="podcastType"
@@ -126,7 +180,20 @@ const Form = ({ audioFile, coverImage, formState, setFormState }) => {
                 onChange={handleChange}
                 placeholder="Podcast Type"
                 required
-              />
+              /> */}
+              <select
+                className="w-full border rounded-lg py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline placeholder:text-xs"
+                value={selectedType} onChange={(e) =>{ 
+                  setSelectedType(e.target.value)
+                  }}>
+                 
+                <option value="">Select a Podcast Type</option>
+                {podcastTypes.map((type, index) => (
+                  <option key={index} value={type}>
+                    {type}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
 
