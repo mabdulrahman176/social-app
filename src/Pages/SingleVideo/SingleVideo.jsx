@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { BsInfoSquare } from "react-icons/bs";
-import { FaChevronLeft, FaTiktok } from "react-icons/fa";
+import { FaChevronLeft } from "react-icons/fa";
 import { CiStar } from "react-icons/ci";
 import { FaRegShareFromSquare } from "react-icons/fa6";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -15,26 +15,56 @@ const Video = () => {
   const [repModOpen, setRepModOpen] = useState(false);
   const [revModOpen, setRevModOpen] = useState(false);
   const [video, setVideo] = useState();
-  
-const handleProfile = ()=>{
-  navigate('/profile')
-}
+  const [videos, setVideos] = useState([]);
+  const [videoIndex, setVideoIndex] = useState(0);
 
-  // Decode the video URL from params
-  const videoId = decodeURIComponent(src);  
+  const handleProfile = () => {
+    navigate('/profile');
+  };
 
-  const getVideo=async()=>{
-    const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/upload/${videoId}`)
-    const data = await req.json()
-    console.log("video data")
-    console.log({data})
-    setVideo(data)
-  }
+  const videoId = decodeURIComponent(src);
 
+  const getVideo = async () => {
+    const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/upload/${videoId}`);
+    const data = await req.json();
+    setVideo(data);
+  };
 
   useEffect(() => {
-        getVideo()
-  }, [videoId])
+    const videoState = window.history.state;
+    if (videoState && videoState.videos) {
+      setVideos(videoState.videos);
+      const currentVideo = videoState.videos.find(v => v._id === videoId);
+      if (currentVideo) {
+        setVideo(currentVideo);
+        setVideoIndex(videoState.videos.findIndex(v => v._id === videoId));
+      }
+    }
+    getVideo();
+  }, [videoId]);
+
+  const handleScroll = (e) => {
+    if (e.deltaY > 0) {
+      // Scroll down
+      if (videoIndex < videos.length - 1) {
+        const nextVideoId = videos[videoIndex + 1]._id;
+        navigate(`/video/${encodeURIComponent(nextVideoId)}`, { state: { videos } });
+      }
+    } else {
+      // Scroll up
+      if (videoIndex > 0) {
+        const prevVideoId = videos[videoIndex - 1]._id;
+        navigate(`/video/${encodeURIComponent(prevVideoId)}`, { state: { videos } });
+      }
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('wheel', handleScroll, { passive: false });
+    return () => {
+      window.removeEventListener('wheel', handleScroll);
+    };
+  }, [videoIndex, videos]);
 
   return (
     <Fragment>
@@ -60,25 +90,19 @@ const handleProfile = ()=>{
             </div>
             <div className="absolute z-10 bottom-3 w-[60%] sm:w-[43%] p-3 text-white">
               <a href="/#" className="text-xl font-semibold">
-                {video?video.user.name:'NO_NAME'}
+                {video && video.user ? video.user.name : 'NO_NAME'}
               </a>
               <p className="py-1 w-[80%] text-sm">
-                {video && video.data.videoDesc}
+                {video && video.data ? video.data.videoDesc : 'Loading...'}
               </p>
               <p className="py-1 w-[80%] text-sm">
-                {video && video.data.videoTags}
+                {video && video.data ? video.data.videoTags : 'Loading...'}
               </p>
-              {/* <div className="flex">
-                <p className="p-1 px-2 gap-2 rounded-lg flex items-center text-xs SVTBottom">
-                  <FaTiktok />
-                  See you again
-                </p>
-              </div> */}
             </div>
-            <div className="absolute bottom-3 z-10 right-2 text-white" >
+            <div className="absolute bottom-3 z-10 right-2 text-white">
               <div className="relative cursor-pointer rounded-full flex justify-center" onClick={handleProfile}>
                 <img
-                  src={video && video.user.picUrl}
+                  src={video && video.user ? video.user.picUrl : '/placeholder.png'}
                   style={{ height: "40px", width: "40px" }}
                   className="rounded-full"
                   alt=""
@@ -99,7 +123,6 @@ const handleProfile = ()=>{
               </div>
               <div
                 className="text-center cursor-pointer mt-5"
-                // onClick={() =>console.log("opening reviews")}
                 onClick={() => setRevModOpen(true)}
               >
                 <p className="text-xs">
@@ -116,8 +139,7 @@ const handleProfile = ()=>{
             </div>
           </div>
           <video
-            src={video && video.data.videoUrl}
-            // src={videoId}
+            src={video && video.data ? video.data.videoUrl : ''}
             autoPlay
             className="h-full relative z-0 rounded-xl w-full bg-slate-300 object-fill"
             controls

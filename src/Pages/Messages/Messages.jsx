@@ -84,7 +84,7 @@ return timeString
                     <div className="flex items-center gap-2">
                       <img
                         // src={''}
-                        src={message.sender?.picUrl?message.sender.picUrl:''}
+                        src={message.sender?.picUrl?message.sender.picUrl:"/profile.png"}
                         alt=""
                         className="h-[50px] w-[50px] rounded-full"
                       />

@@ -11,15 +11,14 @@ import React, { useState, useEffect } from "react";
 import { RiCloseLine } from "react-icons/ri";
 import { deleteReview } from "../../DeleteAPI";
 
-
 const dummyReplies = [
   { reply: "This is a great product!" },
   { reply: "I had some issues with the delivery, but the support was helpful." },
   { reply: "Would definitely recommend to my friends!" },
   { reply: "The quality wasn't as expected." },
   { reply: "Amazing experience, will buy again!" },
-  { reply: "The product arrived damaged, but" }]
-
+  { reply: "The product arrived damaged, but" }
+];
 
 const Review = (props) => {
   const [isWritingReview, setIsWritingReview] = useState(false);
@@ -35,6 +34,9 @@ const Review = (props) => {
     const userKey = str.split("=")[1];
     return userKey;
   };
+
+  // Get the logged-in user's ID once
+  const loggedInUserId = getUserId();
 
   function calculateMean(com) {
     let arr = com.map((e) => e.reviewRatings);
@@ -56,7 +58,7 @@ const Review = (props) => {
           reviewItemId: props.videoId,
           reviewRatings: rating,
           reviewMessage: reviewText,
-          userId: getUserId(),
+          userId: loggedInUserId,
         }),
       });
       const data = await req.json();
@@ -97,7 +99,7 @@ const Review = (props) => {
 
   const postReply = async (commentId) => {
     try {
-      console.log("posting reply")
+      console.log("posting reply");
       const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/reply`, {
         method: "POST",
         headers: {
@@ -107,7 +109,7 @@ const Review = (props) => {
         body: JSON.stringify({
           reviewId: commentId,
           replyMessage: replyText[commentId] || "",
-          userId: getUserId(),
+          userId: loggedInUserId,
         }),
       });
       const data = await req.json();
@@ -118,14 +120,15 @@ const Review = (props) => {
 
       // Clear the reply text for that comment
       setReplyText((prev) => ({ ...prev, [commentId]: "" }));
-      setReplySection(false)
+      setReplySection(false);
     } catch (error) {
       console.error("Error posting reply:", error);
     }
   };
+
   const getReply = async (reviewId) => {
     try {
-      console.log("posting reply", reviewId)
+      console.log("getting replies for review", reviewId);
       const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/reply/${reviewId}`, {
         method: "GET",
         headers: {
@@ -134,15 +137,15 @@ const Review = (props) => {
         credentials: "include",
       });
       const data = await req.json();
-      console.log("review reply")
-      setReviewReplies(data.data)
+      console.log("review reply");
+      setReviewReplies(data.data);
     } catch (error) {
-      console.error("Error posting reply:", error);
+      console.error("Error fetching replies:", error);
     }
   };
 
   useEffect(() => {
-    console.log("vid id is ", props.videoId)
+    console.log("vid id is ", props.videoId);
     fetchComments();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.videoId]);
@@ -300,72 +303,68 @@ const Review = (props) => {
                       <h1 className="font-normal opacity-90">
                         {value.reviewMessage}
                       </h1>
-                      <button
-                        className="text-red-500 flex items-center gap-1 cursor-pointer"
-                        onClick={() => deleteComment(value._id)}
-                        aria-label="Delete review"
-                      >
-                        <FontAwesomeIcon icon={faTrashAlt} />
-                        <span>Delete</span>
-                      </button>
+
+                      {/* Only show delete button if the logged-in user is the author of the comment */}
+                      {value.sender.id === loggedInUserId && (
+                        <button
+                          className="text-red-500 flex items-center gap-1 cursor-pointer"
+                          onClick={() => deleteComment(value._id)}
+                          aria-label="Delete review"
+                        >
+                          <FontAwesomeIcon icon={faTrashAlt} />
+                          <span>Delete</span>
+                        </button>
+                      )}
 
                       {/* Reply Section */}
                       <button onClick={() => {
-                        // setReplySection((prev) => ({
-                        //   ...prev,
-                        //   [value._id]: !prev[value._id],
-                        // }));
                         setReplySection((prev) => {
-                          const newState = {};// Set all the other states to null
+                          const newState = {};
                           Object.keys(prev).forEach((key) => {
                             newState[key] = null;
                           });
 
-                          // Toggle visibility for this specific review
                           newState[value._id] = !prev[value._id];
 
                           return newState;
                         });
-                        getReply(value._id)
-                      }
-                      }
-                      >View Replys</button>
+                        getReply(value._id);
+                      }}>
+                        View Replies
+                      </button>
 
-
-                      {replySection[value._id] && <div className={''}>
-
-
-                        <div className="flex flex-col mt-2">
-                          <textarea
-                            value={replyText[value._id] || ""}
-                            onChange={(e) => setReplyText((prev) => ({ ...prev, [value._id]: e.target.value }))}
-                            className="w-full h-12 p-2 border-none outline-none bg-gray-100 rounded"
-                            placeholder="Write your reply here"
-                          />
-                          <button
-                            onClick={() => postReply(value._id)}
-                            className="text-blue-500 mt-1"
-                          >
-                            Reply
-                          </button>
-                        </div>
-
-                        {/* Display Replies */}
-                        {reviewReplies.map((reply, j) => (
-                          <div key={j} className="flex gap-1 items-center ml-4">
-                            <img
-                              src={"/default-avatar.png"}
-                              // src={reply.sender.picUrl || "/default-avatar.png"}
-                              alt="Profile"
-                              className="rounded-full w-4 h-4"
+                      {replySection[value._id] && (
+                        <div className=''>
+                          <div className="flex flex-col mt-2">
+                            <textarea
+                              value={replyText[value._id] || ""}
+                              onChange={(e) => setReplyText((prev) => ({ ...prev, [value._id]: e.target.value }))}
+                              className="w-full h-12 p-2 border-none outline-none bg-gray-100 rounded"
+                              placeholder="Write your reply here"
                             />
-                            <p className="font-normal opacity-90 text-black">
-                             {reply.replyMessage}
-                            </p>
+                            <button
+                              onClick={() => postReply(value._id)}
+                              className="text-blue-500 mt-1"
+                            >
+                              Reply
+                            </button>
                           </div>
-                        ))}
-                      </div>}
 
+                          {/* Display Replies */}
+                          {reviewReplies.map((reply, j) => (
+                            <div key={j} className="flex gap-1 items-center ml-4">
+                              <img
+                                src={"/default-avatar.png"}
+                                alt="Profile"
+                                className="rounded-full w-4 h-4"
+                              />
+                              <p className="font-normal opacity-90 text-black">
+                               {reply.replyMessage}
+                              </p>
+                            </div>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   ))
                 )}

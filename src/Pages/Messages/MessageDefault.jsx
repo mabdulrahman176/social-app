@@ -13,7 +13,7 @@ function Hello() {
       
       {/* Title */}
       <p className="text-2xl md:text-3xl text-gray-700 my-5 text-center">
-        WhatsApp Web
+        Teq Tak Web
       </p>
       
       {/* Description */}
