@@ -56,7 +56,7 @@ const podcastTypes = [
 const Form = ({ audioFile, coverImage, formState, setFormState, audioDuration }) => { // Added audioDuration prop
   const { PodcastStates } = useContext(myContext);
 
-  const [speakerState, setSpeakerState] = useState({});
+  const [speakerState, setSpeakerState] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedType, setSelectedType] = useState('');
 

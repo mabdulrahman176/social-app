@@ -184,7 +184,7 @@ const EventForm = () => {
                 className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none text-xs focus:shadow-outline"
                 onChange={handleTicketChange}
                 value={selectedType}
-                required
+               
               >
                 <option value="">Select Tickets Type</option>
                 <option value="Premium">Premium</option>
