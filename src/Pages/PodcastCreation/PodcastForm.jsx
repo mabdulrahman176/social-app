@@ -127,7 +127,7 @@ const PodcastForm = () => {
             </div>
           </div>
           <Form 
-            audioFile={audioFile} 
+            aunpm startioFile={audioFile} 
             coverImage={coverImage} 
             formState={formState} 
             setFormState={setFormState} // Ensure this is passed correctly
