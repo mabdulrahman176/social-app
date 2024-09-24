@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 
-const AddSpeaker = ({ updateSpeakerData, initialData }) => {
+const AddSpeaker = ({ updateSpeakerData, initialData, users = [] }) => {
   const [showAdditionalForms, setShowAdditionalForms] = useState(false);
   const [speakerData, setSpeakerData] = useState({});
+  const [filteredUsers, setFilteredUsers] = useState([]);
 
   useEffect(() => {
     // Initialize state with data from props if available
@@ -13,7 +14,7 @@ const AddSpeaker = ({ updateSpeakerData, initialData }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setSpeakerData(prev => ({
+    setSpeakerData((prev) => ({
       ...prev,
       [name]: value,
     }));
@@ -21,6 +22,16 @@ const AddSpeaker = ({ updateSpeakerData, initialData }) => {
     // Show additional forms if speakerName is filled
     if (name === "speakerName" && value) {
       setShowAdditionalForms(true);
+      
+      // Filter users based on the input value
+      if (value.includes("@")) {
+        const searchTerm = value.split("@").pop();
+        if (users) {
+          setFilteredUsers(users.filter(user => user.name.toLowerCase().includes(searchTerm.toLowerCase())));
+        }
+      } else {
+        setFilteredUsers([]);
+      }
     }
   };
 
@@ -34,6 +45,15 @@ const AddSpeaker = ({ updateSpeakerData, initialData }) => {
     if (!e.target.value) {
       setShowAdditionalForms(false);
     }
+  };
+
+  const handleUserSelect = (user) => {
+    // Handle user selection
+    setSpeakerData((prev) => ({
+      ...prev,
+      speakerName: `@${user.name}`, // Tag the selected user
+    }));
+    setFilteredUsers([]);
   };
 
   const handleSubmit = (e) => {
@@ -58,6 +78,20 @@ const AddSpeaker = ({ updateSpeakerData, initialData }) => {
         placeholder="Mention @ to tag a person"
       />
       
+      {filteredUsers.length > 0 && (
+        <ul className="border border-gray-300 rounded-md mt-2">
+          {filteredUsers.map((user) => (
+            <li
+              key={user.id}
+              className="p-2 cursor-pointer hover:bg-gray-200"
+              onClick={() => handleUserSelect(user)}
+            >
+              {user.name}
+            </li>
+          ))}
+        </ul>
+      )}
+
       {showAdditionalForms && (
         <div>
           <label className="block my-4 text-gray-600 text-sm font-bold">

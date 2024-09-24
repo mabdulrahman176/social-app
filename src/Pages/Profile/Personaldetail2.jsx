@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaArrowLeftLong } from "react-icons/fa6";
 
 function Personaldetail2() {
@@ -10,7 +10,7 @@ function Personaldetail2() {
     const userKey = str.split('=')[1];
     return userKey
   }
-
+const navigate = useNavigate()
   const handleSubmit = async () => {
     try {
       const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/users/update/${getUserId()}`, {
@@ -27,6 +27,7 @@ function Personaldetail2() {
     } catch (error) {
       console.error("Error submitting data:", error);
     }
+    navigate('/personaldetails')
   };
 
   const _onChange_ = (e) => {
@@ -64,14 +65,14 @@ function Personaldetail2() {
 
         <div className="flex flex-wrap mt-5">
           <div className="w-full md:w-[50%]">
-            <label htmlFor="fname" className="block text-base font-medium">
-              First Name
+            <label htmlFor="name" className="block text-base font-medium">
+               Name
             </label>
             <input
               type="text"
-              id="fname"
-              name="firstName"
-              placeholder="Enter Your First Name"
+              id="name"
+              name="name"
+              placeholder="Enter Your  Name"
               className="border mt-2 mb-3 w-full md:w-[80%] p-2 rounded-lg"
               onChange={_onChange_}
             /> 
@@ -87,31 +88,11 @@ function Personaldetail2() {
               onChange={_onChange_}
             />
 
-            <label htmlFor="location" className="block text-base font-medium">
-              Location
-            </label>
-            <input
-              type="text"
-              id="location"
-              name="location"
-              placeholder="Enter Your Location"
-              className="border mt-2 mb-5 w-full md:w-[80%] p-2 rounded-lg"
-              onChange={_onChange_}
-            />
+           
           </div>
 
           <div className="w-full md:w-[50%]">
-            <label htmlFor="lname" className="block text-base font-medium">
-              Last Name
-            </label>
-            <input
-              type="text"
-              id="lname"
-              name="lastName"
-              placeholder="Enter Your Last Name"
-              className="border mt-2 mb-5 w-full md:w-[80%] p-2 rounded-lg"
-              onChange={_onChange_}
-            />
+          
             <label htmlFor="study" className="block text-base font-medium">
               Education
             </label>
@@ -123,7 +104,18 @@ function Personaldetail2() {
               className="border mt-2 mb-5 w-full md:w-[80%] p-2 rounded-lg"
               onChange={_onChange_}
             />
-           <div className="my-10">
+             <label htmlFor="location" className="block text-base font-medium">
+              Location
+            </label>
+            <input
+              type="text"
+              id="location"
+              name="location"
+              placeholder="Enter Your Location"
+              className="border mt-2 mb-5 w-full md:w-[80%] p-2 rounded-lg"
+              onChange={_onChange_}
+            />
+           <div className="my-8">
            <button
               type="button"
               className="text-white w-[100px] rounded-md linear_gradient p-1"
