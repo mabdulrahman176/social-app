@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import AddSpeaker from "../PodcastCreation/AddSpeaker";
 import { useNavigate } from "react-router-dom";
 import { myContext } from "../../Context/CreateContext";
-import { FaAngleLeft } from "react-icons/fa";
+import { FaAngleLeft,FaTimes  } from "react-icons/fa";
 import { LuImagePlus } from "react-icons/lu";
 
 const EventForm = () => {
@@ -12,6 +12,9 @@ const EventForm = () => {
   const [coverImageFile, setCoverImageFile] = useState(null);
   const [state, setState] = useState({});
   const [loading, setLoading] = useState(false); // Add loading state
+  const [ticketTypes, setTicketTypes] = useState([]); // State for ticket types and prices
+  const [selectedType, setSelectedType] = useState("");
+  const [ticketPrice, setTicketPrice] = useState(0);
 
   const getUserId = () => {
     const str = document.cookie;
@@ -32,6 +35,12 @@ const EventForm = () => {
       formData.append(key, state[key]);
     });
     formData.append('eventCreatedBy', getUserId());
+
+    // Append ticket types and prices
+    ticketTypes.forEach(ticket => {
+      formData.append('ticketTypes[]', ticket.type);
+      formData.append('ticketPrices[]', ticket.price);
+    });
 
     try {
       const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/events/`, {
@@ -66,6 +75,17 @@ const EventForm = () => {
     }
   };
 
+  const handleTicketChange = (e) => {
+    const { value } = e.target;
+    if (value) {
+      setTicketTypes(prev => [...prev, { type: value, price: ticketPrice }]);
+      setSelectedType("");
+    }
+  };
+  
+  const removeTicket = (index) => {
+    setTicketTypes(prev => prev.filter((_, i) => i !== index));
+  };
   return (
     <>
       <h4 className="flex items-center bg-white gap-3 ps-4 h-[10%]">
@@ -162,8 +182,8 @@ const EventForm = () => {
               <label className="block text-gray-600 text-sm font-bold">Add Tickets Type</label>
               <select
                 className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none text-xs focus:shadow-outline"
-                onChange={onChange}
-                name="eventTicketType"
+                onChange={handleTicketChange}
+                value={selectedType}
                 required
               >
                 <option value="">Select Tickets Type</option>
@@ -172,16 +192,32 @@ const EventForm = () => {
                 <option value="General">General</option>
               </select>
             </div>
+            <div className="mt-4">
+  <ul className=" w-auto flex flex-wrap ">
+    {ticketTypes.map((ticket, index) => (
+      <li key={index} className="my-2 flex justify-between items-center bg-slate-300 rounded-lg w-auto ml-1">
+        {ticket.type} - ${ticket.type === selectedType ? ticketPrice : ticket.price} {/* Update this line */}
+        <FaTimes
+          className="text-gray-500 cursor-pointer"
+          onClick={() => removeTicket(index)}
+        />
+      </li>
+    ))}
+  </ul>
+</div>
             <div className="my-4">
-              <label className="block text-gray-600 text-sm font-bold">Basic Price</label>
-              <input
-                className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
-                type="number"
-                onChange={onChange}
-                name="eventPrice"
-                placeholder="Enter price $35.00"
-              />
-            </div>
+  <label className="block text-gray-600 text-sm font-bold">Basic Price</label>
+  <input
+    className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
+    type="number"
+    value={ticketPrice}
+    onChange={(e) => setTicketPrice(e.target.value)}
+    placeholder="Enter price $35.00"
+  />
+</div>
+
+
+          
           </div>
 
           <div className="sm:w-[40%] w-[45%]">
@@ -253,13 +289,14 @@ const EventForm = () => {
               type="submit"
               disabled={loading} // Disable button when loading
             >
-              {loading ? (
+              {/* {loading ? (
                 <div className="spinner-border text-white" role="status">
                   <span className="sr-only">Loading...</span>
                 </div>
               ) : (
                 "Publish Now"
-              )}
+              )} */}
+              Publish Now
             </button>
           </div>
         </form>
