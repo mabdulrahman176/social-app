@@ -57,9 +57,9 @@ function Personaldetail() {
     ['Small', 'Medium', 'Large', 'Experienced', 'Specialized'],
   ];
 
-  const toggleDropdown = (field) => {
-    setOpenDropdown(openDropdown === field ? null : field);
-  };
+  // const toggleDropdown = (field) => {
+  //   setOpenDropdown(openDropdown === field ? null : field);
+  // };
 
   const handleShow = (index) => {
     setSelectedindex(selectedindex === index ? null : index);
@@ -87,7 +87,7 @@ function Personaldetail() {
 
   return (
     <Fragment>
-      <div className="h-full overflow-y-auto bg-white w-full px-3">
+      <div className="h-full overflow-y-auto bg-white w-full px-3" style={{ WebkitOverflowScrolling: 'touch', WebkitScrollbar: { display: 'none' }, '-msOverflowStyle': 'none', scrollbarWidth: 'none' }}>
         <div className="p-5">
           <div className="flex items-center mb-4">
             <Link to='/profile'>
@@ -101,64 +101,53 @@ function Personaldetail() {
           <p className="text-xl font-semibold mt-5">Description</p>
           <p className="text-[gray]">
             {detail.description || 'No description available.'}
-            <Link className="text-[#9292e9]">Read more</Link>
+          
           </p>
           <p className="text-xl font-semibold mt-5">Personal info</p>
           <div className="p-5">
-            <div className="flex flex-wrap gap-4 mt-5">
-              {/* Name field with dropdown */}
-              <div className="w-full sm:w-[48%] md:w-[31%] lg:w-[50%]">
-                <div className="flex justify-between items-center mb-2 cursor-pointer" onClick={() => toggleDropdown('name')}>
-                  <p className="text-base font-medium">Name</p>
-                  <FaAngleDown className={`transition-transform ${openDropdown === 'name' ? 'rotate-180' : ''}`} />
-                </div>
-                {openDropdown === 'name' && (
-                  <div className="border p-2 rounded-md">
-                    <span>{detail.name || 'No name available.'}</span>
-                  </div>
-                )}
-              </div>
+  <div className="flex flex-wrap gap-4 mt-5">
+    {/* Name field */}
+    <div className="w-full sm:w-[48%] md:w-[31%] lg:w-[50%]">
+      <div className="flex justify-between items-center mb-2">
+        <p className="text-base font-medium">Name</p>
+      </div>
+      <div className="border p-2 rounded-md">
+        <span>{detail.name || 'No name available.'}</span>
+      </div>
+    </div>
+    
+    {/* Work field */}
+    <div className="w-full sm:w-[48%] md:w-[31%] lg:w-[45%]">
+      <div className="flex justify-between items-center mb-2">
+        <p className="text-base font-medium">Work</p>
+      </div>
+      <div className="border p-2 rounded-md">
+        <span>{detail.work_experience || 'No work experience available.'}</span>
+      </div>
+    </div>
+    
+    {/* Education field */}
+    <div className="w-full sm:w-[48%] md:w-[31%] lg:w-[50%]">
+      <div className="flex justify-between items-center mb-2">
+        <p className="text-base font-medium">Education</p>
+      </div>
+      <div className="border p-2 rounded-md whitespace-nowrap">
+        <span>{detail.education || 'No education details available.'}</span>
+      </div>
+    </div>
+    
+    {/* Location field */}
+    <div className="w-full sm:w-[48%] md:w-[31%] lg:w-[45%]">
+      <div className="flex justify-between items-center mb-2">
+        <p className="text-base font-medium">Location</p>
+      </div>
+      <div className="border p-2 rounded-md">
+        <span>{detail.location || 'No location information available.'}</span>
+      </div>
+    </div>
+  </div>
+</div>
 
-              {/* Work field with dropdown */}
-              <div className="w-full sm:w-[48%] md:w-[31%] lg:w-[45%]">
-                <div className="flex justify-between items-center mb-2 cursor-pointer" onClick={() => toggleDropdown('work')}>
-                  <p className="text-base font-medium">Work</p>
-                  <FaAngleDown className={`transition-transform ${openDropdown === 'work' ? 'rotate-180' : ''}`} />
-                </div>
-                {openDropdown === 'work' && (
-                  <div className="border p-2 rounded-md">
-                    <span>{detail.work_experience || 'No work experience available.'}</span>
-                  </div>
-                )}
-              </div>
-
-              {/* Education field with dropdown */}
-              <div className="w-full sm:w-[48%] md:w-[31%] lg:w-[50%]">
-                <div className="flex justify-between items-center mb-2 cursor-pointer" onClick={() => toggleDropdown('education')}>
-                  <p className="text-base font-medium">Education</p>
-                  <FaAngleDown className={`transition-transform ${openDropdown === 'education' ? 'rotate-180' : ''}`} />
-                </div>
-                {openDropdown === 'education' && (
-                  <div className="border p-2 rounded-md whitespace-nowrap">
-                    <span>{detail.education || 'No education details available.'}</span>
-                  </div>
-                )}
-              </div>
-
-              {/* Location field with dropdown */}
-              <div className="w-full sm:w-[48%] md:w-[31%] lg:w-[45%]">
-                <div className="flex justify-between items-center mb-2 cursor-pointer" onClick={() => toggleDropdown('location')}>
-                  <p className="text-base font-medium">Location</p>
-                  <FaAngleDown className={`transition-transform ${openDropdown === 'location' ? 'rotate-180' : ''}`} />
-                </div>
-                {openDropdown === 'location' && (
-                  <div className="border p-2 rounded-md">
-                    <span>{detail.location || 'No location information available.'}</span>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
 
           <p className="text-xl font-semibold mt-5">More info</p>
           <div className="flex flex-wrap gap-4 justify-between">

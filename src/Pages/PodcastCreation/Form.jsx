@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import AddSpeaker from "./AddSpeaker";
-
 import { myContext } from "../../Context/CreateContext";
+
 const podcastTypes = [
   "Tech & Entrepreneurship",
   "Art",
@@ -53,8 +53,7 @@ const podcastTypes = [
   "Subscribed"
 ];
 
-
-const Form = ({ audioFile, coverImage, formState, setFormState }) => {
+const Form = ({ audioFile, coverImage, formState, setFormState, audioDuration }) => { // Added audioDuration prop
   const { PodcastStates } = useContext(myContext);
 
   const [speakerState, setSpeakerState] = useState({});
@@ -77,6 +76,7 @@ const Form = ({ audioFile, coverImage, formState, setFormState }) => {
 
     if (audioFile) {
       formData.append('audio', audioFile);
+      formData.append('podcastDuration', audioDuration); // Append podcastDuration
     }
 
     if (coverImage) {
@@ -92,7 +92,7 @@ const Form = ({ audioFile, coverImage, formState, setFormState }) => {
     }
 
     formData.append('userID', getUserId());
-    formData.append('podcastType',selectedType);
+    formData.append('podcastType', selectedType);
 
     try {
       const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/podcasts/`, {
@@ -168,25 +168,14 @@ const Form = ({ audioFile, coverImage, formState, setFormState }) => {
               ></textarea>
             </div>
             <div className="pt-5">
-              {/* podcast type select */}
               <label className="block text-gray-600 text-sm font-bold" htmlFor="podcastType">
                 Podcast Type<span className="text-red-800">*</span>
               </label>
-              {/* <input
-                className="w-full border rounded-lg py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline placeholder:text-xs"
-                id="podcastType"
-                name="podcastType"
-                type="text"
-                onChange={handleChange}
-                placeholder="Podcast Type"
-                required
-              /> */}
               <select
                 className="w-full border rounded-lg py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline placeholder:text-xs"
-                value={selectedType} onChange={(e) =>{ 
-                  setSelectedType(e.target.value)
-                  }}>
-                 
+                value={selectedType} onChange={(e) => { 
+                  setSelectedType(e.target.value);
+                }}>
                 <option value="">Select a Podcast Type</option>
                 {podcastTypes.map((type, index) => (
                   <option key={index} value={type}>
@@ -236,13 +225,6 @@ const Form = ({ audioFile, coverImage, formState, setFormState }) => {
               className="w-full mt-14 border rounded-full buyticket text-center text-white py-3 px-3 leading-tight focus:outline-none focus:shadow-outline"
               disabled={loading}
             >
-              {/* {loading ? (
-                <div className="spinner-border text-white" role="status">
-                  <span className="sr-only">Loading...</span>
-                </div>
-              ) : (
-                "Publish Now"
-              )} */}
               Publish Now
             </button>
           </div>

@@ -8,20 +8,33 @@ const PodcastForm = () => {
   const [audioFile, setAudioFile] = useState(null);
   const [coverImage, setCoverImage] = useState(null);
   const [formState, setFormState] = useState({});
+  const [audioDuration, setAudioDuration] = useState(0); // State for audio duration
   let navigate = useNavigate();
 
-
   const getUserId = () => {
-    const str = document.cookie
+    const str = document.cookie;
     const userKey = str.split('=')[1];
-    return userKey
-  }
+    return userKey;
+  };
+
+  const handleAudioChange = (files) => {
+    if (files.length > 0) {
+      const file = files[0];
+      setAudioFile(file);
+
+      const audio = new Audio(URL.createObjectURL(file));
+      audio.onloadedmetadata = () => {
+        setAudioDuration(Math.round(audio.duration)); // Set duration in seconds
+      };
+    }
+  };
 
   const handleSubmit = async () => {
     const formData = new FormData();
 
     if (audioFile) {
       formData.append('audio', audioFile);
+      formData.append('podcastDuration', audioDuration); // Append audio duration
     }
 
     if (coverImage) {
@@ -55,8 +68,8 @@ const PodcastForm = () => {
   const _onChange_ = (e) => {
     const { name, value, files } = e.target;
 
-    if (name === "audioName" && files.length > 0) {
-      setAudioFile(files[0]);
+    if (name === "audioName") {
+      handleAudioChange(files); // Call the audio change handler
     }
 
     if (name === "customizeCover" && files.length > 0) {
@@ -69,9 +82,9 @@ const PodcastForm = () => {
     }));
   };
 
-    return (
-      <>
-        <h4 className="flex items-center bg-white gap-3 ps-4 h-[10%]">
+  return (
+    <>
+      <h4 className="flex items-center bg-white gap-3 ps-4 h-[10%]">
         <FaAngleLeft
           className="cursor-pointer"
           onClick={() => navigate("/podcasts")}
@@ -130,7 +143,8 @@ const PodcastForm = () => {
             aunpm startioFile={audioFile} 
             coverImage={coverImage} 
             formState={formState} 
-            setFormState={setFormState} // Ensure this is passed correctly
+            setFormState={setFormState} 
+            audioDuration={audioDuration} // Pass the audio duration prop
           />
         </div>
       </div>
