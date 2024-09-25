@@ -16,8 +16,7 @@ const AllVideos = () => {
       const response = await axios.get(`${API_BASE_URL}/upload/videos/all`, {
         params: { page, limit: 20 }
       });
-      const result = response.data;
-      const updatedData = result.data.map(user => ({
+      const updatedData = response.data.data.map(user => ({
         ...user,
         active: true
       }));
@@ -65,7 +64,7 @@ const AllVideos = () => {
   }, [loading, lastVideoRef]);
 
   const handleVideoClick = (index) => {
-    navigate(`/video/${encodeURIComponent(videos[index]._id)}?index=${index}`, { state: { videos } });
+    navigate(`/video/${encodeURIComponent(videos[index]._id)}`, { state: { videos } });
   };
 
   return (
@@ -76,7 +75,7 @@ const AllVideos = () => {
       <div className="flex flex-wrap justify-center gap-1 sm:w-[90%] lg:w-[80%] mx-auto">
         {videos.map((video, i) => (
           <div
-            key={video._id} // Use unique video ID as key
+            key={video._id}
             ref={i === videos.length - 1 ? lastVideoRef : null}
             className="w-[32%] cursor-pointer grid place-items-center relative h-[30vh] sm:h-[40vh]"
             onClick={() => handleVideoClick(i)}

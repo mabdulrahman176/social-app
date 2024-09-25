@@ -12,6 +12,7 @@ import { RiCloseLine } from "react-icons/ri";
 import { deleteReview } from "../../DeleteAPI";
 
 const Review = (props) => {
+  const { videoId, picUrl } = props;
   const [isWritingReview, setIsWritingReview] = useState(false);
   const [comments, setComments] = useState([]);
   const [rating, setRating] = useState(5); // Default rating
@@ -63,7 +64,7 @@ const Review = (props) => {
         },
         credentials: "include",
         body: JSON.stringify({
-          reviewItemId: props.videoId,
+          reviewItemId: props,
           reviewRatings: rating,
           reviewMessage: reviewText,
           userId: loggedInUserId,
@@ -163,7 +164,7 @@ const Review = (props) => {
         />
         <img
           className="md:w-[45%] w-full md:h-full h-[40%] object-fill"
-          src={'/VideoBoy.jpeg'}
+          src={picUrl}
           alt="Video Thumbnail"
         />
         <section className="flex flex-col py-4 md:w-[55%] w-full h-[60%] md:h-full overflow-y-scroll revOverFlow font-[450] text-xs px-4">
@@ -329,7 +330,7 @@ const Review = (props) => {
                         });
                         getReply(value._id);
                       }}>
-                        View Replies
+                        View Replies {value.repliesCount > 0 && `(${value.repliesCount})`}
                       </button>
 
                       {replySection[value._id] && (

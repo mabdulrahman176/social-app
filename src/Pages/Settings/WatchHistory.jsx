@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { IoBookmarkOutline } from "react-icons/io5";
 import { FaAngleLeft } from "react-icons/fa";
@@ -115,14 +115,19 @@ const newCardData = [
   // Add more card objects here
 ];
 
-const CardComponent = ({ title, imgSrc, navigate }) => (
+const CardComponent = ({ title, videoUrl,videoId, navigate }) => (
   <div
     className="lg:h-[30vh] h-[25vh] lg:w-[12vw] md:w-[15vw] sm:w-[20vw] w-[25vw] relative m-0 text-white cursor-pointer"
-    onClick={() => navigate("/video/video1.mp4")}
+    onClick={() => navigate(`/video/${encodeURIComponent(videoId)}`)}
   >
-    <img className="h-full w-full rounded-lg" src={imgSrc} alt="Card Img" />
+    <video
+      className="h-full w-full rounded-lg object-cover"
+      src={videoUrl}
+      muted
+      controls 
+    />
     <div className="absolute inset-0 flex justify-between ShadedBG rounded-lg">
-      <h5 className="text-sm ps-3 absolute bottom-2">{title}</h5>
+      <h5 className="text-sm ps-3 absolute bottom-2">{title} </h5>
       <IoBookmarkOutline className="absolute  right-2 top-4 text-2xl" />
     </div>
   </div>
@@ -130,6 +135,23 @@ const CardComponent = ({ title, imgSrc, navigate }) => (
 
 function WatchHistory() {
   const navigate = useNavigate();
+
+  const [videos, setVideos] = useState([]);
+  
+  useEffect(() => {
+    const fetchViews = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/views/');
+        const data = await response.json();
+        setVideos(data.data); 
+        console.log("watch data is",data.data)
+      } catch (error) {
+        console.error("Error fetching views:", error);
+      }
+    };
+
+    fetchViews();
+  }, []);
 
   return (
     <div className="bg-white w-full h-full ">
@@ -149,14 +171,15 @@ function WatchHistory() {
             </Link>
           </div>
           <div className="mt-3 flex w-full overflow-x-scroll gap-1 Podcast_Top_Videos">
-            {cardData.map((card) => (
+            {videos.map((video) => (
               <div
-                key={card.id}
+                key={video._id}
                 // className=""
               >
                 <CardComponent
-                  title={card.title}
-                  imgSrc={card.imgSrc}
+                  title={video.viewItemType}
+                  videoUrl={video.videoUrl}
+                  videoId={video._id}
                   navigate={navigate}
                 />
               </div>

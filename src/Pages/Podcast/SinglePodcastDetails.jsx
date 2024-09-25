@@ -1,133 +1,137 @@
 import React, { Fragment, useEffect, useState } from "react";
-import Review from './Review'
-import img2 from './img2.jpeg'
-
-// import {RiPlayCircleLine,} from "react-icons/ri";
-import { useLocation, useNavigate,  } from "react-router-dom";
-import {  CiSquareInfo, CiStar } from "react-icons/ci";
+import Review from './Review';
+import img2 from './img2.jpeg';
+import { useLocation, useNavigate } from "react-router-dom";
+import { CiSquareInfo, CiStar } from "react-icons/ci";
 import { FaRegShareFromSquare } from "react-icons/fa6";
-// import { IoBookmarkOutline } from "react-icons/io5";
 import Model from "../ModalReport/Model";
 import { FaAngleLeft } from "react-icons/fa";
 import RelatedPodcast from "./RelatedPodcast";
-// import { fetchPodcast } from "../../API";
 
-// let guestData = [
-//   {
-//     img: img5,
-//     title: "Host",
-//   },
-//   {
-//     img: img2,
-//     title: "Guest",
-//   },
-//   {
-//     img: img5,
-//     title: "Guest",
-//   },
-//   {
-//     img: img4,
-//     title: "Guest",
-//   },
-// ];
-
-
+let guestData = [
+  { img: img2, title: "Host" },
+  { img: img2, title: "Guest" },
+  { img: img2, title: "Guest" },
+  { img: img2, title: "Guest" },
+];
 
 function SinglePodcastDetails() {
   let navigate = useNavigate();
   const loc = useLocation();
- 
 
-  const [revModOpen, setRevModOpen] = useState(false)
-  const [repModOpen, setRepModOpen] = useState(false)
+  const [revModOpen, setRevModOpen] = useState(false);
+  const [shareModOpen, setShareModOpen] = useState(false);
+  const [repModOpen, setRepModOpen] = useState(false);
   const [recentdata, setRecentData] = useState([]);
   const [result, setResult] = useState({});
 
   useEffect(() => {
     const getData = async () => {
       try {
-        if(loc.state){
+        if (loc.state) {
           const result = await getPodcast(loc.state.id);
-          console.log('single podcast id is',result) 
-          console.log({result});
           setResult(result);
           setRecentData([result]);
         }
-      
       } catch (error) {
         console.error("Fetching data error", error);
       }
     };
     getData();
   }, [loc.state]);
-const getPodcast = async (id) => {
-  const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/podcasts/${id}`, {
-    method: "GET",
-  });
-  const d = await req.json();
-  return d;
-}
+
+  const getPodcast = async (id) => {
+    const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/podcasts/${id}`, {
+      method: "GET",
+    });
+    const d = await req.json();
+    return d;
+  };
+
+  const shareContent = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: result.episodeTitle || 'Check this podcast!',
+          text: result.episodeDescription || 'Listen to this interesting podcast.',
+          url: window.location.href,
+        });
+        console.log('Share successful!');
+      } catch (error) {
+        console.error('Error sharing:', error);
+      }
+    } else {
+      alert('Web Share API is not supported in your browser.');
+    }
+  };
 
   return (
     <Fragment>
       <section className="bg-white h-full w-full relative px-6 overflow-y-scroll Podcast_Top_Videos">
-      {revModOpen && <div className="h-full left-0 w-full absolute top-0 z-20 flex  justify-center items-center">
-          <Review videoId={result._id} setRevModOpen={setRevModOpen} />
-        </div>}
-        {repModOpen && <div className="h-full w-full absolute top-0 left-0 z-20 flex  justify-center items-center">
-          <Model setRepModOpen={setRepModOpen} />
-        </div>}
+        {revModOpen && (
+          <div className="h-full left-0 w-full absolute top-0 z-20 flex justify-center items-center">
+            <Review videoId={result._id} picUrl={result.picUrl} setRevModOpen={setRevModOpen} />
+          </div>
+        )}
+        {repModOpen && (
+          <div className="h-full w-full absolute top-0 left-0 z-20 flex justify-center items-center">
+            <Model setRepModOpen={setRepModOpen} />
+          </div>
+        )}
+        {shareModOpen && (
+          <div className="h-full w-full absolute top-0 left-0 z-20 flex justify-center items-center">
+            {/* Assuming you will implement a Share modal if needed */}
+          </div>
+        )}
         <div className="flex">
-        <h4 className="flex items-center gap-3 md:ms-4 py-3">
-          <FaAngleLeft
-            className="cursor-pointer"
-            onClick={() => navigate("/podcast")}
-          />{" "}
-          Podcast
-        </h4>
+          <h4 className="flex items-center gap-3 md:ms-4 py-3">
+            <FaAngleLeft
+              className="cursor-pointer"
+              onClick={() => navigate("/podcast")}
+            />
+            Podcast
+          </h4>
         </div>
-       {/* {recentdata.map((elm,index)=>( */}
-         <div  className="flex w-full PCS_Flex sm:ps-6 gap-6">
-         <img
-           src={result.picUrl ? result.picUrl : img2}
-           className="md:h-[35vh] h-[39vh] md:w-[33%] w-[40%]  sm:mx-auto rounded-xl"
-           alt=""
-         />
-         <div className="w-[60%]  mx-auto PCS_Child1">
-           <h1 className="text-xl font-semibold">{result.episodeTitle || 'N/A'}</h1>
-           <h2 className="">Podcast Type:</h2>
-           <p className="py-1 opacity-65">{result.podcastType || 'N/A'}</p>
-           <p className="opacity-50">Season Number ={result.seasonNumber || 'N/A'} Episode Number = ({result.episodeNumber || 'N/A'})</p>
-           <p className="">Audio Name:</p>
-<p className="opacity-50">
-  {result.audioName && result.audioName.replace(/[0-9]/g, "").length > 30
-    ? result.audioName.replace(/[0-9]/g, "").slice(0, 30) + "..."
-    : result.audioName && result.audioName.replace(/[0-9]/g, "")}
-</p>
+        <div className="flex w-full PCS_Flex sm:ps-6 gap-6">
+          <img
+            src={result.picUrl ? result.picUrl : img2}
+            className="md:h-[35vh] h-[39vh] md:w-[33%] w-[40%] sm:mx-auto rounded-xl"
+            alt=""
+          />
+          <div className="w-[60%] mx-auto PCS_Child1">
+            <h1 className="text-xl font-semibold">{result.episodeTitle || 'N/A'}</h1>
+            <h2>Podcast Type:</h2>
+            <p className="py-1 opacity-65">{result.podcastType || 'N/A'}</p>
+            <p className="opacity-50">Season Number = {result.seasonNumber || 'N/A'} Episode Number = ({result.episodeNumber || 'N/A'})</p>
+            <p>Audio Name:</p>
+            <p className="opacity-50">
+              {result.audioName && result.audioName.replace(/[0-9]/g, "").length > 30
+                ? result.audioName.replace(/[0-9]/g, "").slice(0, 30) + "..."
+                : result.audioName && result.audioName.replace(/[0-9]/g, "")}
+            </p>
 
-{/* Audio player */}
-{result.audioUrl ? (
-  <audio controls>
-    <source src={result.audioUrl} type="audio/mpeg" />
-    Your browser does not support the audio element.
-  </audio>
-) : (
-  <p className="text-red-500">Audio not available</p>
-)}
+            {/* Audio player */}
+            {result.audioUrl ? (
+              <audio controls>
+                <source src={result.audioUrl} type="audio/mpeg" />
+                Your browser does not support the audio element.
+              </audio>
+            ) : (
+              <p className="text-red-500">Audio not available</p>
+            )}
 
-           <div className="flex items-center gap-4">
-             <CiSquareInfo className="text-2xl cursor-pointer" onClick={()=>setRepModOpen(true)}/>
-             <FaRegShareFromSquare className="text-xl opacity-45 cursor-pointer" />
-             <CiStar className="text-2xl cursor-pointer" onClick={()=>setRevModOpen(true)} />
-            
-           </div>
-           <p className="lg:w-[75%] w-full opacity-50 text-[15px]">
-           {result.episodeDescription}
-           </p>
-         </div>
-       </div>
-       {/* } */}
-        {/* <div className="flex gap-2 md:ps-6 mt-3 w-full overflow-x-scroll Podcast_Top_Videos">
+            <div className="flex items-center gap-4">
+              <CiSquareInfo className="text-2xl cursor-pointer" onClick={() => setRepModOpen(true)} />
+              <FaRegShareFromSquare className="text-xl opacity-45 cursor-pointer" onClick={shareContent} />
+              <CiStar className="text-2xl cursor-pointer" onClick={() => setRevModOpen(true)} />
+            </div>
+            <p className="lg:w-[75%] w-full opacity-50 text-[15px]">
+              {result.episodeDescription}
+            </p>
+          </div>
+        </div>
+        <p>Speakers:</p>
+        <div className="flex gap-2 md:ps-6 mt-3 w-full overflow-x-scroll Podcast_Top_Videos">
           {guestData.map((elm, ind) => (
             <div
               key={ind}
@@ -135,16 +139,16 @@ const getPodcast = async (id) => {
             >
               <img
                 src={elm.img}
-                className="rounded-full h-[25px] w-[25px]"
+                className="rounded-full h-[35px] w-[35px]"
                 alt=""
               />
               <h1 className="text-md">{elm.title}</h1>
             </div>
           ))}
-        </div> */}
+        </div>
 
-          <p className="md:ps-6">Similar podcasts</p>
-<RelatedPodcast/>
+        <p className="md:ps-6">Similar podcasts</p>
+        <RelatedPodcast />
       </section>
     </Fragment>
   );
