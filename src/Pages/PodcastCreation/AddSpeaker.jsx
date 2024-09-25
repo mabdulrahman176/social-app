@@ -1,83 +1,108 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 
-const AddSpeaker = ({ updateSpeakerData, initialData, users = [] }) => {
-  const [showAdditionalForms, setShowAdditionalForms] = useState(false);
-  const [speakerData, setSpeakerData] = useState({});
+const AddSpeaker = ({ updateSpeakerData, initialData }) => {
+  const [inputValue, setInputValue] = useState('');
+  const [speakers, setSpeakers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
+  const [allUsers, setAllUsers] = useState([]);
+  const [showAdditionalForms, setShowAdditionalForms] = useState(false);
+  const [speakerData, setSpeakerData] = useState({
+    speakerFirstName: '',
+    speakerLastName: '',
+    speakerBusinessLink: '',
+  });
+  const [loading, setLoading] = useState(false); // Loading state for fetching users
+
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
   useEffect(() => {
-    // Initialize state with data from props if available
+    const fetchUsers = async () => {
+      setLoading(true); // Start loading
+      try {
+        const response = await axios.get(`${API_BASE_URL}/users`);
+        setAllUsers(response.data.data || []);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      } finally {
+        setLoading(false); // Stop loading
+      }
+    };
+    fetchUsers();
+  }, [API_BASE_URL]);
+
+  useEffect(() => {
     if (initialData) {
-      setSpeakerData(initialData);
+      setSpeakers(initialData);
     }
   }, [initialData]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setSpeakerData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    setInputValue(value);
 
-    // Show additional forms if speakerName is filled
-    if (name === "speakerName" && value) {
-      setShowAdditionalForms(true);
-      
-      // Filter users based on the input value
-      if (value.includes("@")) {
-        const searchTerm = value.split("@").pop();
-        if (users) {
-          setFilteredUsers(users.filter(user => user.name.toLowerCase().includes(searchTerm.toLowerCase())));
-        }
+    if (value.includes('@')) {
+      const searchTerm = value.split('@').pop();
+      if (searchTerm) {
+        filterUsers(searchTerm);
+        setShowAdditionalForms(false);
       } else {
         setFilteredUsers([]);
       }
+    } else {
+      setFilteredUsers([]);
+      setShowAdditionalForms(value.length > 0);
     }
   };
 
-  const handleFocus = () => {
-    // Show additional forms when the input field is focused
-    setShowAdditionalForms(true);
-  };
-
-  const handleBlur = (e) => {
-    // Hide additional forms if the input field loses focus and it's empty
-    if (!e.target.value) {
-      setShowAdditionalForms(false);
-    }
+  const filterUsers = (searchTerm) => {
+    const lowerCaseTerm = searchTerm.toLowerCase();
+    const filtered = allUsers.filter(user =>
+      user && user.userName && user.userName.toLowerCase().includes(lowerCaseTerm)
+    );
+    setFilteredUsers(filtered);
   };
 
   const handleUserSelect = (user) => {
-    // Handle user selection
-    setSpeakerData((prev) => ({
-      ...prev,
-      speakerName: `@${user.name}`, // Tag the selected user
-    }));
+    setSpeakers([...speakers, `@${user.userName}`]);
+    setInputValue(''); // Clear input after selection
     setFilteredUsers([]);
+    setShowAdditionalForms(false);
+    setSpeakerData({ speakerFirstName: '', speakerLastName: '', speakerBusinessLink: '' });
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setSpeakerData(prev => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleRemoveSpeaker = (index) => {
+    const updatedSpeakers = speakers.filter((_, i) => i !== index);
+    setSpeakers(updatedSpeakers);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    updateSpeakerData(speakerData); // Pass data to parent
+    updateSpeakerData(speakers);
+    setInputValue(''); // Clear input on submit
+    setSpeakers([]); // Optionally reset speakers if needed
   };
 
   return (
-    <div>
-      <label className="block text-gray-600 text-sm font-bold">
-        Add Speaker*
-      </label>
+    <form onSubmit={handleSubmit}>
+      <label className="block text-gray-600 text-sm font-bold">Add Speaker*</label>
       <input
-        value={speakerData.speakerName || ''}
-        onChange={handleChange}
-        onFocus={handleFocus} // Show additional forms on focus
-        onBlur={handleBlur}   // Optionally hide additional forms on blur
+        value={inputValue}
+        onChange={handleInputChange}
         className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none focus:shadow-outline placeholder:text-xs"
-        id="speaker"
-        type="text"
-        name="speakerName"
-        placeholder="Mention @ to tag a person"
+        placeholder="Type @ to mention a speaker"
       />
-      
+
+      {loading && <div className="text-gray-500">Loading users...</div>}
+
       {filteredUsers.length > 0 && (
         <ul className="border border-gray-300 rounded-md mt-2">
           {filteredUsers.map((user) => (
@@ -86,22 +111,21 @@ const AddSpeaker = ({ updateSpeakerData, initialData, users = [] }) => {
               className="p-2 cursor-pointer hover:bg-gray-200"
               onClick={() => handleUserSelect(user)}
             >
-              {user.name}
+              {user.userName}
             </li>
           ))}
         </ul>
       )}
 
       {showAdditionalForms && (
-        <div>
-          <label className="block my-4 text-gray-600 text-sm font-bold">
+        <div className="mt-4">
+          <label className="block my-2 text-gray-600 text-sm font-bold">
             Name*
             <input
-              value={speakerData.speakerFirstName || ''}
+              value={speakerData.speakerFirstName}
               className="w-full border py-2 ps-3 rounded-lg text-gray-700 leading-tight focus:outline-none focus:shadow-outline placeholder:text-xs"
-              id="speakerFirstName"
-              onChange={handleChange}
               name="speakerFirstName"
+              onChange={handleChange}
               type="text"
               placeholder="First Name"
             />
@@ -109,17 +133,17 @@ const AddSpeaker = ({ updateSpeakerData, initialData, users = [] }) => {
           <label className="block text-gray-600 text-sm font-bold">
             Family Name*
             <input
-              value={speakerData.speakerLastName || ''}
+              value={speakerData.speakerLastName}
               placeholder="Family Name"
               name="speakerLastName"
               onChange={handleChange}
               className="w-full border py-2 ps-3 rounded-lg text-gray-700 leading-tight focus:outline-none focus:shadow-outline placeholder:text-xs"
             />
           </label>
-          <label className="block my-4 text-gray-600 text-sm font-bold">
+          <label className="block my-2 text-gray-600 text-sm font-bold">
             Share their Business Profile Link
             <input
-              value={speakerData.speakerBusinessLink || ''}
+              value={speakerData.speakerBusinessLink}
               placeholder="Business Profile Link"
               name="speakerBusinessLink"
               onChange={handleChange}
@@ -128,7 +152,28 @@ const AddSpeaker = ({ updateSpeakerData, initialData, users = [] }) => {
           </label>
         </div>
       )}
-    </div>
+
+      <div className="mt-4">
+        {speakers.map((speaker, index) => (
+          <div key={index} className="flex items-center justify-between my-2">
+            <span className="bg-blue-100 text-blue-800 rounded-full px-3 py-1">
+              {speaker}
+            </span>
+            <button
+              type="button"
+              onClick={() => handleRemoveSpeaker(index)}
+              className="text-red-500 ml-2"
+            >
+              Remove
+            </button>
+          </div>
+        ))}
+      </div>
+
+      {/* <button type="submit" className="mt-4 bg-green-500 text-white py-2 px-4 rounded">
+        Submit
+      </button> */}
+    </form>
   );
 };
 
