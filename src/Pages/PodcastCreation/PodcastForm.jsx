@@ -87,8 +87,8 @@ const PodcastForm = () => {
       <h4 className="flex items-center bg-white gap-3 ps-4 h-[10%]">
         <FaAngleLeft
           className="cursor-pointer"
-          onClick={() => navigate("/podcasts")}
-        />{" "}
+          onClick={() => navigate("/podcast")}
+        />
         Create podcast
       </h4>
       <div className="h-[90%] w-full bg-white overflow-y-scroll Podcast_Top_Videos">

@@ -11,23 +11,15 @@ import React, { useState, useEffect } from "react";
 import { RiCloseLine } from "react-icons/ri";
 import { deleteReview } from "../../DeleteAPI";
 
-const dummyReplies = [
-  { reply: "This is a great product!" },
-  { reply: "I had some issues with the delivery, but the support was helpful." },
-  { reply: "Would definitely recommend to my friends!" },
-  { reply: "The quality wasn't as expected." },
-  { reply: "Amazing experience, will buy again!" },
-  { reply: "The product arrived damaged, but" }
-];
-
 const Review = (props) => {
   const [isWritingReview, setIsWritingReview] = useState(false);
   const [comments, setComments] = useState([]);
   const [rating, setRating] = useState(5); // Default rating
   const [reviewText, setReviewText] = useState("");
-  const [replyText, setReplyText] = useState({}); // State for replies
+  const [replyText, setReplyText] = useState({});
   const [replySection, setReplySection] = useState({});
   const [reviewReplies, setReviewReplies] = useState([]);
+  const [openbar, setOpenbar] = useState(false);
 
   const getUserId = () => {
     const str = document.cookie;
@@ -35,18 +27,34 @@ const Review = (props) => {
     return userKey;
   };
 
-  // Get the logged-in user's ID once
+  const openProgress = () => {
+    setOpenbar(prev => !prev);
+  };
+
   const loggedInUserId = getUserId();
 
-  function calculateMean(com) {
-    let arr = com.map((e) => e.reviewRatings);
-    if (arr.length === 0) return 0;
-    const sum = arr.reduce((acc, curr) => acc + curr, 0);
-    return sum / arr.length;
-  }
+  const calculateAverageRating = () => {
+    const totalReviews = comments.length;
+    const totalWeightedRating = comments.reduce((acc, curr) => acc + curr.reviewRatings, 0);
+    return totalReviews > 0 ? (totalWeightedRating / totalReviews).toFixed(1) : 0; // Average rating as a float
+  };
+
+  const calculateRatingsPercentage = () => {
+    const totalReviews = comments.length;
+    const ratingCounts = [0, 0, 0, 0, 0]; // Counts for 1-5 stars
+
+    comments.forEach(comment => {
+      if (comment.reviewRatings >= 1 && comment.reviewRatings <= 5) {
+        ratingCounts[comment.reviewRatings - 1]++;
+      }
+    });
+
+    return ratingCounts.map(count => {
+      return totalReviews > 0 ? (count / totalReviews) * 100 : 0;
+    });
+  };
 
   const postReview = async () => {
-    console.log("posting review");
     try {
       const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/reviews`, {
         method: "POST",
@@ -61,16 +69,11 @@ const Review = (props) => {
           userId: loggedInUserId,
         }),
       });
-      const data = await req.json();
-      console.log({ data });
-
-      // Refresh comments
+      await req.json();
       await fetchComments();
-
-      // Clear the review form
-      setRating(5); // Reset rating to default
-      setReviewText(""); // Clear the review text
-      setIsWritingReview(false); // Switch back to the review list view
+      setRating(5);
+      setReviewText("");
+      setIsWritingReview(false);
     } catch (error) {
       console.error("Error posting review:", error);
     }
@@ -99,7 +102,6 @@ const Review = (props) => {
 
   const postReply = async (commentId) => {
     try {
-      console.log("posting reply");
       const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/reply`, {
         method: "POST",
         headers: {
@@ -112,13 +114,8 @@ const Review = (props) => {
           userId: loggedInUserId,
         }),
       });
-      const data = await req.json();
-      console.log({ data });
-
-      // Refresh comments to include new reply
+      await req.json();
       await fetchComments();
-
-      // Clear the reply text for that comment
       setReplyText((prev) => ({ ...prev, [commentId]: "" }));
       setReplySection(false);
     } catch (error) {
@@ -128,7 +125,6 @@ const Review = (props) => {
 
   const getReply = async (reviewId) => {
     try {
-      console.log("getting replies for review", reviewId);
       const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/reply/${reviewId}`, {
         method: "GET",
         headers: {
@@ -137,7 +133,6 @@ const Review = (props) => {
         credentials: "include",
       });
       const data = await req.json();
-      console.log("review reply");
       setReviewReplies(data.data);
     } catch (error) {
       console.error("Error fetching replies:", error);
@@ -145,10 +140,10 @@ const Review = (props) => {
   };
 
   useEffect(() => {
-    console.log("vid id is ", props.videoId);
     fetchComments();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.videoId]);
+
+  const ratingsPercentage = calculateRatingsPercentage();
 
   return (
     <React.Fragment>
@@ -199,8 +194,7 @@ const Review = (props) => {
                     {[1, 2, 3, 4, 5].map((star) => (
                       <FontAwesomeIcon
                         key={star}
-                        className={`w-5 h-5 ${star <= rating ? "text-yellow-400" : "text-gray-300"
-                          }`}
+                        className={`w-5 h-5 ${star <= rating ? "text-yellow-400" : "text-gray-300"}`}
                         icon={faStar}
                         onClick={() => setRating(star)}
                         aria-label={`${star} star`}
@@ -235,16 +229,13 @@ const Review = (props) => {
                 <div className="flex flex-wrap md:flex-nowrap justify-between items-center">
                   <div className="flex items-center gap-4">
                     <h1 className="text-xl text-violet-500">
-                      {calculateMean(comments).toFixed(1)}
+                      {calculateAverageRating()}
                     </h1>
                     <div>
                       {[1, 2, 3, 4, 5].map((star) => (
                         <FontAwesomeIcon
                           key={star}
-                          className={`w-5 h-5 ${star <= calculateMean(comments)
-                            ? "text-yellow-400"
-                            : "text-gray-300"
-                            }`}
+                          className={`w-5 h-5 ${star <= calculateAverageRating() ? "text-yellow-400" : "text-gray-300"}`}
                           icon={faStar}
                           aria-label={`${star} star`}
                         />
@@ -264,8 +255,25 @@ const Review = (props) => {
                   <FontAwesomeIcon
                     icon={faChevronDown}
                     aria-label="Expand reviews"
+                    onClick={openProgress}
                   />
                 </h1>
+                {openbar && (
+                  <div className="p-4">
+                    {ratingsPercentage.map((percentage, index) => (
+                      <div key={index} className="flex items-center justify-between my-1">
+                        <span className="text-sm">{index + 1} star</span>
+                        <div className="flex-1 mx-2 bg-gray-200 rounded-full overflow-hidden">
+                          <div
+                            className="bg-yellow-400 h-3 rounded-full"
+                            style={{ width: `${percentage}%` }}
+                          ></div>
+                        </div>
+                        <span className="text-sm text-blue-600">{percentage.toFixed(1)}%</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
               <hr />
               <div>
@@ -287,24 +295,16 @@ const Review = (props) => {
                           {[1, 2, 3, 4, 5].map((star) => (
                             <FontAwesomeIcon
                               key={star}
-                              className={`w-5 h-5 ${star <= value.reviewRatings
-                                ? "text-yellow-400"
-                                : "text-gray-300"
-                                }`}
+                              className={`w-5 h-5 ${star <= value.reviewRatings ? "text-yellow-400" : "text-gray-300"}`}
                               icon={faStar}
                               aria-label={`${star} star`}
                             />
                           ))}
                         </div>
-                        <h1 className="font-normal opacity-90">
-                          ({value.reviewRatings.toFixed(1)})
-                        </h1>
+                        <h1 className="font-normal opacity-90">({value.reviewRatings.toFixed(1)})</h1>
                       </div>
-                      <h1 className="font-normal opacity-90">
-                        {value.reviewMessage}
-                      </h1>
+                      <h1 className="font-normal opacity-90">{value.reviewMessage}</h1>
 
-                      {/* Only show delete button if the logged-in user is the author of the comment */}
                       {value.sender.id === loggedInUserId && (
                         <button
                           className="text-red-500 flex items-center gap-1 cursor-pointer"
@@ -316,7 +316,6 @@ const Review = (props) => {
                         </button>
                       )}
 
-                      {/* Reply Section */}
                       <button onClick={() => {
                         setReplySection((prev) => {
                           const newState = {};
@@ -350,7 +349,6 @@ const Review = (props) => {
                             </button>
                           </div>
 
-                          {/* Display Replies */}
                           {reviewReplies.map((reply, j) => (
                             <div key={j} className="flex gap-1 items-center ml-4">
                               <img
