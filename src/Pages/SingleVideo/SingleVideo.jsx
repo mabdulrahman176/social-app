@@ -66,6 +66,23 @@ const Video = () => {
     };
   }, [videoIndex, videos]);
 
+  const shareContent = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: video && video.data ? video.data.videoDesc : 'Check this video!',
+          text: 'Watch this video!',
+          url: window.location.href,
+        });
+        console.log('Share successful!');
+      } catch (error) {
+        console.error('Error sharing:', error);
+      }
+    } else {
+      alert('Web Share API is not supported in your browser.');
+    }
+  };
+
   return (
     <Fragment>
       <section className="h-full w-full relative flex items-center bg-white">
@@ -112,25 +129,19 @@ const Video = () => {
                   className="absolute -bottom-2 p-1 text-xs bg-blue-700 rounded-full"
                 />
               </div>
-              <div
-                className="text-center cursor-pointer mt-5"
-                onClick={() => setRepModOpen(true)}
-              >
+              <div className="text-center cursor-pointer mt-5" onClick={() => setRepModOpen(true)}>
                 <p className="text-xs">
                   <BsInfoSquare className="block text-lg mx-auto" />
                   Report
                 </p>
               </div>
-              <div
-                className="text-center cursor-pointer mt-5"
-                onClick={() => setRevModOpen(true)}
-              >
+              <div className="text-center cursor-pointer mt-5" onClick={() => setRevModOpen(true)}>
                 <p className="text-xs">
                   <CiStar className="block text-2xl mx-auto" />
                   Reviews
                 </p>
               </div>
-              <div className="text-center cursor-pointer mt-5 mb-3">
+              <div className="text-center cursor-pointer mt-5 mb-3" onClick={shareContent}>
                 <p className="text-xs m-0">
                   <FaRegShareFromSquare className="block text-lg mx-auto" />
                   Share

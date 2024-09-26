@@ -235,13 +235,13 @@ function Message2() {
                   className="h-[40px] w-[40px] rounded-full"
                 />
                 <div className="flex">
-                  <div>
+                  <div className="max-w-[70%]">
                     <p className="text-sm font-medium">{e.sender !== getUserId() ? sender.name : "You"}</p>
                     <p className="text-[#686868] text-xs mt-3">{e.message}</p>
                   </div>
                 </div>
               </div>
-              <p className="text-[gray] text-[10px]">{__Time__(e.timestamp)}</p>
+              <p className="text-[gray] text-[10px] break-words">{__Time__(e.timestamp)}</p>
             </div>
           ))}
           {/* Scroll reference */}

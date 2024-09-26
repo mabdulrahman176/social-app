@@ -1,6 +1,5 @@
 import React from "react";
 import { FaAngleLeft } from "react-icons/fa";
-import { TbBrandNeteaseMusic } from "react-icons/tb";
 import { useNavigate, useLocation } from "react-router-dom";
 
 function Calendar2() {
@@ -34,7 +33,14 @@ function Calendar2() {
                 >
                   <div className="w-full">
                     <div className="flex gap-2 mt-2">
-                      <TbBrandNeteaseMusic className="bg-red-500 rounded-2xl text-white top-3 m-2 mb-0 text-3xl" />
+                      <img
+                        src={elm.poster ? elm.poster.picUrl : "/profile.png"}
+                        onLoad={(e) => (e.target.style.opacity = 1)}
+                        onError={(e) => (e.target.src = "/placeholder.png")}
+                        style={{ height: "40px", width: "40px", opacity: 0, transition: "opacity 0.3s ease" }}
+                        className="rounded-full"
+                        alt="Profile"
+                      />
                       <div>
                         <h1 className="font-semibold">{truncatedDescription}</h1>
                         <p className="font-light text-md">{elm.applicationDeadline}</p>
@@ -43,11 +49,11 @@ function Calendar2() {
                     <p className="mt-7 ps-4 text-md opacity-65">{elm.location}</p>
                     <p className="ps-4 text-sm opacity-65 mt-3">{elm.salaryRange}</p>
                     <button
-                    className="w-[90%] mx-auto block text-xs mt-7 bg-[#EEEEEE] h-10 rounded-3xl hover:bg-[#6166f331] hover:text-[#6165F3]"
-                      onClick={() => navigate("/jobdetail")}
-                    >
-                      {elm.jobType === " " ? "Apply Now" : "Applied"}
-                    </button>
+  className="w-[90%] mx-auto block text-xs mt-7 bg-[#EEEEEE] h-10 rounded-3xl hover:bg-[#6166f331] hover:text-[#6165F3]"
+  onClick={() => navigate("/jobdetail", { state: { id: elm._id, title: elm.jobTitle } })}
+>
+  {elm.jobType === " " ? "Apply Now" : "Applied"}
+</button>
                   </div>
                 </div>
               );

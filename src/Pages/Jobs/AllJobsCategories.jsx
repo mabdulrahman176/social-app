@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { TbBrandNeteaseMusic } from "react-icons/tb";
+
 import { useNavigate, Link } from "react-router-dom";
 import { fetchData } from "../../API";
 
@@ -51,21 +51,39 @@ const CalendarSearch = () => {
               >
                 <div className="w-full">
                   <div className="flex gap-2 mt-2">
-                    <TbBrandNeteaseMusic className="bg-red-500 rounded-2xl text-white top-3 m-2 mb-0 text-3xl" />
+                    <img
+                      src={elm.poster ? elm.poster.picUrl : "/profile.png"}
+                      onLoad={(e) => (e.target.style.opacity = 1)}
+                      onError={(e) => (e.target.src = "/profile.png")}
+                      style={{
+                        height: "40px",
+                        width: "40px",
+                        opacity: 0,
+                        transition: "opacity 0.3s ease",
+                      }}
+                      className="rounded-full"
+                      alt="Profile"
+                    />
                     <div>
                       <div className="relative inline-block group">
-                        <h1 className="font-semibold">{truncatedDescription}</h1>
+                        <h1 className="font-semibold">
+                          {truncatedDescription}
+                        </h1>
                         {isLong && (
                           <span className="hidden group-hover:block absolute top-full left-0 bg-white p-2 border border-gray-300 z-10 ">
                             {elm.jobTitle}
                           </span>
                         )}
                       </div>
-                      <p className="font-light text-md">{elm.applicationDeadline}</p>
+                      <p className="font-light text-md">
+                        {elm.applicationDeadline}
+                      </p>
                     </div>
                   </div>
                   <p className="mt-7 ps-4 text-md opacity-65">{elm.location}</p>
-                  <p className="ps-4 text-sm opacity-65 mt-3">{elm.salaryRange}</p>
+                  <p className="ps-4 text-sm opacity-65 mt-3">
+                    {elm.salaryRange}
+                  </p>
                   {elm.jobType === " " ? (
                     <Link
                       to={"/jobdetail"}
@@ -115,7 +133,20 @@ const CalendarSearch = () => {
             >
               <div className="w-full">
                 <div className="flex gap-2 mt-2">
-                  <TbBrandNeteaseMusic className="bg-red-500 rounded-2xl text-white top-3 m-2 mb-0 text-3xl" />
+                  {/* <TbBrandNeteaseMusic className="bg-red-500 rounded-2xl text-white top-3 m-2 mb-0 text-3xl" /> */}
+                  <img
+                    src={elm.poster ? elm.poster.picUrl : "/profile.png"}
+                    onLoad={(e) => (e.target.style.opacity = 1)}
+                    onError={(e) => (e.target.src = "/profile.png")}
+                    style={{
+                      height: "40px",
+                      width: "40px",
+                      opacity: 0,
+                      transition: "opacity 0.3s ease",
+                    }}
+                    className="rounded-full"
+                    alt="Profile"
+                  />
                   <div>
                     <div className="relative inline-block group">
                       <h1 className="font-semibold">{truncatedDescription}</h1>
@@ -125,11 +156,15 @@ const CalendarSearch = () => {
                         </span>
                       )}
                     </div>
-                    <p className="font-light text-md">{elm.applicationDeadline}</p>
+                    <p className="font-light text-md">
+                      {elm.applicationDeadline}
+                    </p>
                   </div>
                 </div>
                 <p className="mt-7 ps-4 text-md opacity-65">{elm.location}</p>
-                <p className="ps-4 text-sm opacity-65 mt-3">{elm.salaryRange}</p>
+                <p className="ps-4 text-sm opacity-65 mt-3">
+                  {elm.salaryRange}
+                </p>
                 {elm.jobType === " " ? (
                   <button
                     className="w-[90%] mx-auto block text-xs mt-7 bg-[#EEEEEE] h-10 rounded-3xl hover:bg-[#6166f331] hover:text-[#6165F3]"
@@ -174,7 +209,20 @@ const CalendarSearch = () => {
             >
               <div className="w-full">
                 <div className="flex gap-2 mt-2">
-                  <TbBrandNeteaseMusic className="bg-red-500 rounded-2xl text-white top-3 m-2 mb-0 text-3xl" />
+                  {/* <TbBrandNeteaseMusic className="bg-red-500 rounded-2xl text-white top-3 m-2 mb-0 text-3xl" /> */}
+                  <img
+                    src={elm.poster ? elm.poster.picUrl : "/profile.png"}
+                    onLoad={(e) => (e.target.style.opacity = 1)}
+                    onError={(e) => (e.target.src = "/profile.png")}
+                    style={{
+                      height: "40px",
+                      width: "40px",
+                      opacity: 0,
+                      transition: "opacity 0.3s ease",
+                    }}
+                    className="rounded-full"
+                    alt="Profile"
+                  />
                   <div>
                     <div className="relative inline-block group">
                       <h1 className="font-semibold">{truncatedDescription}</h1>
@@ -184,11 +232,15 @@ const CalendarSearch = () => {
                         </span>
                       )}
                     </div>
-                    <p className="font-light text-md">{elm.applicationDeadline}</p>
+                    <p className="font-light text-md">
+                      {elm.applicationDeadline}
+                    </p>
                   </div>
                 </div>
                 <p className="mt-7 ps-4 text-md opacity-65">{elm.location}</p>
-                <p className="ps-4 text-sm opacity-65 mt-3">{elm.salaryRange}</p>
+                <p className="ps-4 text-sm opacity-65 mt-3">
+                  {elm.salaryRange}
+                </p>
                 {elm.jobType === " " ? (
                   <button
                     className="w-[90%] mx-auto block text-xs mt-7 bg-[#EEEEEE] h-10 rounded-3xl hover:bg-[#6166f331] hover:text-[#6165F3]"
