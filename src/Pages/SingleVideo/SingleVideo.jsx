@@ -25,11 +25,18 @@ const Video = () => {
   const videoId = decodeURIComponent(src);
 
   const getVideo = async () => {
-    const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/upload/${videoId}`);
+    const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/upload/${videoId}`,{
+      credentials:'include'
+    });
     const data = await req.json();
     setVideo(data);
   };
 
+  const getUserId = () => {
+  const str = document.cookie
+  const userKey = str.split('=')[1];
+  return userKey
+}
   useEffect(() => {
     const videoState = window.history.state;
     if (videoState && videoState.videos) {

@@ -140,7 +140,7 @@ const PodcastForm = () => {
             </div>
           </div>
           <Form 
-            aunpm startioFile={audioFile} 
+            audioFile={audioFile} 
             coverImage={coverImage} 
             formState={formState} 
             setFormState={setFormState} 
