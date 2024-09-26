@@ -20,7 +20,7 @@ function SinglePodcastDetails() {
   const loc = useLocation();
 
   const [revModOpen, setRevModOpen] = useState(false);
-  const [shareModOpen, setShareModOpen] = useState(false);
+  // const [shareModOpen, setShareModOpen] = useState(false);
   const [repModOpen, setRepModOpen] = useState(false);
   const [recentdata, setRecentData] = useState([]);
   const [result, setResult] = useState({});
@@ -78,11 +78,11 @@ function SinglePodcastDetails() {
             <Model setRepModOpen={setRepModOpen} />
           </div>
         )}
-        {shareModOpen && (
+        {/* {shareModOpen && (
           <div className="h-full w-full absolute top-0 left-0 z-20 flex justify-center items-center">
-            {/* Assuming you will implement a Share modal if needed */}
+            Assuming you will implement a Share modal if needed
           </div>
-        )}
+        )} */}
         <div className="flex">
           <h4 className="flex items-center gap-3 md:ms-4 py-3">
             <FaAngleLeft

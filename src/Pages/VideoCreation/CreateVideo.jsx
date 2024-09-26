@@ -57,9 +57,7 @@ const Video = () => {
     formData.append("video", file);
     formData.append("videoDesc", videoDesc);
     formData.append("videoTags", JSON.stringify(videoTags));
-    // formData.append("videoTags", videoTags.join("#"));
     formData.append("videoVisibility", postPriv);
-    console.log({videoTags})
 
     try {
       const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/upload/${getUserId()}`, formData, {
@@ -86,17 +84,34 @@ const Video = () => {
   const descOnChange = (e) => {
     setDesc(e.target.value);
   };
+
   const tagOnChange = (e) => {
     const value = e.target.value;
     const tagsArray = value.split('#').filter(tag => tag.trim() !== '');
-    console.log({tagsArray})
-    
+
     if (tagsArray.length <= 6) {
       setTags(tagsArray);
       setTagInput(value);
       setErrorMessage("");
     } else {
       setErrorMessage("You can add a maximum of 6 tags.");
+    }
+  };
+
+  const shareContent = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: videoDesc || 'Check out this video!',
+          text: 'Watch this video I just uploaded!',
+          url: window.location.href, // You can also use a specific URL if you have it.
+        });
+        console.log('Share successful!');
+      } catch (error) {
+        console.error('Error sharing:', error);
+      }
+    } else {
+      alert('Web Share API is not supported in your browser.');
     }
   };
 
@@ -136,7 +151,7 @@ const Video = () => {
                   </div>
                 </div>
               </div>
-              <div className="flex items-center justify-center gap-2 PodcastSuccessGradient rounded-3xl w-40 h-10 ">
+              <div className="flex items-center justify-center gap-2 PodcastSuccessGradient rounded-3xl w-40 h-10 " onClick={shareContent}>
                 <FaShareFromSquare size={20} className="text-white" />
                 <p className="text-white">Share</p>
               </div>
@@ -170,7 +185,7 @@ const Video = () => {
               />
               <label
                 htmlFor="video-upload"
-                className="bg-[#eff0fe] w-28 whitespace-nowrap h-8 rounded-xl text-[blue] flex items-center justify-center  cursor-pointer"
+                className="bg-[#eff0fe] w-28 whitespace-nowrap h-8 rounded-xl text-[blue] flex items-center justify-center cursor-pointer"
               >
                 Upload Video
               </label>
@@ -233,15 +248,15 @@ const Video = () => {
               className="mb-2 py-1 text-gray-400 ps-3 text-sm outline-none border-none"
               placeholder="Add Description ........"
             />
-           <input
-  value={tagInput} // Bind the input value to state
-  onChange={tagOnChange}
-  type="text"
-  className="mb-2 py-1 text-gray-400 ps-3 text-sm outline-none border-none"
-  placeholder="Add Tags (use # to separate) ........"
-  disabled={videoTags.length >= 7} // Disable input if 6 tags are present
-/>
-            <div className="w-full flex items-center justify-center  h-[80%] rounded-lg relative">
+            <input
+              value={tagInput}
+              onChange={tagOnChange}
+              type="text"
+              className="mb-2 py-1 text-gray-400 ps-3 text-sm outline-none border-none"
+              placeholder="Add Tags (use # to separate) ........"
+              disabled={videoTags.length >= 6}
+            />
+            <div className="w-full flex items-center justify-center h-[80%] rounded-lg relative">
               {postPrivShow && (
                 <div
                   className="w-[90%] h-[60%] absolute top-2 bg-white rounded-xl z-30"

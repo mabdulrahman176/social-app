@@ -17,7 +17,7 @@ function Apply() {
 
   const handleApply = ()=>{
     JobAppliedStates.setJobAppliedSuccess(true)
-    navigate('/jobdetail');
+    navigate('/jobapplysuccess');
   }
 
 

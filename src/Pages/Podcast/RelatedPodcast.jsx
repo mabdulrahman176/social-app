@@ -37,6 +37,7 @@ const RelatedPodcast = () => {
           <IoBookmarkOutline className="absolute right-1 top-1" />
           <div className="absolute bottom-1 left-1">
             <p className="text-sm">{elm.episodeTitle}</p>
+            <p className="text-sm">{elm.user ? elm.user.name : ""}</p>
             <p className="text-xs flex gap-1 items-center">
               <CiPlay1 /> {elm.podcastType}
             </p>

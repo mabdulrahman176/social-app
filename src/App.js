@@ -50,6 +50,7 @@ import Personaldetail from './Pages/Profile/Personaldetail.jsx';
 import DevicePermissions from './Pages/Settings/DevicePermissions.jsx';
 import Personaldetail2 from './Pages/Profile/Personaldetail2.jsx';
 import Search from './Components/Navbar/Saerch.jsx';
+import JobAppliedSuccess from './Pages/Jobs/JobAppliedSuccess.jsx';
 
 
 const App = () => {
@@ -98,6 +99,7 @@ const App = () => {
           <Route path="/singlecategory" element={<SingleCategory />} />
           <Route path="/jobdetail" element={<JobDetail />} />
           <Route path="/jobapply" element={<JobApply />} />
+          <Route path='/jobapplysuccess' element={<JobAppliedSuccess />}/>
           <Route path="/createVideo" element={<CreateVideo />} />
           <Route path="/filters" element={<Filters />} />
           <Route path="/filterpodcast" element={<FilterPodcast />} />

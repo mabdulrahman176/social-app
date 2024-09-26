@@ -13,23 +13,22 @@ const JobCreationform = () => {
   const [loading, setLoading] = useState(false);
 
   const getUserId = () => {
-    const str = document.cookie
+    const str = document.cookie;
     const userKey = str.split('=')[1];
-    return userKey
-  }
+    return userKey;
+  };
 
   const handleSubmit = async () => {
-    setLoading(true); // Show spinner
+    setLoading(true);
     console.log("submitting");
     
-    // Convert languages and skills strings to arrays
     const languages = state.languages.length > 0 ? convertStringToArray(state.languages) : [];
     const skills = state.skills.length > 0 ? convertStringToArray(state.skills) : [];
     const dataToSubmit = {
       ...state,
       languages,
       skills,
-      userId: getUserId()
+      userId: getUserId(),
     };
 
     try {
@@ -45,19 +44,15 @@ const JobCreationform = () => {
       const d = await req.json();
       console.log(d);
       console.log(dataToSubmit);
-
-      // Update the context state
       JobStates.setJobSubmitted(!JobStates.jobSubmitted);
-
-      // Navigate to another page if needed
+      // Optionally navigate to another page
       // navigate("/jobs");
     } catch (error) {
       console.error("Error submitting job:", error);
     } finally {
-      setLoading(false); // Hide spinner
+      setLoading(false);
     }
   };
-
 
   const _onChange_ = (e) => {
     const { name, value } = e.target;
@@ -68,7 +63,6 @@ const JobCreationform = () => {
   };
 
   function convertStringToArray(str) {
-    // Split the string by commas and trim any whitespace
     return str
       .split(",")
       .map((item) => item.trim())
@@ -77,8 +71,7 @@ const JobCreationform = () => {
 
   return (
     <div className="bg-white h-full w-full">
-       {/* Spinner overlay */}
-       {loading && (
+      {loading && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center">
           <div className="spinner-border text-white" role="status">
             <span className="sr-only">Loading...</span>
@@ -89,9 +82,10 @@ const JobCreationform = () => {
         <FaAngleLeft
           className="cursor-pointer"
           onClick={() => navigate("/jobs")}
-        />{" "}
+        />
         Job Creation
       </h4>
+      
       <div className="flex flex-wrap justify-between overflow-y-scroll Podcast_Top_Videos h-[90%] w-[90%] mx-auto">
         <div className="sm:w-[40%] w-[45%]">
           <label
@@ -105,8 +99,10 @@ const JobCreationform = () => {
             onChange={_onChange_}
             id="jobtitle"
             name="jobTitle"
+            required
             placeholder="Enter title"
             className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
+          
           />
         </div>
 
@@ -117,17 +113,20 @@ const JobCreationform = () => {
           >
             Education Level *
           </label>
-              <select
+          <select
             onChange={_onChange_}
             id="education"
             name="educationLevel"
+            required
             className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none text-xs focus:shadow-outline"
+           
           >
+            <option value="">Select Education Level</option>
             <option value="high-school">High School</option>
-            <option value="bachelor's- degree">Bachelor's Degree</option>
-            <option value="associate Degree">Associate Degree</option>
-            <option value="master degree">Master Degree</option>
-            <option value="ph.d-or-doctorate Degree">Ph.D. or Doctorate</option>
+            <option value="bachelor's-degree">Bachelor's Degree</option>
+            <option value="associate-degree">Associate Degree</option>
+            <option value="master-degree">Master Degree</option>
+            <option value="phd-or-doctorate-degree">Ph.D. or Doctorate</option>
             <option value="professional-certification">Professional Certification</option>
             <option value="other">Other</option>
           </select>
@@ -147,6 +146,7 @@ const JobCreationform = () => {
             rows="4"
             className="w-full md:w-80 rounded-md border focus:outline-none focus:ring-2 focus:ring-slate-600"
             placeholder="Enter description"
+            required
           ></textarea>
         </div>
 
@@ -157,37 +157,21 @@ const JobCreationform = () => {
           >
             Company Size *
           </label>
-             <select
+          <select
             onChange={_onChange_}
             id="companysize"
             name="companySize"
             className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none text-xs focus:shadow-outline"
+            required
           >
-            <option value="startup">Startup(1-50 employees)</option>
-            <option value="small-business">Small Business(51-500 employees)</option>
-            <option value="meduim -enterprise">Meduim Enterprise(501-1000 employees)</option>
-            <option value="large-corporation">Large Corporation(1000+ employees)</option>
+            <option value="">Select Company Size</option>
+            <option value="startup">Startup (1-50 employees)</option>
+            <option value="small-business">Small Business (51-500 employees)</option>
+            <option value="medium-enterprise">Medium Enterprise (501-1000 employees)</option>
+            <option value="large-corporation">Large Corporation (1000+ employees)</option>
             <option value="any-size">Any Size</option>
           </select>
         </div>
-
-        {/* <div className="sm:w-[40%] w-[45%]">
-          <label
-            className="block text-gray-600 text-sm font-bold mt-4"
-            htmlFor="category"
-          >
-            Job Category *
-          </label>
-          <select
-            onChange={_onChange_}
-            id="category"
-            name="jobCategory"
-            className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none text-xs focus:shadow-outline"
-          >
-            <option value="full-time">Full time</option>
-            <option value="part-time">Part time</option>
-          </select>
-        </div> */}
 
         <div className="sm:w-[40%] w-[45%]">
           <label
@@ -201,12 +185,14 @@ const JobCreationform = () => {
             id="workplace"
             name="workplaceType"
             className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none text-xs focus:shadow-outline"
+            required
           >
+            <option value="">Select Workplace Type</option>
             <option value="on-site">On-site</option>
             <option value="remote">Remote</option>
             <option value="hybrid">Hybrid</option>
             <option value="flexible">Flexible</option>
-            <option value="location">Location Dependent</option>
+            <option value="location-dependent">Location Dependent</option>
             <option value="other">Other</option>
           </select>
         </div>
@@ -218,16 +204,15 @@ const JobCreationform = () => {
           >
             Select Location*
           </label>
-          <div className="">
-            <input
-              type="text"
-              onChange={_onChange_}
-              id="location"
-              name="location"
-              placeholder="Select location"
-              className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
-            />
-          </div>
+          <input
+            type="text"
+            onChange={_onChange_}
+            id="location"
+            name="location"
+            placeholder="Select location"
+            className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
+            required
+          />
         </div>
 
         <div className="sm:w-[40%] w-[45%]">
@@ -244,6 +229,7 @@ const JobCreationform = () => {
             name="skills"
             placeholder="Enter skills (comma separated)"
             className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
+            required
           />
         </div>
 
@@ -259,13 +245,15 @@ const JobCreationform = () => {
             id="jobtype"
             name="jobType"
             className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none text-xs focus:shadow-outline"
+            required
           >
+            <option value="">Select Job Type</option>
             <option value="full-time">Full time</option>
             <option value="part-time">Part time</option>
-            <option value="part-time">Contract</option>
-            <option value="part-time">Temporary</option>
-            <option value="part-time">Internship</option>
-            <option value="part-time">Other</option>
+            <option value="contract">Contract</option>
+            <option value="temporary">Temporary</option>
+            <option value="internship">Internship</option>
+            <option value="other">Other</option>
           </select>
         </div>
 
@@ -276,16 +264,16 @@ const JobCreationform = () => {
           >
             Application Deadline *
           </label>
-
           <input
             type="date"
             onChange={_onChange_}
             id="deadline"
             name="applicationDeadline"
-            placeholder="Enter skills (comma separated)"
             className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
+            required
           />
         </div>
+
         <div className="sm:w-[40%] w-[45%]">
           <label
             className="block text-gray-600 text-sm font-bold mt-4"
@@ -298,11 +286,13 @@ const JobCreationform = () => {
             id="experience"
             name="experienceLevel"
             className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none text-xs focus:shadow-outline"
+            required
           >
+            <option value="">Select Experience Level</option>
             <option value="entry-level">Entry-Level</option>
             <option value="mid-level">Mid-Level</option>
             <option value="senior-level">Senior-Level</option>
-            <option value="exectuive">Executive</option>
+            <option value="executive">Executive</option>
             <option value="internship">Internship</option>
             <option value="no-experience-required">No Experience required</option>
             <option value="other">Other</option>
@@ -323,6 +313,7 @@ const JobCreationform = () => {
             name="languages"
             placeholder="Enter languages (comma separated)"
             className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
+            required
           />
         </div>
 
@@ -333,12 +324,14 @@ const JobCreationform = () => {
           >
             Salary Range *
           </label>
-                 <select
+          <select
             onChange={_onChange_}
             id="salary"
             name="salaryRange"
             className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none text-xs focus:shadow-outline"
+            required
           >
+            <option value="">Select Salary Range</option>
             <option value="$300000 - below">$300000 - below</option>
             <option value="$50000 - $80000">$50000 - $80000</option>
             <option value="$80000 - $120000">$80000 - $120000</option>
@@ -353,17 +346,19 @@ const JobCreationform = () => {
           >
             Job Shift *
           </label>
-            <select
+          <select
             onChange={_onChange_}
             id="jobshift"
             name="jobShift"
             className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none text-xs focus:shadow-outline"
+            required
           >
+            <option value="">Select Job Shift</option>
             <option value="day">Day Shift</option>
-            <option value="night">Night Shift </option>
+            <option value="night">Night Shift</option>
             <option value="rotating">Rotating Shifts</option>
             <option value="domestic">Domestic Travel</option>
-            <option value="variable">Variable </option>
+            <option value="variable">Variable</option>
             <option value="other">Other</option>
           </select>
         </div>
@@ -380,10 +375,12 @@ const JobCreationform = () => {
             id="travel"
             name="travelRequirement"
             className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none text-xs focus:shadow-outline"
+            required
           >
+            <option value="">Select Travel Requirement</option>
             <option value="no-travel">No Travel</option>
             <option value="occasional">Occasional Travel</option>
-            <option value="frequent">FrequentTravel</option>
+            <option value="frequent">Frequent Travel</option>
             <option value="domestic">Domestic Travel</option>
             <option value="international">International Travel</option>
             <option value="other">Other</option>
@@ -396,19 +393,9 @@ const JobCreationform = () => {
             onClick={handleSubmit}
             disabled={loading}
           >
-             {/* {loading ? (
-              <div className="spinner-border text-white" role="status">
-                <span className="sr-only">Loading...</span>
-              </div>
-            ) : (
-              " Post Job"
-            )} */}
-           Post Job
+            Post Job
           </button>
         </div>
-
-        <br />
-        <br />
       </div>
     </div>
   );
