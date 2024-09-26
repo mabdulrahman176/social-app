@@ -42,7 +42,7 @@ const RelatedPodcast = () => {
             </p>
           </div>
         </div>
-        <img src={elm.picUrl ? elm.picUrl :img} alt={`Img-${ind}`} className="h-full w-full rounded-lg" />
+        <img src={elm.picUrl ? elm.picUrl : img} alt={`Img-${ind}`} className="h-full w-full rounded-lg" />
       </Link>
     ))}
   </div>

@@ -117,14 +117,20 @@ const JobCreationform = () => {
           >
             Education Level *
           </label>
-          <input
-            type="text"
+              <select
             onChange={_onChange_}
             id="education"
             name="educationLevel"
-            placeholder="Enter Education"
-            className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
-          />
+            className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none text-xs focus:shadow-outline"
+          >
+            <option value="high-school">High School</option>
+            <option value="bachelor's- degree">Bachelor's Degree</option>
+            <option value="associate Degree">Associate Degree</option>
+            <option value="master degree">Master Degree</option>
+            <option value="ph.d-or-doctorate Degree">Ph.D. or Doctorate</option>
+            <option value="professional-certification">Professional Certification</option>
+            <option value="other">Other</option>
+          </select>
         </div>
 
         <div className="sm:w-[40%] w-[45%]">
@@ -151,17 +157,21 @@ const JobCreationform = () => {
           >
             Company Size *
           </label>
-          <input
-            type="text"
+             <select
             onChange={_onChange_}
             id="companysize"
             name="companySize"
-            placeholder="Enter Company Size"
-            className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
-          />
+            className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none text-xs focus:shadow-outline"
+          >
+            <option value="startup">Startup(1-50 employees)</option>
+            <option value="small-business">Small Business(51-500 employees)</option>
+            <option value="meduim -enterprise">Meduim Enterprise(501-1000 employees)</option>
+            <option value="large-corporation">Large Corporation(1000+ employees)</option>
+            <option value="any-size">Any Size</option>
+          </select>
         </div>
 
-        <div className="sm:w-[40%] w-[45%]">
+        {/* <div className="sm:w-[40%] w-[45%]">
           <label
             className="block text-gray-600 text-sm font-bold mt-4"
             htmlFor="category"
@@ -177,7 +187,7 @@ const JobCreationform = () => {
             <option value="full-time">Full time</option>
             <option value="part-time">Part time</option>
           </select>
-        </div>
+        </div> */}
 
         <div className="sm:w-[40%] w-[45%]">
           <label
@@ -195,6 +205,9 @@ const JobCreationform = () => {
             <option value="on-site">On-site</option>
             <option value="remote">Remote</option>
             <option value="hybrid">Hybrid</option>
+            <option value="flexible">Flexible</option>
+            <option value="location">Location Dependent</option>
+            <option value="other">Other</option>
           </select>
         </div>
 
@@ -249,6 +262,10 @@ const JobCreationform = () => {
           >
             <option value="full-time">Full time</option>
             <option value="part-time">Part time</option>
+            <option value="part-time">Contract</option>
+            <option value="part-time">Temporary</option>
+            <option value="part-time">Internship</option>
+            <option value="part-time">Other</option>
           </select>
         </div>
 
@@ -285,6 +302,10 @@ const JobCreationform = () => {
             <option value="entry-level">Entry-Level</option>
             <option value="mid-level">Mid-Level</option>
             <option value="senior-level">Senior-Level</option>
+            <option value="exectuive">Executive</option>
+            <option value="internship">Internship</option>
+            <option value="no-experience-required">No Experience required</option>
+            <option value="other">Other</option>
           </select>
         </div>
 
@@ -312,15 +333,17 @@ const JobCreationform = () => {
           >
             Salary Range *
           </label>
-
-          <input
-            type="text"
+                 <select
             onChange={_onChange_}
             id="salary"
             name="salaryRange"
-            placeholder="Enter Salary Range"
-            className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
-          />
+            className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none text-xs focus:shadow-outline"
+          >
+            <option value="$300000 - below">$300000 - below</option>
+            <option value="$50000 - $80000">$50000 - $80000</option>
+            <option value="$80000 - $120000">$80000 - $120000</option>
+            <option value="$120000 and above">$120000 and above</option>
+          </select>
         </div>
 
         <div className="sm:w-[40%] w-[45%]">
@@ -330,15 +353,19 @@ const JobCreationform = () => {
           >
             Job Shift *
           </label>
-
-          <input
-            type="text"
+            <select
             onChange={_onChange_}
             id="jobshift"
             name="jobShift"
-            placeholder="Job Shift Type"
-            className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
-          />
+            className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none text-xs focus:shadow-outline"
+          >
+            <option value="day">Day Shift</option>
+            <option value="night">Night Shift </option>
+            <option value="rotating">Rotating Shifts</option>
+            <option value="domestic">Domestic Travel</option>
+            <option value="variable">Variable </option>
+            <option value="other">Other</option>
+          </select>
         </div>
 
         <div className="sm:w-[40%] w-[45%]">
@@ -354,9 +381,12 @@ const JobCreationform = () => {
             name="travelRequirement"
             className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none text-xs focus:shadow-outline"
           >
-            <option value="none">None</option>
-            <option value="occasionally">Occasionally</option>
-            <option value="frequently">Frequently</option>
+            <option value="no-travel">No Travel</option>
+            <option value="occasional">Occasional Travel</option>
+            <option value="frequent">FrequentTravel</option>
+            <option value="domestic">Domestic Travel</option>
+            <option value="international">International Travel</option>
+            <option value="other">Other</option>
           </select>
         </div>
 
