@@ -25,7 +25,7 @@ const Success = ({ podcastId }) => { // Accept podcastId as a prop
       try {
         await navigator.share({
           title: "Check out this podcast!",
-          url: podcastLink,
+          url: window.location.href,
         });
         console.log('Share successful!');
       } catch (error) {

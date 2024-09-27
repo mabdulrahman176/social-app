@@ -45,7 +45,6 @@ import Filters from './Pages/VideoFilter/Filters.jsx';
 import FilterPodcast from './Pages/PodcastFilter/FilterPodcast.jsx';
 import FilterEvent from './Pages/EventFilter/FilterEvent.jsx';
 import FilterJob from './Pages/JobsFilter/FilterJob.jsx';
-import ProfileVideo from './Pages/Profile/ProfileVideo.jsx';
 import Personaldetail from './Pages/Profile/Personaldetail.jsx';
 import DevicePermissions from './Pages/Settings/DevicePermissions.jsx';
 import Personaldetail2 from './Pages/Profile/Personaldetail2.jsx';
@@ -68,7 +67,7 @@ const App = () => {
         <Route path='/search'element={<Search/>} />
           <Route path="/videos" element={<Feed />} />
           <Route path="/video/:src" element={<SingleVideo />} />
-          <Route path="/ProfileVideo/:src" element={<ProfileVideo />} />
+          {/* <Route path="/ProfileVideo/:src" element={<ProfileVideo />} /> */}
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/profile" element={<ProfilePublic />} />
           <Route path="/personaldetails" element={<Personaldetail />} />

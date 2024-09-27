@@ -37,35 +37,28 @@ function Apply() {
           <div className="md:w-[40%] w-[80%] mx-auto sm:mx-0">
             <form action="" className="mt-8">
               <label htmlFor="" className="block text-sm mb-2">
-                First Name
+                 Name
               </label>
               <input
                 type="text"
-                placeholder="Enter Your First Name"
+                required
+                placeholder="Enter Your  Name"
                 className="placeholder:text-xs ms-3 ps-3 border rounded-md w-full py-2"
                 value={fname}
                 onChange={(e) => setFname(e.target.value)}
               />
-              <label htmlFor="" className="block text-sm mt-5 mb-2">
-                Email Address
+                          <label htmlFor="" className="block text-sm mt-5 mb-2">
+                Phone Country Code
               </label>
               <input
                 type="text"
-                placeholder="Enter Your Email Address"
+                required
+                placeholder="Enter Your Country Code"
                 className="placeholder:text-xs ms-3 ps-3 border rounded-md w-full py-2"
-                value={mail}
-                onChange={(e) => setMail(e.target.value)}
+                value={code}
+                onChange={(e) => setCode(e.target.value)}
               />
-              <label htmlFor="" className="block text-sm mb-2 mt-5">
-                Phone Number
-              </label>
-              <input
-                type="text"
-                placeholder="Enter Your Phone Number"
-                className="placeholder:text-xs ms-3 ps-3 border rounded-md w-full py-2"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-              />
+
               <p className="mt-5 text-sm">Upload resume*</p>
               <div className="h-[7vh] w-[70%] flex justify-center items-center px-5 rounded-3xl bg-[#e7e7f5] text-[blue] mt-2 relative text-xs ms-3">
                 Upload resume
@@ -76,41 +69,44 @@ function Apply() {
 
           <div className="second md:w-[45%] w-[80%] mx-auto sm:mx-0">
             <form action="" className="mt-8">
-            <label htmlFor="" className="block text-sm mb-2">
-                First Name
-              </label>
-              <input
-                type="text"
-                placeholder="Enter Your First Name"
-                className="placeholder:text-xs ms-3 ps-3 border rounded-md w-full py-2"
-                value={lname}
-                onChange={(e) => setLname(e.target.value)}
-              />
-              <label htmlFor="" className="block text-sm mt-5 mb-2">
+            <label htmlFor="" className="block text-sm mt-5 mb-2">
                 Email Address
               </label>
               <input
                 type="text"
-                placeholder="Enter Your Country Code"
+                placeholder="Enter Your Email Address"
                 className="placeholder:text-xs ms-3 ps-3 border rounded-md w-full py-2"
-                value={code}
-                onChange={(e) => setCode(e.target.value)}
+                value={mail}
+                required
+                onChange={(e) => setMail(e.target.value)}
+              />
+              <label htmlFor="" className="block text-sm mb-2 mt-5">
+                Phone Number
+              </label>
+              <input
+                type="text"
+                required
+                placeholder="Enter Your Phone Number"
+                className="placeholder:text-xs ms-3 ps-3 border rounded-md w-full py-2"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
               />
               <p className="block text-sm mt-5 mb-2">
                 Additional Details
               </p>
               <input
                 type="text"
-                className="placeholder:text-xs border-b ms-3 w-[100%] outline-none"
+
+               className="placeholder:text-xs border-b w-full outline-none ms-3 ps-3 mb-10"
                 placeholder="Where do you live?"
               />
-              <p className="text-[gray] text-sm mt-5 ms-3">
+              {/* <p className="text-[gray] text-sm mt-5 ms-3">
                 How many year of experiance do you have with figma?
               </p>
               <input
                 type="text"
                 className="placeholder:text-xs border-b w-full outline-none ms-3 ps-3 mb-10"
-              />
+              /> */}
             </form>
 
            <div className="flex items-center justify-between">

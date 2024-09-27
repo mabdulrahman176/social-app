@@ -39,7 +39,7 @@ const RelatedPodcast = () => {
             <p className="text-sm">{elm.episodeTitle}</p>
             <p className="text-sm">{elm.user ? elm.user.name : ""}</p>
             <p className="text-xs flex gap-1 items-center">
-              <CiPlay1 /> {elm.podcastType}
+              <CiPlay1 /> {elm.podcastDuration}
             </p>
           </div>
         </div>

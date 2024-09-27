@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { CiPlay1, CiEdit, CiTrash } from "react-icons/ci"; // Import icons
-import ProfileVideo from "./ProfileVideo"; // Import the ProfileVideo component
+// import ProfileVideo from "./ProfileVideo"; // Import the ProfileVideo component
 import { useNavigate } from "react-router-dom";
 import { deleteVideo} from '../../DeleteAPI'
 
@@ -11,7 +11,7 @@ const AllVideos = (props) => {
   const [visibleId, setVisibleId] = useState(null); // State for showing icons on hover
   const [deleteId, setDeleteId] = useState(''); // State for showing icons on hover
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); // State for delete modal
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false); // State for edit modal
+
   const [videoToDelete, setVideoToDelete] = useState(null); // State for the video to delete
   const navigate = useNavigate();
 
@@ -32,7 +32,7 @@ const AllVideos = (props) => {
     console.log({video})
     if (action === "edit") {
       setSelectedVideo(video);
-      setIsEditModalOpen(true); // Open the edit modal
+  
     } else if (action === "delete") {
 
       setVideoToDelete(video._id); // Set the video to delete
@@ -84,12 +84,12 @@ const AllVideos = (props) => {
                 {/* Show Edit/Delete icons on hover */}
                 {visibleId === video._id && (
                   <div className="absolute top-2 right-2 flex flex-col space-y-2">
-                    <CiEdit
+                    {/* <CiEdit
                       className="text-white text-3xl cursor-pointer hover:text-gray-300"
                       onClick={(e) => handleIconClick(e, "edit", video)} // Trigger edit action
-                    />
+                    /> */}
                     <CiTrash
-                      className="text-white text-3xl cursor-pointer hover:text-gray-300"
+                      className="text-red-600 text-3xl cursor-pointer hover:text-red-700"
                       onClick={(e) => handleIconClick(e, "delete", video)} // Trigger delete action
                     />
                   </div>
@@ -112,7 +112,7 @@ const AllVideos = (props) => {
             >
               &times;
             </button>
-            <ProfileVideo src={selectedVideo.videoUrl} /> {/* Pass videoUrl */}
+            {/* <ProfileVideo src={selectedVideo.videoUrl} /> Pass videoUrl */}
           </div>
         </div>
       )}
@@ -142,11 +142,11 @@ const AllVideos = (props) => {
       )}
 
       {/* Edit Modal */}
-      {isEditModalOpen && (
+      {/* {isEditModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center">
           <div className="bg-white p-4 rounded-lg">
             <p>Edit Video Details</p>
-            {/* Add edit form here */}
+          
             <div className="flex justify-end mt-4">
               <button
                 className="mr-2 bg-gray-500 text-white px-4 py-2 rounded"
@@ -158,7 +158,7 @@ const AllVideos = (props) => {
                 className="linear_gradient text-white px-4 py-2 rounded"
                 onClick={() => {
                   console.log("Editing video...");
-                  setIsEditModalOpen(false); // Close modal after edit action
+                  setIsEditModalOpen(false); 
                 }}
               >
                 Save Changes
@@ -166,7 +166,7 @@ const AllVideos = (props) => {
             </div>
           </div>
         </div>
-      )}
+      )} */}
     </React.Fragment>
   );
 };

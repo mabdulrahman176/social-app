@@ -21,6 +21,23 @@ const RelatedEvent = () => {
       getData();
     }, []);
 
+    const handleShare = async (e) => {
+      e.stopPropagation(); 
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: "Check out this podcast!",
+            url: window.location.href,
+          });
+          console.log('Share successful!');
+        } catch (error) {
+          console.error('Error sharing:', error);
+        }
+      } else {
+        alert('Web Share API is not supported in your browser.');
+      }
+    };
+
   return (
     <div className="mt-3 flex flex-wrap  gap-1 w-[93%] mx-auto">
     {newcard.map((data, i) => (
@@ -44,7 +61,7 @@ const RelatedEvent = () => {
               >
                 Buy tickets
               </Link>
-              <button className="md:px-7 py-2 flex justify-center w-[30%] md:w-auto JobButtonBgBlur text-xs text-white rounded-full">
+              <button className="md:px-7 py-2 flex justify-center w-[30%] md:w-auto JobButtonBgBlur text-xs text-white rounded-full" onClick={handleShare}>
                 <FaRegShareFromSquare className="text-lg" />
               </button>
             </div>

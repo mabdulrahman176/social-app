@@ -35,10 +35,48 @@ const CalendarSearch = (props) => {
   };
 
   useEffect(() => {
-    console.log("in single job s component");
+    console.log("in single job component");
     console.log(props.jobs);
     setJobs(props.jobs);
   }, [props.jobs]);
+
+  const formatDate = (dateString) => {
+    if (!dateString) return "Invalid date"; // Return a message for undefined dates
+
+    // Normalize the date input by replacing dashes with slashes
+    const normalizedDateString = dateString.replace(/[-]/g, "/");
+
+    // Split the date parts
+    const dateParts = normalizedDateString.split("/");
+
+    let day, month, year;
+
+    // Check for different formats
+    if (dateParts.length === 3) {
+      if (dateParts[0].length === 4) {
+        // Format: YYYY/MM/DD
+        year = dateParts[0];
+        month = dateParts[1] - 1; // Month is zero-indexed
+        day = dateParts[2];
+      } else {
+        // Format: DD/MM/YYYY
+        day = dateParts[0];
+        month = dateParts[1] - 1; // Month is zero-indexed
+        year = dateParts[2];
+      }
+
+      const date = new Date(year, month, day);
+      if (
+        date.getDate() === parseInt(day) &&
+        date.getMonth() === month &&
+        date.getFullYear() === parseInt(year)
+      ) {
+        return `${("0" + day).slice(-2)}/${("0" + (month + 1)).slice(-2)}/${year}`;
+      }
+    }
+
+    return "Invalid date format";
+  };
 
   return (
     <Fragment>
@@ -54,15 +92,28 @@ const CalendarSearch = (props) => {
               >
                 <div className="w-full">
                   <div className="flex gap-2 mt-2">
-                    <TbBrandNeteaseMusic className="bg-red-500 rounded-2xl text-white top-3 m-2 mb-0 text-3xl" />
+                    {/* Display poster image */}
+                    <img
+                      src={elm.poster ? elm.poster.picUrl : "/profile.png"}
+                      onLoad={(e) => (e.target.style.opacity = 1)}
+                      onError={(e) => (e.target.src = "/profile.png")}
+                      style={{
+                        height: "40px",
+                        width: "40px",
+                        opacity: 0,
+                        transition: "opacity 0.3s ease",
+                      }}
+                      className="rounded-full"
+                      alt="Profile"
+                    />
                     <div>
                       <h1 className="font-semibold">{elm.jobTitle}</h1>
                       <p className="font-light text-md">
-                        {elm.jobDescription && elm.jobDescription.slice(0, 14) + "..."}
+                        {formatDate(elm.applicationDeadline)}
                       </p>
                     </div>
                   </div>
-                  <p className="mt-7 ps-4 text-md opacity-65">{elm.jobType}</p>
+                  <p className="mt-7 ps-4 text-md opacity-65">{elm.location}({elm.workplaceType})</p>
                   <p className="ps-4 text-sm opacity-65 mt-3">{elm.salaryRange}</p>
                   {elm.jobType === " " ? (
                     <Link

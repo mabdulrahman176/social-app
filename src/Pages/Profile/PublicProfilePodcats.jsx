@@ -44,7 +44,22 @@ const ApplePodcast = (props) => {
     setpodcast(props.podcast);
     console.log({ podcast });
   }, [props.podcast]);
-
+  const handleShare = async (e) => {
+    e.stopPropagation(); 
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: "Check out this podcast!",
+          url: window.location.href,
+        });
+        console.log('Share successful!');
+      } catch (error) {
+        console.error('Error sharing:', error);
+      }
+    } else {
+      alert('Web Share API is not supported in your browser.');
+    }
+  };
   return (
     <Fragment>
       <div className="overflow-y-scroll Podcast_Top_Videos h-full">
@@ -55,19 +70,20 @@ const ApplePodcast = (props) => {
               className="md:h-[45vh] h-[37vh] w-[32.4%] rounded-lg border relative text-white PPPodcast"
               onMouseEnter={() => setVisibleId(elm._id)}
               onMouseLeave={() => setVisibleId(null)}
-              onClick={() => navigate(`/podcastdetails`)}
+              onClick={() => navigate(`/podcastdetails`, { state: { id: elm._id } })}
+
             >
               <IoBookmarkOutline className="absolute right-2 top-4 text-2xl" />
               <div className="absolute bottom-1 px-2 w-full">
                 <div className="VideosBgBlured rounded-lg px-3 pt-5">
-                  <p className="text-2xl font-medium">{elm.podcastTitle}</p>
-                  <p className="text-lg opacity-60">{elm.userName}</p>
+                  <p className="text-2xl font-medium">{elm.episodeTitle}</p>
+                  <p className="text-sm">{elm.user ? elm.user.name : ""}</p>
                   <div className="flex justify-between">
                     <p className="flex items-center gap-1 text-md">
-                      <CiPlay1 className="text-lg" /> {elm.mint}
+                      <CiPlay1 className="text-lg" />{elm.podcastDuration}
                     </p>
-                    <p>
-                      <FaRegShareFromSquare className="text-2xl -mt-3" />
+                    <p onClick={handleShare}>
+                      <FaRegShareFromSquare className="text-2xl -mt-3 cursor-pointer" />
                     </p>
                   </div>
                 </div>
@@ -80,7 +96,7 @@ const ApplePodcast = (props) => {
               {visibleId === elm._id && (
                 <div className="absolute top-14 right-2 flex flex-col space-y-2">
                   <CiTrash
-                    className="text-white text-3xl cursor-pointer hover:text-red-600"
+                    className="text-red-600 text-3xl cursor-pointer hover:text-red-600"
                     onClick={(e) => handleDeleteClick(e, elm._id)} // Pass event and id
                   />
                 </div>
