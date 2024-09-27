@@ -12,20 +12,20 @@ const AddSpeaker = ({ updateSpeakerData, initialData }) => {
     speakerLastName: '',
     speakerBusinessLink: '',
   });
-  const [loading, setLoading] = useState(false); // Loading state for fetching users
+  const [loading, setLoading] = useState(false);
 
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
   useEffect(() => {
     const fetchUsers = async () => {
-      setLoading(true); // Start loading
+      setLoading(true);
       try {
         const response = await axios.get(`${API_BASE_URL}/users`);
         setAllUsers(response.data.data || []);
       } catch (error) {
         console.error("Error fetching users:", error);
       } finally {
-        setLoading(false); // Stop loading
+        setLoading(false);
       }
     };
     fetchUsers();
@@ -64,8 +64,8 @@ const AddSpeaker = ({ updateSpeakerData, initialData }) => {
   };
 
   const handleUserSelect = (user) => {
-    setSpeakers([...speakers, `@${user.userName}`]);
-    setInputValue(''); // Clear input after selection
+    setSpeakers([...speakers, { id: user.id, userName: `@${user.userName}` }]);
+    setInputValue('');
     setFilteredUsers([]);
     setShowAdditionalForms(false);
     setSpeakerData({ speakerFirstName: '', speakerLastName: '', speakerBusinessLink: '' });
@@ -87,8 +87,8 @@ const AddSpeaker = ({ updateSpeakerData, initialData }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     updateSpeakerData(speakers);
-    setInputValue(''); // Clear input on submit
-    setSpeakers([]); // Optionally reset speakers if needed
+    setInputValue('');
+    setSpeakers([]);
   };
 
   return (
@@ -155,9 +155,9 @@ const AddSpeaker = ({ updateSpeakerData, initialData }) => {
 
       <div className="mt-4">
         {speakers.map((speaker, index) => (
-          <div key={index} className="flex items-center justify-between my-2">
+          <div key={speaker.id} className="flex items-center justify-between my-2">
             <span className="bg-blue-100 text-blue-800 rounded-full px-3 py-1">
-              {speaker}
+              {speaker.userName}
             </span>
             <button
               type="button"
@@ -169,10 +169,6 @@ const AddSpeaker = ({ updateSpeakerData, initialData }) => {
           </div>
         ))}
       </div>
-
-      {/* <button type="submit" className="mt-4 bg-green-500 text-white py-2 px-4 rounded">
-        Submit
-      </button> */}
     </form>
   );
 };

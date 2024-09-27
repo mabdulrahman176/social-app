@@ -11,45 +11,46 @@ function Jobdetail() {
   const loc = useLocation();
   const navigate = useNavigate();
   const [job, setJob] = useState(null);
-  const [poster,setPoster] = useState(null);
-  // Initialize job as null
-  const [loading, setLoading] = useState(true); // Loading state for better UX
-
-useEffect(() => {
-  const getData = async () => {
-    if (loc.state && loc.state.id) {
-      try {
-        console.log(`Fetching job with ID: ${loc.state.id}`); // Log job ID
-        const result_ = await getJob(loc.state.id);
-        console.log("Fetched job data poster:", result_.poster); // Log fetched data
-        setJob(result_.job);
-        setPoster(result_.poster)
-      } catch (error) {
-        console.error("Error fetching job data:", error);
-      } finally {
+  const [poster, setPoster] = useState(null);
+  const [loading, setLoading] = useState(true);
+  console.log("single job details ", job);
+  useEffect(() => {
+    const getData = async () => {
+      if (loc.state && loc.state.id) {
+        try {
+          const result_ = await getJob(loc.state.id);
+          console.log("Fetched job data poster:", result_.poster); // Log fetched data
+          setJob(result_.job);
+          setPoster(result_.poster);
+        } catch (error) {
+          console.error("Error fetching job data:", error);
+        } finally {
+          setLoading(false);
+        }
+      } else {
+        console.error("No job ID provided in location state");
         setLoading(false);
       }
-    } else {
-      console.error("No job ID provided in location state");
-      setLoading(false);
-    }
-  };
-  getData();
-}, [loc.state]);
+    };
+    getData();
+  }, [loc.state]);
+  console.log("Location state in Jobdetail:", loc.state);
 
   const getJob = async (id) => {
-    const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/jobs/${id}`, {
-      method: "GET",
-    });
-  
+    const req = await fetch(
+      `${process.env.REACT_APP_API_BASE_URL}/jobs/${id}`,
+      {
+        method: "GET",
+      }
+    );
+
     if (!req.ok) {
       throw new Error(`HTTP error! status: ${req.status}`);
     }
-  
+
     const d = await req.json();
     return d;
   };
-  
 
   let { JobAppliedStates } = useContext(myContext);
 
@@ -60,17 +61,17 @@ useEffect(() => {
 
   if (!job) {
     return <div>No job found</div>; // Handle case when job is not found
-  };
+  }
 
   const formatDate = (dateString) => {
     // Normalize the date input by replacing dashes with slashes
-    const normalizedDateString = dateString.replace(/[-]/g, '/');
-  
+    const normalizedDateString = dateString.replace(/[-]/g, "/");
+
     // Split the date parts
-    const dateParts = normalizedDateString.split('/');
-  
+    const dateParts = normalizedDateString.split("/");
+
     let day, month, year;
-  
+
     // Check for different formats
     if (dateParts.length === 3) {
       // Check if the first part is a year (YYYY/MM/DD) or day (DD/MM/YYYY)
@@ -85,26 +86,34 @@ useEffect(() => {
         month = dateParts[1] - 1; // Month is zero-indexed
         year = dateParts[2];
       }
-  
+
       // Create a new Date object
       const date = new Date(year, month, day);
-  
+
       // Ensure the date is valid
-      if (date.getDate() == day && date.getMonth() == month && date.getFullYear() == year) {
+      if (
+        date.getDate() === day &&
+        date.getMonth() === month &&
+        date.getFullYear() === year
+      ) {
         // Format and return the date in DD/MM/YYYY
-        return `${('0' + day).slice(-2)}/${('0' + (month + 1)).slice(-2)}/${year}`;
+        return `${("0" + day).slice(-2)}/${("0" + (month + 1)).slice(
+          -2
+        )}/${year}`;
       }
     }
-  
-  
-    return 'Invalid date format';
+
+    return "Invalid date format";
   };
 
   return (
     <div className="h-full w-full bg-white relative">
       {JobAppliedStates.jobAppliedSuccess && <JobAppliedSuccess />}
       <h4 className="flex items-center gap-3 ms-4 h-[10%]">
-        <FaAngleLeft className="cursor-pointer" onClick={() => navigate("/jobs")} />
+        <FaAngleLeft
+          className="cursor-pointer"
+          onClick={() => navigate("/jobs")}
+        />
         Jobs Details
       </h4>
       <div className="w-[95%] mx-auto h-[90%] overflow-y-scroll Podcast_Top_Videos">
@@ -120,14 +129,16 @@ useEffect(() => {
                     className="h-[40px] w-[40px] rounded-full"
                   />
                   <div>
-                    <p className="text-sm">{job.jobCategory}</p>
+                    <p className="text-xl">Tangent Insurance Company</p>
                     <p className="text-[gray] text-sm">
                       {job.location} ({job.workplaceType}) {job.jobType}
                     </p>
                   </div>
                 </div>
                 <p>Application Deadline</p>
-                <p className="text-[gray] mb-5 text-xs">{formatDate(job.applicationDeadline)}</p>
+                <p className="text-[gray] mb-5 text-xs">
+                  {formatDate(job.applicationDeadline)}
+                </p>
                 <div className="flex gap-3">
                   <CiCalendar className="text-xl" />
                   <div className="text-sm">
@@ -148,8 +159,8 @@ useEffect(() => {
                 <div className="flex gap-3 text-sm my-3">
                   <GiSkills className="text-xl text-[gray]" />
                   <div>
-  <p>{job.skills.join(', ')}</p>
-</div>
+                    <p>{job.skills.join(", ")}</p>
+                  </div>
                 </div>
                 <div className="flex items-center gap-3 text-sm">
                   <FaBookReader className="text-lg text-[gray]" />
@@ -177,7 +188,9 @@ useEffect(() => {
                     className="h-[30px] w-[30px] rounded-full"
                   />
                   <p className="text-[gray]">Posted by:</p>
-                  <p className="text-lg font-semibold">{poster.name ? poster.name : "Unknown"}</p>
+                  <p className="text-lg font-semibold">
+                    {poster.name ? poster.name : "Unknown"}
+                  </p>
                 </div>
               </div>
             </div>
@@ -195,19 +208,15 @@ useEffect(() => {
             </div>
             <div className="text-[15px] h-auto overflow-y-scroll Podcast_Top_Videos">
               <p className="text-lg font-bold">Languages</p>
-              <div className="text-lg my-2">
-                {job.languages && job.languages.length > 0 ? (
-                  job.languages.map((e, i) => <p key={i}>{e}</p>)
-                ) : (
-                  "No languages specified"
-                )}
-              </div>
-              {/* <p className="text-lg font-bold">Job Category</p>
-              <p className="text-lg my-3">{job.jobCategory}</p> */}
+              <div className="text-lg my-2">{job.singleLang}</div>
             </div>
             <button
               className="h-[7vh] w-full linear_gradient rounded-3xl mt-6 btn1"
-              onClick={() => navigate("/jobapply")}
+              onClick={() =>
+                navigate("/jobapply", {
+                  state: { id: job._id, userId: job.userId },
+                })
+              }
             >
               Apply Now
             </button>

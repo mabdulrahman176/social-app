@@ -31,9 +31,7 @@ const podcastTypes = [
   "Fiction",
   "Education",
   "Interviews",
-  "Technology",
   "Business & Finance",
-  "History",
   "Health & Wellness",
   "Self-Improvement",
   "Religion & Spirituality",
@@ -41,19 +39,17 @@ const podcastTypes = [
   "Environment",
   "Music",
   "Parenting",
-  "Fashion",
   "Gaming",
   "Food & Cooking",
   "Relationship & Books",
   "Personal Stories",
   "Pets & Animals",
-  "Travel & Outdoor",
   "TV & Film",
   "Social Activities",
   "Subscribed"
 ];
 
-const Form = ({ audioFile, coverImage, formState, setFormState, audioDuration }) => { // Added audioDuration prop
+const Form = ({ audioFile, coverImage, formState, setFormState, audioDuration }) => {
   const { PodcastStates } = useContext(myContext);
 
   const [speakerState, setSpeakerState] = useState([]);
@@ -67,16 +63,15 @@ const Form = ({ audioFile, coverImage, formState, setFormState, audioDuration })
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent default form submission behavior
-
-    setLoading(true); // Show spinner
+    e.preventDefault();
+    setLoading(true);
     console.log("submitting");
 
     const formData = new FormData();
 
     if (audioFile) {
       formData.append('audio', audioFile);
-      formData.append('podcastDuration', audioDuration); // Append podcastDuration
+      formData.append('podcastDuration', audioDuration);
     }
 
     if (coverImage) {
@@ -87,12 +82,14 @@ const Form = ({ audioFile, coverImage, formState, setFormState, audioDuration })
       formData.append(key, value);
     }
 
-    for (const [key, value] of Object.entries(speakerState)) {
-      formData.append(key, value);
-    }
+    // Append speaker data
+    speakerState.forEach((speaker, index) => {
+      formData.append(`speaker_${index}`, speaker);
+    });
 
     formData.append('userID', getUserId());
     formData.append('podcastType', selectedType);
+    console.log("FormData:", Array.from(formData.entries()));
 
     try {
       const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/podcasts/`, {
@@ -113,7 +110,7 @@ const Form = ({ audioFile, coverImage, formState, setFormState, audioDuration })
     } catch (error) {
       console.error("Error submitting podcast:", error);
     } finally {
-      setLoading(false); // Hide spinner
+      setLoading(false);
     }
   };
 
@@ -128,11 +125,8 @@ const Form = ({ audioFile, coverImage, formState, setFormState, audioDuration })
     }
   };
 
-  const updateSpeakerData = (speakerData) => {
-    setSpeakerState(prev => ({
-      ...prev,
-      ...speakerData,
-    }));
+  const updateSpeakerData = (speakers) => {
+    setSpeakerState(speakers);
   };
 
   return (
