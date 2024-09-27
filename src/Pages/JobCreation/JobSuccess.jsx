@@ -10,7 +10,21 @@ const JobSuccess = () => {
 
   let { JobStates } = useContext(myContext)
 
-
+  const handleShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: "Check out this job",
+          url: window.location.href,
+        });
+        console.log('Share successful!');
+      } catch (error) {
+        console.error('Error sharing:', error);
+      }
+    } else {
+      alert('Web Share API is not supported in your browser.');
+    }
+  };
   return (
     <div className="h-full w-full bg-white flex flex-col justify-center relative items-center">
           <RxCross2 className='cursor-pointer  absolute top-5 left-3' onClick={()=>JobStates.setJobSubmitted(false)}/>
@@ -35,10 +49,10 @@ const JobSuccess = () => {
         </div>
         </div>
         </div>
-        <div className="flex items-center justify-center gap-2 PodcastSuccessGradient rounded-3xl w-40 h-10 ">
-          <FaShareFromSquare size={20} className=" text-white" />
-          <p className="  text-white">Share</p>
-        </div>
+        <div className="flex items-center justify-center gap-2 PodcastSuccessGradient rounded-3xl w-40 h-10 " onClick={handleShare}>
+                <FaShareFromSquare size={20} className="text-white" />
+                <p className="text-white">Share</p>
+              </div>
       </div>
     </div>
   );

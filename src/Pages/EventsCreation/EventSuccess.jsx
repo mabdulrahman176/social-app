@@ -10,7 +10,21 @@ const EventSuccess = () => {
 
   let { EventStates } = useContext(myContext)
   
-
+  const handleShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: "Check out this event",
+          url: window.location.href,
+        });
+        console.log('Share successful!');
+      } catch (error) {
+        console.error('Error sharing:', error);
+      }
+    } else {
+      alert('Web Share API is not supported in your browser.');
+    }
+  };
 
   return (
     <div className="h-full w-full bg-white flex flex-col justify-center absolute items-center">
@@ -36,7 +50,7 @@ const EventSuccess = () => {
         </div>
         </div>
         </div>
-        <div className="flex items-center justify-center gap-2 PodcastSuccessGradient rounded-3xl w-40 h-10 ">
+        <div className="flex items-center justify-center gap-2 PodcastSuccessGradient rounded-3xl w-40 h-10 " onClick={handleShare}>
           <FaShareFromSquare size={20} className=" text-white" />
           <p className="  text-white">Share</p>
         </div>

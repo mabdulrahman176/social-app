@@ -31,6 +31,7 @@ function SinglePodcastDetails() {
         if (loc.state) {
           const result = await getPodcast(loc.state.id);
           setResult(result);
+          console.log("single podcast details data is ", result)
           setRecentData([result]);
         }
       } catch (error) {
@@ -78,11 +79,7 @@ function SinglePodcastDetails() {
             <Model setRepModOpen={setRepModOpen} />
           </div>
         )}
-        {/* {shareModOpen && (
-          <div className="h-full w-full absolute top-0 left-0 z-20 flex justify-center items-center">
-            Assuming you will implement a Share modal if needed
-          </div>
-        )} */}
+     
         <div className="flex">
           <h4 className="flex items-center gap-3 md:ms-4 py-3">
             <FaAngleLeft
@@ -102,7 +99,7 @@ function SinglePodcastDetails() {
             <h1 className="text-xl font-semibold">{result.episodeTitle || 'N/A'}</h1>
             <h2>Podcast Type:</h2>
             <p className="py-1 opacity-65">{result.podcastType || 'N/A'}</p>
-            <p className="opacity-50">Season Number = {result.seasonNumber || 'N/A'} Episode Number = ({result.episodeNumber || 'N/A'})</p>
+            <p className="">Season Number = {result.seasonNumber || 'N/A'} <br /> Episode Number = {result.episodeNumber || 'N/A'}</p>
             <p>Audio Name:</p>
             <p className="opacity-50">
               {result.audioName && result.audioName.replace(/[0-9]/g, "").length > 30
@@ -118,18 +115,19 @@ function SinglePodcastDetails() {
               </audio>
             ) : (
               <p className="text-red-500">Audio not available</p>
-            )}
+            )} 
+          </div>
 
-            <div className="flex items-center gap-4">
+        </div>
+        <div className="flex items-center gap-4 ml-8 mt-1">
               <CiSquareInfo className="text-2xl cursor-pointer" onClick={() => setRepModOpen(true)} />
               <FaRegShareFromSquare className="text-xl opacity-45 cursor-pointer" onClick={shareContent} />
               <CiStar className="text-2xl cursor-pointer" onClick={() => setRevModOpen(true)} />
             </div>
-            <p className="lg:w-[75%] w-full opacity-50 text-[15px]">
+            <p>Podcast Description:</p>
+        <p className="lg:w-[75%] w-full opacity-50 text-[15px]">
               {result.episodeDescription}
             </p>
-          </div>
-        </div>
         <p>Speakers:</p>
         <div className="flex gap-2 md:ps-6 mt-3 w-full overflow-x-scroll Podcast_Top_Videos">
           {guestData.map((elm, ind) => (

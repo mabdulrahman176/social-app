@@ -60,7 +60,45 @@ useEffect(() => {
 
   if (!job) {
     return <div>No job found</div>; // Handle case when job is not found
-  }
+  };
+
+  const formatDate = (dateString) => {
+    // Normalize the date input by replacing dashes with slashes
+    const normalizedDateString = dateString.replace(/[-]/g, '/');
+  
+    // Split the date parts
+    const dateParts = normalizedDateString.split('/');
+  
+    let day, month, year;
+  
+    // Check for different formats
+    if (dateParts.length === 3) {
+      // Check if the first part is a year (YYYY/MM/DD) or day (DD/MM/YYYY)
+      if (dateParts[0].length === 4) {
+        // Format: YYYY/MM/DD
+        year = dateParts[0];
+        month = dateParts[1] - 1; // Month is zero-indexed
+        day = dateParts[2];
+      } else {
+        // Format: DD/MM/YYYY
+        day = dateParts[0];
+        month = dateParts[1] - 1; // Month is zero-indexed
+        year = dateParts[2];
+      }
+  
+      // Create a new Date object
+      const date = new Date(year, month, day);
+  
+      // Ensure the date is valid
+      if (date.getDate() == day && date.getMonth() == month && date.getFullYear() == year) {
+        // Format and return the date in DD/MM/YYYY
+        return `${('0' + day).slice(-2)}/${('0' + (month + 1)).slice(-2)}/${year}`;
+      }
+    }
+  
+  
+    return 'Invalid date format';
+  };
 
   return (
     <div className="h-full w-full bg-white relative">
@@ -89,7 +127,7 @@ useEffect(() => {
                   </div>
                 </div>
                 <p>Application Deadline</p>
-                <p className="text-[gray] mb-5 text-xs">{job.applicationDeadline}</p>
+                <p className="text-[gray] mb-5 text-xs">{formatDate(job.applicationDeadline)}</p>
                 <div className="flex gap-3">
                   <CiCalendar className="text-xl" />
                   <div className="text-sm">

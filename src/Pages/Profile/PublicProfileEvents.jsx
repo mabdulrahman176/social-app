@@ -41,6 +41,24 @@ const Calendar = (props) => {
     setEvents(props.events);
   }, [props.events]);
 
+  const handleShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: "Check out this event",
+          url: window.location.href,
+        });
+        console.log('Share successful!');
+      } catch (error) {
+        console.error('Error sharing:', error);
+      }
+    } else {
+      alert('Web Share API is not supported in your browser.');
+    }
+  };
+
+
+  
   return (
     <div className="overflow-y-scroll Podcast_Top_Videos w-full h-full">
       <div className="flex flex-wrap text-white gap-1 w-[95%] mx-auto Podcast_Top_Videos pt-2">
@@ -55,7 +73,7 @@ const Calendar = (props) => {
             {/* Add delete icon */}
             {visibleId === elm._id && (
               <button
-                className="absolute top-14 right-2 text-white text-xl cursor-pointer"
+                className="absolute top-14 right-2 text-red-600 text-3xl cursor-pointer"
                 onClick={() => handleDeleteClick(elm._id)}
               >
                 <IoTrashOutline />
@@ -73,7 +91,7 @@ const Calendar = (props) => {
                   >
                     Buy tickets
                   </button>
-                  <button className="w-[20%] py-2 flex justify-center JobButtonBgBlur text-xs text-white rounded-full">
+                  <button className="w-[20%] py-2 flex justify-center JobButtonBgBlur text-xs text-white rounded-full" onClick={handleShare}>
                     <FaRegShareFromSquare className='text-sm' />
                   </button>
                 </div>

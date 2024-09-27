@@ -120,8 +120,10 @@ const Video = () => {
                 {video && video.data ? video.data.videoDesc : 'Loading...'}
               </p>
               <p className="py-1 w-[80%] text-sm">
-                {video && video.data ? video.data.videoTags : 'Loading...'}
-              </p>
+  {video && video.data 
+    ? `# ${video.data.videoTags.join(' # ')}` 
+    : 'Loading...'}
+</p>
             </div>
             <div className="absolute bottom-3 z-10 right-2 text-white">
               <div className="relative cursor-pointer rounded-full flex justify-center" onClick={handleProfile}>
