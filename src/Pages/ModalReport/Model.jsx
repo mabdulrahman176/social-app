@@ -1,3 +1,4 @@
+// components/Model.js
 import {
   faAngleLeft,
   faAngleRight,
@@ -7,28 +8,31 @@ import React, { useState } from "react";
 import { RiCloseLine } from "react-icons/ri";
 
 const data = [
-  { id: 1, text: "I just don't like it" },
-  { id: 2, text: "It's a spam" },
-  { id: 3, text: "Nudity and sexual activity" },
-  { id: 4, text: "Hate speech or symbols" },
-  { id: 5, text: "False information" },
-  { id: 6, text: "Harassment" },
-  { id: 7, text: "Scam or fraud" },
-  { id: 8, text: "Suicide or self injury" },
-  { id: 9, text: "Eating Disorder" },
-  { id: 10, text: "Bullying" },
-  { id: 11, text: "Other reasons" },
+  { id: "I just don't like it", text: "I just don't like it" },
+  { id: "It's a spam", text: "It's a spam" },
+  { id: "Nudity and sexual activity", text: "Nudity and sexual activity" },
+  { id: "Hate speech or symbols", text: "Hate speech or symbols" },
+  { id: "False information", text: "False information" },
+  { id: "Harassment", text: "Harassment" },
+  { id: "Scam or fraud", text: "Scam or fraud" },
+  { id: "Suicide or self injury", text: "Suicide or self injury" },
+  { id:  "Eating Disorder", text: "Eating Disorder" },
+  { id: "Bullying", text: "Bullying" },
+  { id: "Other reasons", text: "Other reasons" },
 ];
 
 const Model = (props) => {
   const [clickedItems, setClickedItems] = useState({});
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
-
+  const [reportMessage, setReportMessage] = useState("");
+  const [reportItemId, setReportItemId] = useState("");
+  
   const handleClick = (id) => {
     setClickedItems((prev) => ({
       ...prev,
       [id]: !prev[id],
     }));
+    setReportItemId(id);
   };
 
   const handleReportClick = () => {
@@ -43,6 +47,51 @@ const Model = (props) => {
     }
   };
 
+  const handleReportSubmit = async () => {
+    const selectedReportType = Object.keys(clickedItems).find((id) => clickedItems[id]);
+
+    if (!selectedReportType) {
+      alert("Please select a report reason.");
+      return;
+    }
+
+    const getUserId = () => {
+      const str = document.cookie;
+      const userKey = str.split('=')[1];
+      return userKey;
+    };
+
+    const reportData = {
+      userId: getUserId(), 
+      reportItemId: reportItemId,
+      reportType: selectedReportType,
+      reportMessage: reportMessage,
+    };
+    
+    console.log("Sending report data:", reportData);
+
+    try {
+      const response = await fetch('http://localhost:5000/reports', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(reportData),
+      });
+
+      const result = await response.json();
+      console.log(result);
+      if (result.message === "success") {
+        alert("Report submitted successfully!");
+        setIsReportModalOpen(false);
+      } else {
+        alert("Error submitting report.");
+      }
+    } catch (error) {
+      console.error("Error submitting report:", error);
+    }
+  };
+
   return (
     <React.Fragment>
       <section>
@@ -53,7 +102,7 @@ const Model = (props) => {
         />
       </section>
       {!isReportModalOpen && (
-        <div className=" flex relative shadow-lg items-center md:h-[74%] h-[90%] md:w-[67%] w-[50%] md:pb-0 pb-3 bg-white">
+        <div className="flex relative shadow-lg items-center md:h-[74%] h-[90%] md:w-[67%] w-[50%] md:pb-0 pb-3 bg-white">
           <RiCloseLine
             className="absolute z-20 right-2 top-2 cursor-pointer"
             onClick={() => props.setRepModOpen(false)}
@@ -64,15 +113,8 @@ const Model = (props) => {
               src="/VideoBoy.jpeg"
               alt="Img-1"
             />
-
-            {/* <FontAwesomeIcon
-              className="absolute bottom-8 rounded-full p-1  text-sm w-2 h-2 left-2 text-white bg-[#00000072]"
-              icon={faUser}
-            /> */}
-
-            <div className="flex flex-col md:w-[55%] md:h-[90%] w-full h-[50%] ">
+            <div className="flex flex-col md:w-[55%] md:h-[90%] w-full h-[50%]">
               <h1 className="font-semibold py-3 text-center">Report</h1>
-
               <hr className="bg-gray-300 w-full h-[1px]" />
               <h1 className="text-center font-semibold">
                 Why you are reporting this video?
@@ -86,9 +128,7 @@ const Model = (props) => {
                     style={{ cursor: "pointer" }}
                   >
                     <h1 className="flex-1">{val.text}</h1>
-                    {/* {clickedItems[val.id] && ( */}
-                      <input type="radio" className="border-[2px] border-blue-600" name="name"/>
-                    {/* )} */}
+                    <input type="radio" className="border-[2px] border-blue-600" name="name" />
                   </div>
                 ))}
               </div>
@@ -111,7 +151,7 @@ const Model = (props) => {
       </section>
 
       {isReportModalOpen && (
-        <div className="relative shadow-lg md:h-[74%] h-[90%] md:w-[67%] w-[50%] overflow-y-scroll Podcast_Top_Videos flex items-center  bg-white ">
+        <div className="relative shadow-lg md:h-[74%] h-[90%] md:w-[67%] w-[50%] overflow-y-scroll Podcast_Top_Videos flex items-center bg-white">
           <RiCloseLine
             className="absolute right-2 top-2 cursor-pointer"
             onClick={() => props.setRepModOpen(false)}
@@ -123,7 +163,7 @@ const Model = (props) => {
               <div className="flex items-center justify-between py-4">
                 <h1>{""}</h1>
                 <h1 className="font-semibold">Report</h1>
-                <div className="flex items-center gap-1 text-end float-right ">
+                <div className="flex items-center gap-1 text-end float-right">
                   <section className="h-1 w-1 bg-black rounded-full"></section>
                   <section className="h-1 w-1 bg-black rounded-full"></section>
                   <section className="h-1 w-1 bg-black rounded-full"></section>
@@ -137,9 +177,14 @@ const Model = (props) => {
                 <textarea
                   className="w-full outline-none h-20 p-2 border-none bg-gray-100 rounded"
                   placeholder="The person is..."
+                  value={reportMessage}
+                  onChange={(e) => setReportMessage(e.target.value)}
                 ></textarea>
               </div>
-              <button className="mt-4  p-2 linear_gradient w-1/2 self-center text-white rounded-2xl">
+              <button
+                className="mt-4 p-2 linear_gradient w-1/2 self-center text-white rounded-2xl"
+                onClick={handleReportSubmit}
+              >
                 Submit
               </button>
             </div>
