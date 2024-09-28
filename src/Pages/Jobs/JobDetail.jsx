@@ -119,7 +119,7 @@ function Jobdetail() {
               <div className="lg:w-full sm:w-[45%]">
                 <div className="flex gap-3 my-4">
                   <img
-                    src={job.logoName ? job.logoName : "/profile.png"}
+                    src={job.logoUrl ? job.logoUrl : "/profile.png"}
                     alt=""
                     className="h-[40px] w-[40px] rounded-full"
                   />
