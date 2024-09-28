@@ -14,7 +14,11 @@ function JobAppliedSuccess(props) {
       <div className="h-full w-full absolute top-0 left-0 bg-white flex flex-col justify-center  items-center">
         <RxCross2
           className="cursor-pointer  absolute top-5 left-3"
-          onClick={()=>JobAppliedStates.setJobAppliedSuccess(false)}
+          
+          onClick={() => {
+            console.log("Cross clicked");
+            JobAppliedStates.setJobAppliedSuccess(false);
+          }}
           
         />
 

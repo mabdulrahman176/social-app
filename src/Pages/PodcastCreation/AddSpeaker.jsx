@@ -9,23 +9,23 @@ const AddSpeaker = ({ updateSpeakerData, initialData }) => {
   const [showAdditionalForms, setShowAdditionalForms] = useState(false);
   const [speakerData, setSpeakerData] = useState({
     speakerFirstName: '',
-    speakerLastName: '',
+    familyName: '',
     speakerBusinessLink: '',
   });
-  const [loading, setLoading] = useState(false); // Loading state for fetching users
+  const [loading, setLoading] = useState(false);
 
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
   useEffect(() => {
     const fetchUsers = async () => {
-      setLoading(true); // Start loading
+      setLoading(true);
       try {
         const response = await axios.get(`${API_BASE_URL}/users`);
         setAllUsers(response.data.data || []);
       } catch (error) {
         console.error("Error fetching users:", error);
       } finally {
-        setLoading(false); // Stop loading
+        setLoading(false);
       }
     };
     fetchUsers();
@@ -64,11 +64,23 @@ const AddSpeaker = ({ updateSpeakerData, initialData }) => {
   };
 
   const handleUserSelect = (user) => {
-    setSpeakers([...speakers, `@${user.userName}`]);
-    setInputValue(''); // Clear input after selection
+    setSpeakers(prevSpeakers => [
+      ...prevSpeakers,
+      {
+        id: user.Users_PK,
+        userName: `@${user.userName}`,
+        speakerData: [
+          speakerData.speakerFirstName,
+          speakerData.familyName,
+          speakerData.speakerBusinessLink,
+        ],
+      }
+    ]);
+    setInputValue('');
     setFilteredUsers([]);
     setShowAdditionalForms(false);
-    setSpeakerData({ speakerFirstName: '', speakerLastName: '', speakerBusinessLink: '' });
+    setSpeakerData({ speakerFirstName: '', familyName: '', speakerBusinessLink: '' });
+    updateSpeakerData(speakers); // Send updated speakers data to parent
   };
 
   const handleChange = (e) => {
@@ -82,17 +94,11 @@ const AddSpeaker = ({ updateSpeakerData, initialData }) => {
   const handleRemoveSpeaker = (index) => {
     const updatedSpeakers = speakers.filter((_, i) => i !== index);
     setSpeakers(updatedSpeakers);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    updateSpeakerData(speakers);
-    setInputValue(''); // Clear input on submit
-    setSpeakers([]); // Optionally reset speakers if needed
+    updateSpeakerData(updatedSpeakers); // Send updated speakers data to parent
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <div>
       <label className="block text-gray-600 text-sm font-bold">Add Speaker*</label>
       <input
         value={inputValue}
@@ -102,20 +108,15 @@ const AddSpeaker = ({ updateSpeakerData, initialData }) => {
       />
 
       {loading && <div className="text-gray-500">Loading users...</div>}
-
-      {filteredUsers.length > 0 && (
-        <ul className="border border-gray-300 rounded-md mt-2">
-          {filteredUsers.map((user) => (
-            <li
-              key={user.id}
-              className="p-2 cursor-pointer hover:bg-gray-200"
-              onClick={() => handleUserSelect(user)}
-            >
-              {user.userName}
-            </li>
-          ))}
-        </ul>
-      )}
+      {filteredUsers.map((user) => (
+  <li
+    key={user.id} // Ensure user.id is unique
+    className="p-2 cursor-pointer hover:bg-gray-200"
+    onClick={() => handleUserSelect(user)}
+  >
+    {user.userName}
+  </li>
+))}
 
       {showAdditionalForms && (
         <div className="mt-4">
@@ -133,9 +134,9 @@ const AddSpeaker = ({ updateSpeakerData, initialData }) => {
           <label className="block text-gray-600 text-sm font-bold">
             Family Name*
             <input
-              value={speakerData.speakerLastName}
+              value={speakerData.familyName}
               placeholder="Family Name"
-              name="speakerLastName"
+              name="familyName"
               onChange={handleChange}
               className="w-full border py-2 ps-3 rounded-lg text-gray-700 leading-tight focus:outline-none focus:shadow-outline placeholder:text-xs"
             />
@@ -154,26 +155,23 @@ const AddSpeaker = ({ updateSpeakerData, initialData }) => {
       )}
 
       <div className="mt-4">
-        {speakers.map((speaker, index) => (
-          <div key={index} className="flex items-center justify-between my-2">
-            <span className="bg-blue-100 text-blue-800 rounded-full px-3 py-1">
-              {speaker}
-            </span>
-            <button
-              type="button"
-              onClick={() => handleRemoveSpeaker(index)}
-              className="text-red-500 ml-2"
-            >
-              Remove
-            </button>
-          </div>
-        ))}
-      </div>
+      {speakers.map((speaker, index) => (
+  <div key={speaker.id || index} className="flex items-center justify-between my-2">
+    <span className="bg-blue-100 text-blue-800 rounded-full px-3 py-1">
+      {speaker.userName}
+    </span>
+    <button
+      type="button"
+      onClick={() => handleRemoveSpeaker(index)}
+      className="text-red-500 ml-2"
+    >
+      Remove
+    </button>
+  </div>
+))}
 
-      {/* <button type="submit" className="mt-4 bg-green-500 text-white py-2 px-4 rounded">
-        Submit
-      </button> */}
-    </form>
+      </div>
+    </div>
   );
 };
 

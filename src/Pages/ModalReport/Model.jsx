@@ -86,9 +86,9 @@ const Model = (props) => {
                     style={{ cursor: "pointer" }}
                   >
                     <h1 className="flex-1">{val.text}</h1>
-                    {clickedItems[val.id] && (
-                      <input type="checkbox" checked readOnly />
-                    )}
+                    {/* {clickedItems[val.id] && ( */}
+                      <input type="radio" className="border-[2px] border-blue-600" name="name"/>
+                    {/* )} */}
                   </div>
                 ))}
               </div>

@@ -31,12 +31,16 @@ const Video = () => {
     const data = await req.json();
     setVideo(data);
   };
+<<<<<<< HEAD
 
   const getUserId = () => {
   const str = document.cookie
   const userKey = str.split('=')[1];
   return userKey
 }
+=======
+console.log("single video detials is", video)
+>>>>>>> f344843567607e831b7ce0f7599f8e6b42e11282
   useEffect(() => {
     const videoState = window.history.state;
     if (videoState && videoState.videos) {
@@ -113,9 +117,9 @@ const Video = () => {
               Videos
             </div>
             <div className="absolute z-10 bottom-3 w-[60%] sm:w-[43%] p-3 text-white">
-              <a href="/#" className="text-xl font-semibold">
+              <p  className="text-xl font-semibold">
                 {video && video.user ? video.user.name : 'NO_NAME'}
-              </a>
+              </p>
               <p className="py-1 w-[80%] text-sm">
                 {video && video.data ? video.data.videoDesc : 'Loading...'}
               </p>

@@ -31,9 +31,7 @@ const podcastTypes = [
   "Fiction",
   "Education",
   "Interviews",
-  "Technology",
   "Business & Finance",
-  "History",
   "Health & Wellness",
   "Self-Improvement",
   "Religion & Spirituality",
@@ -41,21 +39,18 @@ const podcastTypes = [
   "Environment",
   "Music",
   "Parenting",
-  "Fashion",
   "Gaming",
   "Food & Cooking",
   "Relationship & Books",
   "Personal Stories",
   "Pets & Animals",
-  "Travel & Outdoor",
   "TV & Film",
   "Social Activities",
   "Subscribed"
 ];
 
-const Form = ({ audioFile, coverImage, formState, setFormState, audioDuration }) => { // Added audioDuration prop
+const Form = ({ audioFile, coverImage, formState, setFormState, audioDuration }) => {
   const { PodcastStates } = useContext(myContext);
-
   const [speakerState, setSpeakerState] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedType, setSelectedType] = useState('');
@@ -67,32 +62,46 @@ const Form = ({ audioFile, coverImage, formState, setFormState, audioDuration })
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent default form submission behavior
-
-    setLoading(true); // Show spinner
-    console.log("submitting");
+    e.preventDefault();
+    setLoading(true);
+    console.log("Submitting podcast...");
 
     const formData = new FormData();
 
+    // Append audio file and duration
     if (audioFile) {
       formData.append('audio', audioFile);
-      formData.append('podcastDuration', audioDuration); // Append podcastDuration
+      formData.append('podcastDuration', audioDuration);
     }
 
+    // Append cover image
     if (coverImage) {
       formData.append('image', coverImage);
     }
 
+    // Append other form state values
     for (const [key, value] of Object.entries(formState)) {
       formData.append(key, value);
     }
 
-    for (const [key, value] of Object.entries(speakerState)) {
-      formData.append(key, value);
-    }
+    // Append speaker data as an array
+    speakerState.forEach((speaker, index) => {
+      formData.append(`speakers[${index}][id]`, speaker.id);
+      formData.append(`speakers[${index}][userName]`, speaker.userName);
+      formData.append(`speakers[${index}][speakerData]`, JSON.stringify(speaker.speakerData));
+    });
 
+    // Append user ID and podcast type
     formData.append('userID', getUserId());
     formData.append('podcastType', selectedType);
+
+    // Log FormData entries to the console
+    console.log("FormData Entries:");
+    console.log("Speaker State Before Submission:", speakerState);
+
+    formData.forEach((value, key) => {
+      console.log(key, value);
+    });
 
     try {
       const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/podcasts/`, {
@@ -103,7 +112,7 @@ const Form = ({ audioFile, coverImage, formState, setFormState, audioDuration })
 
       if (response.ok) {
         const result = await response.json();
-        console.log(result);
+        console.log("Response:", result);
         if (PodcastStates && PodcastStates.setPodcastSubmitted) {
           PodcastStates.setPodcastSubmitted(true);
         }
@@ -113,7 +122,7 @@ const Form = ({ audioFile, coverImage, formState, setFormState, audioDuration })
     } catch (error) {
       console.error("Error submitting podcast:", error);
     } finally {
-      setLoading(false); // Hide spinner
+      setLoading(false);
     }
   };
 
@@ -128,13 +137,11 @@ const Form = ({ audioFile, coverImage, formState, setFormState, audioDuration })
     }
   };
 
-  const updateSpeakerData = (speakerData) => {
-    setSpeakerState(prev => ({
-      ...prev,
-      ...speakerData,
-    }));
-  };
 
+  const updateSpeakerData = (speakers) => {
+    setSpeakerState(speakers);
+    console.log("Updated Speakers:", speakers); // Log to verify
+  };
   return (
     <>
       <div className="relative w-full">
@@ -173,9 +180,10 @@ const Form = ({ audioFile, coverImage, formState, setFormState, audioDuration })
               </label>
               <select
                 className="w-full border rounded-lg py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline placeholder:text-xs"
-                value={selectedType} onChange={(e) => { 
-                  setSelectedType(e.target.value);
-                }}>
+                value={selectedType} 
+                onChange={(e) => setSelectedType(e.target.value)}
+                required
+              >
                 <option value="">Select a Podcast Type</option>
                 {podcastTypes.map((type, index) => (
                   <option key={index} value={type}>
@@ -217,7 +225,8 @@ const Form = ({ audioFile, coverImage, formState, setFormState, audioDuration })
             </div>
 
             <div className="mt-2">
-              <AddSpeaker updateSpeakerData={updateSpeakerData} initialData={speakerState} />
+            <AddSpeaker updateSpeakerData={updateSpeakerData} initialData={speakerState} />
+
             </div>
 
             <button

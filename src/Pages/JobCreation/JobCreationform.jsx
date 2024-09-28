@@ -2,15 +2,18 @@ import React, { useContext, useState } from "react";
 import { FaAngleLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { myContext } from "../../Context/CreateContext";
+import { LuImagePlus } from "react-icons/lu"; // Make sure to import the icon
 
-const JobCreationform = () => {
+const JobCreationForm = () => {
   const navigate = useNavigate();
   const { JobStates } = useContext(myContext);
   const [state, setState] = useState({
-    languages: [],
     skills: [],
+    singleLang: "", // Initialize singleLang
   });
   const [loading, setLoading] = useState(false);
+  const [coverImage, setCoverImage] = useState(null);
+  const [coverImageFile, setCoverImageFile] = useState(null); // State to hold file object
 
   const getUserId = () => {
     const str = document.cookie;
@@ -18,32 +21,39 @@ const JobCreationform = () => {
     return userKey;
   };
 
-  const handleSubmit = async () => {
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setCoverImageFile(file);
+      setCoverImage(URL.createObjectURL(file));
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // Prevent default form submission
     setLoading(true);
     console.log("submitting");
-    
-    const languages = state.languages.length > 0 ? convertStringToArray(state.languages) : [];
+
     const skills = state.skills.length > 0 ? convertStringToArray(state.skills) : [];
-    const dataToSubmit = {
-      ...state,
-      languages,
-      skills,
-      userId: getUserId(),
-    };
+    const formData = new FormData();
+    formData.append("userId", getUserId());
+    formData.append("logo", coverImageFile);  // Append the image file
+    formData.append("skills", JSON.stringify(skills));
+   
+    Object.keys(state).forEach((key) => {
+      formData.append(key, state[key]);
+    });
 
     try {
       const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/jobs/`, {
         credentials: "include",
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(dataToSubmit),
+        body: formData, // Send the FormData
       });
 
       const d = await req.json();
       console.log(d);
-      console.log(dataToSubmit);
+      console.log(formData);
       JobStates.setJobSubmitted(!JobStates.jobSubmitted);
       // Optionally navigate to another page
       // navigate("/jobs");
@@ -87,11 +97,9 @@ const JobCreationform = () => {
       </h4>
       
       <div className="flex flex-wrap justify-between overflow-y-scroll Podcast_Top_Videos h-[90%] w-[90%] mx-auto">
+        {/* Job Title */}
         <div className="sm:w-[40%] w-[45%]">
-          <label
-            className="block text-gray-600 text-sm font-bold mt-4"
-            htmlFor="jobtitle"
-          >
+          <label className="block text-gray-600 text-sm font-bold mt-4" htmlFor="jobtitle">
             Job title *
           </label>
           <input
@@ -102,15 +110,67 @@ const JobCreationform = () => {
             required
             placeholder="Enter title"
             className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
-          
           />
         </div>
 
         <div className="sm:w-[40%] w-[45%]">
-          <label
-            className="block text-gray-600 text-sm font-bold mt-4"
-            htmlFor="education"
-          >
+          <label className="block text-gray-600 text-sm font-bold mt-4" htmlFor="companyName">
+            Company Name *
+          </label>
+          <input
+            type="text"
+            onChange={_onChange_}
+            id="companyName"
+            name="companyName"
+            required
+            placeholder="Enter company name"
+            className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
+          />
+        </div>
+<div className="sm:w-[40%] w-[45%]">
+        <div className="mt-2 mb-2">
+          <h1>Customize Cover</h1>
+          <div className="bg-[#f0f0fe] w-full h-[25vh] rounded-lg flex items-center justify-center relative overflow-hidden">
+            <input
+              type="file"
+              accept="image/*"
+              className="absolute w-full h-full opacity-0 cursor-pointer"
+              onChange={handleImageUpload}
+            />
+            {coverImage ? (
+              <img
+                src={coverImage}
+                alt="Cover"
+                className="w-full h-full object-cover rounded-lg"
+              />
+            ) : (
+              <LuImagePlus className="text-blue-800 ms-8 text-3xl" />
+            )}
+          </div>
+        </div>
+        </div>
+ 
+
+        {/* Job Description */}
+        <div className="sm:w-[40%] w-[45%]">
+          <label className="block text-gray-600 text-sm font-bold mt-4" htmlFor="jobdescription">
+            Job description *
+          </label>
+          <textarea
+            onChange={_onChange_}
+            id="jobdescription"
+            name="jobDescription"
+            cols="6"
+            rows="6"
+            className="w-full md:w-80 rounded-md border focus:outline-none focus:ring-2 focus:ring-slate-600"
+            placeholder="Enter description"
+            required
+          ></textarea>
+        </div>
+
+       {/* Education Level */}
+       <div className="sm:w-[40%] w-[45%]">
+          <label className="block text-gray-600 text-sm font-bold mt-4" htmlFor="education">
             Education Level *
           </label>
           <select
@@ -119,42 +179,20 @@ const JobCreationform = () => {
             name="educationLevel"
             required
             className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none text-xs focus:shadow-outline"
-           
           >
             <option value="">Select Education Level</option>
-            <option value="high-school">High School</option>
-            <option value="bachelor's-degree">Bachelor's Degree</option>
-            <option value="associate-degree">Associate Degree</option>
-            <option value="master-degree">Master Degree</option>
-            <option value="phd-or-doctorate-degree">Ph.D. or Doctorate</option>
-            <option value="professional-certification">Professional Certification</option>
-            <option value="other">Other</option>
+            <option value="High-School">High School</option>
+            <option value="Bachelor's-Degree">Bachelor's Degree</option>
+            <option value="Associate-Degree">Associate Degree</option>
+            <option value="Master-Degree">Master Degree</option>
+            <option value="Ph.D.-or-Doctorate-Degree">Ph.D. or Doctorate</option>
+            <option value="Professional-Certification">Professional Certification</option>
+            <option value="Other">Other</option>
           </select>
         </div>
-
+        {/* Company Size */}
         <div className="sm:w-[40%] w-[45%]">
-          <label
-            className="block text-gray-600 text-sm font-bold mt-4"
-            htmlFor="jobdescription"
-          >
-            Job description *
-          </label>
-          <textarea
-            onChange={_onChange_}
-            id="jobdescription"
-            name="jobDescription"
-            rows="4"
-            className="w-full md:w-80 rounded-md border focus:outline-none focus:ring-2 focus:ring-slate-600"
-            placeholder="Enter description"
-            required
-          ></textarea>
-        </div>
-
-        <div className="sm:w-[40%] w-[45%]">
-          <label
-            className="block text-gray-600 text-sm font-bold mt-4"
-            htmlFor="companysize"
-          >
+          <label className="block text-gray-600 text-sm font-bold mt-4" htmlFor="companysize">
             Company Size *
           </label>
           <select
@@ -165,19 +203,17 @@ const JobCreationform = () => {
             required
           >
             <option value="">Select Company Size</option>
-            <option value="startup">Startup (1-50 employees)</option>
-            <option value="small-business">Small Business (51-500 employees)</option>
-            <option value="medium-enterprise">Medium Enterprise (501-1000 employees)</option>
-            <option value="large-corporation">Large Corporation (1000+ employees)</option>
-            <option value="any-size">Any Size</option>
+            <option value="Startup">Startup (1-50 employees)</option>
+            <option value="Small-Business">Small Business (51-500 employees)</option>
+            <option value="Medium-Enterprise">Medium Enterprise (501-1000 employees)</option>
+            <option value="Large-Corporation">Large Corporation (1000+ employees)</option>
+            <option value="Any-Size">Any Size</option>
           </select>
         </div>
 
+        {/* Workplace Type */}
         <div className="sm:w-[40%] w-[45%]">
-          <label
-            className="block text-gray-600 text-sm font-bold mt-4"
-            htmlFor="workplace"
-          >
+          <label className="block text-gray-600 text-sm font-bold mt-4" htmlFor="workplace">
             Workplace type *
           </label>
           <select
@@ -188,20 +224,18 @@ const JobCreationform = () => {
             required
           >
             <option value="">Select Workplace Type</option>
-            <option value="on-site">On-site</option>
-            <option value="remote">Remote</option>
-            <option value="hybrid">Hybrid</option>
-            <option value="flexible">Flexible</option>
-            <option value="location-dependent">Location Dependent</option>
-            <option value="other">Other</option>
+            <option value="On-Site">On-site</option>
+            <option value="Remote">Remote</option>
+            <option value="Hybrid">Hybrid</option>
+            <option value="Flexible">Flexible</option>
+            <option value="Location-Dependent">Location Dependent</option>
+            <option value="Other">Other</option>
           </select>
         </div>
 
+        {/* Location */}
         <div className="sm:w-[40%] w-[45%]">
-          <label
-            className="block text-gray-600 text-sm font-bold mt-4"
-            htmlFor="location"
-          >
+          <label className="block text-gray-600 text-sm font-bold mt-4" htmlFor="location">
             Select Location*
           </label>
           <input
@@ -215,11 +249,9 @@ const JobCreationform = () => {
           />
         </div>
 
+        {/* Skills */}
         <div className="sm:w-[40%] w-[45%]">
-          <label
-            className="block text-gray-600 text-sm font-bold mt-4"
-            htmlFor="skills"
-          >
+          <label className="block text-gray-600 text-sm font-bold mt-4" htmlFor="skills">
             Add Skills *
           </label>
           <input
@@ -233,11 +265,9 @@ const JobCreationform = () => {
           />
         </div>
 
+        {/* Job Type */}
         <div className="sm:w-[40%] w-[45%]">
-          <label
-            className="block text-gray-600 text-sm font-bold mt-4"
-            htmlFor="jobtype"
-          >
+          <label className="block text-gray-600 text-sm font-bold mt-4" htmlFor="jobtype">
             Job type *
           </label>
           <select
@@ -248,20 +278,18 @@ const JobCreationform = () => {
             required
           >
             <option value="">Select Job Type</option>
-            <option value="full-time">Full time</option>
-            <option value="part-time">Part time</option>
-            <option value="contract">Contract</option>
-            <option value="temporary">Temporary</option>
-            <option value="internship">Internship</option>
-            <option value="other">Other</option>
+            <option value="Full-time">Full time</option>
+            <option value="Part-time">Part time</option>
+            <option value="Contract">Contract</option>
+            <option value="Temporary">Temporary</option>
+            <option value="Internship">Internship</option>
+            <option value="Other">Other</option>
           </select>
         </div>
 
+        {/* Application Deadline */}
         <div className="sm:w-[40%] w-[45%]">
-          <label
-            className="block text-gray-600 text-sm font-bold mt-4"
-            htmlFor="deadline"
-          >
+          <label className="block text-gray-600 text-sm font-bold mt-4" htmlFor="deadline">
             Application Deadline *
           </label>
           <input
@@ -274,11 +302,9 @@ const JobCreationform = () => {
           />
         </div>
 
+        {/* Experience Level */}
         <div className="sm:w-[40%] w-[45%]">
-          <label
-            className="block text-gray-600 text-sm font-bold mt-4"
-            htmlFor="experience"
-          >
+          <label className="block text-gray-600 text-sm font-bold mt-4" htmlFor="experience">
             Experience Level *
           </label>
           <select
@@ -289,39 +315,40 @@ const JobCreationform = () => {
             required
           >
             <option value="">Select Experience Level</option>
-            <option value="entry-level">Entry-Level</option>
-            <option value="mid-level">Mid-Level</option>
-            <option value="senior-level">Senior-Level</option>
-            <option value="executive">Executive</option>
-            <option value="internship">Internship</option>
-            <option value="no-experience-required">No Experience required</option>
-            <option value="other">Other</option>
+            <option value="Entry-Level">Entry-Level</option>
+            <option value="Mid-Level">Mid-Level</option>
+            <option value="Senior-Level">Senior-Level</option>
+            <option value="Executive">Executive</option>
+            <option value="Internship">Internship</option>
+            <option value="No-Experience-Required">No Experience required</option>
+            <option value="Other">Other</option>
           </select>
         </div>
 
+        {/* Language */}
         <div className="sm:w-[40%] w-[45%]">
-          <label
-            className="block text-gray-600 text-sm font-bold mt-4"
-            htmlFor="language"
-          >
+          <label className="block text-gray-600 text-sm font-bold mt-4" htmlFor="singleLang">
             Language *
           </label>
-          <input
-            type="text"
+          <select
             onChange={_onChange_}
-            id="language"
-            name="languages"
-            placeholder="Enter languages (comma separated)"
-            className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
+            id="singleLang"
+            name="singleLang" // Matches state key
+            className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none text-xs focus:shadow-outline"
             required
-          />
+          >
+            <option value="Language">Select Language</option>
+            <option value="English">English</option>
+            <option value="Spanish">Spanish</option>
+            <option value="French">French</option>
+            <option value="German">German</option>
+            <option value="Other">Other</option>
+          </select>
         </div>
 
+        {/* Salary Range */}
         <div className="sm:w-[40%] w-[45%]">
-          <label
-            className="block text-gray-600 text-sm font-bold mt-4"
-            htmlFor="salary"
-          >
+          <label className="block text-gray-600 text-sm font-bold mt-4" htmlFor="salary">
             Salary Range *
           </label>
           <select
@@ -339,11 +366,9 @@ const JobCreationform = () => {
           </select>
         </div>
 
+        {/* Job Shift */}
         <div className="sm:w-[40%] w-[45%]">
-          <label
-            className="block text-gray-600 text-sm font-bold mt-4"
-            htmlFor="jobshift"
-          >
+          <label className="block text-gray-600 text-sm font-bold mt-4" htmlFor="jobshift">
             Job Shift *
           </label>
           <select
@@ -353,21 +378,19 @@ const JobCreationform = () => {
             className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none text-xs focus:shadow-outline"
             required
           >
-            <option value="">Select Job Shift</option>
-            <option value="day">Day Shift</option>
-            <option value="night">Night Shift</option>
-            <option value="rotating">Rotating Shifts</option>
-            <option value="domestic">Domestic Travel</option>
-            <option value="variable">Variable</option>
-            <option value="other">Other</option>
+            <option value="Job">Select Job Shift</option>
+            <option value="Day">Day Shift</option>
+            <option value="Night">Night Shift</option>
+            <option value="Rotating">Rotating Shifts</option>
+            <option value="Domestic">Domestic Travel</option>
+            <option value="Variable">Variable</option>
+            <option value="Other">Other</option>
           </select>
         </div>
 
+        {/* Travel Requirement */}
         <div className="sm:w-[40%] w-[45%]">
-          <label
-            className="block text-gray-600 text-sm font-bold mt-4"
-            htmlFor="travel"
-          >
+          <label className="block text-gray-600 text-sm font-bold mt-4" htmlFor="travel">
             Travel Requirement *
           </label>
           <select
@@ -378,15 +401,16 @@ const JobCreationform = () => {
             required
           >
             <option value="">Select Travel Requirement</option>
-            <option value="no-travel">No Travel</option>
-            <option value="occasional">Occasional Travel</option>
-            <option value="frequent">Frequent Travel</option>
-            <option value="domestic">Domestic Travel</option>
-            <option value="international">International Travel</option>
-            <option value="other">Other</option>
+            <option value="No-travel">No Travel</option>
+            <option value="Occasional">Occasional Travel</option>
+            <option value="Frequent">Frequent Travel</option>
+            <option value="Domestic">Domestic Travel</option>
+            <option value="International">International Travel</option>
+            <option value="Other">Other</option>
           </select>
         </div>
 
+        {/* Submit Button */}
         <div className="flex w-full justify-center mt-8">
           <button
             className="w-64 h-12 rounded-full buyticket text-white text-center"
@@ -401,4 +425,4 @@ const JobCreationform = () => {
   );
 };
 
-export default JobCreationform;
+export default JobCreationForm;
