@@ -9,7 +9,7 @@ const AddSpeaker = ({ updateSpeakerData, initialData }) => {
   const [showAdditionalForms, setShowAdditionalForms] = useState(false);
   const [speakerData, setSpeakerData] = useState({
     speakerFirstName: '',
-    speakerLastName: '',
+    familyName: '',
     speakerBusinessLink: '',
   });
   const [loading, setLoading] = useState(false);
@@ -64,11 +64,23 @@ const AddSpeaker = ({ updateSpeakerData, initialData }) => {
   };
 
   const handleUserSelect = (user) => {
-    setSpeakers([...speakers, { id: user.id, userName: `@${user.userName}` }]);
+    setSpeakers(prevSpeakers => [
+      ...prevSpeakers,
+      {
+        id: user.Users_PK,
+        userName: `@${user.userName}`,
+        speakerData: [
+          speakerData.speakerFirstName,
+          speakerData.familyName,
+          speakerData.speakerBusinessLink,
+        ],
+      }
+    ]);
     setInputValue('');
     setFilteredUsers([]);
     setShowAdditionalForms(false);
-    setSpeakerData({ speakerFirstName: '', speakerLastName: '', speakerBusinessLink: '' });
+    setSpeakerData({ speakerFirstName: '', familyName: '', speakerBusinessLink: '' });
+    updateSpeakerData(speakers); // Send updated speakers data to parent
   };
 
   const handleChange = (e) => {
@@ -82,17 +94,11 @@ const AddSpeaker = ({ updateSpeakerData, initialData }) => {
   const handleRemoveSpeaker = (index) => {
     const updatedSpeakers = speakers.filter((_, i) => i !== index);
     setSpeakers(updatedSpeakers);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    updateSpeakerData(speakers);
-    setInputValue('');
-    setSpeakers([]);
+    updateSpeakerData(updatedSpeakers); // Send updated speakers data to parent
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <div>
       <label className="block text-gray-600 text-sm font-bold">Add Speaker*</label>
       <input
         value={inputValue}
@@ -102,20 +108,15 @@ const AddSpeaker = ({ updateSpeakerData, initialData }) => {
       />
 
       {loading && <div className="text-gray-500">Loading users...</div>}
-
-      {filteredUsers.length > 0 && (
-        <ul className="border border-gray-300 rounded-md mt-2">
-          {filteredUsers.map((user) => (
-            <li
-              key={user.id}
-              className="p-2 cursor-pointer hover:bg-gray-200"
-              onClick={() => handleUserSelect(user)}
-            >
-              {user.userName}
-            </li>
-          ))}
-        </ul>
-      )}
+      {filteredUsers.map((user) => (
+  <li
+    key={user.id} // Ensure user.id is unique
+    className="p-2 cursor-pointer hover:bg-gray-200"
+    onClick={() => handleUserSelect(user)}
+  >
+    {user.userName}
+  </li>
+))}
 
       {showAdditionalForms && (
         <div className="mt-4">
@@ -133,9 +134,9 @@ const AddSpeaker = ({ updateSpeakerData, initialData }) => {
           <label className="block text-gray-600 text-sm font-bold">
             Family Name*
             <input
-              value={speakerData.speakerLastName}
+              value={speakerData.familyName}
               placeholder="Family Name"
-              name="speakerLastName"
+              name="familyName"
               onChange={handleChange}
               className="w-full border py-2 ps-3 rounded-lg text-gray-700 leading-tight focus:outline-none focus:shadow-outline placeholder:text-xs"
             />
@@ -154,22 +155,23 @@ const AddSpeaker = ({ updateSpeakerData, initialData }) => {
       )}
 
       <div className="mt-4">
-        {speakers.map((speaker, index) => (
-          <div key={speaker.id} className="flex items-center justify-between my-2">
-            <span className="bg-blue-100 text-blue-800 rounded-full px-3 py-1">
-              {speaker.userName}
-            </span>
-            <button
-              type="button"
-              onClick={() => handleRemoveSpeaker(index)}
-              className="text-red-500 ml-2"
-            >
-              Remove
-            </button>
-          </div>
-        ))}
+      {speakers.map((speaker, index) => (
+  <div key={speaker.id || index} className="flex items-center justify-between my-2">
+    <span className="bg-blue-100 text-blue-800 rounded-full px-3 py-1">
+      {speaker.userName}
+    </span>
+    <button
+      type="button"
+      onClick={() => handleRemoveSpeaker(index)}
+      className="text-red-500 ml-2"
+    >
+      Remove
+    </button>
+  </div>
+))}
+
       </div>
-    </form>
+    </div>
   );
 };
 

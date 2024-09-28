@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useState } from "react";
 import { BsCalendar4Event, BsSuitcaseLg } from "react-icons/bs";
 import { CiVideoOn } from "react-icons/ci";
 import { FaStar } from "react-icons/fa6";
-import { LuPodcast } from "react-icons/lu";
+import { PiApplePodcastsLogoThin } from "react-icons/pi";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { FaPlus } from "react-icons/fa";
 import { Link } from "react-router-dom";
@@ -154,10 +154,12 @@ const ProfilePublic = ({ userId }) => {
               className="cursor-pointer opacity-70"
               onClick={() => setActiveTab("Video")}
             />
-            <LuPodcast
-              className="cursor-pointer opacity-70"
-              onClick={() => setActiveTab("Podcast")}
-            />
+            {/* <LuPodcast
+            
+            /> */}
+            <PiApplePodcastsLogoThin size={30}  className="cursor-pointer opacity-70"
+              onClick={() => setActiveTab("Podcast")} />
+
             <BsCalendar4Event
               className="cursor-pointer opacity-70"
               onClick={() => setActiveTab("Event")}

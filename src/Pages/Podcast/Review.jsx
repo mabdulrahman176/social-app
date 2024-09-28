@@ -56,6 +56,12 @@ const Review = (props) => {
   };
 
   const postReview = async () => {
+    console.log({
+      reviewItemId:videoId,
+      reviewRatings: rating,
+      reviewMessage: reviewText,
+      userId: loggedInUserId,
+    })
     try {
       const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/reviews`, {
         method: "POST",
@@ -64,7 +70,7 @@ const Review = (props) => {
         },
         credentials: "include",
         body: JSON.stringify({
-          reviewItemId: props,
+          reviewItemId: videoId,
           reviewRatings: rating,
           reviewMessage: reviewText,
           userId: loggedInUserId,
@@ -163,7 +169,7 @@ const Review = (props) => {
           aria-label="Close"
         />
         <img
-          className="md:w-[45%] w-full md:h-full h-[40%] object-fill"
+          className="md:w-[45%] w-[40%] md:h-full h-[40%] object-cover"
           src={picUrl}
           alt="Video Thumbnail"
         />

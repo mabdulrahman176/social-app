@@ -64,6 +64,8 @@ function Jobdetail() {
   }
 
   const formatDate = (dateString) => {
+    if (!dateString) return "Invalid date"; // Return a message for undefined dates
+
     // Normalize the date input by replacing dashes with slashes
     const normalizedDateString = dateString.replace(/[-]/g, "/");
 
@@ -74,7 +76,6 @@ function Jobdetail() {
 
     // Check for different formats
     if (dateParts.length === 3) {
-      // Check if the first part is a year (YYYY/MM/DD) or day (DD/MM/YYYY)
       if (dateParts[0].length === 4) {
         // Format: YYYY/MM/DD
         year = dateParts[0];
@@ -87,19 +88,13 @@ function Jobdetail() {
         year = dateParts[2];
       }
 
-      // Create a new Date object
       const date = new Date(year, month, day);
-
-      // Ensure the date is valid
       if (
-        date.getDate() === day &&
+        date.getDate() === parseInt(day) &&
         date.getMonth() === month &&
-        date.getFullYear() === year
+        date.getFullYear() === parseInt(year)
       ) {
-        // Format and return the date in DD/MM/YYYY
-        return `${("0" + day).slice(-2)}/${("0" + (month + 1)).slice(
-          -2
-        )}/${year}`;
+        return `${("0" + day).slice(-2)}/${("0" + (month + 1)).slice(-2)}/${year}`;
       }
     }
 
@@ -124,12 +119,12 @@ function Jobdetail() {
               <div className="lg:w-full sm:w-[45%]">
                 <div className="flex gap-3 my-4">
                   <img
-                    src={poster.picUrl ? poster.picUrl : "/profile.png"}
+                    src={job.logoName ? job.logoName : "/profile.png"}
                     alt=""
                     className="h-[40px] w-[40px] rounded-full"
                   />
                   <div>
-                    <p className="text-xl">Tangent Insurance Company</p>
+                    <p className="text-xl">{job.companyName}</p>
                     <p className="text-[gray] text-sm">
                       {job.location} ({job.workplaceType}) {job.jobType}
                     </p>

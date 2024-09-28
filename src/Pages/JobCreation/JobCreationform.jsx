@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import { FaAngleLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { myContext } from "../../Context/CreateContext";
+import { LuImagePlus } from "react-icons/lu"; // Make sure to import the icon
 
 const JobCreationForm = () => {
   const navigate = useNavigate();
@@ -11,6 +12,8 @@ const JobCreationForm = () => {
     singleLang: "", // Initialize singleLang
   });
   const [loading, setLoading] = useState(false);
+  const [coverImage, setCoverImage] = useState(null);
+  const [coverImageFile, setCoverImageFile] = useState(null); // State to hold file object
 
   const getUserId = () => {
     const str = document.cookie;
@@ -18,30 +21,39 @@ const JobCreationForm = () => {
     return userKey;
   };
 
-  const handleSubmit = async () => {
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setCoverImageFile(file);
+      setCoverImage(URL.createObjectURL(file));
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // Prevent default form submission
     setLoading(true);
     console.log("submitting");
 
     const skills = state.skills.length > 0 ? convertStringToArray(state.skills) : [];
-    const dataToSubmit = {
-      ...state,
-      skills,
-      userId: getUserId(),
-    };
+    const formData = new FormData();
+    formData.append("userId", getUserId());
+    formData.append("logo", coverImageFile);  // Append the image file
+    formData.append("skills", JSON.stringify(skills));
+   
+    Object.keys(state).forEach((key) => {
+      formData.append(key, state[key]);
+    });
 
     try {
       const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/jobs/`, {
         credentials: "include",
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(dataToSubmit),
+        body: formData, // Send the FormData
       });
 
       const d = await req.json();
       console.log(d);
-      console.log(dataToSubmit);
+      console.log(formData);
       JobStates.setJobSubmitted(!JobStates.jobSubmitted);
       // Optionally navigate to another page
       // navigate("/jobs");
@@ -101,8 +113,63 @@ const JobCreationForm = () => {
           />
         </div>
 
-        {/* Education Level */}
         <div className="sm:w-[40%] w-[45%]">
+          <label className="block text-gray-600 text-sm font-bold mt-4" htmlFor="companyName">
+            Company Name *
+          </label>
+          <input
+            type="text"
+            onChange={_onChange_}
+            id="companyName"
+            name="companyName"
+            required
+            placeholder="Enter company name"
+            className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
+          />
+        </div>
+<div className="sm:w-[40%] w-[45%]">
+        <div className="mt-2 mb-2">
+          <h1>Customize Cover</h1>
+          <div className="bg-[#f0f0fe] w-full h-[25vh] rounded-lg flex items-center justify-center relative overflow-hidden">
+            <input
+              type="file"
+              accept="image/*"
+              className="absolute w-full h-full opacity-0 cursor-pointer"
+              onChange={handleImageUpload}
+            />
+            {coverImage ? (
+              <img
+                src={coverImage}
+                alt="Cover"
+                className="w-full h-full object-cover rounded-lg"
+              />
+            ) : (
+              <LuImagePlus className="text-blue-800 ms-8 text-3xl" />
+            )}
+          </div>
+        </div>
+        </div>
+ 
+
+        {/* Job Description */}
+        <div className="sm:w-[40%] w-[45%]">
+          <label className="block text-gray-600 text-sm font-bold mt-4" htmlFor="jobdescription">
+            Job description *
+          </label>
+          <textarea
+            onChange={_onChange_}
+            id="jobdescription"
+            name="jobDescription"
+            cols="6"
+            rows="6"
+            className="w-full md:w-80 rounded-md border focus:outline-none focus:ring-2 focus:ring-slate-600"
+            placeholder="Enter description"
+            required
+          ></textarea>
+        </div>
+
+       {/* Education Level */}
+       <div className="sm:w-[40%] w-[45%]">
           <label className="block text-gray-600 text-sm font-bold mt-4" htmlFor="education">
             Education Level *
           </label>
@@ -123,23 +190,6 @@ const JobCreationForm = () => {
             <option value="Other">Other</option>
           </select>
         </div>
-
-        {/* Job Description */}
-        <div className="sm:w-[40%] w-[45%]">
-          <label className="block text-gray-600 text-sm font-bold mt-4" htmlFor="jobdescription">
-            Job description *
-          </label>
-          <textarea
-            onChange={_onChange_}
-            id="jobdescription"
-            name="jobDescription"
-            rows="4"
-            className="w-full md:w-80 rounded-md border focus:outline-none focus:ring-2 focus:ring-slate-600"
-            placeholder="Enter description"
-            required
-          ></textarea>
-        </div>
-
         {/* Company Size */}
         <div className="sm:w-[40%] w-[45%]">
           <label className="block text-gray-600 text-sm font-bold mt-4" htmlFor="companysize">
