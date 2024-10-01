@@ -167,23 +167,21 @@ const AddSpeaker = ({ updateSpeakerData, initialData }) => {
       )}
 
       <div className="mt-4">
-        {speakers.map((speaker, index) => (
-          <div
-            key={speaker.id || index}
-            className="flex items-center justify-between my-2"
-          >
-            <span className="bg-blue-100 text-blue-800 rounded-full px-3 py-1">
-              {speaker.userName}
-            </span>
-            <button
-              type="button"
-              onClick={() => handleRemoveSpeaker(index)}
-              className="text-red-500 ml-2"
-            >
-              Remove
-            </button>
-          </div>
-        ))}
+      {speakers.map((speaker, index) => (
+  <div key={speaker.id || index} className="flex items-center justify-between my-2">
+    <span className="bg-blue-100 text-blue-800 rounded-full px-3 py-1">
+      {speaker.userName}
+    </span>
+    <button
+      type="button"
+      onClick={() => handleRemoveSpeaker(index)}
+      className="text-red-500 ml-2"
+    >
+      Remove
+    </button>
+  </div>
+))}
+
       </div>
     </div>
   );

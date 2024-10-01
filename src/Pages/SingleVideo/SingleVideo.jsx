@@ -25,7 +25,9 @@ const Video = () => {
   const videoId = decodeURIComponent(src);
 
   const getVideo = async () => {
-    const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/upload/${videoId}`);
+    const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/upload/${videoId}`,{
+      credentials:'include'
+    });
     const data = await req.json();
     setVideo(data);
   };
@@ -113,9 +115,12 @@ console.log("single video detials is", video)
                 {video && video.data ? video.data.videoDesc : 'Loading...'}
               </p>
               <p className="py-1 w-[80%] text-sm">
-  {video && video.data 
+  {/* {video && video.data 
     ? `# ${video.data.videoTags.join(' # ')}` 
-    : 'Loading...'}
+    : 'Loading...'} */}
+    {video && video.data && video.data.videoTags
+  ? video.data.videoTags.map(tag => `#${tag}`).join(' ')
+  : 'Loading...'}
 </p>
             </div>
             <div className="absolute bottom-3 z-10 right-2 text-white">
