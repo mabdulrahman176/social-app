@@ -30,6 +30,7 @@ const ProfilePublic = ({ userId }) => {
     const userKey = str.split('=')[1];
     return userKey;
   };
+  console.log(getUserId())
 
   const handleSubmit = async () => {
     setLoading(true);
