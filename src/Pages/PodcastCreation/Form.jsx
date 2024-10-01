@@ -85,13 +85,14 @@ const Form = ({ audioFile, coverImage, formState, setFormState, audioDuration })
     }
 
     // Append speaker data as an array
-    speakerState.forEach((speaker, index) => {
-      formData.append(`speakers[${index}][id]`, speaker.id);
-      formData.append(`speakers[${index}][userName]`, speaker.userName);
-      formData.append(`speakers[${index}][speakerData]`, JSON.stringify(speaker.speakerData));
-    });
+    // speakerState.forEach((speaker, index) => {
+    //   formData.append(`speakers[${index}][id]`, speaker.id);
+    //   formData.append(`speakers[${index}][userName]`, speaker.userName);
+    //   formData.append(`speakers[${index}][speakerData]`, JSON.stringify(speaker.speakerData));
+    // });
 
     // Append user ID and podcast type
+    // formData.append('eventArray',JSON.stringify() );
     formData.append('userID', getUserId());
     formData.append('podcastType', selectedType);
 
