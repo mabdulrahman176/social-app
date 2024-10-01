@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { BsCalendar4Event, BsSuitcaseLg } from "react-icons/bs";
 import { CiVideoOn } from "react-icons/ci";
-import { FaStar } from "react-icons/fa6";
+import { FaStar, FaStarHalf } from "react-icons/fa6";
 import { PiApplePodcastsLogoThin } from "react-icons/pi";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { FaPlus } from "react-icons/fa";
@@ -19,6 +19,7 @@ const ProfilePublic = ({ userId }) => {
   const [activeTab, setActiveTab] = useState("Video");
   const [profile, setProfile] = useState({});
   const [file, setFile] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -31,8 +32,8 @@ const ProfilePublic = ({ userId }) => {
   };
 
   const handleSubmit = async () => {
+    setLoading(true);
     const formData = new FormData();
-    console.log({ file });
     if (file) {
       formData.append('profilePic', file);
     }
@@ -47,6 +48,8 @@ const ProfilePublic = ({ userId }) => {
       await fetchProfileData(); // Refresh profile data after upload
     } catch (error) {
       console.error('Error updating profile:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -58,18 +61,35 @@ const ProfilePublic = ({ userId }) => {
       setProfile(result.user);
       setDATA(result.data);
       console.log("single user data", result);
-      console.log({ data_ });
-      return result;
     } catch (error) {
       console.error("Fetching profile data error:", error);
     }
   };
 
+  const renderStars = (rating) => {
+    const totalStars = 5; // Total number of stars
+    const filledStars = Math.floor(rating); // Whole filled stars
+    const hasHalfStar = rating % 1 !== 0; // Check if there is a half star
+    const starsArray = [];
+  
+    for (let i = 0; i < totalStars; i++) {
+      if (i < filledStars) {
+        starsArray.push(<FaStar key={i} className="text-[#FFDD55] text-sm md:text-lg" />);
+      } else if (i === filledStars && hasHalfStar) {
+        starsArray.push(<FaStarHalf key={i} className="text-[#FFDD55] text-sm md:text-lg" />);
+      } else {
+        starsArray.push(<FaStar key={i} className="text-gray-400 text-sm md:text-lg" />);
+      }
+    }
+  
+    return starsArray;
+  };
+  
+
   useEffect(() => {
     fetchProfileData();
   }, []);
 
-  // Check if the current user is viewing their own profile
   const isCurrentUser = userId === getUserId();
 
   return (
@@ -87,11 +107,11 @@ const ProfilePublic = ({ userId }) => {
                 className="hidden"
                 id="fileInput"
               />
-              <label htmlFor="fileInput" className="cursor-pointer">
+              <label htmlFor="fileInput" className="cursor-pointer" aria-label="Upload Profile Picture">
                 <img
                   className="rounded-full w-[100px] h-[100px] md:w-[120px] md:h-[120px] object-cover"
                   src={profile.picUrl} // Fallback URL
-                  alt="img"
+                  alt="Profile"
                 />
                 <FaPlus className="absolute lg:bottom-2 -bottom-3 md:bottom-1 text-white text-xl p-1 bg-blue-700 rounded-full" />
               </label>
@@ -99,31 +119,26 @@ const ProfilePublic = ({ userId }) => {
             <div className="py-3 px-4 md:px-6 w-full md:w-[60%]">
               <h1 className="text-lg md:text-xl">{profile.name}</h1>
               <div className="flex py-1 space-x-2">
-                <FaStar className="text-[#FFDD55] text-sm md:text-lg" />
-                <FaStar className="text-[#FFDD55] text-sm md:text-lg" />
-                <FaStar className="text-[#FFDD55] text-sm md:text-lg" />
-                <FaStar className="text-[#FFDD55] text-sm md:text-lg" />
-                <FaStar className="text-[#FFDD55] text-sm md:text-lg" />
-                <h1 className="text-xs md:text-sm">4.7 out of 5</h1>
+              {renderStars(data_.rating?.globalrating || 0)} {/* Render the stars */}
+                <h1 className="text-xs md:text-sm">{data_.rating?.globalrating.toFixed(1) || '0.00'} out of 5</h1>
               </div>
-              <p className="text-xs md:text-sm opacity-65">1,478 global rating</p>
+              <p className="text-xs md:text-sm opacity-65">{data_.rating?.totalRatings || 0} global ratings</p>
               <div className="flex text-blue-600 text-xs md:text-sm py-2">
                 <Link to='/personaldetails'>view personal info</Link>
                 <MdKeyboardArrowRight className="text-xl md:text-2xl" />
               </div>
               <div className="flex gap-2 flex-wrap">
-                {/* Conditionally render buttons */}
                 {isCurrentUser ? (
                   <>
                     <button
-                      className="px-6 py-2 rounded-2xl  text-lg bg-[#F6F6FF]"
+                      className={`px-6 py-2 rounded-2xl text-lg ${loading ? 'bg-gray-400' : 'bg-[#F6F6FF]'}`}
                       onClick={handleSubmit}
+                      disabled={loading}
                     >
-                      Save Changes
+                      {loading ? 'Uploading...' : 'Save Changes'}
                     </button>
                     <button
                       onClick={() => console.log(profile)}
-                      onChange={handleFileChange}
                       className="px-6 py-2 rounded-2xl text-lg text-white bg-[#6165F3]"
                     >
                       Edit Profile 
@@ -132,7 +147,7 @@ const ProfilePublic = ({ userId }) => {
                 ) : (
                   <>
                     <button
-                      className="px-6 py-2 rounded-2xl  text-lg bg-[#F6F6FF]"
+                      className="px-6 py-2 rounded-2xl text-lg bg-[#F6F6FF]"
                       onClick={createChatRoom}
                     >
                       Message
@@ -154,12 +169,11 @@ const ProfilePublic = ({ userId }) => {
               className="cursor-pointer opacity-70"
               onClick={() => setActiveTab("Video")}
             />
-            {/* <LuPodcast
-            
-            /> */}
-            <PiApplePodcastsLogoThin size={30}  className="cursor-pointer opacity-70"
-              onClick={() => setActiveTab("Podcast")} />
-
+            <PiApplePodcastsLogoThin
+              size={30}
+              className="cursor-pointer opacity-70"
+              onClick={() => setActiveTab("Podcast")}
+            />
             <BsCalendar4Event
               className="cursor-pointer opacity-70"
               onClick={() => setActiveTab("Event")}
