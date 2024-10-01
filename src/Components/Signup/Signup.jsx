@@ -203,7 +203,11 @@ const Signup = () => {
             {/* <img className="w-10 h-10" src="/Github.png" alt="Github" /> */}
             <FaGithub className="text- w-8 h-8"/>
           </div>
-          <div className="flex justify-center items-center bg-[#f1f1f1] w-[4rem] h-[4rem] px-2 py-2 rounded-full cursor-pointer">
+          <div className="flex justify-center items-center bg-[#f1f1f1] w-[4rem] h-[4rem] px-2 py-2 rounded-full cursor-pointer"
+              onClick={() =>
+              window.open(`${process.env.REACT_APP_API_BASE_URL}/auth/facebook`)
+            }
+          >
             {/* <img className="w-10 h-10" src="/facebook.png" alt="" /> */}
             <FaFacebookF className="text-blue-800 w-8 h-8"/>
           </div>

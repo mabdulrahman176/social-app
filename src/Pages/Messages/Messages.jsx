@@ -14,7 +14,7 @@ function Message() {
   const [rooms, setRooms] = useState([])
 
   const fetchAllChatrooms = async () => {
-    const req = await fetch(`http://localhost:5000/chatrooms/${getUserId()}`)
+    const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/chatrooms/${getUserId()}`)
     const d = await req.json()
     const roomIds =d.data.map((e) =>e && e._id )
     setRooms(roomIds);
@@ -90,7 +90,7 @@ return timeString
                       />
                       <div>
                         <p className="text-md font-medium">{message.sender.name}</p>
-                        <p className="text-[gray] text-sm">{message.messages.length>0 &&  message.messages.at(-1).message}</p>
+                        <p className="text-[gray] text-sm">{message.messages.length>0 &&  message.messages.at(-1).message.slice(0, 10)}</p>
                       </div>
                     </div>
                     <p className="text-xs">{__Time__(message.updatedAt)}</p>
