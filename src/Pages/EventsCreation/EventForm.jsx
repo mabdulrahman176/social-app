@@ -290,8 +290,8 @@ const EventForm = () => {
               />
             </div>
             <div className="my-4">
-            <AddSpeaker updateSpeakerData={updateSpeakerData} initialData={speakerState} />
 
+            <AddSpeaker updateSpeakerData={updateSpeakerData} initialData={speakerState} />
             </div>
             <div className="my-4">
               <label className="block text-gray-600 text-sm font-bold">Manage Privacy Settings</label>

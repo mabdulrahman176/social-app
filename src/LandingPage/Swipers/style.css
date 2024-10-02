@@ -1,0 +1,107 @@
+.propertyCards {
+    width: 100%;
+    /* min-height: 90vh; */
+    display: flex;
+    justify-content: center;
+    background-color: #0C0D38;
+    padding-bottom: 70px;
+}
+
+.propertyCards-content {
+    width: 92%;
+    height: 100%;
+    position: relative;
+}
+
+.swiper {
+    width: 100%;
+    height: 100%;
+    margin-top: 60px;
+}
+/* .swiper-slide{
+    padding-top: 20px;
+    margin-top: 10px;
+    border-top: 1px solid gray;
+} */
+
+/* .swiper-slide {
+    width: 20%;
+    overflow: ;
+} */
+
+.swiper-slide img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.swiper-navigation-buttonss {
+    height: 20px;
+    position: absolute;
+    /* left: 95%; */
+    right: 10px;
+    margin-top: -40px;
+    display: flex;
+
+}
+
+.swiper-button-prev1 {
+    height: 50px;
+    width: 50px;
+    margin: 5px;
+    margin-left: -35px;
+    margin-top: -15px;
+
+    border: 1px solid #0C0D38;
+    background-color: #F7F7F7    ;
+    border-radius: 50%;
+    color: rgb(39, 36, 36);
+    cursor: pointer;
+}
+
+.swiper-button-next2 {
+    height: 50px;
+    width: 50px;
+    margin: 5px;
+    margin-top: -15px;
+    /* border: 1px solid blue; */
+    background-color: #6165F3    ;
+    border-radius: 50%;
+    color: white;
+    cursor: pointer;
+}
+
+.antd-card {
+    background-color: #c8ff0017;
+}
+
+.my-card h2 {
+    font-family: sans-serif;
+    font-size: 20.11px;
+    font-weight: 500;
+    line-height: 25.59px;
+    letter-spacing: -0.02em;
+    text-align: left;
+    color: white;
+}
+
+.my-card p {
+    font-family: sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 25.59px;
+    letter-spacing: -0.02em;
+    text-align: left;
+    color: #FFFFFF80;
+}
+
+.howit-title {
+    color: white;
+    margin-top: 50px;
+}
+.swiper-button-next2:hover,
+.swiper-button-prev1:hover {
+    background-color: blue;
+    color: white;
+}
