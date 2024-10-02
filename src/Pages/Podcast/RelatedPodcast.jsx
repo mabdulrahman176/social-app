@@ -23,6 +23,18 @@ const RelatedPodcast = () => {
       getData();
     }, []);
   
+    
+  const formatDuration = (duration) => {
+    // Assuming duration is in milliseconds
+    const seconds = Math.floor(duration / 1000);
+    
+    if (seconds < 60) {
+      return `${seconds} seconds`;
+    } else {
+      const minutes = Math.floor(seconds / 60);
+      return `${minutes} min${minutes > 1 ? 's' : ''}`; // Pluralize if necessary
+    }
+  };
 
   return (
     <div className="flex justify-start  ps-5 gap-2 flex-wrap w-full overflow-x-auto Podcast_Top_Videos mt-2">
@@ -39,7 +51,7 @@ const RelatedPodcast = () => {
             <p className="text-sm">{elm.episodeTitle}</p>
             <p className="text-sm">{elm.user ? elm.user.name : ""}</p>
             <p className="text-xs flex gap-1 items-center">
-              <CiPlay1 /> {elm.podcastDuration}
+              <CiPlay1 />  {formatDuration(elm.podcastDuration)}
             </p>
           </div>
         </div>

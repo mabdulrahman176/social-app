@@ -51,6 +51,7 @@ import Personaldetail2 from './Pages/Profile/Personaldetail2.jsx';
 import Search from './Components/Navbar/Saerch.jsx';
 import JobAppliedSuccess from './Pages/Jobs/JobAppliedSuccess.jsx';
 import Header from './LandingPage/Header.jsx'
+import NotFound from './Components/PageNotFound.jsx';
 
 
 const App = () => {
@@ -63,6 +64,7 @@ const App = () => {
         <Route path="/" element={<Header/>} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/signin" element={<Signup />} />
+<Route path='/notfound' element={<NotFound />} />
 
         {/* Routes with Layout */}
         <Route element={<Layout />}>
@@ -124,7 +126,7 @@ const App = () => {
         </Route>
 
         {/* Redirect to signup if no matching route is found */}
-        <Route path="*" element={<Navigate to="/" />} />
+        <Route path="*" element={<Navigate to="/notfound" />} />
         {/* <Route path="*" element={<Navigate to="/signup" />} /> */}
       </Routes>
 

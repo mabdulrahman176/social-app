@@ -5,10 +5,11 @@ import { deleteJob } from '../../DeleteAPI'; // Import deleteJob function
 import { Link } from "react-router-dom";
 
 const CalendarSearch = (props) => {
-  const [jobs, setJobs] = useState([]);
+  const [jobs, setJobs] = useState([]); // State to hold jobs
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteItemId, setDeleteItemId] = useState(null);
   const [visibleId, setVisibleId] = useState(null);
+  const [loading, setLoading] = useState(true); // Loading state
 
   const handleDeleteClick = (id) => {
     setDeleteItemId(id);
@@ -16,12 +17,10 @@ const CalendarSearch = (props) => {
   };
 
   const handleDeleteConfirm = async () => {
-    // Call deleteJob function when delete is confirmed
     try {
       await deleteJob(deleteItemId); // Call the deleteJob API with the selected job ID
       console.log(`Deleted job with id: ${deleteItemId}`);
-      // Optionally, remove the deleted job from the local state
-      setJobs((prevJobs) => prevJobs.filter((job) => job._id !== deleteItemId));
+      setJobs((prevJobs) => prevJobs.filter((job) => job._id !== deleteItemId)); // Remove job from local state
     } catch (error) {
       console.error("Error deleting job:", error);
     }
@@ -35,31 +34,26 @@ const CalendarSearch = (props) => {
   };
 
   useEffect(() => {
+    setLoading(true); // Start loading
     console.log("in single job component");
     console.log(props.jobs);
-    setJobs(props.jobs);
+    setJobs(props.jobs); // Set jobs from props
+    setLoading(false); // Stop loading after setting jobs
   }, [props.jobs]);
 
   const formatDate = (dateString) => {
     if (!dateString) return "Invalid date"; // Return a message for undefined dates
 
-    // Normalize the date input by replacing dashes with slashes
     const normalizedDateString = dateString.replace(/[-]/g, "/");
-
-    // Split the date parts
     const dateParts = normalizedDateString.split("/");
-
     let day, month, year;
 
-    // Check for different formats
     if (dateParts.length === 3) {
       if (dateParts[0].length === 4) {
-        // Format: YYYY/MM/DD
         year = dateParts[0];
         month = dateParts[1] - 1; // Month is zero-indexed
         day = dateParts[2];
       } else {
-        // Format: DD/MM/YYYY
         day = dateParts[0];
         month = dateParts[1] - 1; // Month is zero-indexed
         year = dateParts[2];
@@ -82,7 +76,9 @@ const CalendarSearch = (props) => {
     <Fragment>
       <div className="ps-6 overflow-y-scroll Podcast_Top_Videos h-full w-full">
         <div className="flex gap-1 flex-wrap w-full Podcast_Top_Videos">
-          {jobs &&
+          {loading ? (
+            <p className="text-center w-full">Loading...</p>
+          ) : jobs && jobs.length > 0 ? (
             jobs.map((elm, i) => (
               <div
                 key={i}
@@ -92,7 +88,6 @@ const CalendarSearch = (props) => {
               >
                 <div className="w-full">
                   <div className="flex gap-2 mt-2">
-                    {/* Display poster image */}
                     <img
                       src={elm.logoUrl ? elm.logoUrl : "/profile.png"}
                       onLoad={(e) => (e.target.style.opacity = 1)}
@@ -113,7 +108,7 @@ const CalendarSearch = (props) => {
                       </p>
                     </div>
                   </div>
-                  <p className="mt-7 ps-4 text-md opacity-65">{elm.location}({elm.workplaceType})</p>
+                  <p className="mt-7 ps-4 text-md opacity-65">{elm.location} ({elm.workplaceType})</p>
                   <p className="ps-4 text-sm opacity-65 mt-3">{elm.salaryRange}</p>
                   {elm.jobType === " " ? (
                     <Link
@@ -134,18 +129,18 @@ const CalendarSearch = (props) => {
                       </Link>
                     </div>
                   )}
-                  {/* Add delete icon */}
-                  {true && (
-                    <button
-                      className="absolute top-2 right-2 text-red-600 text-xl cursor-pointer"
-                      onClick={() => handleDeleteClick(elm._id)}
-                    >
-                      <IoTrashOutline />
-                    </button>
-                  )}
+                  <button
+                    className="absolute top-2 right-2 text-red-600 text-xl cursor-pointer"
+                    onClick={() => handleDeleteClick(elm._id)}
+                  >
+                    <IoTrashOutline />
+                  </button>
                 </div>
               </div>
-            ))}
+            ))
+          ) : (
+            <p className="text-center w-full">No jobs available</p>
+          )}
         </div>
 
         {/* Delete Modal */}

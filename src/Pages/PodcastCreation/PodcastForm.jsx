@@ -24,7 +24,7 @@ const PodcastForm = () => {
 
       const audio = new Audio(URL.createObjectURL(file));
       audio.onloadedmetadata = () => {
-        setAudioDuration(Math.round(audio.duration)); // Set duration in seconds
+        setAudioDuration(Math.round(audio.duration * 1000)); // Set duration in seconds
       };
     }
   };

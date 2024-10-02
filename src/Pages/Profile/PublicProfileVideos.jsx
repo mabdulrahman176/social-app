@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { CiPlay1, CiEdit, CiTrash } from "react-icons/ci"; // Import icons
-// import ProfileVideo from "./ProfileVideo"; // Import the ProfileVideo component
+import { CiPlay1, CiTrash } from "react-icons/ci"; // Import icons
 import { useNavigate } from "react-router-dom";
-import { deleteVideo} from '../../DeleteAPI'
+import { deleteVideo } from '../../DeleteAPI';
 
 const AllVideos = (props) => {
   const [video, setVideo] = useState([]); // State to hold the video list
   const [selectedVideo, setSelectedVideo] = useState(null); // State for the selected video
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false); // State for the video modal
   const [visibleId, setVisibleId] = useState(null); // State for showing icons on hover
-  const [deleteId, setDeleteId] = useState(''); // State for showing icons on hover
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); // State for delete modal
-
   const [videoToDelete, setVideoToDelete] = useState(null); // State for the video to delete
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); // State for delete modal
+  const [loading, setLoading] = useState(true); // Loading state
+
   const navigate = useNavigate();
 
   const openVideoModal = (video) => {
@@ -25,18 +24,12 @@ const AllVideos = (props) => {
     setSelectedVideo(null);
   };
 
-
   const handleIconClick = (event, action, video) => {
-
     event.stopPropagation(); // Prevent navigation on icon click
-    console.log({video})
     if (action === "edit") {
       setSelectedVideo(video);
-  
     } else if (action === "delete") {
-
       setVideoToDelete(video._id); // Set the video to delete
-
       setIsDeleteModalOpen(true); // Open the delete modal
     }
   };
@@ -56,9 +49,16 @@ const AllVideos = (props) => {
   };
 
   useEffect(() => {
-    setVideo(props.videos); // Set the video list from props
+    setLoading(true); // Start loading
+    const fetchVideos = () => {
+      setVideo(props.videos); // Set the video list from props
+      setLoading(false); // Stop loading after setting the videos
+    };
+
+    fetchVideos(); // Fetch videos
+
     return () => {
-      setVideo([]);
+      setVideo([]); // Clean up on unmount
     };
   }, [props.videos]); // Ensure we are watching the correct prop (props.videos)
 
@@ -66,7 +66,9 @@ const AllVideos = (props) => {
     <React.Fragment>
       <div className="bg-white px-2 h-full w-full">
         <div className="flex flex-wrap gap-1 bg-white w-[95%] mx-auto">
-          {video && video.length > 0 ? (
+          {loading ? (
+            <p className="text-center w-full">Loading...</p>
+          ) : video && video.length > 0 ? (
             video.map((video, ind) => (
               <div
                 key={ind}
@@ -80,14 +82,10 @@ const AllVideos = (props) => {
                   className="w-[100%] h-[100%] overflow-y-hidden object-fill"
                 ></video>
                 <CiPlay1 className="absolute text-2xl text-white" />
-                
+
                 {/* Show Edit/Delete icons on hover */}
                 {visibleId === video._id && (
                   <div className="absolute top-2 right-2 flex flex-col space-y-2">
-                    {/* <CiEdit
-                      className="text-white text-3xl cursor-pointer hover:text-gray-300"
-                      onClick={(e) => handleIconClick(e, "edit", video)} // Trigger edit action
-                    /> */}
                     <CiTrash
                       className="text-red-600 text-3xl cursor-pointer hover:text-red-700"
                       onClick={(e) => handleIconClick(e, "delete", video)} // Trigger delete action
@@ -122,7 +120,6 @@ const AllVideos = (props) => {
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center">
           <div className="bg-white p-4 rounded-lg">
             <p>Are you sure you want to delete this video?</p>
-            <p>{deleteId}</p>
             <div className="flex justify-end mt-4">
               <button
                 className="mr-2 bg-gray-500 text-white px-4 py-2 rounded"
@@ -140,33 +137,6 @@ const AllVideos = (props) => {
           </div>
         </div>
       )}
-
-      {/* Edit Modal */}
-      {/* {isEditModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center">
-          <div className="bg-white p-4 rounded-lg">
-            <p>Edit Video Details</p>
-          
-            <div className="flex justify-end mt-4">
-              <button
-                className="mr-2 bg-gray-500 text-white px-4 py-2 rounded"
-                onClick={() => setIsEditModalOpen(false)}
-              >
-                Close
-              </button>
-              <button
-                className="linear_gradient text-white px-4 py-2 rounded"
-                onClick={() => {
-                  console.log("Editing video...");
-                  setIsEditModalOpen(false); 
-                }}
-              >
-                Save Changes
-              </button>
-            </div>
-          </div>
-        </div>
-      )} */}
     </React.Fragment>
   );
 };

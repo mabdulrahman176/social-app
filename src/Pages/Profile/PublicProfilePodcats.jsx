@@ -6,10 +6,11 @@ import { useNavigate } from "react-router-dom";
 import { deletePodcast } from "../../DeleteAPI";
 
 const ApplePodcast = (props) => {
-  const [podcast, setpodcast] = useState([]);
+  const [podcast, setPodcast] = useState([]);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteItemId, setDeleteItemId] = useState(null);
   const [visibleId, setVisibleId] = useState(null);
+  const [loading, setLoading] = useState(true); // Loading state
 
   const handleDeleteClick = (e, id) => {
     e.stopPropagation(); // Prevent navigation when clicking delete icon
@@ -23,7 +24,7 @@ const ApplePodcast = (props) => {
         console.log(`Attempting to delete podcast with id: ${deleteItemId}`);
         await deletePodcast(deleteItemId); // Call deletePodcast with the ID
         console.log('Podcast deleted successfully.');
-        setpodcast(podcast.filter((item) => item._id !== deleteItemId)); // Remove deleted podcast from state
+        setPodcast(podcast.filter((item) => item._id !== deleteItemId)); // Remove deleted podcast from state
       } catch (error) {
         console.error('Error deleting podcast:', error);
       }
@@ -41,9 +42,16 @@ const ApplePodcast = (props) => {
   useEffect(() => {
     console.log("podcasts single user section");
     console.log(props.podcast);
-    setpodcast(props.podcast);
-    console.log({ podcast });
+    
+    // Simulate loading time
+    setLoading(true);
+    setTimeout(() => {
+      setPodcast(props.podcast);
+      setLoading(false);
+      console.log({ podcast });
+    }, 1000); // Simulating a delay of 1 second
   }, [props.podcast]);
+
   const handleShare = async (e) => {
     e.stopPropagation(); 
     if (navigator.share) {
@@ -60,50 +68,72 @@ const ApplePodcast = (props) => {
       alert('Web Share API is not supported in your browser.');
     }
   };
+
+  const formatDuration = (duration) => {
+    const seconds = Math.floor(duration / 1000);
+    
+    if (seconds < 60) {
+      return `${seconds} seconds`;
+    } else {
+      const minutes = Math.floor(seconds / 60);
+      return `${minutes} min${minutes > 1 ? 's' : ''}`; // Pluralize if necessary
+    }
+  };
+
   return (
     <Fragment>
       <div className="overflow-y-scroll Podcast_Top_Videos h-full">
-        <div className="flex flex-wrap gap-1 w-[95%] mx-auto Podcast_Top_Videos pt-2">
-          {podcast && podcast.map((elm, ind) => (
-            <div
-              key={ind}
-              className="md:h-[45vh] h-[37vh] w-[32.4%] rounded-lg border relative text-white PPPodcast"
-              onMouseEnter={() => setVisibleId(elm._id)}
-              onMouseLeave={() => setVisibleId(null)}
-              onClick={() => navigate(`/podcastdetails`, { state: { id: elm._id } })}
-
-            >
-              <IoBookmarkOutline className="absolute right-2 top-4 text-2xl" />
-              <div className="absolute bottom-1 px-2 w-full">
-                <div className="VideosBgBlured rounded-lg px-3 pt-5">
-                  <p className="text-2xl font-medium">{elm.episodeTitle}</p>
-                  <p className="text-sm">{elm.user ? elm.user.name : ""}</p>
-                  <div className="flex justify-between">
-                    <p className="flex items-center gap-1 text-md">
-                      <CiPlay1 className="text-lg" />{elm.podcastDuration}
-                    </p>
-                    <p onClick={handleShare}>
-                      <FaRegShareFromSquare className="text-2xl -mt-3 cursor-pointer" />
-                    </p>
+        {loading ? (
+          <div className="text-center">Loading...</div>
+        ) : (
+          <>
+            {podcast.length === 0 ? (
+              <div className="text-center">No podcasts available.</div>
+            ) : (
+              <div className="flex flex-wrap gap-1 w-[95%] mx-auto Podcast_Top_Videos pt-2">
+                {podcast.map((elm, ind) => (
+                  <div
+                    key={ind}
+                    className="md:h-[45vh] h-[37vh] w-[32.4%] rounded-lg border relative text-white PPPodcast"
+                    onMouseEnter={() => setVisibleId(elm._id)}
+                    onMouseLeave={() => setVisibleId(null)}
+                    onClick={() => navigate(`/podcastdetails`, { state: { id: elm._id } })}
+                  >
+                    <IoBookmarkOutline className="absolute right-2 top-4 text-2xl" />
+                    <div className="absolute bottom-1 px-2 w-full">
+                      <div className="VideosBgBlured rounded-lg px-3 pt-5">
+                        <p className="text-2xl font-medium">{elm.episodeTitle}</p>
+                        <p className="text-sm">{elm.user ? elm.user.name : ""}</p>
+                        <div className="flex justify-between">
+                          <p className="flex items-center gap-1 text-md">
+                            <CiPlay1 className="text-lg" />
+                            {formatDuration(elm.podcastDuration)}
+                          </p>
+                          <p onClick={handleShare}>
+                            <FaRegShareFromSquare className="text-2xl -mt-3 cursor-pointer" />
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <img
+                      src={elm.picUrl}
+                      alt={`Img-${ind}`}
+                      className="h-full w-full rounded-lg"
+                    />
+                    {visibleId === elm._id && (
+                      <div className="absolute top-14 right-2 flex flex-col space-y-2">
+                        <CiTrash
+                          className="text-red-600 text-3xl cursor-pointer hover:text-red-600"
+                          onClick={(e) => handleDeleteClick(e, elm._id)} // Pass event and id
+                        />
+                      </div>
+                    )}
                   </div>
-                </div>
+                ))}
               </div>
-              <img
-                src={elm.picUrl}
-                alt={`Img-${ind}`}
-                className="h-full w-full rounded-lg"
-              />
-              {visibleId === elm._id && (
-                <div className="absolute top-14 right-2 flex flex-col space-y-2">
-                  <CiTrash
-                    className="text-red-600 text-3xl cursor-pointer hover:text-red-600"
-                    onClick={(e) => handleDeleteClick(e, elm._id)} // Pass event and id
-                  />
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
+            )}
+          </>
+        )}
 
         {/* Delete Modal */}
         {isDeleteModalOpen && (

@@ -25,6 +25,19 @@ function PodcastTopVideos() {
   }, []);
 
   const navigate = useNavigate();
+
+  const formatDuration = (duration) => {
+    // Assuming duration is in milliseconds
+    const seconds = Math.floor(duration / 1000);
+    
+    if (seconds < 60) {
+      return `${seconds} seconds`;
+    } else {
+      const minutes = Math.floor(seconds / 60);
+      return `${minutes} min${minutes > 1 ? 's' : ''}`; // Pluralize if necessary
+    }
+  };
+
   return (
     <Fragment>
      <section className="w-full h-[89%] bg-white mt-1 text-white overflow-y-scroll Podcast_Top_Videos">
@@ -43,7 +56,7 @@ function PodcastTopVideos() {
                     <p className="text-sm">{elm.episodeTitle}</p>
                      <p className="text-sm">{elm.user ? elm.user.name : ""}</p>
                     <p className="text-xs flex gap-1 items-center">
-                      <CiPlay1 /> {elm.podcastDuration}
+                      <CiPlay1 /> {formatDuration(elm.podcastDuration)}
                     </p>
                   </div>
                 </div>
@@ -69,7 +82,7 @@ function PodcastTopVideos() {
             <p className="text-sm">{elm.user ? elm.user.name : ""}</p>
           
             <p className="text-xs flex gap-1 items-center">
-              <CiPlay1 /> {elm.podcastDuration}
+              <CiPlay1 /> {formatDuration(elm.podcastDuration)}
             </p>
           </div>
         </div>
@@ -93,7 +106,7 @@ function PodcastTopVideos() {
                     <p className="text-sm">{elm.episodeTitle}</p>
                     <p className="text-sm">{elm.user ? elm.user.name : ""}</p>
                     <p className="text-xs flex gap-1 items-center">
-                      <CiPlay1 /> {elm.podcastDuration}
+                      <CiPlay1 />  {formatDuration(elm.podcastDuration)}
                     </p>
                   </div>
                 </div>
