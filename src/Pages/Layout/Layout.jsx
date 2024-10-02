@@ -20,7 +20,7 @@ const Layout = () => {
   return (
     <div className="flex flex-col h-[100vh] w-[100vw]   bg-gray-200">
       {/* Header */}
-      <header className="bg-white h-[7%] w-full">
+      <header className="bg-white h-[7%] w-full ">
         <Navbar state={{setRightSidebar,rightSidebar}}/>
         {/* <Search/> */}
       </header>

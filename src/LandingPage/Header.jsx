@@ -31,8 +31,8 @@ const Header = () => {
 
 
   return (
-    <div className=''>
-    <div className="flex bg-[#e4efff] justify-between h-36 w-full px-6 sm:px-6 md:px-12 lg:px-28 pt-4 relative items-center">
+    <div className='overflow-x-hidden'>
+    <div className="flex bg-[#e4efff] justify-between h-36 w-full px-6 sm:px-6 md:px-12 lg:px-28 pt-4 relative items-center ">
       {/* Logo */}
       <div className="Logo">
         <NavLink to="/" className="text-[#6165f3] font-sans text-2xl sm:text-2xl font-extrabold">

@@ -16,7 +16,7 @@ import RelatedEvent from "./RelatedEvent";
 function Eventdetails() {
   const loc = useLocation();
   const navigate = useNavigate();
-  const [newcard, setNewCard] = useState([]);
+  // const [newcard, setNewCard] = useState([]);
   const [result, setResult] = useState({});
   const [event, setEvent] = useState({});
   useEffect(() => {
@@ -59,16 +59,33 @@ function Eventdetails() {
           <FaAngleLeft
             className="cursor-pointer"
             onClick={() => navigate("/events")}
-          />{" "}
+          />
           Event Detail
         </h4>
         {/* {newcard.map(( data,index)=>( */}
         <div className="overflow-y-scroll w-[93%] Podcast_Top_Videos mx-auto h-[90%]">
-          <img
+         <div className="flex ">
+
+         <img
             src={event.eventCoverUrl ? event.eventCoverUrl : img}
             alt=""
             className="eventimg1"
           />
+           <div className="sm:w-[40%] pt-5 ml-6 my-6">
+              <div className="ticketstarting py-3 rounded w-[80%] mx-auto  ">
+                <small className="text-gray-500">Tickets starting at</small>
+                <h5 className="text-lg pb-2 font-bold">
+                  {event.eventTicketPrice}
+                </h5>
+                <button
+                  className="buyticket  text-white rounded-lg px-4 py-2 mt-2"
+                  onClick={() => navigate("/ticket", { state: { id:event._id } })}
+                >
+                  <small>Buy Tickets</small>
+                </button>
+              </div>
+            </div>
+         </div>
           <div className="sm:flex mt-2">
             <div className="risk sm:w-[60%]">
               <h3 className="text-xl font-bold">{event.eventTitle}</h3>
@@ -84,20 +101,7 @@ function Eventdetails() {
                 {event.eventCatagory}
               </p>
             </div>
-            <div className="sm:w-[40%] pt-5">
-              <div className="ticketstarting py-3 rounded w-[80%] mx-auto  ">
-                <small className="text-gray-500">Tickets starting at</small>
-                <h5 className="text-lg pb-2 font-bold">
-                  {event.eventTicketPrice}
-                </h5>
-                <button
-                  className="buyticket  text-white rounded-lg px-4 py-2 mt-2"
-                  onClick={() => navigate("/ticket")}
-                >
-                  <small>Buy Tickets</small>
-                </button>
-              </div>
-            </div>
+           
           </div>
 
           <h4 className="text-xl font-bold mt-5">Event Information</h4>

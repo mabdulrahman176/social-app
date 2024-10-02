@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaRegShareFromSquare } from 'react-icons/fa6';
 import { IoBookmarkOutline, IoTrashOutline } from 'react-icons/io5'; // Import the delete icon
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { deleteEvent } from '../../DeleteAPI';// Import the deleteEvent function
 
 
@@ -84,14 +84,15 @@ const Calendar = (props) => {
                 <small className="block text-xl">{elm.eventTitle}</small>
                 <p className="text-xs py-2">{elm.eventDate}</p>
                 <p className="text-sm pb-2">{elm.eventDescription}</p>
-                <div className='flex items-center'>
-                  <button
-                    className="me-2 w-[80%] py-2 JobButtonBgBlur text-xs text-white rounded-full"
-                    onClick={() => navigate("/ticket")}
-                  >
-                    Buy tickets
-                  </button>
-                  <button className="w-[20%] py-2 flex justify-center JobButtonBgBlur text-xs text-white rounded-full" onClick={handleShare}>
+                <div className='flex justify-between'>
+                <Link
+                to="/eventdetail"
+                state={{ id: elm._id }}
+                className="me-2 md:px-5 py-2 JobButtonBgBlur md:w-auto w-[70%] text-sm text-white rounded-full"
+              >
+                Buy tickets
+              </Link>
+                  <button className="md:px-7 py-2 flex justify-center w-[30%] md:w-auto JobButtonBgBlur text-xs text-white rounded-full" onClick={handleShare}>
                     <FaRegShareFromSquare className='text-sm' />
                   </button>
                 </div>

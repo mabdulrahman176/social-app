@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSort } from "@fortawesome/free-solid-svg-icons";
 import "./Ticket.css";
 import { FaAngleLeft } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { CiLocationOn } from "react-icons/ci";
 import { IoCalendarOutline } from "react-icons/io5";
 import img from "./Img1.png";
@@ -13,7 +13,36 @@ function Ticket() {
   const [more, setMore] = useState(0);
   const [able, setAble] = useState(0);
 
+ 
+  const [tickets, setTickets] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const loc = useLocation();
   const navigate = useNavigate();
+
+  const fetchTickets = async (id) => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/events/${id}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      console.log("Fetched ticket data:", data); // Log the entire response
+      setTickets(data.event); 
+    } catch (error) {
+      console.error("Error fetching tickets:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+ useEffect(() => {
+  console.log("Component mounted. loc.state:", loc.state);
+  if (loc.state) {
+    fetchTickets(loc.state.id);
+  } else {
+    console.error("No event ID found in location state.");
+  }
+}, [loc.state]);
 
   return (
     <>
@@ -21,32 +50,29 @@ function Ticket() {
         <h3 className="flex items-center gap-3 ms-4 h-[10%]">
           <FaAngleLeft
             className="cursor-pointer"
-            onClick={() => navigate("/eventdetail")}
+            onClick={() => navigate("/eventdetail",{ state: { id:tickets._id } })}
           />
           Ticket Options
         </h3>
         <div className="h-[90%] overflow-y-scroll Podcast_Top_Videos">
           <div className="sm:flex justify-between items-center sm:w-[90%] sm:ps-0 ps-4 mx-auto">
             <img
-              src={img}
+              src={tickets.eventCoverUrl ? tickets.eventCoverUrl : img}
               alt=""
               className="sm:w-[50%] w-[70%] h-[40vh] rounded-lg border ticket_img "
             />
             <div className="risk2 sm:w-[47%] w-[90%] sm:mt-0 mt-3">
               <h3 className="text-lg font-bold">
-                Risk-tolerant for higher returns
+                {tickets.eventTitle}
               </h3>
               <p className="flex items-center gap-2 py-2 text-sm">
-                <CiLocationOn className="me-1" /> Grand Hall, Street 3232, UK
+                <CiLocationOn className="me-1" /> {tickets.eventLocation}
               </p>
               <p className="flex items-center gap-2 py-2 text-sm">
-                <IoCalendarOutline className="me-1" /> September 22, 2024 -
-                10:00pm-2:00am
+                <IoCalendarOutline className="me-1" /> {tickets.eventDate}
               </p>
               <p className=" text-[16px] opacity-80 mt-3">
-                Marty travels back in time using an eccentric scientist's time
-                machine. However, he must make his high-school-aged parents fall
-                in love in order to return to the present.
+             {tickets.eventDescription}
               </p>
             </div>
           </div>

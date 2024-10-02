@@ -94,7 +94,7 @@ const CalendarSearch = (props) => {
                   <div className="flex gap-2 mt-2">
                     {/* Display poster image */}
                     <img
-                      src={elm.poster ? elm.poster.picUrl : "/profile.png"}
+                      src={elm.logoUrl ? elm.logoUrl : "/profile.png"}
                       onLoad={(e) => (e.target.style.opacity = 1)}
                       onError={(e) => (e.target.src = "/profile.png")}
                       style={{
