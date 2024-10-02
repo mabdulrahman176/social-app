@@ -52,6 +52,7 @@ import Search from './Components/Navbar/Saerch.jsx';
 import JobAppliedSuccess from './Pages/Jobs/JobAppliedSuccess.jsx';
 import Header from './LandingPage/Header.jsx'
 import NotFound from './Components/PageNotFound.jsx';
+import PageNotFound from './Components/PageNotFound.jsx';
 
 
 const App = () => {
@@ -68,6 +69,7 @@ const App = () => {
 
         {/* Routes with Layout */}
         <Route element={<Layout />}>
+      
         <Route path='/search'element={<Search/>} />
           <Route path="/videos" element={<Feed />} />
           <Route path="/video/:src" element={<SingleVideo />} />
@@ -109,6 +111,8 @@ const App = () => {
           <Route path="/filterevent" element={<FilterEvent />} />
           <Route path="/filterjob" element={<FilterJob />} />
           <Route path="/jobs" element={<Jobs />} />
+    {/* Redirect to 404 Page if no matching route is found */}
+    <Route path="*" element={<PageNotFound />} />
 
           {/* SETTINGS ROUTES */}
           <Route path="/appliedjobs" element={<AppliedJobs />} />
@@ -125,9 +129,7 @@ const App = () => {
           <Route path="/privacy" element={<Privacy />} />
         </Route>
 
-        {/* Redirect to signup if no matching route is found */}
-        <Route path="*" element={<Navigate to="/notfound" />} />
-        {/* <Route path="*" element={<Navigate to="/signup" />} /> */}
+   
       </Routes>
 
 
