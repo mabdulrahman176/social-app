@@ -23,7 +23,8 @@
     "remixicon": "^4.3.0",
     "socket.io-client": "^4.7.5",
     "tapable": "^2.2.1",
-    "web-vitals": "^2.1.4"
+    "antd": "^5.20.0",
+    "swiper": "^11.1.9"
   },
   "scripts": {
     "start": "set PORT=5173 && react-scripts start",

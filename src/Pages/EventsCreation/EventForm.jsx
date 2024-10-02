@@ -262,7 +262,12 @@ const EventForm = () => {
               />
             </div>
             <div className="my-4">
-              <AddSpeaker />
+
+            
+            
+              <AddSpeaker updateSpeakerData={[]} initialData={[]} />
+            
+            
             </div>
             <div className="my-4">
               <label className="block text-gray-600 text-sm font-bold">Manage Privacy Settings</label>
