@@ -91,8 +91,9 @@ const ProfilePublic = ({ userId }) => {
     fetchProfileData();
   }, []);
 
-  const isCurrentUser = userId === getUserId();
+  const isCurrentUser =  getUserId();
 
+console.log("user id is ", isCurrentUser)
   return (
     <Fragment>
       <div className="bg-white h-full w-full">

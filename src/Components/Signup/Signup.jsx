@@ -3,18 +3,17 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaFacebookF } from "react-icons/fa";
 import { FaGithub } from "react-icons/fa";
 
-
 const Signup = () => {
   const navigate = useNavigate();
   const [signUp, setSignUp] = useState(true);
-
   const location = useLocation();
-
   const [state, setState] = useState({});
   const [selectedRole, setSelectedRole] = useState("viewer");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent default form submission behavior
+    setLoading(true); // Start loading
 
     console.log("Submitting data:", { ...state, role: selectedRole });
 
@@ -35,14 +34,22 @@ const Signup = () => {
       const d = await req.json();
       console.log("Response data:", d);
 
-      // Clear form fields
-      setState({});
-      setSelectedRole("");
+      // Check if the response indicates success
+      if (d.success) { // Adjust according to your actual response structure
+        // Clear form fields
+        setState({});
+        setSelectedRole("viewer"); // Reset role to default
 
-      // Navigate to home page
-      navigate("/videos");
+        // Navigate to home page
+        console.log("Navigating to /videos");
+        navigate("/videos");
+      } else {
+        console.error("Error from server:", d.message || "Unknown error");
+      }
     } catch (error) {
       console.error("Error during fetch:", error);
+    } finally {
+      setLoading(false); // End loading
     }
   };
 
@@ -67,22 +74,18 @@ const Signup = () => {
 
   return (
     <div className="w-[100vw] h-[100vh] grid place-items-center bg-blue-200">
-      <div className=" w-full h-full md:h-[95vh] md:w-[27rem] bg-white flex flex-col justify-between items-center md:items-center px-10 py-4">
+      <div className="w-full h-full md:h-[95vh] md:w-[27rem] bg-white flex flex-col justify-between items-center md:items-center px-10 py-4">
         <section className="flex flex-col gap-2 items-center py-[1px] w-[19rem]">
           <div className="flex justify-center items-center border-[1px] border-gray-300 rounded w-full">
             <button
               onClick={() => navigate("/signup")}
-              className={`${
-                signUp ? "linear_gradient" : "text-black"
-              } w-full py-[10px] text-xs font-semibold rounded`}
+              className={`${signUp ? "linear_gradient" : "text-black"} w-full py-[10px] text-xs font-semibold rounded`}
             >
               Sign up
             </button>
             <button
               onClick={() => navigate("/signin")}
-              className={`${
-                !signUp ? "linear_gradient" : ""
-              } text-black w-full py-[10px] text-xs font-semibold rounded`}
+              className={`${!signUp ? "linear_gradient" : ""} text-black w-full py-[10px] text-xs font-semibold rounded`}
             >
               Sign in
             </button>
@@ -91,8 +94,7 @@ const Signup = () => {
           <h1 className="text font-bold text-start">Let's get started!</h1>
 
           <form className="flex flex-col w-[22rem] gap-2" onSubmit={handleSubmit}>
-
-          <input
+            <input
               type="text"
               placeholder="Name"
               name="name"
@@ -102,7 +104,6 @@ const Signup = () => {
               required
               className="py-2 px-4 w-full rounded outline-none border-[1px] border-gray-200 placeholder:text-xs"
             />
-
             <input
               type="text"
               placeholder="Email"
@@ -113,7 +114,6 @@ const Signup = () => {
               required
               className="py-2 px-4 rounded outline-none border-[1px] border-gray-200 placeholder:text-xs"
             />
-
             <input
               type="password"
               placeholder="Password"
@@ -124,39 +124,25 @@ const Signup = () => {
               required
               className="py-2 px-4 w-auto rounded outline-none border-[1px] border-gray-200 placeholder:text-xs"
             />
-            <h2 className=" font-semibold text-center ">Select your Role</h2>
-            <section
-              className={`flex justify-center gap-4 max-w-full ${
-                !signUp ? "h-0 opacity-0" : ""
-              }`}
-            >
+            <h2 className="font-semibold text-center">Select your Role</h2>
+            <section className={`flex justify-center gap-4 max-w-full ${!signUp ? "h-0 opacity-0" : ""}`}>
               <button
                 type="button"
-                className={`${
-                  selectedRole === "entrepreneur"
-                    ? "linear_gradient"
-                    : "bg-[#f1f1f1]"
-                } rounded text-xs text-black px-2 py-2 font-semibold`}
+                className={`${selectedRole === "entrepreneur" ? "linear_gradient" : "bg-[#f1f1f1]"} rounded text-xs text-black px-2 py-2 font-semibold`}
                 onClick={() => handleRoleSelect("entrepreneur")}
               >
                 Entrepreneur
               </button>
               <button
                 type="button"
-                className={`${
-                  selectedRole === "invester"
-                    ? "linear_gradient"
-                    : "bg-[#f1f1f1]"
-                } rounded text-xs text-black px-2 py-2 font-semibold`}
+                className={`${selectedRole === "invester" ? "linear_gradient" : "bg-[#f1f1f1]"} rounded text-xs text-black px-2 py-2 font-semibold`}
                 onClick={() => handleRoleSelect("invester")}
               >
                 Investor
               </button>
               <button
                 type="button"
-                className={`${
-                  selectedRole === "viewer" ? "linear_gradient" : "bg-[#f1f1f1]"
-                } rounded text-xs text-black px-2 py-2 font-semibold`}
+                className={`${selectedRole === "viewer" ? "linear_gradient" : "bg-[#f1f1f1]"} rounded text-xs text-black px-2 py-2 font-semibold`}
                 onClick={() => handleRoleSelect("viewer")}
               >
                 Viewer
@@ -167,53 +153,38 @@ const Signup = () => {
               <button
                 type="submit"
                 className="w-full mb-4 bg-purple-800 py-3 rounded-3xl font-semibold linear_gradient text-black"
+                disabled={loading} // Disable button while loading
               >
-                {`${signUp ? "Sign up" : "Sign in"}`}
+                {loading ? "Loading..." : `${signUp ? "Sign up" : "Sign in"}`}
               </button>
             </section>
           </form>
         </section>
 
-        {/* <div className="h-[1px] md:my-2 relative bg-black w-full">
-          <p className="absolute -top-[12px] md:left-[77px] left-[99px] px-1 text-black text-sm bg-white">
-            or continue with
-          </p>
-        </div> */}
         <div className="flex flex-row w-full items-center">
           <div className="w-full h-[1px] bg-black"></div>
-          <div className=" px-2 text-black text-sm whitespace-nowrap bg-white">or continue with</div>
+          <div className="px-2 text-black text-sm whitespace-nowrap bg-white">or continue with</div>
           <div className="w-full h-[1px] bg-black"></div>
         </div>
 
         <section className="flex items-center justify-between w-full md:my-2">
-        <div
+          <div
             className="flex justify-center items-center bg-[#f1f1f1] w-[4rem] h-[4rem] px-2 py-2 rounded-full cursor-pointer"
-            onClick={() =>
-              window.open(`${process.env.REACT_APP_API_BASE_URL}/auth/google`)
-            }
+            onClick={() => window.open(`${process.env.REACT_APP_API_BASE_URL}/auth/google`)}
           >
             <img className="w-10 h-10" src="/google.png" alt="Google" />
           </div>
           <div
             className="flex justify-center items-center bg-[#f1f1f1] p-[.3rem] w-[4rem] h-[4rem] rounded-full cursor-pointer"
-            onClick={() =>
-              window.open(`${process.env.REACT_APP_API_BASE_URL}/auth/github`)
-            }
+            onClick={() => window.open(`${process.env.REACT_APP_API_BASE_URL}/auth/github`)}
           >
-            {/* <img className="w-10 h-10" src="/Github.png" alt="Github" /> */}
             <FaGithub className="text- w-8 h-8"/>
           </div>
           <div className="flex justify-center items-center bg-[#f1f1f1] w-[4rem] h-[4rem] px-2 py-2 rounded-full cursor-pointer"
-              onClick={() =>
-              window.open(`${process.env.REACT_APP_API_BASE_URL}/auth/facebook`)
-            }
+              onClick={() => window.open(`${process.env.REACT_APP_API_BASE_URL}/auth/facebook`)}
           >
-            {/* <img className="w-10 h-10" src="/facebook.png" alt="" /> */}
             <FaFacebookF className="text-blue-800 w-8 h-8"/>
           </div>
-          {/* <div className="flex justify-center items-center bg-[#f1f1f1] px-2 py-2 rounded-full">
-            <img className="w-5 h-5" src="/linkedin.png" alt="" />
-          </div> */}
           <div className="flex justify-center items-center bg-[#f1f1f1] w-[4rem] h-[4rem] px-2 py-2 rounded-full cursor-pointer">
             <svg
               width="28"
@@ -237,24 +208,27 @@ const Signup = () => {
           <p className="text-sm text-center md:w-[15vw] font-[450]">
             By proceeding you agree to investors{" "}
           </p>
-
           <p className="text-sm text-center md:w-[15vw] text-blue-400">
             Terms of use <span className="text-black">&</span> Privacy policy
           </p>
         </section>
 
-        {signUp && <p className="text-sm text-center w-full pt-8">
-          Already have an account?{" "}
-          <Link to="/signin" className="text-blue-400">
-            Log in
-          </Link>
-        </p>}
-        {!signUp && <p className="text-sm text-center w-full pt-8">
-          Create a new account?{" "}
-          <Link to="/signup" className="text-blue-400">
-            Signup
-          </Link>
-        </p>}
+        {signUp && (
+          <p className="text-sm text-center w-full pt-8">
+            Already have an account?{" "}
+            <Link to="/signin" className="text-blue-400">
+              Log in
+            </Link>
+          </p>
+        )}
+        {!signUp && (
+          <p className="text-sm text-center w-full pt-8">
+            Create a new account?{" "}
+            <Link to="/signup" className="text-blue-400">
+              Signup
+            </Link>
+          </p>
+        )}
       </div>
     </div>
   );
