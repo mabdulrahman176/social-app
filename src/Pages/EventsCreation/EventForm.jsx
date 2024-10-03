@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { myContext } from "../../Context/CreateContext";
 import { FaAngleLeft,FaTimes  } from "react-icons/fa";
 import { LuImagePlus } from "react-icons/lu";
+import axios from "axios";
 
 const EventForm = () => {
   const navigate = useNavigate();
@@ -12,11 +13,11 @@ const EventForm = () => {
   const [coverImageFile, setCoverImageFile] = useState(null);
   const [state, setState] = useState({});
   const [speakerState, setSpeakerState] = useState([]);
-  const [loading, setLoading] = useState(false); // Add loading state
-  const [ticketTypes, setTicketTypes] = useState([]); // State for ticket types and prices
+  const [loading, setLoading] = useState(false);
+  const [ticketTypes, setTicketTypes] = useState([]);
   const [selectedType, setSelectedType] = useState("");
   const [ticketPrice, setTicketPrice] = useState(0);
-
+  
   const getUserId = () => {
     const str = document.cookie;
     const userKey = str.split('=')[1];
@@ -26,41 +27,31 @@ const EventForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-  
+
     const formData = new FormData();
     if (coverImageFile) {
       formData.append('coverImage', coverImageFile);
     }
-    
+
     // Append other event details to formData
     Object.keys(state).forEach((key) => {
       formData.append(key, state[key]);
     });
-    
+
     formData.append('eventCreatedBy', getUserId());
   
-    // Append ticket types to formData
-    ticketTypes.forEach(ticket => {
-      formData.append('ticketTypes[]', ticket.type);
-      formData.append('ticketPrices[]', ticket.price);
-    });
+      // Append speakers data to formData
+      speakerState.forEach((speaker, index) => {
+        formData.append(`speakers[${index}][id]`, speaker.id);
+        formData.append(`speakers[${index}][name]`, speaker.name);
+        formData.append(`speakers[${index}][speakerData]`, JSON.stringify(speaker.speakerData)); // Ensure this is defined in AddSpeaker
+      });
   
-    // Append speakers data to formData
-    speakerState.forEach((speaker, index) => {
-      console.log(`Speaker ${index}:`, speaker);
-      formData.append(`speakers[${index}][id]`, speaker.id);
-      formData.append(`speakers[${index}][userName]`, speaker.userName);
-      // formData.append(`speakers[${index}][speakerData]`, JSON.stringify(speaker.speakerData));
-    });
   
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/events/`, {
-        method: 'POST',
-        body: formData,
-      });
-      const data = await response.json();
-      console.log(data);
-  
+      const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/events/`, formData);
+      console.log(response.data);
+
       EventStates.setEventSubmitted(!EventStates.eventSubmitted);
       navigate("/events");
     } catch (error) {
@@ -87,6 +78,7 @@ const EventForm = () => {
     }
   };
 
+
   const handleTicketChange = (e) => {
     const { value } = e.target;
     if (value) {
@@ -94,21 +86,15 @@ const EventForm = () => {
       setSelectedType("");
     }
   };
+
   
   const removeTicket = (index) => {
     setTicketTypes(prev => prev.filter((_, i) => i !== index));
   };
-  // const formData = new FormData();
-
-  // speakerState.forEach((speaker, index) => {
-  //   formData.append(`speakers[${index}][id]`, speaker._id);
-  //   formData.append(`speakers[${index}][userName]`, speaker.userName);
-  //   formData.append(`speakers[${index}][speakerData]`, JSON.stringify(speaker.speakerData));
-  // });
+ 
   
   console.log("Submitting speakers:", speakerState);
 
-  
   const updateSpeakerData = (speakers) => {
     setSpeakerState(speakers);
     console.log("Updated Speakers:", speakers);
@@ -260,13 +246,23 @@ const EventForm = () => {
               />
             </div>
             <div className="my-4">
-              <label className="block text-gray-600 text-sm font-bold">Duration</label>
+              <label className="block text-gray-600 text-sm font-bold">Start Time</label>
               <input
                 className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
                 type="text"
                 onChange={onChange}
                 name="eventDuration"
-                placeholder="Enter duration"
+                placeholder="Enter Start Time"
+              />
+            </div>
+            <div className="my-4">
+              <label className="block text-gray-600 text-sm font-bold">End Time</label>
+              <input
+                className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
+                type="text"
+                onChange={onChange}
+                name="eventDuration"
+                placeholder="Enter End Time"
               />
             </div>
             <div className="my-4">

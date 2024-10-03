@@ -12,7 +12,7 @@ const Navbar = ({ state }) => {
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [data, setData] = useState([]);
-  const [notificationCount, setNotificationCount] = useState(0); // State for notification count
+  const [notificationCount, setNotificationCount] = useState(0);
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
   // Fetch users from the backend
@@ -20,6 +20,7 @@ const Navbar = ({ state }) => {
     try {
       const response = await axios.get(`${API_BASE_URL}/users`);
       setData(response.data.data || []);
+      console.log("Fetched users:", response.data.data); // Log fetched users
     } catch (error) {
       console.error("Error fetching user data:", error);
     }
@@ -28,8 +29,8 @@ const Navbar = ({ state }) => {
   // Fetch notifications count from the backend
   const fetchNotificationCount = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/notifications/count`); // Adjust the endpoint as needed
-      setNotificationCount(response.data.count || 0); // Assuming the API returns the count
+      const response = await axios.get(`${API_BASE_URL}/notifications/count`);
+      setNotificationCount(response.data.count || 0);
     } catch (error) {
       console.error("Error fetching notification count:", error);
     }
@@ -37,25 +38,32 @@ const Navbar = ({ state }) => {
 
   useEffect(() => {
     fetchUsers();
-    fetchNotificationCount(); // Fetch notification count when component mounts
+    fetchNotificationCount();
   }, []);
 
   useEffect(() => {
     if (searchTerm.length > 0) {
       const filteredSuggestions = data.filter(user =>
-        user.userName && user.userName.toLowerCase().includes(searchTerm.toLowerCase())
+        user.name && user.name.toLowerCase().includes(searchTerm.toLowerCase())
       );
+      console.log("Filtered suggestions:", filteredSuggestions); // Log filtered suggestions
       setSuggestions(filteredSuggestions);
       setShowSuggestions(true);
     } else {
+      setSuggestions([]); // Clear suggestions when search term is empty
       setShowSuggestions(false);
     }
   }, [searchTerm, data]);
 
-  const handleSuggestionClick = (userName) => {
-    setSearchTerm(userName);
-    setShowSuggestions(false);
-    // Optionally navigate or perform an action here
+  const handleSuggestionClick = (userId) => {
+    navigate(`/user/${userId}`); // Navigate to the user profile based on userId
+  };
+
+  const handleSearchClick = () => {
+    const selectedUser = suggestions[0]; // Select the first suggestion
+    if (selectedUser) {
+      navigate(`/user/${selectedUser._id}`); // Navigate to the user's profile
+    }
   };
 
   return (
@@ -76,7 +84,10 @@ const Navbar = ({ state }) => {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-        <button className="rounded-r-3xl border-[1px] bg-gray-200 border-gray-200 px-4 py-1">
+        <button 
+          className="rounded-r-3xl border-[1px] bg-gray-200 border-gray-200 px-4 py-1" 
+          onClick={handleSearchClick}
+        >
           <FontAwesomeIcon icon={faMagnifyingGlass} />
         </button>
       
@@ -91,10 +102,10 @@ const Navbar = ({ state }) => {
                 <li
                   key={index}
                   className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
-                  onClick={() => handleSuggestionClick(suggestion.userName)}
+                  onClick={() => handleSuggestionClick(suggestion._id)} // Navigate on suggestion click
                 >
                   <div>
-                    <p>{suggestion.userName}</p>
+                    <p>{suggestion.name}</p>
                   </div>
                 </li>
               ))

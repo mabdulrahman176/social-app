@@ -59,10 +59,7 @@ const AddSpeaker = ({ updateSpeakerData, initialData }) => {
   const filterUsers = (searchTerm) => {
     const lowerCaseTerm = searchTerm.toLowerCase();
     const filtered = allUsers.filter(
-      (user) =>
-        user &&
-        user.userName &&
-        user.userName.toLowerCase().includes(lowerCaseTerm)
+      (user) => user && user.name && user.name.toLowerCase().includes(lowerCaseTerm)
     );
     setFilteredUsers(filtered);
   };
@@ -70,12 +67,8 @@ const AddSpeaker = ({ updateSpeakerData, initialData }) => {
   const handleUserSelect = (user) => {
     const newSpeaker = {
       id: user.Users_PK,
-      userName: `@${user.userName}`,
-      speakerData: [
-        speakerData.speakerName,
-        speakerData.familyName,
-        speakerData.speakerBusinessLink,
-      ],
+      name: `@${user.name}`,
+      speakerData: [], // Additional data can be added if needed
     };
 
     const updatedSpeakers = [...speakers, newSpeaker];
@@ -83,14 +76,22 @@ const AddSpeaker = ({ updateSpeakerData, initialData }) => {
     setInputValue("");
     setFilteredUsers([]);
     setShowAdditionalForms(false);
-    setSpeakerData({
-      speakerName: "",
-      familyName: "",
-      speakerBusinessLink: "",
-    });
+    updateSpeakerData(updatedSpeakers);
+  };
 
-    // Update parent component with new speakers
-    updateSpeakerData(updatedSpeakers); // Ensure updated speakers state is sent
+  const handleManualEntry = () => {
+    const nonTaggedSpeaker = {
+      name: "", 
+      speakerData: [
+        speakerData.speakerName,
+        speakerData.familyName,
+        speakerData.speakerBusinessLink,
+      ],
+    };
+
+    const updatedSpeakers = [...speakers, nonTaggedSpeaker];
+    setSpeakers(updatedSpeakers);
+    updateSpeakerData(updatedSpeakers);
   };
 
   const handleChange = (e) => {
@@ -104,7 +105,7 @@ const AddSpeaker = ({ updateSpeakerData, initialData }) => {
   const handleRemoveSpeaker = (index) => {
     const updatedSpeakers = speakers.filter((_, i) => i !== index);
     setSpeakers(updatedSpeakers);
-    updateSpeakerData(updatedSpeakers); // Send updated speakers data to parent
+    updateSpeakerData(updatedSpeakers);
   };
 
   return (
@@ -120,15 +121,17 @@ const AddSpeaker = ({ updateSpeakerData, initialData }) => {
       />
 
       {loading && <div className="text-gray-500">Loading users...</div>}
-      {filteredUsers.map((user) => (
-        <li
-          key={user.Users_PK} // Ensure user.Users_PK is unique
-          className="p-2 cursor-pointer hover:bg-gray-200"
-          onClick={() => handleUserSelect(user)}
-        >
-          {user.userName}
-        </li>
-      ))}
+      <ul>
+        {filteredUsers.map((user) => (
+          <li
+            key={user.Users_PK}
+            className="p-2 cursor-pointer hover:bg-gray-200"
+            onClick={() => handleUserSelect(user)}
+          >
+            {user.name}
+          </li>
+        ))}
+      </ul>
 
       {showAdditionalForms && (
         <div className="mt-4">
@@ -167,21 +170,20 @@ const AddSpeaker = ({ updateSpeakerData, initialData }) => {
       )}
 
       <div className="mt-4">
-      {speakers.map((speaker, index) => (
-  <div key={speaker.id || index} className="flex items-center justify-between my-2">
-    <span className="bg-blue-100 text-blue-800 rounded-full px-3 py-1">
-      {speaker.userName}
-    </span>
-    <button
-      type="button"
-      onClick={() => handleRemoveSpeaker(index)}
-      className="text-red-500 ml-2"
-    >
-      Remove
-    </button>
-  </div>
-))}
-
+        {speakers.map((speaker, index) => (
+          <div key={speaker.id || index} className="flex items-center justify-between my-2">
+            <span className="bg-blue-100 text-blue-800 rounded-full px-3 py-1">
+              {speaker.name || `Speaker ${index + 1}`}
+            </span>
+            <button
+              type="button"
+              onClick={() => handleRemoveSpeaker(index)}
+              className="text-red-500 ml-2"
+            >
+              Remove
+            </button>
+          </div>
+        ))}
       </div>
     </div>
   );

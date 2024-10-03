@@ -20,7 +20,13 @@ const AllVideos = () => {
         ...user,
         active: true
       }));
-      setVideos(prevVideos => [...prevVideos, ...updatedData]);
+
+      // Avoid duplicates by checking existing video IDs
+      setVideos(prevVideos => {
+        const existingIds = new Set(prevVideos.map(video => video._id));
+        const newVideos = updatedData.filter(video => !existingIds.has(video._id));
+        return [...prevVideos, ...newVideos];
+      });
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
@@ -40,7 +46,8 @@ const AllVideos = () => {
 
     const handleObserver = (entries) => {
       const target = entries[0];
-      if (target.isIntersecting) {
+      // Load next page when the last video is in view and there are still videos to load
+      if (target.isIntersecting && videos.length % 20 === 0 && videos.length > 0) {
         setPage(prevPage => prevPage + 1);
       }
     };
@@ -61,7 +68,7 @@ const AllVideos = () => {
         observer.current.unobserve(lastVideoRef.current);
       }
     };
-  }, [loading, lastVideoRef]);
+  }, [loading, lastVideoRef, videos]);
 
   const handleVideoClick = (index) => {
     navigate(`/video/${encodeURIComponent(videos[index]._id)}`, { state: { videos } });
@@ -72,10 +79,10 @@ const AllVideos = () => {
       <h1 className="text-xl font-bold my-3 sm:w-[90%] lg:w-[80%] mx-auto">
         Entrepreneur & Investor Videos
       </h1>
-      <div className="flex flex-wrap justify-center gap-1 sm:w-[90%] lg:w-[80%] mx-auto">
-        {videos.map((video, i) => (
+      <div className="flex flex-wrap justify-start gap-1 sm:w-[90%] lg:w-[80%] mx-auto">
+        {videos.slice(0, Math.min(videos.length, page * 20)).map((video, i) => (
           <div
-            key={i}
+            key={video._id} // Use unique ID instead of index
             ref={i === videos.length - 1 ? lastVideoRef : null}
             className="w-[32%] cursor-pointer grid place-items-center relative h-[30vh] sm:h-[40vh]"
             onClick={() => handleVideoClick(i)}
