@@ -6,6 +6,9 @@ import { GiSkills } from "react-icons/gi";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import JobAppliedSuccess from "./JobAppliedSuccess";
 import { myContext } from "../../Context/CreateContext";
+import axios from "axios";
+
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 function Jobdetail() {
   const loc = useLocation();
@@ -101,6 +104,30 @@ function Jobdetail() {
     return "Invalid date format";
   };
 
+  const getUserId = () => {
+    const str = document.cookie;
+    const userKey = str.split('=')[1];
+    return userKey;
+  };
+
+  const user_id = getUserId();
+  
+  const handleSaveToWishlist = async (jobId) => {
+    try {
+      const response = await axios.post(`${API_BASE_URL}/wishlist`, {
+        wishItemType: 'job',
+        wishItemId: jobId,
+        userId: user_id,
+      });
+      
+      console.log('Wishlist item saved:', response.data); // Log the response to check what is returned
+      alert('Job saved to wishlist!');
+    } catch (error) {
+      console.error('Error saving to wishlist:', error);
+      alert('Could not save to wishlist. Please try again.');
+    }
+  };
+
   return (
     <div className="h-full w-full bg-white relative">
       {JobAppliedStates.jobAppliedSuccess && <JobAppliedSuccess />}
@@ -191,9 +218,16 @@ function Jobdetail() {
             </div>
           </div>
           <div className="about lg:w-[49%] w-[90%] mx-auto lg:mt-0 mt-6">
-            <div className="flex items-center gap-3">
-              <CiBookmark />
+            <div className="flex justify-between">
+             
               <p className="text-xl font-bold">About the job</p>
+              <CiBookmark
+  className="text-2xl cursor-pointer"
+  onClick={(e) => {
+    e.stopPropagation(); // Prevent bubbling up to parent elements
+    handleSaveToWishlist(job._id); // Pass the job ID
+  }}
+/>
             </div>
             <div className="text-[15px] text-[gray] h-auto overflow-y-scroll Podcast_Top_Videos">
               <p className="text-lg font-bold text-black">About The Role</p>

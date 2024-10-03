@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendar, faLocationDot } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { FaAngleLeft } from "react-icons/fa";
 import img from './Img1.png'
 
@@ -12,16 +12,43 @@ function Contactinfo() {
     const [address, setAddress] = useState('');
     const [confirmAddress, setConfirmAddress] = useState('');
     const [contact, setContact] = useState('');
+    const [tickets, setTickets] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const loc = useLocation();
+    const navigate = useNavigate();
+  
+    const fetchTickets = async (id) => {
+      try {
+        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/events/${id}`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        console.log("Fetched ticket buyerInfo:", data); // Log the entire response
+        setTickets(data.event); 
+      } catch (error) {
+        console.error("Error fetching tickets:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+  
+   useEffect(() => {
+    console.log("Component mounted. loc.state:", loc.state);
+    if (loc.state) {
+      fetchTickets(loc.state.id);
+    } else {
+      console.error("No event ID found in location state.");
+    }
+  }, [loc.state]);
 
-
-    let navigate = useNavigate()
     
     return (
         <div className="p-2 bg-white h-full w-full">
             <h4 className="flex items-center gap-3 ms-4 h-[10%]">
           <FaAngleLeft
             className="cursor-pointer"
-            onClick={() => navigate("/ticket")}
+            onClick={() => navigate("/ticket",{ state: { id:tickets._id } })}
           />{" "}
           Buyer Contact Information
         </h4>
@@ -81,7 +108,7 @@ function Contactinfo() {
                                 onChange={(e) => setConfirmAddress(e.target.value)}
                             />
                         </div>
-                        <button type="submit" onClick={()=>navigate('/ticketpayment')} className="w-full buyticket text-center py-2 mt-40 text-white rounded ">Continue to Payment</button>
+                        <button type="submit" onClick={()=>navigate('/ticketpayment',{ state: { id:tickets._id } })} className="w-full buyticket text-center py-2 mt-40 text-white rounded ">Continue to Payment</button>
                     </form>
                 </div>
                 <div className="lg:w-[50%] sm:w-[80%] w-full mx-auto">
@@ -89,14 +116,14 @@ function Contactinfo() {
                     <div className=" p-6 pt-0 rounded">
                         <h4 className="text-md font-semibold mb-4">Event Details</h4>
                         <div className="flex items-center mb-4">
-                            <img src={img} alt="Event" className="w-[30%] h-[12vh] object-cover rounded mr-4" />
+                            <img src={tickets.eventCoverUrl ? tickets.eventCoverUrl : img} alt="Event" className="w-[30%] h-[12vh] object-cover rounded mr-4" />
                             <div>
-                                <h6 className="font-semibold text-md">Risk-tolerant for higher return</h6>
+                                <h6 className="font-semibold text-md"> {tickets.eventTitle}</h6>
                                 <p className="text-gray-600 text-xs py-2">
-                                    <FontAwesomeIcon icon={faLocationDot} className="mr-1" /> Grand Hall, Street 3232, UK
+                             <FontAwesomeIcon icon={faLocationDot} className="mr-1" />{tickets.eventLocation} 
                                 </p>
                                 <p className="text-gray-600 text-xs">
-                                    <FontAwesomeIcon icon={faCalendar} className="mr-1" /> September 22, 2024 - 10:00pm-2:00am
+                                    <FontAwesomeIcon icon={faCalendar} className="mr-1" />{tickets.eventDate} - {tickets.eventDuration}
                                 </p>
                             </div>
                         </div>

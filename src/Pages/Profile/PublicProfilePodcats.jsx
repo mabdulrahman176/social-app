@@ -4,13 +4,16 @@ import { FaRegShareFromSquare } from "react-icons/fa6";
 import { IoBookmarkOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import { deletePodcast } from "../../DeleteAPI";
+import axios from 'axios'; 
+
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const ApplePodcast = (props) => {
   const [podcast, setPodcast] = useState([]);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteItemId, setDeleteItemId] = useState(null);
   const [visibleId, setVisibleId] = useState(null);
-  const [loading, setLoading] = useState(true); // Loading state
+  const [loading, setLoading] = useState(true);
 
   const handleDeleteClick = (e, id) => {
     e.stopPropagation(); // Prevent navigation when clicking delete icon
@@ -18,17 +21,23 @@ const ApplePodcast = (props) => {
     setIsDeleteModalOpen(true);
   };
 
+  const getUserId = () => {
+    const str = document.cookie;
+    const userKey = str.split('=')[1];
+    return userKey;
+  };
+
   const handleDeleteConfirm = async () => {
     if (deleteItemId) {
       try {
         console.log(`Attempting to delete podcast with id: ${deleteItemId}`);
-        await deletePodcast(deleteItemId); // Call deletePodcast with the ID
+        await deletePodcast(deleteItemId);
         console.log('Podcast deleted successfully.');
-        setPodcast(podcast.filter((item) => item._id !== deleteItemId)); // Remove deleted podcast from state
+        setPodcast(podcast.filter((item) => item._id !== deleteItemId));
       } catch (error) {
         console.error('Error deleting podcast:', error);
       }
-      setIsDeleteModalOpen(false); // Close the modal after delete action
+      setIsDeleteModalOpen(false);
     }
   };
 
@@ -42,18 +51,18 @@ const ApplePodcast = (props) => {
   useEffect(() => {
     console.log("podcasts single user section");
     console.log(props.podcast);
-    
+
     // Simulate loading time
     setLoading(true);
     setTimeout(() => {
       setPodcast(props.podcast);
       setLoading(false);
       console.log({ podcast });
-    }, 1000); // Simulating a delay of 1 second
+    }, 1000);
   }, [props.podcast]);
 
   const handleShare = async (e) => {
-    e.stopPropagation(); 
+    e.stopPropagation();
     if (navigator.share) {
       try {
         await navigator.share({
@@ -76,7 +85,24 @@ const ApplePodcast = (props) => {
       return `${seconds} seconds`;
     } else {
       const minutes = Math.floor(seconds / 60);
-      return `${minutes} min${minutes > 1 ? 's' : ''}`; // Pluralize if necessary
+      return `${minutes} min${minutes > 1 ? 's' : ''}`;
+    }
+  };
+
+  const user_id = getUserId();
+  
+  const handleSaveToWishlist = async (podcastId) => {
+    try {
+      const response = await axios.post(`${API_BASE_URL}/wishlist`, {
+        wishItemType: 'podcast',
+        wishItemId: podcastId,
+        userId: user_id, 
+      });
+      console.log('Wishlist item saved:', response.data);
+      alert('Podcast saved to wishlist!');
+    } catch (error) {
+      console.error('Error saving to wishlist:', error);
+      alert('Could not save to wishlist. Please try again.');
     }
   };
 
@@ -99,7 +125,13 @@ const ApplePodcast = (props) => {
                     onMouseLeave={() => setVisibleId(null)}
                     onClick={() => navigate(`/podcastdetails`, { state: { id: elm._id } })}
                   >
-                    <IoBookmarkOutline className="absolute right-2 top-4 text-2xl" />
+                    <IoBookmarkOutline
+                      className="absolute right-2 top-4 text-2xl cursor-pointer"
+                      onClick={(e) => {
+                        e.stopPropagation(); // Prevent triggering onClick of parent div
+                        handleSaveToWishlist(elm._id);
+                      }}
+                    />
                     <div className="absolute bottom-1 px-2 w-full">
                       <div className="VideosBgBlured rounded-lg px-3 pt-5">
                         <p className="text-2xl font-medium">{elm.episodeTitle}</p>
@@ -124,7 +156,7 @@ const ApplePodcast = (props) => {
                       <div className="absolute top-14 right-2 flex flex-col space-y-2">
                         <CiTrash
                           className="text-red-600 text-3xl cursor-pointer hover:text-red-600"
-                          onClick={(e) => handleDeleteClick(e, elm._id)} // Pass event and id
+                          onClick={(e) => handleDeleteClick(e, elm._id)}
                         />
                       </div>
                     )}

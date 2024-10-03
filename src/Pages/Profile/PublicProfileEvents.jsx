@@ -1,15 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { FaRegShareFromSquare } from 'react-icons/fa6';
-import { IoBookmarkOutline, IoTrashOutline } from 'react-icons/io5'; // Import the delete icon
+import { IoBookmarkOutline, IoTrashOutline } from 'react-icons/io5'; 
 import { Link, useNavigate } from 'react-router-dom';
-import { deleteEvent } from '../../DeleteAPI'; // Import the deleteEvent function
+import { deleteEvent } from '../../DeleteAPI';
+import axios from 'axios';
+
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const Calendar = (props) => {
-  const [events, setEvents] = useState([]); // State to hold events
+
+  const getUserId = () => {
+    const str = document.cookie;
+    const userKey = str.split('=')[1];
+    return userKey;
+  };
+
+  const [events, setEvents] = useState([]);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteItemId, setDeleteItemId] = useState(null);
   const [visibleId, setVisibleId] = useState(null);
-  const [loading, setLoading] = useState(true); // Loading state
+  const [loading, setLoading] = useState(true);
   let navigate = useNavigate();
 
   const handleDeleteClick = (id) => {
@@ -21,13 +31,13 @@ const Calendar = (props) => {
     if (deleteItemId) {
       try {
         console.log(`Deleting event with id: ${deleteItemId}`);
-        await deleteEvent(deleteItemId); // Call deleteEvent with the ID
-        setEvents(events.filter((item) => item._id !== deleteItemId)); // Remove deleted event from state
+        await deleteEvent(deleteItemId);
+        setEvents(events.filter((item) => item._id !== deleteItemId));
         console.log('Event deleted successfully.');
       } catch (error) {
         console.error('Error deleting event:', error);
       }
-      setIsDeleteModalOpen(false); // Close the modal after delete action
+      setIsDeleteModalOpen(false);
     }
   };
 
@@ -37,10 +47,10 @@ const Calendar = (props) => {
   };
 
   useEffect(() => {
-    setLoading(true); // Start loading
+    setLoading(true);
     console.log("single event user comp", props.events);
-    setEvents(props.events); // Set events from props
-    setLoading(false); // Stop loading after setting events
+    setEvents(props.events);
+    setLoading(false);
   }, [props.events]);
 
   const handleShare = async () => {
@@ -58,6 +68,22 @@ const Calendar = (props) => {
       alert('Web Share API is not supported in your browser.');
     }
   };
+const user_id = getUserId();
+  // New function to save a wishlist item
+  const handleSaveToWishlist = async (eventId) => {
+    try {
+      const response = await axios.post(`${API_BASE_URL}/wishlist`, {
+        wishItemType: 'event',
+        wishItemId: eventId,
+        userId: user_id,
+      });
+      console.log('Wishlist item saved:', response.data);
+      alert('Event saved to wishlist!');
+    } catch (error) {
+      console.error('Error saving to wishlist:', error);
+      alert('Could not save to wishlist. Please try again.');
+    }
+  };
 
   return (
     <div className="overflow-y-scroll Podcast_Top_Videos w-full h-full">
@@ -72,7 +98,10 @@ const Calendar = (props) => {
               onMouseEnter={() => setVisibleId(elm._id)}
               onMouseLeave={() => setVisibleId(null)}
             >
-              <IoBookmarkOutline className="absolute right-2 top-4 text-2xl" />
+              <IoBookmarkOutline 
+                className="absolute right-2 top-4 text-2xl cursor-pointer"
+                onClick={() => handleSaveToWishlist(elm._id)} // Save to wishlist on icon click
+              />
               {visibleId === elm._id && (
                 <button
                   className="absolute top-14 right-2 text-red-600 text-3xl cursor-pointer"

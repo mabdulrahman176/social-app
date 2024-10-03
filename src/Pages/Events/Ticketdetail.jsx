@@ -1,12 +1,43 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FaAngleLeft } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import img from './Img2.png'
 import img2 from './Img1.png'
 
 
 function Ticketdetail() {
-  let navigate = useNavigate();
+  
+  const [tickets, setTickets] = useState([]);
+  const [user,setUser] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const loc = useLocation();
+  const navigate = useNavigate();
+
+  const fetchTickets = async (id) => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/events/${id}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      console.log("Fetched ticketPayment:", data); // Log the entire response
+      setTickets(data.event); 
+      setUser(data.user)
+    } catch (error) {
+      console.error("Error fetching tickets:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+ useEffect(() => {
+  console.log("Component mounted. loc.state:", loc.state);
+  if (loc.state) {
+    fetchTickets(loc.state.id);
+  } else {
+    console.error("No event ID found in location state.");
+  }
+}, [loc.state]);
 
   return (
     <>
@@ -14,7 +45,7 @@ function Ticketdetail() {
         <h4 className="flex items-center gap-3 ms-4 h-[10%]">
           <FaAngleLeft
             className="cursor-pointer"
-            onClick={() => navigate("/ticketpayment")}
+            onClick={() => navigate("/ticketpayment",{ state: { id:tickets._id } })}
           />{" "}
           Ticket Details
         </h4>
@@ -23,29 +54,29 @@ function Ticketdetail() {
             <div className="flex justify-evenly flex-wrap lg:flex-nowrap">
               <div className="div lg:w-[45%] w-[80%] mx-auto">
                 <img
-                  src={img}
+                 src={tickets.eventCoverUrl ? tickets.eventCoverUrl : img}
                   alt=""
                   className="h-[40vh] w-full mt-8"
                 />
                 <p className="text-md font-semibold opacity-55 text-center p-2">
-                  Risk-tolerant for higher returns
+                  {tickets.eventTitle}
                 </p>
               </div>
 
               <div className="location lg:w-[50%] w-[80%] mx-auto mt-8">
                 <p className="text-xs font-semibold text-[gray]">Location</p>
                 <p className="text-sm  opacity-70">
-                  St.James Park Square, London
+                  {tickets.eventLocation}
                 </p>
                 <div className="flex justify-between mt-5">
                   <div className="name h-[10vh] w-[20%]">
                     <p className="text-xs font-semibold text-[gray]">Name</p>
-                    <p className="text-sm font-medium  opacity-70">Kim Seon ho</p>
+                    <p className="text-sm font-medium  opacity-70">{user.name}</p>
                   </div>
 
                   <div className="date h-[10vh] w-[20%]">
                     <p className="text-xs font-semibold text-[gray]">Date</p>
-                    <p className="text-sm font-medium  opacity-70">28 Apr 2024</p>
+                    <p className="text-sm font-medium  opacity-70">{tickets.eventDate}</p>
                   </div>
                 </div>
 
@@ -54,14 +85,14 @@ function Ticketdetail() {
                     <p className="text-xs font-semibold text-[gray]">
                       Start Time
                     </p>
-                    <p className="text-sm font-medium  opacity-70">18:00 pm</p>
+                    <p className="text-sm font-medium  opacity-70">{tickets.eventDuration}</p>
                   </div>
 
                   <div className="date h-[10vh] w-[20%]">
                     <p className="text-xs font-semibold text-[gray]">
                       End Time
                     </p>
-                    <p className="text-sm font-medium  opacity-70">22:00 pm</p>
+                    <p className="text-sm font-medium  opacity-70">{tickets.eventDuration}</p>
                   </div>
                 </div>
 

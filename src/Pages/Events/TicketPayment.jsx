@@ -1,17 +1,46 @@
 import { faCalendar, faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FaAngleLeft, FaCcVisa } from "react-icons/fa";
 import { FaCcMastercard } from "react-icons/fa";
 import { FaPaypal } from "react-icons/fa";
 import { SiPayoneer } from "react-icons/si";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import img from './Img1.png'
 
 
 function Payment() {
 
-  let navigate = useNavigate()
+  const [tickets, setTickets] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const loc = useLocation();
+  const navigate = useNavigate();
+
+  const fetchTickets = async (id) => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/events/${id}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      console.log("Fetched ticketPayment:", data); // Log the entire response
+      setTickets(data.event); 
+    } catch (error) {
+      console.error("Error fetching tickets:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+ useEffect(() => {
+  console.log("Component mounted. loc.state:", loc.state);
+  if (loc.state) {
+    fetchTickets(loc.state.id);
+  } else {
+    console.error("No event ID found in location state.");
+  }
+}, [loc.state]);
+
 
 
   return (
@@ -22,7 +51,7 @@ function Payment() {
           <FaAngleLeft
 
             className="cursor-pointer"
-            onClick={() => navigate("/ticketbuyer")}
+            onClick={() => navigate("/ticketbuyer",{ state: { id:tickets._id } })}
           />{" "}
           Payment Method
         </h4>
@@ -94,14 +123,14 @@ function Payment() {
             <div className=" p-2 pt-0 rounded">
                         <h4 className="text-md font-semibold mb-4">Event Details</h4>
                         <div className="flex items-center mb-4">
-                            <img src={img} alt="Event" className="w-[30%] h-[12vh] object-cover rounded mr-4" />
+                            <img src={tickets.eventCoverUrl ? tickets.eventCoverUrl : img} alt="Event" className="w-[30%] h-[12vh] object-cover rounded mr-4" />
                             <div>
-                                <h6 className="font-semibold text-sm">Risk-tolerant for higher return</h6>
+                                <h6 className="font-semibold text-sm">{tickets.eventTitle}</h6>
                                 <p className="text-gray-600 text-xs py-2">
-                                    <FontAwesomeIcon icon={faLocationDot} className="mr-1" /> Grand Hall, Street 3232, UK
+                                    <FontAwesomeIcon icon={faLocationDot} className="mr-1" />{tickets.eventLocation}
                                 </p>
                                 <p className="text-gray-600 text-xs">
-                                    <FontAwesomeIcon icon={faCalendar} className="mr-1" /> September 22, 2024 - 10:00pm-2:00am
+                                    <FontAwesomeIcon icon={faCalendar} className="mr-1" /> {tickets.eventDate} - {tickets.eventDuration}
                                 </p>
                             </div>
                         </div>
@@ -126,7 +155,9 @@ function Payment() {
                             <h6 className=" font-semibold text-sm opacity-65">Rp. 742.000</h6>
                         </div>
                     </div>
-              <Link to="/ticketdetails" className="buyticket text-center px-4 py-2 block rounded-xl mx-auto mt-2 w-[53%]">Continue</Link>
+              <Link to="/ticketdetails"
+              state={{id : tickets._id}}
+              className="buyticket text-center px-4 py-2 block rounded-xl mx-auto mt-2 w-[53%]">Continue</Link>
             </div>
           </div>
         </div>

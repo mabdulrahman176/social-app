@@ -157,6 +157,7 @@ function Ticket() {
 
           <Link
             to="/ticketbuyer"
+            state={{id : tickets._id}}
             className="buyticket text-center py-2 block rounded-xl mx-auto mt-7 w-[30%]"
           >
             Continue

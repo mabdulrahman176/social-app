@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
-
 import { IoBookmarkOutline } from "react-icons/io5";
-
 import EventFilters from "./EventFilters";
 import Image from "./Img2.png";
 import { fetchEvent } from "../../API";
 import RelatedEvent from "./RelatedEvent";
+import axios from "axios";
 
-const CardComponent = ({ title, imgSrc }) => (
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
+const CardComponent = ({ title, imgSrc, onSave }) => (
   <div className="h-[30vh] lg:w-[12vw] md:w-[15vw] sm:w-[20vw] w-[25vw] relative cursor-pointer m-0 text-white">
     <img
       className="h-full w-full rounded-lg"
@@ -16,7 +17,10 @@ const CardComponent = ({ title, imgSrc }) => (
     />
     <div className="absolute inset-0 flex justify-between ShadedBG rounded-lg">
       <h5 className="text-sm ps-3 absolute bottom-2">{title}</h5>
-      <IoBookmarkOutline className="absolute right-2 top-4 text-2xl" />
+      <IoBookmarkOutline 
+        className="absolute right-2 top-4 text-2xl cursor-pointer" 
+        onClick={onSave} // Call the save function passed as prop
+      />
     </div>
   </div>
 );
@@ -28,8 +32,7 @@ function Event() {
     const getData = async () => {
       try {
         const result = await fetchEvent(); // Use the function from api.js
-        console.log("events results");
-        console.log(result);
+        console.log("events results", result);
         setNewCard(result.data);
       } catch (error) {
         console.error("Fetching data error", error);
@@ -38,6 +41,28 @@ function Event() {
     getData();
   }, []);
 
+  const handleSaveToWishlist = async (eventId) => {
+    const user_id = getUserId(); // Function to get user ID from cookies
+    try {
+      const response = await axios.post(`${API_BASE_URL}/wishlist`, {
+        wishItemType: 'event',
+        wishItemId: eventId,
+        userId: user_id,
+      });
+      console.log('Wishlist item saved:', response.data);
+      alert('Event saved to wishlist!');
+    } catch (error) {
+      console.error('Error saving to wishlist:', error);
+      alert('Could not save to wishlist. Please try again.');
+    }
+  };
+
+  const getUserId = () => {
+    const str = document.cookie;
+    const userKey = str.split("=")[1];
+    return userKey;
+  };
+
   return (
     <div className="h-full w-full">
       <div className="w-full h-[10%]">
@@ -45,7 +70,7 @@ function Event() {
       </div>
       <div className="h-[89%] bg-white mt-1 w-full overflow-y-scroll Podcast_Top_Videos">
         <h3 className="text-xl font-bold my-3 w-[95%] mx-auto">
-          Suggested Event
+          Suggested Events
         </h3>
         <div className="h-full w-[95%] mx-auto">
           <div className="flex w-full overflow-x-scroll gap-1 Podcast_Top_Videos">
@@ -54,6 +79,10 @@ function Event() {
                 key={i}
                 title={data.eventTitle}
                 imgSrc={data.eventCoverUrl}
+                onSave={(e) => {
+                  e.stopPropagation(); // Prevent triggering on parent elements
+                  handleSaveToWishlist(data._id); // Pass the event ID
+                }}
               />
             ))}
           </div>
