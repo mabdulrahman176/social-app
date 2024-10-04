@@ -68,7 +68,6 @@ const AddSpeaker = ({ updateSpeakerData, initialData }) => {
     const newSpeaker = {
       id: user.Users_PK,
       name: `@${user.name}`,
-      speakerData: [], // Additional data can be added if needed
     };
 
     const updatedSpeakers = [...speakers, newSpeaker];

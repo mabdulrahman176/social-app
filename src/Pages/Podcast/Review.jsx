@@ -46,7 +46,7 @@ const Review = (props) => {
 
     comments.forEach(comment => {
       if (comment.reviewRatings >= 1 && comment.reviewRatings <= 5) {
-        ratingCounts[comment.reviewRatings - 1]++;
+        ratingCounts[5 - comment.reviewRatings ]++;
       }
     });
 
@@ -167,7 +167,7 @@ const Review = (props) => {
           className="absolute right-2 top-2 cursor-pointer"
           onClick={() => props.setRevModOpen(false)}
           aria-label="Close"
-        />
+        />  
         <img
           className="md:w-[45%] w-[40%] md:h-full h-[40%] object-cover"
           src={picUrl}
@@ -269,7 +269,7 @@ const Review = (props) => {
                   <div className="p-4">
                     {ratingsPercentage.map((percentage, index) => (
                       <div key={index} className="flex items-center justify-between my-1">
-                        <span className="text-sm">{index + 1} star</span>
+                        <span className="text-sm">{5 - index} star</span>
                         <div className="flex-1 mx-2 bg-gray-200 rounded-full overflow-hidden">
                           <div
                             className="bg-yellow-400 h-3 rounded-full"

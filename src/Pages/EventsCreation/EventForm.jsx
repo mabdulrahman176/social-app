@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import AddSpeaker from "../PodcastCreation/AddSpeaker";
 import { useNavigate } from "react-router-dom";
 import { myContext } from "../../Context/CreateContext";
-import { FaAngleLeft,FaTimes  } from "react-icons/fa";
+import { FaAngleLeft, FaTimes } from "react-icons/fa";
 import { LuImagePlus } from "react-icons/lu";
 import axios from "axios";
 
@@ -17,10 +17,10 @@ const EventForm = () => {
   const [ticketTypes, setTicketTypes] = useState([]);
   const [selectedType, setSelectedType] = useState("");
   const [ticketPrice, setTicketPrice] = useState(0);
-  
+
   const getUserId = () => {
     const str = document.cookie;
-    const userKey = str.split('=')[1];
+    const userKey = str.split("=")[1];
     return userKey;
   };
 
@@ -30,43 +30,47 @@ const EventForm = () => {
 
     const formData = new FormData();
     if (coverImageFile) {
-      formData.append('coverImage', coverImageFile);
+      formData.append("coverImage", coverImageFile);
     }
 
     // Append other event details to formData
+    formData.append("eventCreatedBy", getUserId());
     Object.keys(state).forEach((key) => {
       formData.append(key, state[key]);
     });
 
-    formData.append('eventCreatedBy', getUserId());
-  
-      // Append speakers data to formData
-      speakerState.forEach((speaker, index) => {
-        formData.append(`speakers[${index}][id]`, speaker.id);
-        formData.append(`speakers[${index}][name]`, speaker.name);
-        formData.append(`speakers[${index}][speakerData]`, JSON.stringify(speaker.speakerData)); // Ensure this is defined in AddSpeaker
-      });
-  
-  
+   // Append ticket types
+    formData.append("generalTicket", ticketTypes.generalTicket);
+    formData.append("premiumTicket", ticketTypes.premiumTicket);
+    formData.append("vipTicket", ticketTypes.vipTicket);
+    // Append speakers data to formData
+    speakerState.forEach((speaker, index) => {
+      formData.append(`speakers[${index}][id]`, speaker.id);
+      formData.append(`speakers[${index}][name]`, speaker.name);
+
+    });
+
     try {
-      const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/events/`, formData);
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_BASE_URL}/events/`,
+        formData
+      );
       console.log(response.data);
 
       EventStates.setEventSubmitted(!EventStates.eventSubmitted);
       navigate("/events");
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
     } finally {
       setLoading(false);
     }
   };
-  
 
   const onChange = (e) => {
     const { name, value } = e.target;
     setState((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -78,21 +82,25 @@ const EventForm = () => {
     }
   };
 
-
   const handleTicketChange = (e) => {
     const { value } = e.target;
-    if (value) {
-      setTicketTypes(prev => [...prev, { type: value, price: ticketPrice }]);
+  
+    if (value && ticketPrice > 0) {
+      const newTicket = {
+        type: value,
+        price: ticketPrice,
+      };
+  
+      setTicketTypes((prev) => [...prev, newTicket]);
       setSelectedType("");
+      setTicketPrice(0);
     }
   };
 
-  
-  const removeTicket = (index) => {
-    setTicketTypes(prev => prev.filter((_, i) => i !== index));
+  const removeTicket = (type) => {
+    setTicketTypes((prev) => ({ ...prev, [type]: 0 }));
   };
- 
-  
+
   console.log("Submitting speakers:", speakerState);
 
   const updateSpeakerData = (speakers) => {
@@ -106,7 +114,7 @@ const EventForm = () => {
         <FaAngleLeft
           className="cursor-pointer"
           onClick={() => navigate("/events")}
-        />{" "}
+        />
         Create Event
       </h4>
 
@@ -120,7 +128,10 @@ const EventForm = () => {
       )}
 
       <div className="w-full h-[90%] bg-white overflow-y-scroll Podcast_Top_Videos">
-        <form onSubmit={handleSubmit} className="flex sm:w-[80%] w-[95%] justify-between mx-auto h-full">
+        <form
+          onSubmit={handleSubmit}
+          className="flex sm:w-[80%] w-[95%] justify-between mx-auto h-full"
+        >
           <div className="sm:w-[40%] w-[45%]">
             <div className="mt-2 mb-2">
               <h1>Customize Cover</h1>
@@ -144,7 +155,9 @@ const EventForm = () => {
             </div>
             {/* Form fields */}
             <div className="my-4">
-              <label className="block text-gray-600 text-sm font-bold">Event Title</label>
+              <label className="block text-gray-600 text-sm font-bold">
+                Event Title
+              </label>
               <input
                 className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
                 onChange={onChange}
@@ -154,7 +167,9 @@ const EventForm = () => {
               />
             </div>
             <div className="my-4">
-              <label className="block text-gray-600 text-sm font-bold">Event Description</label>
+              <label className="block text-gray-600 text-sm font-bold">
+                Event Description
+              </label>
               <input
                 className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
                 onChange={onChange}
@@ -164,17 +179,21 @@ const EventForm = () => {
               />
             </div>
             <div className="my-4">
-              <label className="block text-gray-600 text-sm font-bold">Event Category</label>
+              <label className="block text-gray-600 text-sm font-bold">
+                Event Category
+              </label>
               <input
                 className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
                 onChange={onChange}
-                name="eventCategory"
+                name="eventCatagory"
                 type="text"
                 placeholder="Enter category"
               />
             </div>
             <div className="my-4">
-              <label className="block text-gray-600 text-sm font-bold">Select Date</label>
+              <label className="block text-gray-600 text-sm font-bold">
+                Select Date
+              </label>
               <input
                 className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none text-xs focus:shadow-outline"
                 type="date"
@@ -183,7 +202,9 @@ const EventForm = () => {
               />
             </div>
             <div className="my-4">
-              <label className="block text-gray-600 text-sm font-bold">Select Location</label>
+              <label className="block text-gray-600 text-sm font-bold">
+                Select Location
+              </label>
               <input
                 className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
                 onChange={onChange}
@@ -192,51 +213,58 @@ const EventForm = () => {
                 placeholder="Enter location"
               />
             </div>
+
             <div className="my-4">
-              <label className="block text-gray-600 text-sm font-bold">Add Tickets Type</label>
-              <select
-                className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none text-xs focus:shadow-outline"
-                onChange={handleTicketChange}
-                value={selectedType}
-               
-              >
-                <option value="">Select Tickets Type</option>
-                <option value="Premium">Premium</option>
-                <option value="VIP">VIP</option>
-                <option value="General">General</option>
-              </select>
+              <label className="block text-gray-600 text-sm font-bold">
+                Basic Price
+              </label>
+              <input
+                className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
+                type="number"
+                value={ticketPrice}
+                min={0}
+                onChange={(e) => setTicketPrice(e.target.value)}
+                placeholder="Enter price $35.00"
+              />
             </div>
-            <div className="mt-4">
-  <ul className=" w-auto flex flex-wrap ">
-    {ticketTypes.map((ticket, index) => (
-      <li key={index} className="my-2 flex justify-between items-center bg-slate-300 rounded-lg w-auto ml-1">
-        {ticket.type} - ${ticket.type === selectedType ? ticketPrice : ticket.price} {/* Update this line */}
-        <FaTimes
-          className="text-gray-500 cursor-pointer"
-          onClick={() => removeTicket(index)}
-        />
-      </li>
-    ))}
-  </ul>
-</div>
+
             <div className="my-4">
-  <label className="block text-gray-600 text-sm font-bold">Basic Price</label>
-  <input
-    className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
-    type="number"
-    value={ticketPrice}
-    onChange={(e) => setTicketPrice(e.target.value)}
-    placeholder="Enter price $35.00"
-  />
-</div>
+      <label className="block text-gray-600 text-sm font-bold">Add Tickets Type</label>
+      <select
+        className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none text-xs focus:shadow-outline"
+        onChange={handleTicketChange}
+        value={selectedType}
+      >
+        <option value="">Select Tickets Type</option>
+        <option value="Premium">Premium</option>
+        <option value="VIP">VIP</option>
+        <option value="General">General</option>
+      </select>
+    </div>
 
-
-          
+    <div className="mt-4">
+      <ul className="w-auto flex flex-wrap">
+        {ticketTypes.map((ticket, index) => (
+          <li
+            key={index}
+            className="my-2 flex justify-between items-center bg-slate-300 rounded-lg w-auto ml-1"
+          >
+            {ticket.type} - ${ticket.price}
+            <FaTimes
+              className="text-gray-500 cursor-pointer"
+              onClick={() => removeTicket(index)}
+            />
+          </li>
+        ))}
+      </ul>
+    </div>
           </div>
 
           <div className="sm:w-[40%] w-[45%]">
             <div className="my-4">
-              <label className="block text-gray-600 text-sm font-bold">Event Type</label>
+              <label className="block text-gray-600 text-sm font-bold">
+                Event Type
+              </label>
               <input
                 className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
                 type="text"
@@ -246,27 +274,33 @@ const EventForm = () => {
               />
             </div>
             <div className="my-4">
-              <label className="block text-gray-600 text-sm font-bold">Start Time</label>
+              <label className="block text-gray-600 text-sm font-bold">
+                Start Time
+              </label>
               <input
                 className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
                 type="text"
                 onChange={onChange}
-                name="eventDuration"
+                name="startTime"
                 placeholder="Enter Start Time"
               />
             </div>
             <div className="my-4">
-              <label className="block text-gray-600 text-sm font-bold">End Time</label>
+              <label className="block text-gray-600 text-sm font-bold">
+                End Time
+              </label>
               <input
                 className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
                 type="text"
                 onChange={onChange}
-                name="eventDuration"
+                name="endTime"
                 placeholder="Enter End Time"
               />
             </div>
             <div className="my-4">
-              <label className="block text-gray-600 text-sm font-bold">Event Format</label>
+              <label className="block text-gray-600 text-sm font-bold">
+                Event Format
+              </label>
               <input
                 className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
                 type="text"
@@ -276,7 +310,9 @@ const EventForm = () => {
               />
             </div>
             <div className="my-4">
-              <label className="block text-gray-600 text-sm font-bold">Network Opportunities</label>
+              <label className="block text-gray-600 text-sm font-bold">
+                Network Opportunities
+              </label>
               <input
                 className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
                 type="text"
@@ -286,11 +322,15 @@ const EventForm = () => {
               />
             </div>
             <div className="my-4">
-
-            <AddSpeaker updateSpeakerData={updateSpeakerData} initialData={speakerState} />
+              <AddSpeaker
+                updateSpeakerData={updateSpeakerData}
+                initialData={speakerState}
+              />
             </div>
             <div className="my-4">
-              <label className="block text-gray-600 text-sm font-bold">Manage Privacy Settings</label>
+              <label className="block text-gray-600 text-sm font-bold">
+                Manage Privacy Settings
+              </label>
               <input
                 className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
                 type="text"
@@ -300,7 +340,9 @@ const EventForm = () => {
               />
             </div>
             <div className="my-4">
-              <label className="block text-gray-600 text-sm font-bold">Number of People</label>
+              <label className="block text-gray-600 text-sm font-bold">
+                Number of People
+              </label>
               <input
                 className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
                 type="number"
@@ -312,15 +354,8 @@ const EventForm = () => {
             <button
               className="w-full h-12 mt-14 border rounded-3xl linear_gradient text-white py-2 px-3 leading-tight focus:outline-none text-sm focus:shadow-outline"
               type="submit"
-              disabled={loading} // Disable button when loading
+              disabled={loading}
             >
-              {/* {loading ? (
-                <div className="spinner-border text-white" role="status">
-                  <span className="sr-only">Loading...</span>
-                </div>
-              ) : (
-                "Publish Now"
-              )} */}
               Publish Now
             </button>
           </div>

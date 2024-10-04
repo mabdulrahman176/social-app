@@ -8,7 +8,7 @@ import img2 from './Img1.png'
 function Ticketdetail() {
   
   const [tickets, setTickets] = useState([]);
-  const [user,setUser] = useState([]);
+  const [user,setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const loc = useLocation();
   const navigate = useNavigate();
@@ -71,7 +71,7 @@ function Ticketdetail() {
                 <div className="flex justify-between mt-5">
                   <div className="name h-[10vh] w-[20%]">
                     <p className="text-xs font-semibold text-[gray]">Name</p>
-                    <p className="text-sm font-medium  opacity-70">{user.name}</p>
+                    <p className="text-sm font-medium  opacity-70">{ user ?user.name : "Unknown"}</p>
                   </div>
 
                   <div className="date h-[10vh] w-[20%]">
