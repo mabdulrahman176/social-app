@@ -110,7 +110,7 @@ function Eventdetails() {
               <FontAwesomeIcon icon={faClock} className="text-3xl" />
               <div>
                 <h5 className="text-sm font-bold">Duration</h5>
-                <p className="text-sm">{event.eventDuration}</p>
+                <p className="text-sm">{event.startTime} - {event.endTime}</p>
               </div>
             </div>
             <div className="participant sm:mt-0 mt-4 w-full sm:w-[33%]">

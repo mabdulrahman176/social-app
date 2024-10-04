@@ -1,5 +1,5 @@
-import React, { Fragment, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { Fragment, useEffect, useRef, useState } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { BsInfoSquare } from "react-icons/bs";
 import { FaChevronLeft } from "react-icons/fa";
 import { CiStar } from "react-icons/ci";
@@ -12,6 +12,7 @@ import Review from "../Podcast/Review";
 const Video = () => {
   let navigate = useNavigate();
   const { src } = useParams();
+  const location = useLocation();
   const [repModOpen, setRepModOpen] = useState(false);
   const [revModOpen, setRevModOpen] = useState(false);
   const [video, setVideo] = useState();
@@ -25,25 +26,49 @@ const Video = () => {
   const videoId = decodeURIComponent(src);
 
   const getVideo = async () => {
-    const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/upload/${videoId}`,{
-      credentials:'include'
+    const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/upload/${videoId}`, {
+      credentials: 'include'
     });
     const data = await req.json();
     setVideo(data);
   };
-console.log("single video detials is", video)
+
+  console.log("Single video details:", video);
+
   useEffect(() => {
-    const videoState = window.history.state;
-    if (videoState && videoState.videos) {
-      setVideos(videoState.videos);
-      const currentVideo = videoState.videos.find(v => v._id === videoId);
+    console.log("Current location state:", location.state); // Log the state
+    if (location.state && location.state.videos) {
+      setVideos(location.state.videos); // Set the videos array from state
+      const currentVideo = location.state.videos.find(v => v._id === videoId);
       if (currentVideo) {
         setVideo(currentVideo);
-        setVideoIndex(videoState.videos.findIndex(v => v._id === videoId));
+        setVideoIndex(location.state.videos.findIndex(v => v._id === videoId));
       }
     }
     getVideo();
-  }, [videoId]);
+  }, [videoId, location.state]);
+
+  const useDebounce = (callback, delay) => {
+    const timerRef = useRef(null);
+  
+    const debouncedCallback = (...args) => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+      timerRef.current = setTimeout(() => {
+        callback(...args);
+      }, delay);
+    };
+  
+    useEffect(() => {
+      return () => {
+        clearTimeout(timerRef.current); // Clean up on unmount
+      };
+    }, []);
+  
+    return debouncedCallback;
+  };
+
 
   const handleScroll = (e) => {
     if (e.deltaY > 0) {
@@ -61,12 +86,14 @@ console.log("single video detials is", video)
     }
   };
 
+  const debouncedHandleScroll = useDebounce(handleScroll, 100); // Adjust the delay as needed
+
   useEffect(() => {
-    window.addEventListener('wheel', handleScroll, { passive: false });
+    window.addEventListener('wheel', debouncedHandleScroll, { passive: false });
     return () => {
-      window.removeEventListener('wheel', handleScroll);
+      window.removeEventListener('wheel', debouncedHandleScroll);
     };
-  }, [videoIndex, videos]);
+  }, [debouncedHandleScroll]);
 
   const shareContent = async () => {
     if (navigator.share) {
@@ -108,20 +135,17 @@ console.log("single video detials is", video)
               Videos
             </div>
             <div className="absolute z-10 bottom-3 w-[60%] sm:w-[43%] p-3 text-white">
-              <p  className="text-xl font-semibold">
+              <p className="text-xl font-semibold">
                 {video && video.user ? video.user.name : 'NO_NAME'}
               </p>
               <p className="py-1 w-[80%] text-sm">
                 {video && video.data ? video.data.videoDesc : 'Loading...'}
               </p>
               <p className="py-1 w-[80%] text-sm">
-  {/* {video && video.data 
-    ? `# ${video.data.videoTags.join(' # ')}` 
-    : 'Loading...'} */}
-    {video && video.data && video.data.videoTags
-  ? video.data.videoTags.map(tag => `#${tag}`).join(' ')
-  : 'Loading...'}
-</p>
+                {video && video.data && video.data.videoTags
+                  ? video.data.videoTags.map(tag => `#${tag}`).join(' ')
+                  : 'Loading...'}
+              </p>
             </div>
             <div className="absolute bottom-3 z-10 right-2 text-white">
               <div className="relative cursor-pointer rounded-full flex justify-center" onClick={handleProfile}>

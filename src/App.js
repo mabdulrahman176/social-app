@@ -53,6 +53,7 @@ import JobAppliedSuccess from './Pages/Jobs/JobAppliedSuccess.jsx';
 import Header from './LandingPage/Header.jsx'
 import NotFound from './Components/PageNotFound.jsx';
 import PageNotFound from './Components/PageNotFound.jsx';
+import WishList from './Pages/Settings/WishList.jsx';
 
 
 const App = () => {
@@ -127,6 +128,7 @@ const App = () => {
           <Route path="/blocklist" element={<Blocklist />} />
           <Route path="/terms" element={<Term />} />
           <Route path="/privacy" element={<Privacy />} />
+          <Route path="/wishlist" element={<WishList />}/>
         </Route>
 
    

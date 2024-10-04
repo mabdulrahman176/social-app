@@ -83,11 +83,13 @@ function Ticket() {
           <div className="flex justify-between gap-3  Podcast_Top_Videos  mt-3 lg:w-[90%] w-[95%] mx-auto Ticket_Tickets">
             <div className="border rounded shadow-lg w-[33%] text-center px-4 py-6 ticket flex-shrink-0">
               <h5 className="text-lg font-bold">General Admission</h5>
-              <p className="min-h-[28vh] text-[14px] opacity-80 pt-5">
+              {/* <p className="min-h-[28vh] text-[14px] opacity-80 pt-5">
                   1 Ticket Mobil (maks, 2 orang) 2 Burger Senja & Fries, 2 Teh
                   Senja 1 Voucher Merchandise spot dan pelayanan VIP sesi foto.
-              </p>
-              <h5 className="text-lg font-bold">$71.000</h5>
+              </p> */}
+              <h5 className="text-lg font-bold">${tickets.
+generalTicket
+}</h5>
               <div className="plusbutton flex items-center">
                 <button
                   disabled={add === 0}
@@ -107,12 +109,13 @@ function Ticket() {
             </div>
             <div className="border rounded shadow-lg w-[33%] text-center px-4 pt-4 ticket flex-shrink-0">
               <h5 className="text-lg font-bold">Premium Admission</h5>
-              <p className="min-h-[28vh] text-[14px] opacity-80 pt-5">
+              {/* <p className="min-h-[28vh] text-[14px] opacity-80 pt-5">
                   1 Ticket Mobil (maks, 2 orang) 2 Burger Senja & Fries, 2 Teh
                   Senja 1 Voucher Merchandise dekorasi kabin spot & pelayanan
                   VVIP sesi foto.
-              </p>
-              <h5 className="text-lg font-bold">$42.000</h5>
+              </p> */}
+              <h5 className="text-lg font-bold">${tickets.premiumTicket
+              }</h5>
               <div className="plusbutton flex items-center">
                 <button
                   disabled={more === 0}
@@ -132,10 +135,10 @@ function Ticket() {
             </div>
             <div className="border rounded shadow-lg w-[33%] text-center px-4 pt-4 ticket flex-shrink-0">
               <h5 className="text-lg font-bold">Early Access</h5>
-              <p className="earlytext text-[14px] opacity-80 min-h-[28vh] pt-5">
+              {/* <p className="earlytext text-[14px] opacity-80 min-h-[28vh] pt-5">
                   1 Ticket Mobil (maks, 2 orang) 2 Hotdog Drive in-senja
-              </p>
-              <h5 className="text-lg font-bold">$42.000</h5>
+              </p> */}
+              <h5 className="text-lg font-bold">${tickets.vipTicket}</h5>
               <div className="plusbutton flex items-center">
                 <button
                   disabled={able === 0}
@@ -155,13 +158,15 @@ function Ticket() {
             </div>
           </div>
 
-          <Link
+        <div className="flex justify-center w-[30%] my-3 mx-auto">
+        <Link
             to="/ticketbuyer"
             state={{id : tickets._id}}
             className="buyticket text-center py-2 block rounded-xl mx-auto mt-7 w-[30%]"
           >
             Continue
           </Link>
+        </div>
           <br />
           
         </div>

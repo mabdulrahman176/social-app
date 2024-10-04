@@ -2,6 +2,7 @@ import React from "react";
 import { CiCreditCard1, CiSearch } from "react-icons/ci";
 import { HiMiniDevicePhoneMobile } from "react-icons/hi2";
 import { GoHistory } from "react-icons/go";
+import { IoBookmarkOutline } from "react-icons/io5";
 // import { IoNotificationsOutline } from "react-icons/io5";
 import { RiContactsBook2Line } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
@@ -46,7 +47,7 @@ const Setting = () => {
           <p className="py-5 border-b border-gray-200 cursor-pointer flex items-center gap-2" onClick={()=>navigate('/privacy')}><LuScrollText className="text-2xl text-gray-500"/> Privacy policy</p>
           <p className="py-5 border-b border-gray-200 cursor-pointer flex items-center gap-2" onClick={()=>navigate('/terms')}><PiBookOpenText className="text-2xl text-gray-500"/> Terms of Use</p>
           <p className="py-5 border-b border-gray-200 cursor-pointer flex items-center gap-2" onClick={()=>navigate('/changepassword')}><SlLock className="text-2xl text-gray-500"/> Change Password</p>
-         
+          <p className="py-5 border-b border-gray-200 cursor-pointer flex items-center gap-2" onClick={()=>navigate('/wishlist')}><IoBookmarkOutline className="text-2xl text-gray-500"/> WishList</p>
             
           </div>
       </div>

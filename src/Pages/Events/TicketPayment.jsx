@@ -130,7 +130,7 @@ function Payment() {
                                     <FontAwesomeIcon icon={faLocationDot} className="mr-1" />{tickets.eventLocation}
                                 </p>
                                 <p className="text-gray-600 text-xs">
-                                    <FontAwesomeIcon icon={faCalendar} className="mr-1" /> {tickets.eventDate} - {tickets.eventDuration}
+                                    <FontAwesomeIcon icon={faCalendar} className="mr-1" /> {tickets.eventDate} - {tickets.startTime} - {tickets.endTime}
                                 </p>
                             </div>
                         </div>

@@ -13,14 +13,25 @@ const AllVideos = () => {
   const getData = async (page) => {
     setLoading(true);
     try {
-      const response = await axios.get(`${API_BASE_URL}/upload/videos/all`, {
+      const response = await axios.get(`${API_BASE_URL}/upload`, {
         params: { page, limit: 20 }
       });
-      const updatedData = response.data.data.map(user => ({
-        ...user,
-        active: true
+  
+      console.log("All videos data user:", response.data.data); // Log the data to inspect the structure
+  
+      // Extracting the videos from the response
+      const updatedData = response.data.data.map(item => ({
+        _id: item.data._id,
+        videoUrl: item.data.videoUrl,
+        videoName: item.data.videoName,
+        videoDesc: item.data.videoDesc,
+        videoTags: item.data.videoTags,
+        createdAt: item.data.createdAt,
+        updatedAt: item.data.updatedAt,
+        comments: item.commments || [], 
+        user: item.user || {} 
       }));
-
+  
       // Avoid duplicates by checking existing video IDs
       setVideos(prevVideos => {
         const existingIds = new Set(prevVideos.map(video => video._id));
@@ -33,7 +44,7 @@ const AllVideos = () => {
       setLoading(false);
     }
   };
-
+  
   useEffect(() => {
     getData(page);
   }, [page]);

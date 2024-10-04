@@ -85,14 +85,14 @@ function Ticketdetail() {
                     <p className="text-xs font-semibold text-[gray]">
                       Start Time
                     </p>
-                    <p className="text-sm font-medium  opacity-70">{tickets.eventDuration}</p>
+                    <p className="text-sm font-medium  opacity-70">{tickets.startTime}</p>
                   </div>
 
                   <div className="date h-[10vh] w-[20%]">
                     <p className="text-xs font-semibold text-[gray]">
                       End Time
                     </p>
-                    <p className="text-sm font-medium  opacity-70">{tickets.eventDuration}</p>
+                    <p className="text-sm font-medium  opacity-70">{tickets.endTime}</p>
                   </div>
                 </div>
 

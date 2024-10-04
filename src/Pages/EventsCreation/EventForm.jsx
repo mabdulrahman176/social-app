@@ -6,6 +6,54 @@ import { FaAngleLeft, FaTimes } from "react-icons/fa";
 import { LuImagePlus } from "react-icons/lu";
 import axios from "axios";
 
+const eventCatagory = [
+  "Tech & Entrepreneurship",
+  "Art",
+  "Tech & Investor",
+  "Teamwork",
+  "Finance",
+  "Networking",
+  "Government",
+  "Charity",
+  "Language",
+  "Politics",
+  "Fashion",
+  "History",
+  "Hobbies",
+  "Career & Business",
+  "Travel & Outdoor",
+  "Investors",
+  "News",
+  "Technology",
+  "True Crime",
+  "Comedy",
+  "Music & Dancing",
+  "Sports",
+  "Science",
+  "Leadership",
+  "Sustainability",
+  "Fiction",
+  "Education",
+  "Interviews",
+  "Business & Finance",
+  "Health & Wellness",
+  "Self-Improvement",
+  "Religion & Spirituality",
+  "Pop Culture",
+  "Environment",
+  "Music",
+  "Parenting",
+  "Gaming",
+  "Food & Cooking",
+  "Relationship & Books",
+  "Personal Stories",
+  "Pets & Animals",
+  "TV & Film",
+  "Social Activities",
+  "Subscribed"
+];
+
+
 const EventForm = () => {
   const navigate = useNavigate();
   const { EventStates } = useContext(myContext);
@@ -14,58 +62,69 @@ const EventForm = () => {
   const [state, setState] = useState({});
   const [speakerState, setSpeakerState] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [ticketTypes, setTicketTypes] = useState([]);
-  const [selectedType, setSelectedType] = useState("");
-  const [ticketPrice, setTicketPrice] = useState(0);
+ const [ticketTypes, setTicketTypes] = useState([]);
+const [selectedType, setSelectedType] = useState("");
+const [ticketPrice, setTicketPrice] = useState(0);
 
   const getUserId = () => {
     const str = document.cookie;
     const userKey = str.split("=")[1];
     return userKey;
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
+  
     const formData = new FormData();
+    
+    // Append cover image if exists
     if (coverImageFile) {
       formData.append("coverImage", coverImageFile);
     }
-
-    // Append other event details to formData
-    formData.append("eventCreatedBy", getUserId());
+  
+    // Append all state fields to formData
     Object.keys(state).forEach((key) => {
       formData.append(key, state[key]);
     });
-
-   // Append ticket types
-    formData.append("generalTicket", ticketTypes.generalTicket);
-    formData.append("premiumTicket", ticketTypes.premiumTicket);
-    formData.append("vipTicket", ticketTypes.vipTicket);
-    // Append speakers data to formData
+  
+    // Set event creator ID
+    formData.append("eventCreatedBy", getUserId());
+  
+    // Append tickets as an array instead of separate fields
+    ticketTypes.forEach((ticket, index) => {
+      formData.append(`tickets[${index}][type]`, ticket.type);
+      formData.append(`tickets[${index}][price]`, ticket.price);
+    });
+  
+    // Append speaker data
     speakerState.forEach((speaker, index) => {
       formData.append(`speakers[${index}][id]`, speaker.id);
       formData.append(`speakers[${index}][name]`, speaker.name);
-
     });
-
+    // Log the FormData to see its contents
+    for (let pair of formData.entries()) {
+      console.log(`${pair[0]}: ${pair[1]}`);
+    }
+  
     try {
+      // Ensure the URL is correctly defined in the environment variables
       const response = await axios.post(
         `${process.env.REACT_APP_API_BASE_URL}/events/`,
         formData
       );
-      console.log(response.data);
-
+      
+      console.log("Event Created Successfully:", response.data);
+  
+      // Update context state
       EventStates.setEventSubmitted(!EventStates.eventSubmitted);
       navigate("/events");
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error submitting the event:", error);
     } finally {
       setLoading(false);
     }
   };
-
+  
   const onChange = (e) => {
     const { name, value } = e.target;
     setState((prev) => ({
@@ -84,21 +143,14 @@ const EventForm = () => {
 
   const handleTicketChange = (e) => {
     const { value } = e.target;
-  
-    if (value && ticketPrice > 0) {
-      const newTicket = {
-        type: value,
-        price: ticketPrice,
-      };
-  
-      setTicketTypes((prev) => [...prev, newTicket]);
+    if (value) {
+      setTicketTypes((prev) => [...prev, { type: value, price: parseFloat(ticketPrice) }]);
       setSelectedType("");
-      setTicketPrice(0);
     }
   };
 
-  const removeTicket = (type) => {
-    setTicketTypes((prev) => ({ ...prev, [type]: 0 }));
+  const removeTicket = (index) => {
+    setTicketTypes((prev) => prev.filter((_, i) => i !== index));
   };
 
   console.log("Submitting speakers:", speakerState);
@@ -178,18 +230,28 @@ const EventForm = () => {
                 placeholder="Enter description"
               />
             </div>
+           
+         
+
             <div className="my-4">
-              <label className="block text-gray-600 text-sm font-bold">
+            <label className="block text-gray-600 text-sm font-bold">
                 Event Category
               </label>
-              <input
-                className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
+              <select
+                className="w-full border rounded-lg py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline placeholder:text-xs"
+                value={selectedType} 
                 onChange={onChange}
-                name="eventCatagory"
-                type="text"
-                placeholder="Enter category"
-              />
+                required
+              >
+                <option value="">Select a Event Category</option>
+                {eventCatagory.map((type, index) => (
+                  <option key={index} value={type} className="absolute top-5">
+                    {type}
+                  </option>
+                ))}
+              </select>
             </div>
+
             <div className="my-4">
               <label className="block text-gray-600 text-sm font-bold">
                 Select Date
