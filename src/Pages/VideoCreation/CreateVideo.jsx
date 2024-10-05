@@ -8,6 +8,8 @@ import { TiGroupOutline } from "react-icons/ti";
 import { PiEyeClosed } from "react-icons/pi";
 import { IoIosLink } from "react-icons/io";
 import { RxCross2 } from "react-icons/rx";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'; // Import CSS for toast notifications
 
 const Video = () => {
   const [inputData, setInpData] = useState("");
@@ -43,12 +45,14 @@ const Video = () => {
       setInpData("");
       setInpType("");
       setFile(null);
+      toast.error("Please upload a valid video file."); // Show toast
     }
   };
 
   const handleSubmit = async () => {
     if (!file) {
       setErrorMessage("No video file selected.");
+      toast.error("No video file selected."); // Show toast
       return;
     }
 
@@ -67,8 +71,10 @@ const Video = () => {
       });
       console.log({ response });
       setVidPostSucc(true);
+      toast.success("Video uploaded successfully!"); // Show success toast
     } catch (error) {
       setErrorMessage("Failed to upload video.");
+      toast.error("Failed to upload video."); // Show toast
       console.error("Error uploading video:", error);
     } finally {
       setLoading(false);
@@ -95,6 +101,7 @@ const Video = () => {
       setErrorMessage("");
     } else {
       setErrorMessage("You can add a maximum of 6 tags.");
+      toast.error("You can add a maximum of 6 tags."); // Show toast
     }
   };
 
@@ -104,14 +111,15 @@ const Video = () => {
         await navigator.share({
           title: videoDesc || 'Check out this video!',
           text: 'Watch this video I just uploaded!',
-          url: window.location.href, // You can also use a specific URL if you have it.
+          url: window.location.href,
         });
-        console.log('Share successful!');
+        toast.success('Share successful!'); // Show success toast
       } catch (error) {
+        toast.error('Error sharing the video.'); // Show error toast
         console.error('Error sharing:', error);
       }
     } else {
-      alert('Web Share API is not supported in your browser.');
+      toast.error('Web Share API is not supported in your browser.'); // Show error toast
     }
   };
 
@@ -126,6 +134,7 @@ const Video = () => {
 
   return (
     <>
+      <ToastContainer /> {/* Include the ToastContainer here */}
       <div className="h-full flex items-center bg-white w-full relative overflow-y-scroll Podcast_Top_Videos">
         {vidPostSucc && (
           <div className="h-full w-full bg-white z-40 flex flex-col top-0 left-0 justify-center absolute items-center">

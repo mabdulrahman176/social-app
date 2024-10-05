@@ -5,6 +5,8 @@ import Image from "./Img2.png";
 import { fetchEvent } from "../../API";
 import RelatedEvent from "./RelatedEvent";
 import axios from "axios";
+import { ToastContainer, toast } from 'react-toastify'; // Import toast components
+import 'react-toastify/dist/ReactToastify.css'; // Import toast styles
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -50,10 +52,10 @@ function Event() {
         userId: user_id,
       });
       console.log('Wishlist item saved:', response.data);
-      alert('Event saved to wishlist!');
+      toast.success('Event saved to wishlist!'); // Notify on success
     } catch (error) {
       console.error('Error saving to wishlist:', error);
-      alert('Could not save to wishlist. Please try again.');
+      toast.error('Could not save to wishlist. Please try again.'); // Notify on error
     }
   };
 
@@ -65,6 +67,7 @@ function Event() {
 
   return (
     <div className="h-full w-full">
+      <ToastContainer /> {/* Include ToastContainer for notifications */}
       <div className="w-full h-[10%]">
         <EventFilters />
       </div>

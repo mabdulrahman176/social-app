@@ -1,4 +1,3 @@
-// components/Model.js
 import {
   faAngleLeft,
   faAngleRight,
@@ -6,6 +5,8 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import { RiCloseLine } from "react-icons/ri";
+import { ToastContainer, toast } from 'react-toastify'; // Import toast components
+import 'react-toastify/dist/ReactToastify.css'; // Import toast styles
 
 const data = [
   { id: "I just don't like it", text: "I just don't like it" },
@@ -16,7 +17,7 @@ const data = [
   { id: "Harassment", text: "Harassment" },
   { id: "Scam or fraud", text: "Scam or fraud" },
   { id: "Suicide or self injury", text: "Suicide or self injury" },
-  { id:  "Eating Disorder", text: "Eating Disorder" },
+  { id: "Eating Disorder", text: "Eating Disorder" },
   { id: "Bullying", text: "Bullying" },
   { id: "Other reasons", text: "Other reasons" },
 ];
@@ -51,7 +52,7 @@ const Model = (props) => {
     const selectedReportType = Object.keys(clickedItems).find((id) => clickedItems[id]);
 
     if (!selectedReportType) {
-      alert("Please select a report reason.");
+      toast.error("Please select a report reason."); // Show error toast
       return;
     }
 
@@ -82,18 +83,20 @@ const Model = (props) => {
       const result = await response.json();
       console.log(result);
       if (result.message === "success") {
-        alert("Report submitted successfully!");
+        toast.success("Report submitted successfully!"); // Show success toast
         setIsReportModalOpen(false);
       } else {
-        alert("Error submitting report.");
+        toast.error("Error submitting report."); // Show error toast
       }
     } catch (error) {
       console.error("Error submitting report:", error);
+      toast.error("Error submitting report."); // Show error toast
     }
   };
 
   return (
     <React.Fragment>
+      <ToastContainer /> {/* Include ToastContainer for notifications */}
       <section>
         <FontAwesomeIcon
           className="absolute w-4 h-4 rounded-full left-2 cursor-pointer"
@@ -117,7 +120,7 @@ const Model = (props) => {
               <h1 className="font-semibold py-3 text-center">Report</h1>
               <hr className="bg-gray-300 w-full h-[1px]" />
               <h1 className="text-center font-semibold">
-                Why you are reporting this video?
+                Why are you reporting this video?
               </h1>
               <div className="px-4 overflow-y-scroll JobFilScr">
                 {data.map((val) => (

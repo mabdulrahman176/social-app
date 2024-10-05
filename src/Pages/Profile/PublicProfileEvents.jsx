@@ -4,11 +4,12 @@ import { IoBookmarkOutline, IoTrashOutline } from 'react-icons/io5';
 import { Link, useNavigate } from 'react-router-dom';
 import { deleteEvent } from '../../DeleteAPI';
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify'; // Importing Toastify
+import 'react-toastify/dist/ReactToastify.css'; // Import CSS for Toastify
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const Calendar = (props) => {
-
   const getUserId = () => {
     const str = document.cookie;
     const userKey = str.split('=')[1];
@@ -33,9 +34,10 @@ const Calendar = (props) => {
         console.log(`Deleting event with id: ${deleteItemId}`);
         await deleteEvent(deleteItemId);
         setEvents(events.filter((item) => item._id !== deleteItemId));
-        console.log('Event deleted successfully.');
+        toast.success('Event deleted successfully!'); // Using toast for success
       } catch (error) {
         console.error('Error deleting event:', error);
+        toast.error('Error deleting event.'); // Using toast for error
       }
       setIsDeleteModalOpen(false);
     }
@@ -60,16 +62,18 @@ const Calendar = (props) => {
           title: "Check out this event",
           url: window.location.href,
         });
-        console.log('Share successful!');
+        toast.success('Share successful!'); // Using toast for success
       } catch (error) {
         console.error('Error sharing:', error);
+        toast.error('Error sharing event.'); // Using toast for error
       }
     } else {
-      alert('Web Share API is not supported in your browser.');
+      toast.warn('Web Share API is not supported in your browser.'); // Using toast for warning
     }
   };
-const user_id = getUserId();
-  // New function to save a wishlist item
+
+  const user_id = getUserId();
+
   const handleSaveToWishlist = async (eventId) => {
     try {
       const response = await axios.post(`${API_BASE_URL}/wishlist`, {
@@ -78,10 +82,10 @@ const user_id = getUserId();
         userId: user_id,
       });
       console.log('Wishlist item saved:', response.data);
-      alert('Event saved to wishlist!');
+      toast.success('Event saved to wishlist!'); // Using toast for success
     } catch (error) {
       console.error('Error saving to wishlist:', error);
-      alert('Could not save to wishlist. Please try again.');
+      toast.error('Could not save to wishlist. Please try again.'); // Using toast for error
     }
   };
 
@@ -166,6 +170,8 @@ const user_id = getUserId();
           </div>
         </div>
       )}
+
+      <ToastContainer /> {/* Include ToastContainer for rendering notifications */}
     </div>
   );
 };

@@ -4,7 +4,9 @@ import { FaRegShareFromSquare } from "react-icons/fa6";
 import { IoBookmarkOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import { deletePodcast } from "../../DeleteAPI";
-import axios from 'axios'; 
+import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify'; // Importing Toastify
+import 'react-toastify/dist/ReactToastify.css'; // Import CSS for Toastify
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -32,10 +34,11 @@ const ApplePodcast = (props) => {
       try {
         console.log(`Attempting to delete podcast with id: ${deleteItemId}`);
         await deletePodcast(deleteItemId);
-        console.log('Podcast deleted successfully.');
+        toast.success('Podcast deleted successfully!'); // Using toast for success
         setPodcast(podcast.filter((item) => item._id !== deleteItemId));
       } catch (error) {
         console.error('Error deleting podcast:', error);
+        toast.error('Error deleting podcast.'); // Using toast for error
       }
       setIsDeleteModalOpen(false);
     }
@@ -69,12 +72,13 @@ const ApplePodcast = (props) => {
           title: "Check out this podcast!",
           url: window.location.href,
         });
-        console.log('Share successful!');
+        toast.success('Share successful!'); // Using toast for success
       } catch (error) {
         console.error('Error sharing:', error);
+        toast.error('Error sharing podcast.'); // Using toast for error
       }
     } else {
-      alert('Web Share API is not supported in your browser.');
+      toast.warn('Web Share API is not supported in your browser.'); // Using toast for warning
     }
   };
 
@@ -99,10 +103,10 @@ const ApplePodcast = (props) => {
         userId: user_id, 
       });
       console.log('Wishlist item saved:', response.data);
-      alert('Podcast saved to wishlist!');
+      toast.success('Podcast saved to wishlist!'); // Using toast for success
     } catch (error) {
       console.error('Error saving to wishlist:', error);
-      alert('Could not save to wishlist. Please try again.');
+      toast.error('Could not save to wishlist. Please try again.'); // Using toast for error
     }
   };
 
@@ -190,6 +194,8 @@ const ApplePodcast = (props) => {
           </div>
         )}
       </div>
+
+      <ToastContainer /> {/* Include ToastContainer for rendering notifications */}
     </Fragment>
   );
 };

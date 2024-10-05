@@ -92,8 +92,8 @@ const [ticketPrice, setTicketPrice] = useState(0);
   
     // Append tickets as an array instead of separate fields
     ticketTypes.forEach((ticket, index) => {
-      formData.append(`tickets[${index}][type]`, ticket.type);
-      formData.append(`tickets[${index}][price]`, ticket.price);
+      formData.append(`tickets[${index}][type]`, ticket.price);
+      // formData.append(`tickets[${index}][price]`, ticket.price);
     });
   
     // Append speaker data
@@ -298,9 +298,11 @@ const [ticketPrice, setTicketPrice] = useState(0);
         value={selectedType}
       >
         <option value="">Select Tickets Type</option>
-        <option value="Premium">Premium</option>
-        <option value="VIP">VIP</option>
-        <option value="General">General</option>
+        <option value="basicTicket">Basic</option>
+        <option value="standardTicket">Standard</option>
+        <option value="premiumTicket">Premium</option>
+       
+      
       </select>
     </div>
 

@@ -5,6 +5,8 @@ import Image from './Img2.png';
 import { FaRegShareFromSquare } from "react-icons/fa6";
 import { fetchEvent } from "../../API";
 import axios from "axios";
+import { ToastContainer, toast } from 'react-toastify'; // Import toast components
+import 'react-toastify/dist/ReactToastify.css'; // Import toast styles
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -32,12 +34,13 @@ const RelatedEvent = () => {
           title: "Check out this event!",
           url: window.location.href,
         });
-        console.log('Share successful!');
+        toast.success('Event link shared successfully!'); // Notify on success
       } catch (error) {
         console.error('Error sharing:', error);
+        toast.error('Error sharing the event link.'); // Notify on error
       }
     } else {
-      alert('Web Share API is not supported in your browser.');
+      toast.error('Web Share API is not supported in your browser.'); // Notify if not supported
     }
   };
 
@@ -50,10 +53,10 @@ const RelatedEvent = () => {
         userId: user_id,
       });
       console.log('Wishlist item saved:', response.data);
-      alert('Event saved to wishlist!');
+      toast.success('Event saved to wishlist!'); // Notify on success
     } catch (error) {
       console.error('Error saving to wishlist:', error);
-      alert('Could not save to wishlist. Please try again.');
+      toast.error('Could not save to wishlist. Please try again.'); // Notify on error
     }
   };
 
@@ -65,6 +68,7 @@ const RelatedEvent = () => {
 
   return (
     <div className="mt-3 flex flex-wrap gap-1 w-[93%] mx-auto">
+      <ToastContainer /> {/* Include ToastContainer for notifications */}
       {newcard.map((data, i) => (
         <div key={i} className="m-0 text-white md:w-[33%] w-[49.4%] h-[42vh] relative">
           <img

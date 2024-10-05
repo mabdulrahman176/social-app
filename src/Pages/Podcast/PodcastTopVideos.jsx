@@ -3,9 +3,11 @@ import { CiPlay1 } from "react-icons/ci";
 import { IoBookmarkOutline } from "react-icons/io5";
 import img from './img2.jpeg';
 import RelatedPodcast from './RelatedPodcast';
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { fetchPodcast } from "../../API";
 import axios from "axios";
+import { ToastContainer, toast } from 'react-toastify'; // Import toast components
+import 'react-toastify/dist/ReactToastify.css'; // Import toast styles
 
 function PodcastTopVideos() {
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -53,15 +55,16 @@ function PodcastTopVideos() {
         userId: user_id,
       });
       console.log('Wishlist item saved:', response.data);
-      alert('Podcast saved to wishlist!');
+      toast.success('Podcast saved to wishlist!'); // Show success toast
     } catch (error) {
       console.error('Error saving to wishlist:', error);
-      alert('Could not save to wishlist. Please try again.');
+      toast.error('Could not save to wishlist. Please try again.'); // Show error toast
     }
   };
 
   return (
     <Fragment>
+      <ToastContainer /> {/* Include the ToastContainer here */}
       <section className="w-full h-[89%] bg-white mt-1 text-white overflow-y-scroll Podcast_Top_Videos">
         <h1 className="flex items-center text-xl font-bold my-3 ps-3 text-black">Recently Played</h1>
         <section className="h-[90%] w-full">
@@ -97,34 +100,32 @@ function PodcastTopVideos() {
 
           {/* Related Podcasts */}
           <div className="flex justify-start ps-5 gap-2 flex-wrap w-full overflow-x-auto Podcast_Top_Videos mt-2">
-  {recentdata.slice(0, 3).map((elm, ind) => (
-    <div
-      key={ind}
-      className="cursor-pointer lg:h-[42vh] h-[25vh] lg:w-[22.33vw] md:w-[33.33vw] sm:w-[33.33vw] w-[33.33vw] flex-shrink-0 rounded-lg relative"
-      onClick={() => navigate(`/podcastdetails`, { state: { id: elm._id } })} // Handle navigation
-    >
-      <div className="absolute h-full w-full ShadedBG rounded-lg">
-        <IoBookmarkOutline
-          className="absolute right-1 top-1 text-2xl cursor-pointer"
-          onClick={(e) => {
-            e.stopPropagation(); // Prevent triggering onClick of parent div
-            handleSaveToWishlist(elm._id); // Save to wishlist
-          }}
-        />
-        <div className="absolute bottom-1 left-1">
-          <p className="text-sm">{elm.episodeTitle}</p>
-          <p className="text-sm">{elm.user ? elm.user.name : ""}</p>
-          <p className="text-xs flex gap-1 items-center">
-            <CiPlay1 /> {formatDuration(elm.podcastDuration)}
-          </p>
-        </div>
-      </div>
-      <img src={elm.picUrl ? elm.picUrl : img} alt={`Img-${ind}`} className="h-full w-full rounded-lg" />
-    </div>
-  ))}
-</div>
-
-
+            {recentdata.slice(0, 3).map((elm, ind) => (
+              <div
+                key={ind}
+                className="cursor-pointer lg:h-[42vh] h-[25vh] lg:w-[22.33vw] md:w-[33.33vw] sm:w-[33.33vw] w-[33.33vw] flex-shrink-0 rounded-lg relative"
+                onClick={() => navigate(`/podcastdetails`, { state: { id: elm._id } })} // Handle navigation
+              >
+                <div className="absolute h-full w-full ShadedBG rounded-lg">
+                  <IoBookmarkOutline
+                    className="absolute right-1 top-1 text-2xl cursor-pointer"
+                    onClick={(e) => {
+                      e.stopPropagation(); // Prevent triggering onClick of parent div
+                      handleSaveToWishlist(elm._id); // Save to wishlist
+                    }}
+                  />
+                  <div className="absolute bottom-1 left-1">
+                    <p className="text-sm">{elm.episodeTitle}</p>
+                    <p className="text-sm">{elm.user ? elm.user.name : ""}</p>
+                    <p className="text-xs flex gap-1 items-center">
+                      <CiPlay1 /> {formatDuration(elm.podcastDuration)}
+                    </p>
+                  </div>
+                </div>
+                <img src={elm.picUrl ? elm.picUrl : img} alt={`Img-${ind}`} className="h-full w-full rounded-lg" />
+              </div>
+            ))}
+          </div>
 
           <h1 className="ps-3 text-xl font-bold my-3 text-black">Suggested Podcast</h1>
 

@@ -7,6 +7,8 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import JobAppliedSuccess from "./JobAppliedSuccess";
 import { myContext } from "../../Context/CreateContext";
 import axios from "axios";
+import { ToastContainer, toast } from 'react-toastify'; // Import toast components
+import 'react-toastify/dist/ReactToastify.css'; // Import toast styles
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -16,13 +18,12 @@ function Jobdetail() {
   const [job, setJob] = useState(null);
   const [poster, setPoster] = useState(null);
   const [loading, setLoading] = useState(true);
-  console.log("single job details ", job);
+
   useEffect(() => {
     const getData = async () => {
       if (loc.state && loc.state.id) {
         try {
           const result_ = await getJob(loc.state.id);
-          console.log("Fetched job data poster:", result_.poster); // Log fetched data
           setJob(result_.job);
           setPoster(result_.poster);
         } catch (error) {
@@ -37,14 +38,11 @@ function Jobdetail() {
     };
     getData();
   }, [loc.state]);
-  console.log("Location state in Jobdetail:", loc.state);
 
   const getJob = async (id) => {
     const req = await fetch(
       `${process.env.REACT_APP_API_BASE_URL}/jobs/${id}`,
-      {
-        method: "GET",
-      }
+      { method: "GET" }
     );
 
     if (!req.ok) {
@@ -55,9 +53,8 @@ function Jobdetail() {
     return d;
   };
 
-  let { JobAppliedStates } = useContext(myContext);
+  const { JobAppliedStates } = useContext(myContext);
 
-  // Loading indicator or error handling can be added here
   if (loading) {
     return <div>Loading...</div>; // Simple loading state
   }
@@ -67,27 +64,19 @@ function Jobdetail() {
   }
 
   const formatDate = (dateString) => {
-    if (!dateString) return "Invalid date"; // Return a message for undefined dates
-
-    // Normalize the date input by replacing dashes with slashes
+    if (!dateString) return "Invalid date";
     const normalizedDateString = dateString.replace(/[-]/g, "/");
-
-    // Split the date parts
     const dateParts = normalizedDateString.split("/");
 
     let day, month, year;
-
-    // Check for different formats
     if (dateParts.length === 3) {
       if (dateParts[0].length === 4) {
-        // Format: YYYY/MM/DD
         year = dateParts[0];
-        month = dateParts[1] - 1; // Month is zero-indexed
+        month = dateParts[1] - 1;
         day = dateParts[2];
       } else {
-        // Format: DD/MM/YYYY
         day = dateParts[0];
-        month = dateParts[1] - 1; // Month is zero-indexed
+        month = dateParts[1] - 1;
         year = dateParts[2];
       }
 
@@ -120,16 +109,17 @@ function Jobdetail() {
         userId: user_id,
       });
       
-      console.log('Wishlist item saved:', response.data); // Log the response to check what is returned
-      alert('Job saved to wishlist!');
+      console.log('Wishlist item saved:', response.data);
+      toast.success('Job saved to wishlist!'); // Use toast for success notification
     } catch (error) {
       console.error('Error saving to wishlist:', error);
-      alert('Could not save to wishlist. Please try again.');
+      toast.error('Could not save to wishlist. Please try again.'); // Use toast for error notification
     }
   };
 
   return (
     <div className="h-full w-full bg-white relative">
+      <ToastContainer /> {/* Include ToastContainer for notifications */}
       {JobAppliedStates.jobAppliedSuccess && <JobAppliedSuccess />}
       <h4 className="flex items-center gap-3 ms-4 h-[10%]">
         <FaAngleLeft
@@ -219,15 +209,14 @@ function Jobdetail() {
           </div>
           <div className="about lg:w-[49%] w-[90%] mx-auto lg:mt-0 mt-6">
             <div className="flex justify-between">
-             
               <p className="text-xl font-bold">About the job</p>
               <CiBookmark
-  className="text-2xl cursor-pointer"
-  onClick={(e) => {
-    e.stopPropagation(); // Prevent bubbling up to parent elements
-    handleSaveToWishlist(job._id); // Pass the job ID
-  }}
-/>
+                className="text-2xl cursor-pointer"
+                onClick={(e) => {
+                  e.stopPropagation(); // Prevent bubbling up to parent elements
+                  handleSaveToWishlist(job._id); // Pass the job ID
+                }}
+              />
             </div>
             <div className="text-[15px] text-[gray] h-auto overflow-y-scroll Podcast_Top_Videos">
               <p className="text-lg font-bold text-black">About The Role</p>

@@ -8,6 +8,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import Model from "../ModalReport/Model";
 import Review from "../Podcast/Review";
+import { ToastContainer, toast } from 'react-toastify'; // Importing Toastify
+import 'react-toastify/dist/ReactToastify.css'; // Import CSS for Toastify
 
 const Video = () => {
   let navigate = useNavigate();
@@ -69,7 +71,6 @@ const Video = () => {
     return debouncedCallback;
   };
 
-
   const handleScroll = (e) => {
     if (e.deltaY > 0) {
       // Scroll down
@@ -103,12 +104,13 @@ const Video = () => {
           text: 'Watch this video!',
           url: window.location.href,
         });
-        console.log('Share successful!');
+        toast.success('Share successful!'); // Using toast for success
       } catch (error) {
         console.error('Error sharing:', error);
+        toast.error('Error sharing the video.'); // Using toast for error
       }
     } else {
-      alert('Web Share API is not supported in your browser.');
+      toast.warn('Web Share API is not supported in your browser.'); // Using toast for warning
     }
   };
 
@@ -128,7 +130,7 @@ const Video = () => {
         <div className="w-[80%] sm:w-[65%] md:w-[55%] h-[95%] mx-auto rounded-xl relative">
           <div className="absolute z-10 rounded-lg left-0 top-0 h-full w-full ShadedBG">
             <div
-              className="absolute cursor-pointer flex gap-2 items-center ps-2 text-lg text-white left-0 z-10"
+              className="absolute cursor-pointer flex gap-2 items-center ps-4 py-2 text-lg text-white left-0 z-10"
               onClick={() => navigate("/videos")}
             >
               <FaChevronLeft className="text-xs" />
@@ -188,6 +190,8 @@ const Video = () => {
           ></video>
         </div>
       </section>
+
+      <ToastContainer /> {/* Include ToastContainer for rendering notifications */}
     </Fragment>
   );
 };

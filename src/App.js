@@ -3,7 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import Signup from './Components/Signup/Signup';
 import Layout from './Pages/Layout/Layout';
 import ProfilePublic from './Pages/Profile/ProfilePublic';
-import Dashboard from './Pages/Dashboard/Dashboard';
+// import Dashboard from './Pages/Dashboard/Dashboard';
 import Feed from './Pages/Feed/Feed.jsx';
 import SingleVideo from './Pages/SingleVideo/SingleVideo.jsx';
 import './App.css';
@@ -75,7 +75,7 @@ const App = () => {
           <Route path="/videos" element={<Feed />} />
           <Route path="/video/:src" element={<SingleVideo />} />
           {/* <Route path="/ProfileVideo/:src" element={<ProfileVideo />} /> */}
-          <Route path="/dashboard" element={<Dashboard />} />
+          {/* <Route path="/dashboard" element={<Dashboard />} /> */}
           <Route path="/profile" element={<ProfilePublic />} />
           <Route path="/personaldetails" element={<Personaldetail />} />
           <Route path="/personaldetail2" element={<Personaldetail2 />} />
