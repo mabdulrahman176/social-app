@@ -39,13 +39,15 @@ function Ticketdetail() {
   }
 }, [loc.state]);
 
+const selectedTickets = loc.state?.selectedTickets || {};
+
   return (
     <>
       <div className="main h-full w-full bg-white">
         <h4 className="flex items-center gap-3 ms-4 h-[10%]">
           <FaAngleLeft
             className="cursor-pointer"
-            onClick={() => navigate("/ticketpayment",{ state: { id:tickets._id } })}
+            onClick={() => navigate("/ticketpayment",{ state: { id:tickets._id ,selectedTickets} })}
           />{" "}
           Ticket Details
         </h4>

@@ -70,7 +70,7 @@ const RelatedEvent = () => {
     <div className="mt-3 flex flex-wrap gap-1 w-[93%] mx-auto">
       <ToastContainer /> {/* Include ToastContainer for notifications */}
       {newcard.map((data, i) => (
-        <div key={i} className="m-0 text-white md:w-[33%] w-[49.4%] h-[42vh] relative">
+        <div key={i} className="m-0 text-white md:w-[32%] w-[49.4%] h-[42vh] relative">
           <img
             src={data.eventCoverUrl ? data.eventCoverUrl : Image}
             alt="Card Img2"

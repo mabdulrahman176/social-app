@@ -20,6 +20,7 @@ function Notification() {
       try {
         const response = await axios.get(API_URL); 
         setNotifications(response.data.data);
+        console.log("notifications is ", response.data.data)
       } catch (error) {
         console.error('Error fetching notifications:', error);
       }

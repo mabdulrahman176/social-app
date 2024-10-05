@@ -75,7 +75,7 @@ function Eventdetails() {
               <div className="ticketstarting py-3 rounded w-[80%] mx-auto  ">
                 <small className="text-gray-500">Tickets starting at</small>
                 <h5 className="text-lg pb-2 font-bold">
-                  {event.eventTicketPrice}
+                  ${event.basicTicket}
                 </h5>
                 <button
                   className="buyticket  text-white rounded-lg px-4 py-2 mt-2"
