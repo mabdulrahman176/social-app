@@ -29,7 +29,7 @@ const AllVideos = (props) => {
     if (action === "edit") {
       setSelectedVideo(video);
     } else if (action === "delete") {
-      setVideoToDelete(video._id); // Set the video to delete
+      setVideoToDelete(video.data._id); // Set the video to delete
       setIsDeleteModalOpen(true); // Open the delete modal
     }
   };
@@ -51,7 +51,9 @@ const AllVideos = (props) => {
   useEffect(() => {
     setLoading(true); // Start loading
     const fetchVideos = () => {
-      setVideo(props.videos); // Set the video list from props
+      setVideo(props.videos);
+      console.log("props video is",props.videos)
+      // Set the video list from props
       setLoading(false); // Stop loading after setting the videos
     };
 
@@ -73,18 +75,18 @@ const AllVideos = (props) => {
               <div
                 key={ind}
                 className="w-[32%] cursor-pointer grid place-items-center relative h-[30vh] sm:h-[40vh]"
-                onClick={() => navigate(`/video/${encodeURIComponent(video._id)}`)}
-                onMouseEnter={() => setVisibleId(video._id)} // Set _id for hover
+                onClick={() => navigate(`/video/${encodeURIComponent(video.data._id)}`)}
+                onMouseEnter={() => setVisibleId(video.data._id)} // Set _id for hover
                 onMouseLeave={() => setVisibleId(null)} // Reset on leave
               >
                 <video
-                  src={video.videoUrl}
+                  src={video.data.videoUrl}
                   className="w-[100%] h-[100%] overflow-y-hidden object-fill"
                 ></video>
                 <CiPlay1 className="absolute text-2xl text-white" />
 
                 {/* Show Edit/Delete icons on hover */}
-                {visibleId === video._id && (
+                {visibleId === video.data._id && (
                   <div className="absolute top-2 right-2 flex flex-col space-y-2">
                     <CiTrash
                       className="text-red-600 text-3xl cursor-pointer hover:text-red-700"

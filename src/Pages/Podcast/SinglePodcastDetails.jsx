@@ -8,12 +8,7 @@ import Model from "../ModalReport/Model";
 import { FaAngleLeft } from "react-icons/fa";
 import RelatedPodcast from "./RelatedPodcast";
 
-let guestData = [
-  { img: img2, title: "Host" },
-  { img: img2, title: "Guest" },
-  { img: img2, title: "Guest" },
-  { img: img2, title: "Guest" },
-];
+
 
 function SinglePodcastDetails() {
   let navigate = useNavigate();
@@ -130,17 +125,17 @@ function SinglePodcastDetails() {
             </p>
         <p>Speakers:</p>
         <div className="flex gap-2 md:ps-6 mt-3 w-full overflow-x-scroll Podcast_Top_Videos">
-          {guestData.map((elm, ind) => (
+          {result.speakers && result.speakers.map((elm, ind) => (
             <div
               key={ind}
-              className="flex items-center justify-center flex-shrink-0 gap-3 py-2 my-2 rounded w-[100px] bg-gray-200"
+              className="flex items-center justify-center flex-shrink-0 gap-3 py-2 my-2 rounded w-auto bg-gray-200"
             >
               <img
-                src={elm.img}
+                src={elm.picUrl ? elm.picUrl : img2}
                 className="rounded-full h-[35px] w-[35px]"
                 alt=""
               />
-              <h1 className="text-md">{elm.title}</h1>
+              <h1 className="text-md">{elm.name}</h1>
             </div>
           ))}
         </div>

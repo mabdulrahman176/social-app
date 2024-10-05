@@ -89,18 +89,21 @@ const [ticketPrice, setTicketPrice] = useState(0);
   
     // Set event creator ID
     formData.append("eventCreatedBy", getUserId());
+    formData.append('eventCatagory', selectedType);
   
     // Append tickets as an array instead of separate fields
     ticketTypes.forEach((ticket, index) => {
-      formData.append(`tickets[${index}][type]`, ticket.price);
+      formData.append(ticket.type, +ticket.price);
+      console.log("ticket",ticket.type, +ticket.price)
       // formData.append(`tickets[${index}][price]`, ticket.price);
     });
   
-    // Append speaker data
-    speakerState.forEach((speaker, index) => {
-      formData.append(`speakers[${index}][id]`, speaker.id);
-      formData.append(`speakers[${index}][name]`, speaker.name);
-    });
+     // Create an array of speaker IDs
+     const speakerIds = speakerState.map(speaker => speaker.id);
+     console.log("speaker idd", speakerIds)
+     console.log("speaker state", speakerState)
+
+     formData.append('eventArray', JSON.stringify(speakerState));
     // Log the FormData to see its contents
     for (let pair of formData.entries()) {
       console.log(`${pair[0]}: ${pair[1]}`);
@@ -240,12 +243,12 @@ const [ticketPrice, setTicketPrice] = useState(0);
               <select
                 className="w-full border rounded-lg py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline placeholder:text-xs"
                 value={selectedType} 
-                onChange={onChange}
-                required
+                onChange={(e) => setSelectedType(e.target.value)} 
+                
               >
                 <option value="">Select a Event Category</option>
                 {eventCatagory.map((type, index) => (
-                  <option key={index} value={type} className="absolute top-5">
+                  <option key={index} value={type} >
                     {type}
                   </option>
                 ))}
@@ -313,7 +316,11 @@ const [ticketPrice, setTicketPrice] = useState(0);
             key={index}
             className="my-2 flex justify-between items-center bg-slate-300 rounded-lg w-auto ml-1"
           >
-            {ticket.type} - ${ticket.price}
+            {ticket.type == 'premiumTicket'&& `Premium - ${ticket.price}`}
+            {ticket.type == 'basicTicket'&& `Basic - ${ticket.price}`}            
+            {ticket.type == 'standardTicket'&& `Standard - ${ticket.price}`}
+
+
             <FaTimes
               className="text-gray-500 cursor-pointer"
               onClick={() => removeTicket(index)}

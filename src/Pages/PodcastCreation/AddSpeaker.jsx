@@ -65,9 +65,10 @@ const AddSpeaker = ({ updateSpeakerData, initialData }) => {
   };
 
   const handleUserSelect = (user) => {
+    // Only store the user ID in the speaker object
     const newSpeaker = {
-      id: user.Users_PK,
-      name: `@${user.name}`,
+      id: user.Users_PK, // User ID
+      name: `@${user.name}`, // Display name
     };
 
     const updatedSpeakers = [...speakers, newSpeaker];
@@ -75,12 +76,15 @@ const AddSpeaker = ({ updateSpeakerData, initialData }) => {
     setInputValue("");
     setFilteredUsers([]);
     setShowAdditionalForms(false);
-    updateSpeakerData(updatedSpeakers);
+
+    // Create an array of IDs for the server
+    const eventArray = updatedSpeakers.map(speaker => speaker.id);
+    updateSpeakerData(eventArray); // Send only the IDs
   };
 
   const handleManualEntry = () => {
     const nonTaggedSpeaker = {
-      name: "", 
+      name: "", // You can choose to handle this as needed
       speakerData: [
         speakerData.speakerName,
         speakerData.familyName,
@@ -90,7 +94,10 @@ const AddSpeaker = ({ updateSpeakerData, initialData }) => {
 
     const updatedSpeakers = [...speakers, nonTaggedSpeaker];
     setSpeakers(updatedSpeakers);
-    updateSpeakerData(updatedSpeakers);
+    
+    // Assuming manual entries will also have an ID assigned or handled differently
+    const eventArray = updatedSpeakers.map(speaker => speaker.id);
+    updateSpeakerData(eventArray); // Send only the IDs
   };
 
   const handleChange = (e) => {
@@ -104,7 +111,10 @@ const AddSpeaker = ({ updateSpeakerData, initialData }) => {
   const handleRemoveSpeaker = (index) => {
     const updatedSpeakers = speakers.filter((_, i) => i !== index);
     setSpeakers(updatedSpeakers);
-    updateSpeakerData(updatedSpeakers);
+    
+    // Update eventArray after removal
+    const eventArray = updatedSpeakers.map(speaker => speaker.id);
+    updateSpeakerData(eventArray); // Send updated IDs to server
   };
 
   return (

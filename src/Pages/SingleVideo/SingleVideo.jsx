@@ -21,8 +21,8 @@ const Video = () => {
   const [videos, setVideos] = useState([]);
   const [videoIndex, setVideoIndex] = useState(0);
 
-  const handleProfile = () => {
-    navigate('/profile');
+  const handleProfile = (userId) => {
+    navigate(`/profile/${userId}`); 
   };
 
   const videoId = decodeURIComponent(src);
@@ -150,12 +150,14 @@ const Video = () => {
               </p>
             </div>
             <div className="absolute bottom-3 z-10 right-2 text-white">
-              <div className="relative cursor-pointer rounded-full flex justify-center" onClick={handleProfile}>
+              <div className="relative cursor-pointer rounded-full flex justify-center" >
                 <img
                   src={video && video.user ? video.user.picUrl : '/placeholder.png'}
                   style={{ height: "40px", width: "40px" }}
                   className="rounded-full"
                   alt=""
+                  onClick={() => handleProfile(video.user.Users_PK
+                  )}
                 />
                 <FontAwesomeIcon
                   icon={faPlus}
