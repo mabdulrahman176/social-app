@@ -91,6 +91,12 @@ function Message2() {
       setMessage(''); // Clear the message after sending
     }
   };
+  const deleteMessage = (id) => {
+      console.log("deleting message")
+      socket.emit('sendMessage', { roomId, sender: getUserId(), messageId:id });
+    
+    }
+  
 
   useEffect(() => {
     fetchChatroom(loc.state.id); // Fetch chatroom on mount
@@ -241,6 +247,7 @@ function Message2() {
                   </div>
                 </div>
               </div>
+              <button onClick={()=>deleteMessage(e.messageId)} >Delete</button>
               <p className="text-[gray] text-[10px] break-words">{__Time__(e.timestamp)}</p>
             </div>
           ))}
