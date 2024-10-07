@@ -197,7 +197,7 @@ const Search = () => {
                   <div className="flex flex-row pl-3  items-center">
                     <img
                       className="w-16 h-16 object-cover rounded-3xl  mx-4"
-                      src={e.picUrl ? e.picUrl : "dummyUser.avif"}
+                      src={e.picUrl ? e.picUrl : "/placeholder.jpg"}
                       alt=""
                     />
                     <p className="text-2xl">{e.name}</p>

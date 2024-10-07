@@ -137,9 +137,13 @@ const Video = () => {
               Videos
             </div>
             <div className="absolute z-10 bottom-3 w-[60%] sm:w-[43%] p-3 text-white">
-              <p className="text-xl font-semibold">
+             <Link to="/userprofile"
+              state={{id :video && video.user ? video.user.Users_PK :" "}}
+             >
+             <p className="text-xl font-semibold">
                 {video && video.user ? video.user.name : 'NO_NAME'}
               </p>
+             </Link>
               <p className="py-1 w-[80%] text-sm">
                 {video && video.data ? video.data.videoDesc : 'Loading...'}
               </p>
@@ -155,10 +159,10 @@ const Video = () => {
                state={{id :video && video.user ? video.user.Users_PK :" "}}
                >
                <img
-                  src={video && video.user ? video.user.picUrl : '/placeholder.png'}
+                  src={video && video.user ? video.user.picUrl : "/placeholder.jpg"}
                   style={{ height: "40px", width: "40px" }}
                   className="rounded-full"
-                  alt="User Profile Picture"
+                  alt="User Profile "
                 />
                </Link>
                 <FontAwesomeIcon

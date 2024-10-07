@@ -50,9 +50,8 @@ const eventCatagory = [
   "Pets & Animals",
   "TV & Film",
   "Social Activities",
-  "Subscribed"
+  "Subscribed",
 ];
-
 
 const EventForm = () => {
   const navigate = useNavigate();
@@ -62,9 +61,9 @@ const EventForm = () => {
   const [state, setState] = useState({});
   const [speakerState, setSpeakerState] = useState([]);
   const [loading, setLoading] = useState(false);
- const [ticketTypes, setTicketTypes] = useState([]);
-const [selectedType, setSelectedType] = useState("");
-const [ticketPrice, setTicketPrice] = useState(0);
+  const [ticketTypes, setTicketTypes] = useState([]);
+  const [selectedType, setSelectedType] = useState("");
+  const [ticketPrice, setTicketPrice] = useState(0);
 
   const getUserId = () => {
     const str = document.cookie;
@@ -74,50 +73,50 @@ const [ticketPrice, setTicketPrice] = useState(0);
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-  
+
     const formData = new FormData();
-    
+
     // Append cover image if exists
     if (coverImageFile) {
       formData.append("coverImage", coverImageFile);
     }
-  
+
     // Append all state fields to formData
     Object.keys(state).forEach((key) => {
       formData.append(key, state[key]);
     });
-  
+
     // Set event creator ID
     formData.append("eventCreatedBy", getUserId());
-    formData.append('eventCatagory', selectedType);
-  
+    formData.append("eventCatagory", selectedType);
+
     // Append tickets as an array instead of separate fields
     ticketTypes.forEach((ticket, index) => {
       formData.append(ticket.type, +ticket.price);
-      console.log("ticket",ticket.type, +ticket.price)
+      console.log("ticket", ticket.type, +ticket.price);
       // formData.append(`tickets[${index}][price]`, ticket.price);
     });
-  
-     // Create an array of speaker IDs
-     const speakerIds = speakerState.map(speaker => speaker.id);
-     console.log("speaker idd", speakerIds)
-     console.log("speaker state", speakerState)
 
-     formData.append('eventArray', JSON.stringify(speakerState));
+    // Create an array of speaker IDs
+    const speakerIds = speakerState.map((speaker) => speaker.id);
+    console.log("speaker idd", speakerIds);
+    console.log("speaker state", speakerState);
+
+    formData.append("eventArray", JSON.stringify(speakerState));
     // Log the FormData to see its contents
     for (let pair of formData.entries()) {
       console.log(`${pair[0]}: ${pair[1]}`);
     }
-  
+
     try {
       // Ensure the URL is correctly defined in the environment variables
       const response = await axios.post(
         `${process.env.REACT_APP_API_BASE_URL}/events/`,
         formData
       );
-      
+
       console.log("Event Created Successfully:", response.data);
-  
+
       // Update context state
       EventStates.setEventSubmitted(!EventStates.eventSubmitted);
       navigate("/events");
@@ -127,7 +126,7 @@ const [ticketPrice, setTicketPrice] = useState(0);
       setLoading(false);
     }
   };
-  
+
   const onChange = (e) => {
     const { name, value } = e.target;
     setState((prev) => ({
@@ -147,7 +146,10 @@ const [ticketPrice, setTicketPrice] = useState(0);
   const handleTicketChange = (e) => {
     const { value } = e.target;
     if (value) {
-      setTicketTypes((prev) => [...prev, { type: value, price: parseFloat(ticketPrice) }]);
+      setTicketTypes((prev) => [
+        ...prev,
+        { type: value, price: parseFloat(ticketPrice) },
+      ]);
       setSelectedType("");
     }
   };
@@ -233,22 +235,19 @@ const [ticketPrice, setTicketPrice] = useState(0);
                 placeholder="Enter description"
               />
             </div>
-           
-         
 
             <div className="my-4">
-            <label className="block text-gray-600 text-sm font-bold">
+              <label className="block text-gray-600 text-sm font-bold">
                 Event Category
               </label>
               <select
                 className="w-full border rounded-lg py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline placeholder:text-xs"
-                value={selectedType} 
-                onChange={(e) => setSelectedType(e.target.value)} 
-                
+                value={selectedType}
+                onChange={(e) => setSelectedType(e.target.value)}
               >
                 <option value="">Select a Event Category</option>
                 {eventCatagory.map((type, index) => (
-                  <option key={index} value={type} >
+                  <option key={index} value={type}>
                     {type}
                   </option>
                 ))}
@@ -280,55 +279,50 @@ const [ticketPrice, setTicketPrice] = useState(0);
             </div>
 
             <div className="my-4">
-              <label className="block text-gray-600 text-sm font-bold">
-                Basic Price
+              <label className="block text-gray-600 text-sm font-bold my-1">
+                Add Tickets Type
               </label>
               <input
-                className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
+                className="w-full border py-2 ps-3 my-2 rounded-lg text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
                 type="number"
                 value={ticketPrice}
                 min={0}
                 onChange={(e) => setTicketPrice(e.target.value)}
                 placeholder="Enter price $35.00"
               />
+              <select
+                className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none text-xs focus:shadow-outline"
+                onChange={handleTicketChange}
+                value={selectedType}
+              >
+                <option value="">Select Tickets Type</option>
+                <option value="basicTicket">Basic</option>
+                <option value="standardTicket">Standard</option>
+                <option value="premiumTicket">Premium</option>
+              </select>
             </div>
 
-            <div className="my-4">
-      <label className="block text-gray-600 text-sm font-bold">Add Tickets Type</label>
-      <select
-        className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none text-xs focus:shadow-outline"
-        onChange={handleTicketChange}
-        value={selectedType}
-      >
-        <option value="">Select Tickets Type</option>
-        <option value="basicTicket">Basic</option>
-        <option value="standardTicket">Standard</option>
-        <option value="premiumTicket">Premium</option>
-       
-      
-      </select>
-    </div>
+            <div className="mt-4">
+              <ul className="w-auto flex flex-wrap">
+                {ticketTypes.map((ticket, index) => (
+                  <li
+                    key={index}
+                    className="my-2 flex justify-between items-center bg-slate-300 rounded-lg w-auto ml-1"
+                  >
+                    {ticket.type == "premiumTicket" &&
+                      `Premium - ${ticket.price}`}
+                    {ticket.type == "basicTicket" && `Basic - ${ticket.price}`}
+                    {ticket.type == "standardTicket" &&
+                      `Standard - ${ticket.price}`}
 
-    <div className="mt-4">
-      <ul className="w-auto flex flex-wrap">
-        {ticketTypes.map((ticket, index) => (
-          <li
-            key={index}
-            className="my-2 flex justify-between items-center bg-slate-300 rounded-lg w-auto ml-1"
-          >
-            {ticket.type == 'premiumTicket'&& `Premium - ${ticket.price}`}
-            {ticket.type == 'basicTicket'&& `Basic - ${ticket.price}`}            
-            {ticket.type == 'standardTicket'&& `Standard - ${ticket.price}`}
-
-
-            <FaTimes
-              className="text-gray-500 cursor-pointer"
-              onClick={() => removeTicket(index)}
-            />
-          </li>
-        ))}
-      </ul>
-    </div>
+                    <FaTimes
+                      className="text-gray-500 cursor-pointer"
+                      onClick={() => removeTicket(index)}
+                    />
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
 
           <div className="sm:w-[40%] w-[45%]">
@@ -336,13 +330,26 @@ const [ticketPrice, setTicketPrice] = useState(0);
               <label className="block text-gray-600 text-sm font-bold">
                 Event Type
               </label>
-              <input
+              {/* <input
                 className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
                 type="text"
                 onChange={onChange}
                 name="eventType"
                 placeholder="Enter event type"
-              />
+              /> */}
+              <select
+                name="eventType"
+                id="eventType"
+                onChange={onChange}
+                className="w-full border rounded-lg py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline placeholder:text-xs"
+              >
+                <option value="eventType">Select Event Type</option>
+                <option value="eventType">Conference</option>
+                <option value="eventType">Seminar</option>
+                <option value="eventType">Work Shop</option>
+                <option value="eventType">Trade Show</option>
+                <option value="eventType">Other</option>
+              </select>
             </div>
             <div className="my-4">
               <label className="block text-gray-600 text-sm font-bold">
@@ -350,7 +357,7 @@ const [ticketPrice, setTicketPrice] = useState(0);
               </label>
               <input
                 className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
-                type="text"
+                type="time"
                 onChange={onChange}
                 name="startTime"
                 placeholder="Enter Start Time"
@@ -362,7 +369,7 @@ const [ticketPrice, setTicketPrice] = useState(0);
               </label>
               <input
                 className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
-                type="text"
+                type="time"
                 onChange={onChange}
                 name="endTime"
                 placeholder="Enter End Time"
@@ -372,25 +379,55 @@ const [ticketPrice, setTicketPrice] = useState(0);
               <label className="block text-gray-600 text-sm font-bold">
                 Event Format
               </label>
-              <input
+              {/* <input
                 className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
                 type="text"
                 onChange={onChange}
                 name="eventFormat"
                 placeholder="Enter format"
-              />
+              /> */}
+
+              <select
+                name="eventFormat"
+                id="eventFormat"
+                onChange={onChange}
+                className="w-full border rounded-lg py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline placeholder:text-xs"
+              >
+                <option value="eventFormat">Select Event Format</option>
+                <option value="eventFormat">In-Person</option>
+                <option value="eventFormat">Virtual</option>
+                <option value="eventFormat">Hybrid</option>
+                <option value="eventFormat">Pre-Recorded-content</option>
+                <option value="eventFormat">Other</option>
+              </select>
             </div>
             <div className="my-4">
               <label className="block text-gray-600 text-sm font-bold">
                 Network Opportunities
               </label>
-              <input
+              {/* <input
                 className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
                 type="text"
                 onChange={onChange}
                 name="eventNetworkOps"
                 placeholder="Enter network opportunities"
-              />
+              /> */}
+
+<select
+                name="eventNetworkOps"
+                id="eventNetworkOps"
+                onChange={onChange}
+                className="w-full border rounded-lg py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline placeholder:text-xs"
+              >
+                <option value="eventNetworkOps">Select Network  Opportunities</option>
+                <option value="eventNetworkOps">Speed Networking</option>
+                <option value="eventNetworkOps">RoundTable Discussions</option>
+                <option value="eventNetworkOps">Social Mixers</option>
+                <option value="eventNetworkOps">Panel Discussions</option>
+                <option value="eventNetworkOps">Q&A Sessions</option>
+                <option value="eventNetworkOps">Ongoing Registration</option>
+                <option value="eventNetworkOps">Other</option>
+              </select>
             </div>
             <div className="my-4">
               <AddSpeaker
@@ -398,7 +435,7 @@ const [ticketPrice, setTicketPrice] = useState(0);
                 initialData={speakerState}
               />
             </div>
-            <div className="my-4">
+            {/* <div className="my-4">
               <label className="block text-gray-600 text-sm font-bold">
                 Manage Privacy Settings
               </label>
@@ -409,7 +446,7 @@ const [ticketPrice, setTicketPrice] = useState(0);
                 name="eventPrivacySettings"
                 placeholder="Enter privacy settings"
               />
-            </div>
+            </div> */}
             <div className="my-4">
               <label className="block text-gray-600 text-sm font-bold">
                 Number of People

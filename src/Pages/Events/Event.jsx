@@ -14,7 +14,7 @@ const CardComponent = ({ title, imgSrc, onSave }) => (
   <div className="h-[30vh] lg:w-[12vw] md:w-[15vw] sm:w-[20vw] w-[25vw] relative cursor-pointer m-0 text-white">
     <img
       className="h-full w-full rounded-lg"
-      src={imgSrc ? imgSrc : Image}
+      src={imgSrc ? imgSrc : "/loading.jpg"}
       alt="Card Img"
     />
     <div className="absolute inset-0 flex justify-between ShadedBG rounded-lg">
@@ -81,7 +81,7 @@ function Event() {
               <CardComponent
                 key={i}
                 title={data.eventTitle}
-                imgSrc={data.eventCoverUrl}
+                imgSrc={data.eventCoverUrl || "/loading.jpg"}
                 onSave={(e) => {
                   e.stopPropagation(); // Prevent triggering on parent elements
                   handleSaveToWishlist(data._id); // Pass the event ID

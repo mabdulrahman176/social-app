@@ -152,7 +152,7 @@ const ApplePodcast = (props) => {
                       </div>
                     </div>
                     <img
-                      src={elm.picUrl}
+                      src={elm.picUrl || "/placeholder.jpg"}
                       alt={`Img-${ind}`}
                       className="h-full w-full rounded-lg"
                     />

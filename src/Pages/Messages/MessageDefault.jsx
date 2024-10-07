@@ -7,7 +7,7 @@ function Hello() {
       {/* Image */}
       <img 
         src={Img} 
-        alt="WhatsApp Web" 
+        alt="Teq Tak Web" 
         className="h-[30vh] w-auto max-w-full object-cover"
       />
       

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { fetchPodcast } from "../../API";
 import { Link, useNavigate } from "react-router-dom";
-import img from "./img2.jpeg";
+// import img from "./img2.jpeg";
 import { CiPlay1 } from "react-icons/ci";
 import { IoBookmarkOutline } from "react-icons/io5";
 import axios from "axios";
@@ -89,7 +89,7 @@ const RelatedPodcast = () => {
               </div>
             </div>
             <img
-              src={elm.picUrl ? elm.picUrl : img}
+              src={elm.picUrl ? elm.picUrl : "/loading.jpg"}
               alt={`Img-${ind}`}
               className="h-full w-full rounded-lg"
             />

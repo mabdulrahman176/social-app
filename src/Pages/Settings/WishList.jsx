@@ -45,7 +45,7 @@ const Wishlist = () => {
                     return (
                       <div key={item._id} className="md:h-[45vh] h-[37vh] w-[32.4%] rounded-lg border relative text-white">
                         <IoBookmarkOutline className="absolute right-2 top-4 text-2xl cursor-pointer" />
-                        <img src={item.wishItemId} alt={item.wishItemId} className="h-full w-full rounded-lg" />
+                        <img src={item.wishItemId || "/placeholder.jpg"} alt={item.wishItemId} className="h-full w-full rounded-lg" />
                         <div className="absolute bottom-1 w-full px-2">
                           <div className="bg-black bg-opacity-70 rounded-lg p-3">
                             <p className="text-2xl font-medium">{item.title}</p>
@@ -61,7 +61,7 @@ const Wishlist = () => {
                     return (
                       <div key={item._id} className="md:h-[45vh] h-[37vh] w-[32.4%] rounded-lg border relative text-white">
                         <IoBookmarkOutline className="absolute right-2 top-4 text-2xl cursor-pointer" />
-                        <img src={item.coverUrl} alt={item.wishItemId} className="h-full w-full rounded-lg" />
+                        <img src={item.coverUrl || "/placeholder.jpg"} alt={item.wishItemId} className="h-full w-full rounded-lg" />
                         <div className="absolute bottom-1 w-full px-2">
                           <div className="bg-black bg-opacity-70 rounded-lg p-3">
                             <p className="text-2xl font-medium">{item.eventTitle}</p>

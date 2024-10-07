@@ -9,7 +9,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { FaAngleLeft } from "react-icons/fa";
 import { IoCalendarOutline } from "react-icons/io5";
 import { CiLocationOn } from "react-icons/ci";
-import img from "./Img2.png";
+// import img from "./Img2.png";
 
 import RelatedEvent from "./RelatedEvent";
 
@@ -67,7 +67,7 @@ function Eventdetails() {
          <div className="flex ">
 
          <img
-            src={event.eventCoverUrl ? event.eventCoverUrl : img}
+            src={event.eventCoverUrl ? event.eventCoverUrl : "/loading.jpg"}
             alt=""
             className="eventimg1"
           />

@@ -19,8 +19,7 @@ function Term() {
       <div className="main w-[90%] h-[90%] mx-auto overflow-y-scroll Podcast_Top_Videos">
         <div className="h-full text-[14px] opacity-80">
         <p>
-          These Terms of Use ("Terms") govern your access to and use of the [App
-          Name] Mobile Application (the "App"). By accessing and using the app,
+          These Terms of Use ("Terms") govern your access to and use of the Teq Tak Mobile Application (the "App"). By accessing and using the app,
           you agree to be bound by these terms.
         </p>
 

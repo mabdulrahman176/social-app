@@ -136,7 +136,7 @@ function Jobdetail() {
               <div className="lg:w-full sm:w-[45%]">
                 <div className="flex gap-3 my-4">
                   <img
-                    src={job.logoUrl ? job.logoUrl : "/profile.png"}
+                    src={job.logoUrl ? job.logoUrl : "/placeholder.jpg"}
                     alt=""
                     className="h-[40px] w-[40px] rounded-full"
                   />
@@ -193,9 +193,12 @@ function Jobdetail() {
                     <p>shared with the employer.</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-1 mt-2">
+                <Link to="/userprofile"
+                    state={{id:job.userId ? job.userId : "unkown"}}
+                >
+                  <div className="flex items-center gap-1 mt-2">
                   <img
-                    src={poster.picUrl ? poster.picUrl : "/profile.png"}
+                    src={poster.picUrl ? poster.picUrl : "/placeholder.jpg"}
                     alt=""
                     className="h-[30px] w-[30px] rounded-full"
                   />
@@ -204,6 +207,8 @@ function Jobdetail() {
                     {poster.name ? poster.name : "Unknown"}
                   </p>
                 </div>
+                </Link>
+              
               </div>
             </div>
           </div>
@@ -225,7 +230,7 @@ function Jobdetail() {
               <p>{job.travelRequirement}</p>
             </div>
             <div className="text-[15px] h-auto overflow-y-scroll Podcast_Top_Videos">
-              <p className="text-lg font-bold">Languages</p>
+              <p className="text-lg font-bold">Language</p>
               <div className="text-lg my-2">{job.singleLang}</div>
             </div>
             <button

@@ -70,7 +70,7 @@ function Calendar2() {
                   <div className="w-full">
                     <div className="flex gap-2 mt-2">
                       <img
-                         src={elm.poster ? elm.poster.picUrl : "/profile.png"}
+                         src={elm.logoUrl ? elm.logoUrl : "/placeholder.jpg"}
                         onLoad={(e) => (e.target.style.opacity = 1)}
                         onError={(e) => (e.target.src = "/placeholder.png")}
                         style={{ height: "40px", width: "40px", opacity: 0, transition: "opacity 0.3s ease" }}

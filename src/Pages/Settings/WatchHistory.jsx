@@ -189,7 +189,7 @@ function WatchHistory() {
             {newCardData.map((data, i) => (
               <div key={i} className="m-0 text-white sm:w-[32.4%] w-[49.4%]  h-[45vh] relative">
                 <img
-                  src={data.imgSrc}
+                  src={data.imgSrc || "/placeholder.jpg"}
                   alt="Card Img2y"
                   className="h-full w-full rounded-lg cursor-pointer"
                   onClick={() => navigate("/eventdetail", { state: { data } })}

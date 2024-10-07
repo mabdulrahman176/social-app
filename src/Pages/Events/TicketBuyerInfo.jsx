@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendar, faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FaAngleLeft } from "react-icons/fa";
-import img from './Img1.png'
+// import img from './Img1.png'
 
 function Contactinfo() {
     const [firstname, setFirstname] = useState('');
@@ -146,7 +146,7 @@ function Contactinfo() {
                     <div className="p-6 pt-0 rounded">
                         <h4 className="text-md font-semibold mb-4">Event Details</h4>
                         <div className="flex items-center mb-4">
-                            <img src={tickets.eventCoverUrl ? tickets.eventCoverUrl : img} alt="Event" className="w-[30%] h-[12vh] object-cover rounded mr-4" />
+                            <img src={tickets.eventCoverUrl ? tickets.eventCoverUrl : "/loading.jpg"} alt="Event" className="w-[30%] h-[12vh] object-cover rounded mr-4" />
                             <div>
                                 <h6 className="font-semibold text-md">{tickets.eventTitle}</h6>
                                 <p className="text-gray-600 text-xs py-2">

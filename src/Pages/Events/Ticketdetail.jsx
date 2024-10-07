@@ -56,7 +56,7 @@ const selectedTickets = loc.state?.selectedTickets || {};
             <div className="flex justify-evenly flex-wrap lg:flex-nowrap">
               <div className="div lg:w-[45%] w-[80%] mx-auto">
                 <img
-                 src={tickets.eventCoverUrl ? tickets.eventCoverUrl : img}
+                 src={tickets.eventCoverUrl ? tickets.eventCoverUrl : "/loading.jpg"}
                   alt=""
                   className="h-[40vh] w-full mt-8"
                 />

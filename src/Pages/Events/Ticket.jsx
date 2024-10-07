@@ -6,7 +6,7 @@ import { FaAngleLeft } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { CiLocationOn } from "react-icons/ci";
 import { IoCalendarOutline } from "react-icons/io5";
-import img from "./Img1.png";
+// import img from "./Img1.png";
 
 function Ticket() {
   const [add, setAdd] = useState(0); // Basic
@@ -80,7 +80,7 @@ function Ticket() {
       <div className="h-[90%] overflow-y-scroll Podcast_Top_Videos">
         <div className="sm:flex justify-between items-center sm:w-[90%] sm:ps-0 ps-4 mx-auto">
           <img
-            src={tickets.eventCoverUrl ? tickets.eventCoverUrl : img}
+            src={tickets.eventCoverUrl ? tickets.eventCoverUrl : "/loading.jpg"}
             alt=""
             className="sm:w-[50%] w-[70%] h-[40vh] rounded-lg border ticket_img "
           />

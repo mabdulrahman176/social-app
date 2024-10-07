@@ -18,8 +18,7 @@ function Privacy() {
       <div className="main w-[90%] h-[90%] mx-auto overflow-y-scroll Podcast_Top_Videos">
        <div className="h-full text-[14px] opacity-80">
        <p className="p-2">
-          Your privacy is important to us. This Privacy Policy explains how [App
-          Name] ("we","us","or","our") collects uses and discloses and your
+          Your privacy is important to us. This Privacy Policy explains how Teq Tak ("we","us","or","our") collects uses and discloses and your
           informations when you use our mobile applications ("the,"app").
         </p>
         <p className="text-md font-semibold py-3">Information We Collect</p>

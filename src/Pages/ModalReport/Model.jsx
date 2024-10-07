@@ -113,7 +113,7 @@ const Model = (props) => {
           <section className="flex md:flex-nowrap flex-wrap relative items-center w-full h-[100%] font-[450] text-xs">
             <img
               className="md:w-[50%] w-full md:h-full h-[50%] relative"
-              src={props.picUrl}
+              src={props.picUrl || "/loading.jpg"}
               alt="Img-1"
             />
             <div className="flex flex-col md:w-[55%] md:h-[90%] w-full h-[50%]">
@@ -161,7 +161,7 @@ const Model = (props) => {
           />
 
           <section className="flex md:flex-nowrap flex-wrap md:items-center w-full h-[100%] font-[450] text-xs">
-            <img className="md:w-[45%] w-full md:h-full h-[45%]" src={props.picUrl} alt="" />
+            <img className="md:w-[45%] w-full md:h-full h-[45%]" src={props.picUrl || "/placeholder.jpg"} alt="user picture" />
             <div className="flex flex-col md:w-[50%] md:h-full h-[50%] w-full md:p-4">
               <div className="flex items-center justify-between py-4">
                 <h1>{""}</h1>

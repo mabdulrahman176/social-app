@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { CiPlay1 } from "react-icons/ci";
 import { IoBookmarkOutline } from "react-icons/io5";
-import img from './img2.jpeg';
+// import img from './img2.jpeg';
 import RelatedPodcast from './RelatedPodcast';
 import { Link, useNavigate } from "react-router-dom";
 import { fetchPodcast } from "../../API";
@@ -94,7 +94,7 @@ function PodcastTopVideos() {
                     </p>
                   </div>
                 </div>
-                <img src={elm.picUrl ? elm.picUrl : img} alt={`Img-${ind}`} className="h-full w-full rounded-lg" />
+                <img src={elm.picUrl ? elm.picUrl : "/loading.jpg"} alt={`Img-${ind}`} className="h-full w-full rounded-lg" />
               </div>
             ))}
           </div>
@@ -124,7 +124,7 @@ function PodcastTopVideos() {
                     </p>
                   </div>
                 </div>
-                <img src={elm.picUrl ? elm.picUrl : img} alt={`Img-${ind}`} className="h-full w-full rounded-lg" />
+                <img src={elm.picUrl ? elm.picUrl : "/loading.jpg"} alt={`Img-${ind}`} className="h-full w-full rounded-lg" />
               </div>
             ))}
           </div>
@@ -156,7 +156,7 @@ function PodcastTopVideos() {
                     </p>
                   </div>
                 </div>
-                <img src={elm.picUrl ? elm.picUrl : img} alt={`Img-${ind}`} className="h-full w-full rounded-lg" />
+                <img src={elm.picUrl ? elm.picUrl : "/loading.jpg"} alt={`Img-${ind}`} className="h-full w-full rounded-lg" />
               </div>
             ))}
           </div>

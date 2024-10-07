@@ -94,9 +94,9 @@ const CalendarSearch = () => {
                 <div className="w-full">
                   <div className="flex gap-2 mt-2">
                     <img
-                      src={elm.poster ? elm.poster.picUrl : "/profile.png"}
+                      src={elm.logoUrl ? elm.logoUrl : "/placeholder.jpg"}
                       onLoad={(e) => (e.target.style.opacity = 1)}
-                      onError={(e) => (e.target.src = "/profile.png")}
+                      onError={(e) => (e.target.src = "/placeholder.jpg")}
                       style={{
                         height: "40px",
                         width: "40px",
@@ -177,9 +177,9 @@ const CalendarSearch = () => {
                 <div className="flex gap-2 mt-2">
                   {/* <TbBrandNeteaseMusic className="bg-red-500 rounded-2xl text-white top-3 m-2 mb-0 text-3xl" /> */}
                   <img
-                    src={elm.poster ? elm.poster.picUrl : "/profile.png"}
+                    src={elm.logoUrl ? elm.logoUrl : "/placeholder.jpg"}
                     onLoad={(e) => (e.target.style.opacity = 1)}
-                    onError={(e) => (e.target.src = "/profile.png")}
+                    onError={(e) => (e.target.src = "/placeholder.jpg")}
                     style={{
                       height: "40px",
                       width: "40px",
@@ -253,9 +253,9 @@ const CalendarSearch = () => {
                 <div className="flex gap-2 mt-2">
                   {/* <TbBrandNeteaseMusic className="bg-red-500 rounded-2xl text-white top-3 m-2 mb-0 text-3xl" /> */}
                   <img
-                    src={elm.poster ? elm.poster.picUrl : "/profile.png"}
+                    src={elm.logoUrl ? elm.logoUrl : "/placeholder.jpg"}
                     onLoad={(e) => (e.target.style.opacity = 1)}
-                    onError={(e) => (e.target.src = "/profile.png")}
+                    onError={(e) => (e.target.src = "/placeholder.jpg")}
                     style={{
                       height: "40px",
                       width: "40px",

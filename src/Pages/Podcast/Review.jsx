@@ -170,7 +170,7 @@ const Review = (props) => {
         />  
         <img
           className="md:w-[45%] w-[40%] md:h-full h-[40%] object-cover"
-          src={picUrl}
+          src={picUrl || "/loading.jpg"}
           alt="Video Thumbnail"
         />
         <section className="flex flex-col py-4 md:w-[55%] w-full h-[60%] md:h-full overflow-y-scroll revOverFlow font-[450] text-xs px-4">
@@ -291,7 +291,7 @@ const Review = (props) => {
                     <div key={i} className="flex flex-col gap-3 mb-4">
                       <div className="flex gap-1 items-center">
                         <img
-                          src={value.sender.picUrl || "/default-avatar.png"}
+                          src={value.sender.picUrl || "/placeholder.jpg"}
                           alt="Profile"
                           className="rounded-full w-5 h-5"
                         />
@@ -359,7 +359,7 @@ const Review = (props) => {
                           {reviewReplies.map((reply, j) => (
                             <div key={j} className="flex gap-1 items-center ml-4">
                               <img
-                                src={"/default-avatar.png"}
+                                src={"/placeholder.jpg"}
                                 alt="Profile"
                                 className="rounded-full w-4 h-4"
                               />

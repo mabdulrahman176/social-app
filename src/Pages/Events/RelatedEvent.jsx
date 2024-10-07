@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { IoBookmarkOutline } from "react-icons/io5";
-import Image from './Img2.png';
+// import Image from './Img2.png';
 import { FaRegShareFromSquare } from "react-icons/fa6";
 import { fetchEvent } from "../../API";
 import axios from "axios";
@@ -72,7 +72,7 @@ const RelatedEvent = () => {
       {newcard.map((data, i) => (
         <div key={i} className="m-0 text-white md:w-[32%] w-[49.4%] h-[42vh] relative">
           <img
-            src={data.eventCoverUrl ? data.eventCoverUrl : Image}
+            src={data.eventCoverUrl ? data.eventCoverUrl : "/loading.jpg"}
             alt="Card Img2"
             className="h-full w-full rounded-lg cursor-pointer"
           />

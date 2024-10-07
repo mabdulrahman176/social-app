@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { FaAngleLeft, FaCcVisa, FaCcMastercard, FaPaypal } from "react-icons/fa";
 import { SiPayoneer } from "react-icons/si";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import img from './Img1.png';
+// import img from './Img1.png';
 
 function Payment() {
   const [tickets, setTickets] = useState({});
@@ -155,7 +155,7 @@ function Payment() {
             <div className="p-2 pt-0 rounded">
               <h4 className="text-md font-semibold mb-4">Event Details</h4>
               <div className="flex items-center mb-4">
-                <img src={tickets.eventCoverUrl ? tickets.eventCoverUrl : img} alt="Event" className="w-[30%] h-[12vh] object-cover rounded mr-4" />
+                <img src={tickets.eventCoverUrl ? tickets.eventCoverUrl : "/loading.jpg"} alt="Event" className="w-[30%] h-[12vh] object-cover rounded mr-4" />
                 <div>
                   <h6 className="font-semibold text-sm">{tickets.eventTitle}</h6>
                   <p className="text-gray-600 text-xs py-2">

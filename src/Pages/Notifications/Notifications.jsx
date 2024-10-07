@@ -56,7 +56,7 @@ function Notification() {
                 <div className="flex gap-2">
                   <Link to='/profile'>
                     <img
-                      src={notification.imgSrc || "https://via.placeholder.com/50"} // Fallback image URL
+                      src={notification.imgSrc || "/placeholder.jpg"} // Fallback image URL
                       alt={`Notification from user ${notification._id}`}
                       className="h-[50px] w-[50px] rounded-full"
                     />

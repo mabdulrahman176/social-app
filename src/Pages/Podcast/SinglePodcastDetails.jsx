@@ -86,7 +86,7 @@ function SinglePodcastDetails() {
         </div>
         <div className="flex w-full PCS_Flex sm:ps-6 gap-6">
           <img
-            src={result.picUrl ? result.picUrl : img2}
+            src={result.picUrl ? result.picUrl : "/loading.jpg"}
             className="md:h-[35vh] h-[39vh] md:w-[33%] w-[40%] sm:mx-auto rounded-xl"
             alt=""
           />

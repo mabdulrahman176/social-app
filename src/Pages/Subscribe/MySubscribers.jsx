@@ -60,7 +60,7 @@ function MySubscribers(props) {
                 <div className="flex items-center gap-3">
                   <Link to="/profile">
                     <img
-                      src={subscriber.user.picUrl?subscriber.user.picUrl:''} 
+                      src={subscriber.user.picUrl?subscriber.user.picUrl:'/placeholder.jpg'} 
                       alt=""
                       className="h-[40px] w-[40px] lg:h-[50px] lg:w-[50px] rounded-full"
                     />
