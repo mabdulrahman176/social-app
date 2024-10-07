@@ -3,7 +3,7 @@ import { CiPlay1 } from "react-icons/ci";
 import { IoBookmarkOutline } from "react-icons/io5";
 import img from './img2.jpeg';
 import RelatedPodcast from './RelatedPodcast';
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { fetchPodcast } from "../../API";
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify'; // Import toast components
@@ -87,7 +87,8 @@ function PodcastTopVideos() {
                   </div>
                   <div className="absolute bottom-1 left-1">
                     <p className="text-sm">{elm.episodeTitle}</p>
-                    <p className="text-sm">{elm.user ? elm.user.name : ""}</p>
+                    <Link to="/userprofile" state={{id:elm.userID ? elm.userID :"unknown"}}   onClick={(e) => {
+                      e.stopPropagation()}}  ><p className="text-sm">{elm.user ? elm.user.name : ""}</p></Link>
                     <p className="text-xs flex gap-1 items-center">
                       <CiPlay1 /> {formatDuration(elm.podcastDuration)}
                     </p>
@@ -116,7 +117,8 @@ function PodcastTopVideos() {
                   />
                   <div className="absolute bottom-1 left-1">
                     <p className="text-sm">{elm.episodeTitle}</p>
-                    <p className="text-sm">{elm.user ? elm.user.name : ""}</p>
+                    <Link to="/userprofile" state={{id:elm.userID ? elm.userID :""}}   onClick={(e) => {
+                      e.stopPropagation()}}  ><p className="text-sm">{elm.user ? elm.user.name : ""}</p></Link>
                     <p className="text-xs flex gap-1 items-center">
                       <CiPlay1 /> {formatDuration(elm.podcastDuration)}
                     </p>
@@ -146,7 +148,9 @@ function PodcastTopVideos() {
                   />
                   <div className="absolute bottom-1 left-1">
                     <p className="text-sm">{elm.episodeTitle}</p>
-                    <p className="text-sm">{elm.user ? elm.user.name : ""}</p>
+                    <Link to="/userprofile" state={{id:elm.userID ? elm.userID :""}}  onClick={(e) => {
+                      e.stopPropagation(); // Prevent triggering onClick of parent div
+                    }}><p className="text-sm">{elm.user ? elm.user.name : ""}</p></Link>
                     <p className="text-xs flex gap-1 items-center">
                       <CiPlay1 /> {formatDuration(elm.podcastDuration)}
                     </p>

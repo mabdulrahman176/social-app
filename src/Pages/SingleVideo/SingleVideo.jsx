@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useRef, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { BsInfoSquare } from "react-icons/bs";
 import { FaChevronLeft } from "react-icons/fa";
 import { CiStar } from "react-icons/ci";
@@ -151,14 +151,16 @@ const Video = () => {
             </div>
             <div className="absolute bottom-3 z-10 right-2 text-white">
               <div className="relative cursor-pointer rounded-full flex justify-center" >
-                <img
+               <Link to="/userprofile"
+               state={{id :video && video.user ? video.user.Users_PK :" "}}
+               >
+               <img
                   src={video && video.user ? video.user.picUrl : '/placeholder.png'}
                   style={{ height: "40px", width: "40px" }}
                   className="rounded-full"
-                  alt=""
-                  onClick={() => handleProfile(video.user.Users_PK
-                  )}
+                  alt="User Profile Picture"
                 />
+               </Link>
                 <FontAwesomeIcon
                   icon={faPlus}
                   className="absolute -bottom-2 p-1 text-xs bg-blue-700 rounded-full"

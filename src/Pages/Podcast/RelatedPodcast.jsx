@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { fetchPodcast } from "../../API";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import img from "./img2.jpeg";
 import { CiPlay1 } from "react-icons/ci";
 import { IoBookmarkOutline } from "react-icons/io5";
 import axios from "axios";
-import { ToastContainer, toast } from 'react-toastify'; // Import toast components
-import 'react-toastify/dist/ReactToastify.css'; // Import toast styles
+import { ToastContainer, toast } from "react-toastify"; // Import toast components
+import "react-toastify/dist/ReactToastify.css"; // Import toast styles
 
 const RelatedPodcast = () => {
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -29,7 +29,7 @@ const RelatedPodcast = () => {
     const seconds = Math.floor(duration / 1000);
     return seconds < 60
       ? `${seconds} seconds`
-      : `${Math.floor(seconds / 60)} min${seconds > 60 ? 's' : ''}`;
+      : `${Math.floor(seconds / 60)} min${seconds > 60 ? "s" : ""}`;
   };
 
   const getUserId = () => {
@@ -62,7 +62,9 @@ const RelatedPodcast = () => {
           <div
             key={ind}
             className="cursor-pointer lg:h-[42vh] h-[25vh] lg:w-[22.33vw] md:w-[33.33vw] sm:w-[33.33vw] w-[33.33vw] flex-shrink-0 rounded-lg relative"
-            onClick={() => navigate(`/podcastdetails`, { state: { id: elm._id } })} // Navigate on click
+            onClick={() =>
+              navigate(`/podcastdetails`, { state: { id: elm._id } })
+            } // Navigate on click
           >
             <div className="absolute h-full w-full ShadedBG rounded-lg">
               <IoBookmarkOutline
@@ -74,7 +76,13 @@ const RelatedPodcast = () => {
               />
               <div className="absolute bottom-1 left-1">
                 <p className="text-sm">{elm.episodeTitle}</p>
-                <p className="text-sm">{elm.user ? elm.user.name : ""}</p>
+                <Link
+                  to="/userprofile"
+                  state={{ id: elm.userID ? elm.userID : "unknown" }}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <p className="text-sm">{elm.user ? elm.user.name : ""}</p>
+                </Link>
                 <p className="text-xs flex gap-1 items-center">
                   <CiPlay1 /> {formatDuration(elm.podcastDuration)}
                 </p>

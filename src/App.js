@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import Signup from './Components/Signup/Signup';
 import Layout from './Pages/Layout/Layout';
 import ProfilePublic from './Pages/Profile/ProfilePublic';
@@ -54,6 +54,7 @@ import Header from './LandingPage/Header.jsx'
 import NotFound from './Components/PageNotFound.jsx';
 import PageNotFound from './Components/PageNotFound.jsx';
 import WishList from './Pages/Settings/WishList.jsx';
+import UserProfile from './Pages/Profile/UserProfile.jsx';
 
 
 const App = () => {
@@ -77,6 +78,7 @@ const App = () => {
           {/* <Route path="/ProfileVideo/:src" element={<ProfileVideo />} /> */}
           {/* <Route path="/dashboard" element={<Dashboard />} /> */}
           <Route path="/profile" element={<ProfilePublic />} />
+          <Route path="/userprofile" element={<UserProfile />} />
           <Route path="/personaldetails" element={<Personaldetail />} />
           <Route path="/personaldetail2" element={<Personaldetail2 />} />
           <Route path="/notifications" element={<Notifications />} />
