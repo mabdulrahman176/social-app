@@ -31,6 +31,32 @@ function Payment() {
     }
   };
 
+
+  const getUserId = () => {
+    const str = document.cookie;
+    const userKey = str.split('=')[1];
+    return userKey;
+  };
+  const stripePaymentCheckout=async(id)=>{
+    const payload={
+      eventId:loc.state.id,
+      buyerId:getUserId(),
+      ticketArray:loc.state.selectedTickets,
+    }
+    console.log({payload})
+    
+    const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/payment/stripe/s`,{
+    method:'POST',
+    headers:{
+      "Content-type":"application/json"
+    },
+    body:JSON.stringify(payload)
+    })
+    const data = await req.json()
+    console.log({data})
+      window.location.href=data.url
+  }
+
   useEffect(() => {
     console.log("Component mounted. loc.state:", loc.state);
     if (loc.state) {
@@ -75,7 +101,9 @@ function Payment() {
             {/* Other Payment Methods */}
             <h4 className="text-md font-semibold mb-4">Pay With</h4>
             {/* Apple Pay */}
-            <div className="debit h-[7vh] w-[100%] border rounded p-2 cursor-pointer mt-2 mb-4">
+            <div
+            onClick={()=>stripePaymentCheckout(555)}
+            className="debit h-[7vh] w-[100%] border rounded p-2 cursor-pointer mt-2 mb-4">
               <label className="flex justify-between cursor-pointer" htmlFor="AP">
                 <div className="flex gap-5 items-center">
                   <input type="radio" id="AP" name="paymentMethod" />

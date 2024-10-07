@@ -76,7 +76,7 @@ return timeString
 
               {/* message lists */}
               {chats.map((message, ind) => (
-              message &&  <Link to={`user1`} key={ind}
+              message?.message &&  <Link to={`user1`} key={ind}
                   state={{ id: message._id }}
                 >
               {/* message && message.sender.name &&  <Link to={`user1`} key={ind} */}
@@ -89,8 +89,8 @@ return timeString
                         className="h-[50px] w-[50px] rounded-full"
                       />
                       <div>
-                        <p className="text-md font-medium">{message.sender.name}</p>
-                        <p className="text-[gray] text-sm">{message.messages.length>0 &&  message.messages.at(-1).message.slice(0, 10)}</p>
+                        <p className="text-md font-medium">{message.sender?message.sender.name:""}</p>
+                        <p className="text-[gray] text-sm">{(message.messages.length>0 && message.messages.at(-1)!=null)?message.messages.at(-1).message.slice(0, 10):''}</p>
                       </div>
                     </div>
                     <p className="text-xs">{__Time__(message.updatedAt)}</p>
