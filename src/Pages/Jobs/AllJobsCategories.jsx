@@ -141,7 +141,7 @@ const CalendarSearch = () => {
                         state={{ id: elm._id }}
                         className="w-[90%] mx-auto flex text-xs mt-7 justify-center items-center bg-[#EEEEEE] h-10 rounded-3xl hover:bg-[#6166f331] hover:text-[#6165F3]"
                       >
-                        Applied
+                       Apply Now
                       </Link>
                     </div>
                   )}
@@ -219,7 +219,7 @@ const CalendarSearch = () => {
                     className="w-[90%] mx-auto block text-xs mt-7 bg-[#EEEEEE] h-10 rounded-3xl hover:bg-[#6166f331] hover:text-[#6165F3]"
                     onClick={() => navigate("/jobdetail")}
                   >
-                    Applied
+                   Apply Now
                   </button>
                 )}
               </div>
@@ -295,7 +295,7 @@ const CalendarSearch = () => {
                     className="w-[90%] mx-auto block text-xs mt-7 bg-[#EEEEEE] h-10 rounded-3xl hover:bg-[#6166f331] hover:text-[#6165F3]"
                     onClick={() => navigate("/jobdetail")}
                   >
-                    Applied
+                   Apply Now
                   </button>
                 )}
               </div>

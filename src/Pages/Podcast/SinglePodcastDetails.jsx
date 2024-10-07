@@ -71,7 +71,7 @@ function SinglePodcastDetails() {
         )}
         {repModOpen && (
           <div className="h-full w-full absolute top-0 left-0 z-20 flex justify-center items-center">
-            <Model setRepModOpen={setRepModOpen} />
+            <Model setRepModOpen={setRepModOpen}  videoId={result._id} picUrl={result.picUrl}/>
           </div>
         )}
      
@@ -128,7 +128,7 @@ function SinglePodcastDetails() {
           {result.speakers && result.speakers.map((elm, ind) => (
             <div
               key={ind}
-              className="flex items-center justify-center flex-shrink-0 gap-3 py-2 my-2 rounded w-auto bg-gray-200"
+              className="flex items-center justify-center flex-shrink-0 gap-3 py-2 px-2 my-2 rounded w-auto bg-gray-200"
             >
               <img
                 src={elm.picUrl ? elm.picUrl : img2}

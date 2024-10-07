@@ -1,5 +1,4 @@
 import React, { useState, Fragment, useEffect } from "react";
-import { TbBrandNeteaseMusic } from "react-icons/tb";
 import { IoTrashOutline } from "react-icons/io5"; // Import the delete icon
 import { deleteJob } from '../../DeleteAPI'; // Import deleteJob function
 import { Link } from "react-router-dom";
@@ -125,7 +124,7 @@ const CalendarSearch = (props) => {
                         state={{ id: elm._id }}
                         className="w-[90%] mx-auto flex text-xs mt-7 justify-center items-center bg-[#EEEEEE] h-10 rounded-3xl hover:bg-[#6166f331] hover:text-[#6165F3]"
                       >
-                        Applied
+                        Apply Now
                       </Link>
                     </div>
                   )}

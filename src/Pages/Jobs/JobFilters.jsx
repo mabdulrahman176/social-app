@@ -83,14 +83,14 @@ function JobFilters() {
         </Link>
         <Link to='/filterjob' className="px-4 py-1 ms-2 m-0 rounded-3xl cursor-pointer Video_Nav_Filters">All</Link>
         <div
-          className="px-4 py-1 flex-shrink-0 w-auto ms-2 m-0 rounded-3xl flex items-center  cursor-pointer Video_Nav_Filters text-sm"
+          className="px-4 py-1 flex-shrink-0 w-auto ms-2 m-0 rounded-3xl flex items-center  cursor-pointer Video_Nav_Filters text-sm relative"
           onMouseOver={() => setCatDrop(true)}
           onMouseLeave={() => setCatDrop(false)}
         >
           Categories <RiArrowDropDownLine />
           {catDrop && (
             <div
-              className="absolute w-[40vh] top-6 z-10"
+              className="absolute w-[40vh] top-8 z-10"
               onClick={() => setCatDrop(false)}
             >
               <p className="bg-white p-3 shadow-lg rounded-lg flex justify-between items-center">
@@ -201,7 +201,7 @@ function JobFilters() {
         >
           Salary Range <RiArrowDropDownLine />
           {salRangeDrop && (
-            <div className="absolute w-[40vh] top-6 z-10 ">
+            <div className="absolute w-[40vh] top-10 z-10 ">
               <p className="bg-white p-3 shadow-lg rounded-lg flex justify-between items-center">
                 {salRangeSelectData} <RiArrowDropUpLine />
               </p>

@@ -60,69 +60,88 @@ function Contactinfo() {
                 Buyer Contact Information
             </h4>
             <div className="flex flex-wrap-reverse lg:flex-nowrap gap-3 Podcast_Top_Videos w-[95%] h-[90%] overflow-y-scroll mx-auto">
-                <div className="lg:w-[50%] sm:w-[80%] w-full gap-2 justify-between flex mx-auto">
-                    <form className="w-[47%]">
-                        <div className="mb-4 w-full ">
-                            <label className="block text-black text-sm mb-2"> Name</label>
-                            <input
-                                type="text"
-                                placeholder="Enter Your  Name"
-                                className="w-[100%] p-1 border border-black rounded placeholder:text-black placeholder:text-xs"
-                                value={firstname}
-                                onChange={(e) => setFirstname(e.target.value)}
-                            />
-                        </div>
-                        <div className="mb-4">
-                            <label className="block text-black text-sm mb-2">Email Address</label>
-                            <input
-                                type="text"
-                                placeholder="Enter Your Email"
-                                className="w-full p-1 border border-black placeholder:text-black placeholder:text-xs rounded"
-                                value={address}
-                                onChange={(e) => setAddress(e.target.value)}
-                            />
-                        </div>
-                        <div className="mb-4">
-                            <label className="block text-black text-sm mb-2">Phone Number</label>
-                            <input
-                                type="text"
-                                placeholder="Enter Your Phone Number"
-                                className="w-full p-1 border border-black placeholder:text-black placeholder:text-xs rounded"
-                                value={contact}
-                                onChange={(e) => setContact(e.target.value)}
-                            />
-                        </div>
-                    </form>
-                    <form className="w-[47%]">
-                        <div className="mb-4">
-                            <label className="block text-black text-sm mb-2">Confirm Name</label>
-                            <input
-                                type="text"
-                                placeholder="Enter Your Confirm Name"
-                                className="w-full p-1 border border-black placeholder:text-black placeholder:text-xs rounded"
-                                value={lastname}
-                                onChange={(e) => setLastname(e.target.value)}
-                            />
-                        </div>
-                        <div className="mb-4">
-                            <label className="block text-black text-sm mb-2">Confirm Email Address</label>
-                            <input
-                                type="text"
-                                placeholder="Enter Your Confirm Email"
-                                className="w-full p-1 border border-black placeholder:text-black placeholder:text-xs rounded"
-                                value={confirmAddress}
-                                onChange={(e) => setConfirmAddress(e.target.value)}
-                            />
-                        </div>
-                        <button
-                            type="submit"
-                            onClick={() => navigate('/ticketpayment', { state: { id: tickets._id ,selectedTickets} })}
-                            className="w-full buyticket text-center py-2 mt-40 text-white rounded"
-                        >
-                            Continue to Payment
-                        </button>
-                    </form>
-                </div>
+            <div className="lg:w-[50%] sm:w-[80%] w-full gap-2 justify-between flex mx-auto">
+    <form 
+        className="w-full" 
+        onSubmit={(e) => {
+            e.preventDefault(); // Prevent default form submission
+            // You can check for validation here if needed
+            if (firstname && address && contact && lastname && confirmAddress) {
+                navigate('/ticketpayment', { state: { id: tickets._id, selectedTickets } });
+            } else {
+                // Handle invalid form case (e.g., show a message)
+                alert("Please fill in all required fields.");
+            }
+        }}
+    >
+        <div className="flex flex-wrap gap-5">
+        <div className="mb-4 w-[47%]">
+            <label className="block text-black text-sm mb-2"> Name</label>
+            <input
+                type="text"
+                placeholder="Enter Your Name"
+                className="w-full p-1 border border-black rounded placeholder:text-black placeholder:text-xs"
+                value={firstname}
+                required
+                onChange={(e) => setFirstname(e.target.value)}
+            />
+        </div>
+        <div className="mb-4 w-[47%]">
+            <label className="block text-black text-sm mb-2">Confirm Name</label>
+            <input
+                type="text"
+                placeholder="Confirm Your Name"
+                required
+                className="w-full p-1 border border-black placeholder:text-black placeholder:text-xs rounded"
+                value={lastname}
+                onChange={(e) => setLastname(e.target.value)}
+            />
+        </div>
+        <div className="mb-4 w-[47%]">
+            <label className="block text-black text-sm mb-2">Email Address</label>
+            <input
+                type="email" // Changed to 'email' for better validation
+                placeholder="Enter Your Email"
+                className="w-full p-1 border border-black placeholder:text-black placeholder:text-xs rounded"
+                value={address}
+                required
+                onChange={(e) => setAddress(e.target.value)}
+            />
+        </div>
+        <div className="mb-4 w-[47%]">
+            <label className="block text-black text-sm mb-2">Confirm Email Address</label>
+            <input
+                type="email" // Changed to 'email' for better validation
+                placeholder="Confirm your Email"
+                className="w-full p-1 border border-black placeholder:text-black placeholder:text-xs rounded"
+                value={confirmAddress}
+                required
+                onChange={(e) => setConfirmAddress(e.target.value)}
+            />
+        </div>
+        <div className="mb-4 w-[47%]">
+            <label className="block text-black text-sm mb-2">Phone Number</label>
+            <input
+                type="tel" // Changed to 'tel' for better validation
+                placeholder="Enter Your Phone Number"
+                className="w-full p-1 border border-black placeholder:text-black placeholder:text-xs rounded"
+                value={contact}
+                required
+                onChange={(e) => setContact(e.target.value)}
+            />
+        </div>
+        </div>
+       
+       
+        <button
+            type="submit"
+            className="w-[50%]  buyticket text-center py-2 mt-4 text-white rounded"
+        >
+            Continue to Payment
+        </button>
+    </form>
+</div>
+
                 <div className="lg:w-[50%] sm:w-[80%] w-full mx-auto">
                     <div className="p-6 pt-0 rounded">
                         <h4 className="text-md font-semibold mb-4">Event Details</h4>

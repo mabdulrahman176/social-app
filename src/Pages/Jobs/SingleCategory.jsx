@@ -88,7 +88,7 @@ function Calendar2() {
   className="w-[90%] mx-auto block text-xs mt-7 bg-[#EEEEEE] h-10 rounded-3xl hover:bg-[#6166f331] hover:text-[#6165F3]"
   onClick={() => navigate("/jobdetail", { state: { id: elm._id, title: elm.jobTitle } })}
 >
-  {elm.jobType === " " ? "Apply Now" : "Applied"}
+  {elm.jobType === " " ? "Apply Now" : "Apply Now"}
 </button>
                   </div>
                 </div>
