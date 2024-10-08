@@ -59,16 +59,16 @@ const AddSpeaker = ({ updateSpeakerData, initialData }) => {
   const filterUsers = (searchTerm) => {
     const lowerCaseTerm = searchTerm.toLowerCase();
     const filtered = allUsers.filter(
-      (user) => user && user.name && user.name.toLowerCase().includes(lowerCaseTerm)
+      (user) => user && user.name  && user.name.toLowerCase().includes(lowerCaseTerm)
     );
     setFilteredUsers(filtered);
   };
 
   const handleUserSelect = (user) => {
-    // Only store the user ID in the speaker object
     const newSpeaker = {
       id: user.Users_PK, // User ID
-      name: `@${user.name}`, // Display name
+      name: user.name, // Display name
+      picUrl: user.picUrl || "/placeholder.jpg", 
     };
 
     const updatedSpeakers = [...speakers, newSpeaker];
@@ -77,25 +77,20 @@ const AddSpeaker = ({ updateSpeakerData, initialData }) => {
     setFilteredUsers([]);
     setShowAdditionalForms(false);
 
-    // Create an array of IDs for the server
     const eventArray = updatedSpeakers.map(speaker => speaker.id);
     updateSpeakerData(eventArray); // Send only the IDs
   };
 
   const handleManualEntry = () => {
     const nonTaggedSpeaker = {
-      name: "", // You can choose to handle this as needed
-      speakerData: [
-        speakerData.speakerName,
-        speakerData.familyName,
-        speakerData.speakerBusinessLink,
-      ],
+      id: Date.now(), // Use a unique ID for manual entries
+      name: `${speakerData.speakerName} ${speakerData.familyName}`,
+      picUrl: "", // No picUrl for manual entries
     };
 
     const updatedSpeakers = [...speakers, nonTaggedSpeaker];
     setSpeakers(updatedSpeakers);
     
-    // Assuming manual entries will also have an ID assigned or handled differently
     const eventArray = updatedSpeakers.map(speaker => speaker.id);
     updateSpeakerData(eventArray); // Send only the IDs
   };
@@ -112,7 +107,6 @@ const AddSpeaker = ({ updateSpeakerData, initialData }) => {
     const updatedSpeakers = speakers.filter((_, i) => i !== index);
     setSpeakers(updatedSpeakers);
     
-    // Update eventArray after removal
     const eventArray = updatedSpeakers.map(speaker => speaker.id);
     updateSpeakerData(eventArray); // Send updated IDs to server
   };
@@ -130,13 +124,18 @@ const AddSpeaker = ({ updateSpeakerData, initialData }) => {
       />
 
       {loading && <div className="text-gray-500">Loading users...</div>}
-      <ul>
+      <ul className=" h-[200px] overflow-y-scroll"  style={{ WebkitOverflowScrolling: 'touch', WebkitScrollbar: { display: 'none' }, '-msOverflowStyle': 'none', scrollbarWidth: 'none' }}>
         {filteredUsers.map((user) => (
           <li
             key={user.Users_PK}
             className="p-2 cursor-pointer hover:bg-gray-200"
             onClick={() => handleUserSelect(user)}
           >
+            <img 
+              src={user.picUrl || "/placeholder.jpg"} 
+              alt={user.name} 
+              className="inline-block w-8 h-8 rounded-full mr-2" 
+            />
             {user.name}
           </li>
         ))}
@@ -180,9 +179,16 @@ const AddSpeaker = ({ updateSpeakerData, initialData }) => {
 
       <div className="mt-4">
         {speakers.map((speaker, index) => (
-          <div key={speaker.id || index} className="flex items-center justify-between my-2">
+          <div key={speaker.id} className="flex items-center justify-between my-2">
+            {speaker.picUrl && (
+              <img 
+                src={speaker.picUrl || "/placeholder.jpg"} 
+                alt={speaker.name} 
+                className="w-8 h-8 rounded-full mr-2" 
+              />
+            )}
             <span className="bg-blue-100 text-blue-800 rounded-full px-3 py-1">
-              {speaker.name || `Speaker ${index + 1}`}
+              {speaker.name}
             </span>
             <button
               type="button"

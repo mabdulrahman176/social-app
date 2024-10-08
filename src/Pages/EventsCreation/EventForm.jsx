@@ -63,7 +63,8 @@ const EventForm = () => {
   const [loading, setLoading] = useState(false);
   const [ticketTypes, setTicketTypes] = useState([]);
   const [selectedType, setSelectedType] = useState("");
-  const [ticketPrice, setTicketPrice] = useState(0);
+  const [ticketPrice, setTicketPrice] = useState("");
+  const [ticketQuantity, setTicketQuantity] = useState("");
 
   const getUserId = () => {
     const str = document.cookie;
@@ -90,12 +91,29 @@ const EventForm = () => {
     formData.append("eventCreatedBy", getUserId());
     formData.append("eventCatagory", selectedType);
 
-    // Append tickets as an array instead of separate fields
-    ticketTypes.forEach((ticket, index) => {
-      formData.append(ticket.type, +ticket.price);
-      console.log("ticket", ticket.type, +ticket.price);
-      // formData.append(`tickets[${index}][price]`, ticket.price);
-    });
+    // // Append tickets as an array instead of separate fields
+    // ticketTypes.forEach((ticket, index) => {
+    //   formData.append(ticket.type, +ticket.price);
+    //   console.log("ticket", ticket.type, +ticket.price);
+    //   // formData.append(`tickets[${index}][price]`, ticket.price);
+    // });
+
+  // Create an array of ticket objects
+const ticketArray = ticketTypes.map(ticket => ({
+  ticketType: ticket.type,
+  price: ticket.price,
+  quantity: ticket.quantity,
+}));
+
+// Append each ticket object separately to FormData
+ticketArray.forEach((ticket, index) => {
+  formData.append(`eventTicketArray[${index}][ticketType]`, ticket.ticketType);
+  formData.append(`eventTicketArray[${index}][price]`, ticket.price);
+  formData.append(`eventTicketArray[${index}][quantity]`, ticket.quantity);
+});
+
+// Log to verify the correct structure
+console.log("Ticket Array:", ticketArray);
 
     // Create an array of speaker IDs
     const speakerIds = speakerState.map((speaker) => speaker.id);
@@ -120,6 +138,7 @@ const EventForm = () => {
       // Update context state
       EventStates.setEventSubmitted(!EventStates.eventSubmitted);
       navigate("/events");
+      resetForm();
     } catch (error) {
       console.error("Error submitting the event:", error);
     } finally {
@@ -143,14 +162,38 @@ const EventForm = () => {
     }
   };
 
+  const resetForm = () => {
+    setCoverImage(null);
+    setCoverImageFile(null);
+    setState({});
+    setSpeakerState([]);
+    setTicketTypes([]);
+    setSelectedType("");
+    setTicketPrice("");
+    setTicketQuantity(""); // Reset ticket quantity
+  };
+
   const handleTicketChange = (e) => {
     const { value } = e.target;
-    if (value) {
-      setTicketTypes((prev) => [
-        ...prev,
-        { type: value, price: parseFloat(ticketPrice) },
-      ]);
-      setSelectedType("");
+    if (value && ticketPrice && ticketQuantity) {
+      const existingTicket = ticketTypes.find(
+        (ticket) => ticket.type === value
+      );
+      if (!existingTicket) {
+        setTicketTypes((prev) => [
+          ...prev,
+          {
+            type: value,
+            price: parseFloat(ticketPrice),
+            quantity: parseInt(ticketQuantity),
+          },
+        ]);
+        setSelectedType("");
+        setTicketPrice(""); // Clear the ticket price input after adding
+        setTicketQuantity(""); // Clear the ticket quantity input after adding
+      } else {
+        alert("This ticket type has already been added.");
+      }
     }
   };
 
@@ -290,8 +333,15 @@ const EventForm = () => {
                 onChange={(e) => setTicketPrice(e.target.value)}
                 placeholder="Enter price $35.00"
               />
+              <input
+                type="number"
+                   className="w-full border py-2 ps-3 my-2 rounded-lg text-gray-600 leading-tight focus:outline-none placeholder:text-xs focus:shadow-outline"
+                value={ticketQuantity}
+                onChange={(e) => setTicketQuantity(e.target.value)}
+                placeholder="Enter Ticket Quantity"
+              />
               <select
-                className="w-full border py-2 ps-3 rounded-lg text-gray-600 leading-tight focus:outline-none text-xs focus:shadow-outline"
+                className="w-full border py-2 ps-3 mb-6 rounded-lg text-gray-600 leading-tight focus:outline-none text-xs focus:shadow-outline"
                 onChange={handleTicketChange}
                 value={selectedType}
               >
@@ -309,11 +359,12 @@ const EventForm = () => {
                     key={index}
                     className="my-2 flex justify-between items-center bg-slate-300 rounded-lg w-auto ml-1"
                   >
-                    {ticket.type == "premiumTicket" &&
-                      `Premium - ${ticket.price}`}
-                    {ticket.type == "basicTicket" && `Basic - ${ticket.price}`}
-                    {ticket.type == "standardTicket" &&
-                      `Standard - ${ticket.price}`}
+                    {ticket.type === "premiumTicket" &&
+                      `Premium - ${ticket.price}$ - ${ticket.quantity}`}
+                    {ticket.type === "basicTicket" &&
+                      `Basic - ${ticket.price}$ - ${ticket.quantity}`}
+                    {ticket.type === "standardTicket" &&
+                      `Standard - ${ticket.price}$ - ${ticket.quantity}`}
 
                     <FaTimes
                       className="text-gray-500 cursor-pointer"
@@ -413,13 +464,15 @@ const EventForm = () => {
                 placeholder="Enter network opportunities"
               /> */}
 
-<select
+              <select
                 name="eventNetworkOps"
                 id="eventNetworkOps"
                 onChange={onChange}
                 className="w-full border rounded-lg py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline placeholder:text-xs"
               >
-                <option value="eventNetworkOps">Select Network  Opportunities</option>
+                <option value="eventNetworkOps">
+                  Select Network Opportunities
+                </option>
                 <option value="eventNetworkOps">Speed Networking</option>
                 <option value="eventNetworkOps">RoundTable Discussions</option>
                 <option value="eventNetworkOps">Social Mixers</option>

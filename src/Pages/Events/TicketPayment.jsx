@@ -45,7 +45,7 @@ function Payment() {
     }
     console.log({payload})
     
-    const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/payment/stripe/s`,{
+    const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/payment/stripe/`,{
     method:'POST',
     headers:{
       "Content-type":"application/json"
