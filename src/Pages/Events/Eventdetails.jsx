@@ -5,7 +5,7 @@ import {
   faClock,
   faTriangleExclamation,
 } from "@fortawesome/free-solid-svg-icons";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaAngleLeft } from "react-icons/fa";
 import { IoCalendarOutline } from "react-icons/io5";
 import { CiLocationOn } from "react-icons/ci";
@@ -19,6 +19,7 @@ function Eventdetails() {
   // const [newcard, setNewCard] = useState([]);
   const [result, setResult] = useState({});
   const [event, setEvent] = useState({});
+  
   useEffect(() => {
     console.log("single event detail");
     console.log(loc.state);
@@ -26,8 +27,9 @@ function Eventdetails() {
       try {
         if (loc.state) {
           const result_ = await getEvent(loc.state.id);
-          console.log({ result_ });
+          console.log("result of single event is ",{ result_ });
           setResult(result_);
+       
           setEvent(() => {
             return {
               ...result_.event,
@@ -52,6 +54,7 @@ function Eventdetails() {
     setResult(d);
     return d;
   };
+  // console.log("evnetPrice",event.eventTicketArray)
   return (
     <>
       <div className="main h-full w-full bg-white">
@@ -63,29 +66,51 @@ function Eventdetails() {
           Event Detail
         </h4>
         {/* {newcard.map(( data,index)=>( */}
-        <div className="overflow-y-scroll w-[93%] Podcast_Top_Videos mx-auto h-[90%]">
-         <div className="flex ">
+        <div className="overflow-y-scroll  w-[93%] Podcast_Top_Videos mx-auto h-[90%]">
+          <div className="flex md:flex-wrap">
+            <img
+              src={event.eventCoverUrl ? event.eventCoverUrl : "/loading.jpg"}
+              alt=""
+              className="eventimg1"
+            />
+            <div className="flex flex-row-reverse justify-between  w-[40%]">
 
-         <img
-            src={event.eventCoverUrl ? event.eventCoverUrl : "/loading.jpg"}
-            alt=""
-            className="eventimg1"
-          />
-           <div className="sm:w-[40%] pt-5 ml-6 my-6">
-              <div className="ticketstarting py-3 rounded w-[80%] mx-auto  ">
+            <img
+              src={result.user ? result.user.picUrl : "/placeholder.jpg"}
+              alt={result.user.name}
+              className="rounded-[100px] w-[100px] h-[100px] object-cover"
+            />
+            <div className="w-full   pt-32 ml-6 my-6">
+              <div className="ticketstarting py-3 rounded w-full">
                 <small className="text-gray-500">Tickets starting at</small>
                 <h5 className="text-lg pb-2 font-bold">
-                  ${event.basicTicket}
+                  {event.eventTicketArray &&
+                  event.eventTicketArray.length > 0 ? (
+                    event.eventTicketArray
+                      .filter((ticket) => ticket.ticketType === "Basic")
+                      .map((ticket, index) => (
+                        <div key={index}>
+                       
+                          <p>${ticket.price}</p>
+                        
+                        </div>
+                      ))
+                  ) : (
+                    <p>empty</p>
+                  )}
                 </h5>
                 <button
                   className="buyticket  text-white rounded-lg px-4 py-2 mt-2"
-                  onClick={() => navigate("/ticket", { state: { id:event._id } })}
+                  onClick={() =>
+                    navigate("/ticket", { state: { id: event._id } })
+                  }
                 >
                   <small>Buy Tickets</small>
                 </button>
               </div>
             </div>
-         </div>
+            </div>
+          </div>
           <div className="sm:flex mt-2">
             <div className="risk sm:w-[60%]">
               <h3 className="text-xl font-bold">{event.eventTitle}</h3>
@@ -101,7 +126,6 @@ function Eventdetails() {
                 {event.eventCatagory}
               </p>
             </div>
-           
           </div>
 
           <h4 className="text-xl font-bold mt-5">Event Information</h4>
@@ -110,7 +134,9 @@ function Eventdetails() {
               <FontAwesomeIcon icon={faClock} className="text-3xl" />
               <div>
                 <h5 className="text-sm font-bold">Duration</h5>
-                <p className="text-sm">{event.startTime} - {event.endTime}</p>
+                <p className="text-sm">
+                  {event.startTime} - {event.endTime}
+                </p>
               </div>
             </div>
             <div className="participant sm:mt-0 mt-4 w-full sm:w-[33%]">
@@ -160,6 +186,25 @@ function Eventdetails() {
           <p className="opacity-80 text-[16px] mt-4">
             {event.eventDescription}
           </p>
+
+          <p className="text-xl font-bold mt-6">Speakers:</p>
+        <div className="flex gap-2 md:ps-6 mt-3 w-full overflow-x-scroll Podcast_Top_Videos">
+          {result.speakers && result.speakers.map((elm, ind) => (
+            <Link to="/userprofile"
+            state={{id:elm.Users_PK}}
+              key={ind}
+              className="flex items-center justify-center flex-shrink-0 gap-3 py-2 px-2 my-2 rounded w-auto bg-gray-200"
+            >
+              <img
+                src={elm.picUrl ? elm.picUrl : "/placeholder.jpg"}
+                className="rounded-full h-[35px] w-[35px]"
+                alt=""
+              />
+              <h1 className="text-md">{elm.name}</h1>
+            </Link>
+          ))}
+        </div>
+
           <div className="h-[30vh] w-full mt-5">
             <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13905.02928760363!2d71.71692598390551!3d29.392027599969865!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x393b904fe67dd47b%3A0x33075b928acd331e!2sTibba%20Badar%20Sher%20Bahawalpur%2C%20Punjab%2C%20Pakistan!5e0!3m2!1sen!2s!4v1720097793875!5m2!1sen!2s"

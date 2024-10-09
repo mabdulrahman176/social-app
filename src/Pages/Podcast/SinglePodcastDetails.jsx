@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useState } from "react";
 import Review from './Review';
 import img2 from './img2.jpeg';
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { CiSquareInfo, CiStar } from "react-icons/ci";
 import { FaRegShareFromSquare } from "react-icons/fa6";
 import Model from "../ModalReport/Model";
@@ -126,17 +126,18 @@ function SinglePodcastDetails() {
         <p>Speakers:</p>
         <div className="flex gap-2 md:ps-6 mt-3 w-full overflow-x-scroll Podcast_Top_Videos">
           {result.speakers && result.speakers.map((elm, ind) => (
-            <div
+            <Link to="/userprofile"
+            state={{id:elm.Users_PK}}
               key={ind}
               className="flex items-center justify-center flex-shrink-0 gap-3 py-2 px-2 my-2 rounded w-auto bg-gray-200"
             >
               <img
-                src={elm.picUrl ? elm.picUrl : img2}
+                src={elm.picUrl ? elm.picUrl : "/placeholder.jpg"}
                 className="rounded-full h-[35px] w-[35px]"
                 alt=""
               />
               <h1 className="text-md">{elm.name}</h1>
-            </div>
+            </Link>
           ))}
         </div>
 

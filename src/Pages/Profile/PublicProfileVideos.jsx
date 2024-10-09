@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { CiPlay1, CiTrash } from "react-icons/ci"; // Import icons
+import { CiPlay1, CiTrash } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
 import { deleteVideo } from '../../DeleteAPI';
 
 const AllVideos = (props) => {
   const [video, setVideo] = useState([]); // State to hold the video list
-  const [selectedVideo, setSelectedVideo] = useState(null); // State for the selected video
-  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false); // State for the video modal
-  const [visibleId, setVisibleId] = useState(null); // State for showing icons on hover
-  const [videoToDelete, setVideoToDelete] = useState(null); // State for the video to delete
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); // State for delete modal
-  const [loading, setLoading] = useState(true); // Loading state
+  const [selectedVideo, setSelectedVideo] = useState(null);
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
+  const [visibleId, setVisibleId] = useState(null);
+  const [videoToDelete, setVideoToDelete] = useState(null);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
 
@@ -25,44 +25,44 @@ const AllVideos = (props) => {
   };
 
   const handleIconClick = (event, action, video) => {
-    event.stopPropagation(); // Prevent navigation on icon click
-    if (action === "edit") {
-      setSelectedVideo(video);
-    } else if (action === "delete") {
-      setVideoToDelete(video.data._id); // Set the video to delete
-      setIsDeleteModalOpen(true); // Open the delete modal
+    event.stopPropagation();
+    if (action === "delete") {
+      setVideoToDelete(video.data._id);
+      setIsDeleteModalOpen(true);
     }
   };
 
   const handleDelete = async () => {
     if (videoToDelete) {
       try {
-        console.log('Attempting to delete video with ID:', videoToDelete);
-        await deleteVideo(videoToDelete); // Call deleteVideo with the video ID
-        console.log('Video deleted successfully.');
-        setVideo(video.filter((v) => v._id !== videoToDelete)); // Remove deleted video from state
+        await deleteVideo(videoToDelete);
+        setVideo((prevVideos) => prevVideos.filter((v) => v.data._id !== videoToDelete));
       } catch (error) {
         console.error('Error deleting video:', error);
       }
-      setIsDeleteModalOpen(false); // Close modal after delete action
+      setIsDeleteModalOpen(false);
     }
   };
 
   useEffect(() => {
-    setLoading(true); // Start loading
+    setLoading(true);
     const fetchVideos = () => {
-      setVideo(props.videos);
-      console.log("props video is",props.videos)
-      // Set the video list from props
-      setLoading(false); // Stop loading after setting the videos
+      // Check if props.videos is defined and is an array
+      if (Array.isArray(props.videos)) {
+        setVideo(props.videos);
+      } else {
+        console.warn("Expected props.videos to be an array, received:", props.videos);
+        setVideo([]);
+      }
+      setLoading(false);
     };
 
-    fetchVideos(); // Fetch videos
+    fetchVideos();
 
     return () => {
-      setVideo([]); // Clean up on unmount
+      // Cleanup if necessary
     };
-  }, [props.videos]); // Ensure we are watching the correct prop (props.videos)
+  }, [props.videos]);
 
   return (
     <React.Fragment>
@@ -70,27 +70,27 @@ const AllVideos = (props) => {
         <div className="flex flex-wrap gap-1 bg-white w-[95%] mx-auto">
           {loading ? (
             <p className="text-center w-full">Loading...</p>
-          ) : video && video.length > 0 ? (
+          ) : video.length > 0 ? (
             video.map((video, ind) => (
               <div
                 key={ind}
                 className="w-[32%] cursor-pointer grid place-items-center relative h-[30vh] sm:h-[40vh]"
                 onClick={() => navigate(`/video/${encodeURIComponent(video.data._id)}`)}
-                onMouseEnter={() => setVisibleId(video.data._id)} // Set _id for hover
-                onMouseLeave={() => setVisibleId(null)} // Reset on leave
+                onMouseEnter={() => setVisibleId(video.data._id)}
+                onMouseLeave={() => setVisibleId(null)}
               >
                 <video
                   src={video.data.videoUrl}
                   className="w-[100%] h-[100%] overflow-y-hidden object-fill"
+                  controls
                 ></video>
                 <CiPlay1 className="absolute text-2xl text-white" />
 
-                {/* Show Edit/Delete icons on hover */}
                 {visibleId === video.data._id && (
                   <div className="absolute top-2 right-2 flex flex-col space-y-2">
                     <CiTrash
                       className="text-red-600 text-3xl cursor-pointer hover:text-red-700"
-                      onClick={(e) => handleIconClick(e, "delete", video)} // Trigger delete action
+                      onClick={(e) => handleIconClick(e, "delete", video)}
                     />
                   </div>
                 )}
@@ -102,7 +102,6 @@ const AllVideos = (props) => {
         </div>
       </div>
 
-      {/* Video Modal */}
       {isVideoModalOpen && selectedVideo && (
         <div className="fixed inset-0 bg-black bg-opacity-70 z-50 flex justify-center items-center">
           <div className="relative w-full max-w-3xl">
@@ -112,12 +111,11 @@ const AllVideos = (props) => {
             >
               &times;
             </button>
-            {/* <ProfileVideo src={selectedVideo.videoUrl} /> Pass videoUrl */}
+            <video src={selectedVideo.data.videoUrl} controls className="w-full h-full" />
           </div>
         </div>
       )}
 
-      {/* Delete Modal */}
       {isDeleteModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center">
           <div className="bg-white p-4 rounded-lg">
@@ -131,7 +129,7 @@ const AllVideos = (props) => {
               </button>
               <button
                 className="linear_gradient text-white px-4 py-2 rounded"
-                onClick={handleDelete} // Call handleDelete on confirmation
+                onClick={handleDelete}
               >
                 Delete
               </button>

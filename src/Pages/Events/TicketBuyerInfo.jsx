@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendar, faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FaAngleLeft } from "react-icons/fa";
-// import img from './Img1.png'
 
 function Contactinfo() {
     const [firstname, setFirstname] = useState('');
@@ -16,7 +15,6 @@ function Contactinfo() {
     const loc = useLocation();
     const navigate = useNavigate();
 
-    // Assuming selectedTickets is passed through state
     const selectedTickets = loc.state?.selectedTickets || { basicTicket: 0, premiumTicket: 0, standardTicket: 0 };
 
     const fetchTickets = async (id) => {
@@ -26,7 +24,6 @@ function Contactinfo() {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             const data = await response.json();
-            console.log("Fetched ticket buyerInfo:", data); // Log the entire response
             setTickets(data.event);
         } catch (error) {
             console.error("Error fetching tickets:", error);
@@ -36,7 +33,6 @@ function Contactinfo() {
     };
 
     useEffect(() => {
-        console.log("Component mounted. loc.state:", loc.state);
         if (loc.state) {
             fetchTickets(loc.state.id);
         } else {
@@ -44,103 +40,104 @@ function Contactinfo() {
         }
     }, [loc.state]);
 
+    // Find prices for each ticket type
+    const basicTicketPrice = tickets.eventTicketArray?.find(ticket => ticket.ticketType === 'Basic')?.price || 0;
+    const standardTicketPrice = tickets.eventTicketArray?.find(ticket => ticket.ticketType === 'Standard')?.price || 0;
+    const premiumTicketPrice = tickets.eventTicketArray?.find(ticket => ticket.ticketType === 'Premium')?.price || 0;
+
     // Calculate total tickets and price
     const totalTickets = selectedTickets.basicTicket + selectedTickets.premiumTicket + selectedTickets.standardTicket;
-    const totalPrice = (selectedTickets.basicTicket * tickets.basicTicket) +
-                       (selectedTickets.premiumTicket * tickets.premiumTicket) +
-                       (selectedTickets.standardTicket * tickets.standardTicket);
+    const totalPrice = (selectedTickets.basicTicket * basicTicketPrice) +
+                       (selectedTickets.premiumTicket * premiumTicketPrice) +
+                       (selectedTickets.standardTicket * standardTicketPrice);
 
     return (
         <div className="p-2 bg-white h-full w-full">
             <h4 className="flex items-center gap-3 ms-4 h-[10%]">
                 <FaAngleLeft
                     className="cursor-pointer"
-                    onClick={() => navigate("/ticket", { state: { id: tickets._id ,selectedTickets} })}
+                    onClick={() => navigate("/ticket", { state: { id: tickets._id, selectedTickets } })}
                 />
                 Buyer Contact Information
             </h4>
             <div className="flex flex-wrap-reverse lg:flex-nowrap gap-3 Podcast_Top_Videos w-[95%] h-[90%] overflow-y-scroll mx-auto">
-            <div className="lg:w-[50%] sm:w-[80%] w-full gap-2 justify-between flex mx-auto">
-    <form 
-        className="w-full" 
-        onSubmit={(e) => {
-            e.preventDefault(); // Prevent default form submission
-            // You can check for validation here if needed
-            if (firstname && address && contact && lastname && confirmAddress) {
-                navigate('/ticketpayment', { state: { id: tickets._id, selectedTickets } });
-            } else {
-                // Handle invalid form case (e.g., show a message)
-                alert("Please fill in all required fields.");
-            }
-        }}
-    >
-        <div className="flex flex-wrap gap-5">
-        <div className="mb-4 w-[47%]">
-            <label className="block text-black text-sm mb-2"> Name</label>
-            <input
-                type="text"
-                placeholder="Enter Your Name"
-                className="w-full p-1 border border-black rounded placeholder:text-black placeholder:text-xs"
-                value={firstname}
-                required
-                onChange={(e) => setFirstname(e.target.value)}
-            />
-        </div>
-        <div className="mb-4 w-[47%]">
-            <label className="block text-black text-sm mb-2">Confirm Name</label>
-            <input
-                type="text"
-                placeholder="Confirm Your Name"
-                required
-                className="w-full p-1 border border-black placeholder:text-black placeholder:text-xs rounded"
-                value={lastname}
-                onChange={(e) => setLastname(e.target.value)}
-            />
-        </div>
-        <div className="mb-4 w-[47%]">
-            <label className="block text-black text-sm mb-2">Email Address</label>
-            <input
-                type="email" // Changed to 'email' for better validation
-                placeholder="Enter Your Email"
-                className="w-full p-1 border border-black placeholder:text-black placeholder:text-xs rounded"
-                value={address}
-                required
-                onChange={(e) => setAddress(e.target.value)}
-            />
-        </div>
-        <div className="mb-4 w-[47%]">
-            <label className="block text-black text-sm mb-2">Confirm Email Address</label>
-            <input
-                type="email" // Changed to 'email' for better validation
-                placeholder="Confirm your Email"
-                className="w-full p-1 border border-black placeholder:text-black placeholder:text-xs rounded"
-                value={confirmAddress}
-                required
-                onChange={(e) => setConfirmAddress(e.target.value)}
-            />
-        </div>
-        <div className="mb-4 w-[47%]">
-            <label className="block text-black text-sm mb-2">Phone Number</label>
-            <input
-                type="tel" // Changed to 'tel' for better validation
-                placeholder="Enter Your Phone Number"
-                className="w-full p-1 border border-black placeholder:text-black placeholder:text-xs rounded"
-                value={contact}
-                required
-                onChange={(e) => setContact(e.target.value)}
-            />
-        </div>
-        </div>
-       
-       
-        <button
-            type="submit"
-            className="w-[50%]  buyticket text-center py-2 mt-4 text-white rounded"
-        >
-            Continue to Payment
-        </button>
-    </form>
-</div>
+                <div className="lg:w-[50%] sm:w-[80%] w-full gap-2 justify-between flex mx-auto">
+                    <form 
+                        className="w-full" 
+                        onSubmit={(e) => {
+                            e.preventDefault();
+                            if (firstname && address && contact && lastname && confirmAddress) {
+                                navigate('/ticketpayment', { state: { id: tickets._id, selectedTickets } });
+                            } else {
+                                alert("Please fill in all required fields.");
+                            }
+                        }}
+                    >
+                        <div className="flex flex-wrap gap-5">
+                            <div className="mb-4 w-[47%]">
+                                <label className="block text-black text-sm mb-2">Name</label>
+                                <input
+                                    type="text"
+                                    placeholder="Enter Your Name"
+                                    className="w-full p-1 border border-black rounded placeholder:text-black placeholder:text-xs"
+                                    value={firstname}
+                                    required
+                                    onChange={(e) => setFirstname(e.target.value)}
+                                />
+                            </div>
+                            <div className="mb-4 w-[47%]">
+                                <label className="block text-black text-sm mb-2">Confirm Name</label>
+                                <input
+                                    type="text"
+                                    placeholder="Confirm Your Name"
+                                    required
+                                    className="w-full p-1 border border-black placeholder:text-black placeholder:text-xs rounded"
+                                    value={lastname}
+                                    onChange={(e) => setLastname(e.target.value)}
+                                />
+                            </div>
+                            <div className="mb-4 w-[47%]">
+                                <label className="block text-black text-sm mb-2">Email Address</label>
+                                <input
+                                    type="email"
+                                    placeholder="Enter Your Email"
+                                    className="w-full p-1 border border-black placeholder:text-black placeholder:text-xs rounded"
+                                    value={address}
+                                    required
+                                    onChange={(e) => setAddress(e.target.value)}
+                                />
+                            </div>
+                            <div className="mb-4 w-[47%]">
+                                <label className="block text-black text-sm mb-2">Confirm Email Address</label>
+                                <input
+                                    type="email"
+                                    placeholder="Confirm your Email"
+                                    className="w-full p-1 border border-black placeholder:text-black placeholder:text-xs rounded"
+                                    value={confirmAddress}
+                                    required
+                                    onChange={(e) => setConfirmAddress(e.target.value)}
+                                />
+                            </div>
+                            <div className="mb-4 w-[47%]">
+                                <label className="block text-black text-sm mb-2">Phone Number</label>
+                                <input
+                                    type="tel"
+                                    placeholder="Enter Your Phone Number"
+                                    className="w-full p-1 border border-black placeholder:text-black placeholder:text-xs rounded"
+                                    value={contact}
+                                    required
+                                    onChange={(e) => setContact(e.target.value)}
+                                />
+                            </div>
+                        </div>
+                        <button
+                            type="submit"
+                            className="w-[50%] buyticket text-center py-2 mt-4 text-white rounded"
+                        >
+                            Continue to Payment
+                        </button>
+                    </form>
+                </div>
 
                 <div className="lg:w-[50%] sm:w-[80%] w-full mx-auto">
                     <div className="p-6 pt-0 rounded">

@@ -5,8 +5,8 @@ import { IoBookmarkOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import { deletePodcast } from "../../DeleteAPI";
 import axios from 'axios';
-import { ToastContainer, toast } from 'react-toastify'; // Importing Toastify
-import 'react-toastify/dist/ReactToastify.css'; // Import CSS for Toastify
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -18,7 +18,7 @@ const ApplePodcast = (props) => {
   const [loading, setLoading] = useState(true);
 
   const handleDeleteClick = (e, id) => {
-    e.stopPropagation(); // Prevent navigation when clicking delete icon
+    e.stopPropagation();
     setDeleteItemId(id);
     setIsDeleteModalOpen(true);
   };
@@ -34,11 +34,11 @@ const ApplePodcast = (props) => {
       try {
         console.log(`Attempting to delete podcast with id: ${deleteItemId}`);
         await deletePodcast(deleteItemId);
-        toast.success('Podcast deleted successfully!'); // Using toast for success
+        toast.success('Podcast deleted successfully!');
         setPodcast(podcast.filter((item) => item._id !== deleteItemId));
       } catch (error) {
         console.error('Error deleting podcast:', error);
-        toast.error('Error deleting podcast.'); // Using toast for error
+        toast.error('Error deleting podcast.');
       }
       setIsDeleteModalOpen(false);
     }
@@ -55,12 +55,13 @@ const ApplePodcast = (props) => {
     console.log("podcasts single user section");
     console.log(props.podcast);
 
-    // Simulate loading time
+    // Ensure props.podcast is always an array
+    const fetchedPodcasts = Array.isArray(props.podcast) ? props.podcast : [];
     setLoading(true);
     setTimeout(() => {
-      setPodcast(props.podcast);
+      setPodcast(fetchedPodcasts);
       setLoading(false);
-      console.log({ podcast });
+      console.log({ fetchedPodcasts });
     }, 1000);
   }, [props.podcast]);
 
@@ -72,19 +73,18 @@ const ApplePodcast = (props) => {
           title: "Check out this podcast!",
           url: window.location.href,
         });
-        toast.success('Share successful!'); // Using toast for success
+        toast.success('Share successful!');
       } catch (error) {
         console.error('Error sharing:', error);
-        toast.error('Error sharing podcast.'); // Using toast for error
+        toast.error('Error sharing podcast.');
       }
     } else {
-      toast.warn('Web Share API is not supported in your browser.'); // Using toast for warning
+      toast.warn('Web Share API is not supported in your browser.');
     }
   };
 
   const formatDuration = (duration) => {
     const seconds = Math.floor(duration / 1000);
-    
     if (seconds < 60) {
       return `${seconds} seconds`;
     } else {
@@ -103,10 +103,10 @@ const ApplePodcast = (props) => {
         userId: user_id, 
       });
       console.log('Wishlist item saved:', response.data);
-      toast.success('Podcast saved to wishlist!'); // Using toast for success
+      toast.success('Podcast saved to wishlist!');
     } catch (error) {
       console.error('Error saving to wishlist:', error);
-      toast.error('Could not save to wishlist. Please try again.'); // Using toast for error
+      toast.error('Could not save to wishlist. Please try again.');
     }
   };
 
@@ -132,7 +132,7 @@ const ApplePodcast = (props) => {
                     <IoBookmarkOutline
                       className="absolute right-2 top-4 text-2xl cursor-pointer"
                       onClick={(e) => {
-                        e.stopPropagation(); // Prevent triggering onClick of parent div
+                        e.stopPropagation();
                         handleSaveToWishlist(elm._id);
                       }}
                     />
@@ -195,7 +195,7 @@ const ApplePodcast = (props) => {
         )}
       </div>
 
-      <ToastContainer /> {/* Include ToastContainer for rendering notifications */}
+      <ToastContainer />
     </Fragment>
   );
 };

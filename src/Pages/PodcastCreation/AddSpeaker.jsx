@@ -32,18 +32,18 @@ const AddSpeaker = ({ updateSpeakerData, initialData }) => {
     fetchUsers();
   }, [API_BASE_URL]);
 
-  useEffect(() => {
-    if (initialData) {
-      setSpeakers(initialData);
-    }
-  }, [initialData]);
+  // useEffect(() => {
+  //   if (initialData) {
+  //     setSpeakers(initialData);
+  //   }
+  // }, [initialData]);
 
   const handleInputChange = (e) => {
     const value = e.target.value;
     setInputValue(value);
 
     if (value.includes("@")) {
-      const searchTerm = value.split("@").pop();
+      const searchTerm = value.split("@").pop().trim();
       if (searchTerm) {
         filterUsers(searchTerm);
         setShowAdditionalForms(false);
@@ -59,7 +59,7 @@ const AddSpeaker = ({ updateSpeakerData, initialData }) => {
   const filterUsers = (searchTerm) => {
     const lowerCaseTerm = searchTerm.toLowerCase();
     const filtered = allUsers.filter(
-      (user) => user && user.name  && user.name.toLowerCase().includes(lowerCaseTerm)
+      (user) => user && user.name && user.name.toLowerCase().includes(lowerCaseTerm)
     );
     setFilteredUsers(filtered);
   };
@@ -67,12 +67,16 @@ const AddSpeaker = ({ updateSpeakerData, initialData }) => {
   const handleUserSelect = (user) => {
     const newSpeaker = {
       id: user.Users_PK, // User ID
-      name: user.name, // Display name
+      name: user.name || "unknown", // Display name
       picUrl: user.picUrl || "/placeholder.jpg", 
     };
 
     const updatedSpeakers = [...speakers, newSpeaker];
+    console.log("updated speaker",updatedSpeakers)
+    console.log("speakers are",speakers)
+
     setSpeakers(updatedSpeakers);
+    console.log("speakers are",speakers)
     setInputValue("");
     setFilteredUsers([]);
     setShowAdditionalForms(false);
@@ -124,22 +128,24 @@ const AddSpeaker = ({ updateSpeakerData, initialData }) => {
       />
 
       {loading && <div className="text-gray-500">Loading users...</div>}
-      <ul className=" h-[200px] overflow-y-scroll"  style={{ WebkitOverflowScrolling: 'touch', WebkitScrollbar: { display: 'none' }, '-msOverflowStyle': 'none', scrollbarWidth: 'none' }}>
-        {filteredUsers.map((user) => (
-          <li
-            key={user.Users_PK}
-            className="p-2 cursor-pointer hover:bg-gray-200"
-            onClick={() => handleUserSelect(user)}
-          >
-            <img 
-              src={user.picUrl || "/placeholder.jpg"} 
-              alt={user.name} 
-              className="inline-block w-8 h-8 rounded-full mr-2" 
-            />
-            {user.name}
-          </li>
-        ))}
-      </ul>
+      {inputValue.includes("@") && filteredUsers.length > 0 && (
+        <ul className="h-[200px] min-h-[50px] overflow-y-scroll border border-gray-300 rounded-lg mt-2">
+          {filteredUsers.map((user) => (
+            <li
+              key={user.Users_PK}
+              className="p-2 cursor-pointer hover:bg-gray-200 flex items-center"
+              onClick={() => handleUserSelect(user)}
+            >
+              <img 
+                src={user.picUrl || "/placeholder.jpg"} 
+                alt={user.name} 
+                className="inline-block w-8 h-8 rounded-full mr-2" 
+              />
+              {user.name}
+            </li>
+          ))}
+        </ul>
+      )}
 
       {showAdditionalForms && (
         <div className="mt-4">
@@ -174,17 +180,18 @@ const AddSpeaker = ({ updateSpeakerData, initialData }) => {
               className="w-full border py-2 ps-3 rounded-lg text-gray-700 leading-tight focus:outline-none focus:shadow-outline placeholder:text-xs"
             />
           </label>
+       
         </div>
       )}
 
       <div className="mt-4">
         {speakers.map((speaker, index) => (
-          <div key={speaker.id} className="flex items-center justify-between my-2">
+          <div key={index} className="flex items-center gap-3 my-2">
             {speaker.picUrl && (
               <img 
                 src={speaker.picUrl || "/placeholder.jpg"} 
                 alt={speaker.name} 
-                className="w-8 h-8 rounded-full mr-2" 
+                className="w-8 h-8 rounded-full " 
               />
             )}
             <span className="bg-blue-100 text-blue-800 rounded-full px-3 py-1">

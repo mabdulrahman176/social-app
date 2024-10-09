@@ -20,7 +20,9 @@ function Ticket() {
 
   const fetchTickets = async (id) => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/events/${id}`);
+      const response = await fetch(
+        `${process.env.REACT_APP_API_BASE_URL}/events/${id}`
+      );
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -46,19 +48,25 @@ function Ticket() {
 
   const handleAddChange = (increment) => {
     if (add + increment <= 1000 && totalTickets + increment <= totalAvailable) {
-      setAdd(prev => prev + increment);
+      setAdd((prev) => prev + increment);
     }
   };
 
   const handleMoreChange = (increment) => {
-    if (more + increment <= 1000 && totalTickets + increment <= totalAvailable) {
-      setMore(prev => prev + increment);
+    if (
+      more + increment <= 1000 &&
+      totalTickets + increment <= totalAvailable
+    ) {
+      setMore((prev) => prev + increment);
     }
   };
 
   const handleAbleChange = (increment) => {
-    if (able + increment <= 1000 && totalTickets + increment <= totalAvailable) {
-      setAble(prev => prev + increment);
+    if (
+      able + increment <= 1000 &&
+      totalTickets + increment <= totalAvailable
+    ) {
+      setAble((prev) => prev + increment);
     }
   };
 
@@ -68,12 +76,26 @@ function Ticket() {
     standardTicket: able,
   };
 
+  const remainingBasic = tickets.eventTicketArray
+  ? tickets.eventTicketArray.find(ticket => ticket.ticketType === 'Basic')?.quantity - add
+  : 0;
+
+const remainingStandard = tickets.eventTicketArray
+  ? tickets.eventTicketArray.find(ticket => ticket.ticketType === 'Standard')?.quantity - more
+  : 0;
+
+const remainingPremium = tickets.eventTicketArray
+  ? tickets.eventTicketArray.find(ticket => ticket.ticketType === 'Premium')?.quantity - able
+  : 0;
+
   return (
     <div className="main bg-white h-full w-full">
       <h3 className="flex items-center gap-3 ms-4 h-[10%]">
         <FaAngleLeft
           className="cursor-pointer"
-          onClick={() => navigate("/eventdetail", { state: { id: tickets._id } })}
+          onClick={() =>
+            navigate("/eventdetail", { state: { id: tickets._id } })
+          }
         />
         Ticket Options
       </h3>
@@ -92,7 +114,9 @@ function Ticket() {
             <p className="flex items-center gap-2 py-2 text-sm">
               <IoCalendarOutline className="me-1" /> {tickets.eventDate}
             </p>
-            <p className="text-[16px] opacity-80 mt-3">{tickets.eventDescription}</p>
+            <p className="text-[16px] opacity-80 mt-3">
+              {tickets.eventDescription}
+            </p>
           </div>
         </div>
         <button className="btnsort bg-blue-500 text-white py-2 px-4 my-3 block ms-auto rounded-lg">
@@ -102,10 +126,24 @@ function Ticket() {
         <div className="flex justify-between gap-3 Podcast_Top_Videos mt-3 lg:w-[90%] w-[95%] mx-auto Ticket_Tickets">
           <div className="border rounded shadow-lg w-[33%] text-center px-4 py-6 ticket flex-shrink-0">
             <h5 className="text-lg font-bold">Basic Admission</h5>
-            <h5 className="text-lg font-bold">${tickets.basicTicket}</h5>
+            <h5 className="text-lg font-bold">
+              {" "}
+              {tickets.eventTicketArray &&
+              tickets.eventTicketArray.length > 0 ? (
+                tickets.eventTicketArray
+                  .filter((ticket) => ticket.ticketType === "Basic")
+                  .map((ticket, index) => (
+                    <div key={index}>
+                      <p>${ticket.price}</p>
+                    </div>
+                  ))
+              ) : (
+                <p>empty</p>
+              )}
+            </h5>
             <div className="plusbutton flex items-center">
               <button
-                disabled={add === 0}
+disabled = {add === 0}
                 className="btnplus bg-gray-300 text-gray-700 py-1 text-center rounded"
                 onClick={() => handleAddChange(-1)}
               >
@@ -113,19 +151,32 @@ function Ticket() {
               </button>
               <p className="mt-2 mx-3">{add}</p>
               <button
+              disabled={remainingBasic <= 0}
                 className="btnplus bg-blue-500 text-white py-1 text-center rounded"
                 onClick={() => handleAddChange(1)}
               >
                 +
               </button>
             </div>
+            <p className="pt-6">Remaining: {remainingBasic}</p>
           </div>
           <div className="border rounded shadow-lg w-[33%] text-center px-4 pt-4 ticket flex-shrink-0">
-            <h5 className="text-lg font-bold">Premium Admission</h5>
-            <h5 className="text-lg font-bold">${tickets.premiumTicket}</h5>
+            <h5 className="text-lg font-bold">Standard Admission</h5>
+            <h5 className="text-lg font-bold"> {tickets.eventTicketArray &&
+              tickets.eventTicketArray.length > 0 ? (
+                tickets.eventTicketArray
+                  .filter((ticket) => ticket.ticketType === "Standard")
+                  .map((ticket, index) => (
+                    <div key={index}>
+                      <p>${ticket.price}</p>
+                    </div>
+                  ))
+              ) : (
+                <p>empty</p>
+              )}</h5>
             <div className="plusbutton flex items-center">
               <button
-                disabled={more === 0}
+             disabled={more === 0}
                 className="btnplus bg-gray-300 text-gray-700 py-1 text-center rounded"
                 onClick={() => handleMoreChange(-1)}
               >
@@ -135,14 +186,27 @@ function Ticket() {
               <button
                 className="btnplus bg-blue-500 text-white py-1 text-center rounded"
                 onClick={() => handleMoreChange(1)}
+                disabled={remainingStandard <= 0} 
               >
                 +
               </button>
             </div>
+            <p className="pt-6">Remaining: {remainingStandard}</p>
           </div>
           <div className="border rounded shadow-lg w-[33%] text-center px-4 pt-4 ticket flex-shrink-0">
-            <h5 className="text-lg font-bold">Standard Access</h5>
-            <h5 className="text-lg font-bold">${tickets.standardTicket}</h5>
+            <h5 className="text-lg font-bold">Premium Access</h5>
+            <h5 className="text-lg font-bold"> {tickets.eventTicketArray &&
+              tickets.eventTicketArray.length > 0 ? (
+                tickets.eventTicketArray
+                  .filter((ticket) => ticket.ticketType === "Premium")
+                  .map((ticket, index) => (
+                    <div key={index}>
+                      <p>${ticket.price}</p>
+                    </div>
+                  ))
+              ) : (
+                <p>empty</p>
+              )}</h5>
             <div className="plusbutton flex items-center">
               <button
                 disabled={able === 0}
@@ -155,10 +219,12 @@ function Ticket() {
               <button
                 className="btnplus bg-blue-500 text-white py-1 text-center rounded"
                 onClick={() => handleAbleChange(1)}
+                disabled={remainingPremium <= 0}
               >
                 +
               </button>
             </div>
+            <p className="pt-6">Remaining: {remainingPremium}</p>
           </div>
         </div>
 

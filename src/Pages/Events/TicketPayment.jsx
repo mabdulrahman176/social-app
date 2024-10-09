@@ -66,11 +66,14 @@ function Payment() {
     }
   }, [loc.state]);
 
-  // Calculate total tickets and price
-  const totalTickets = selectedTickets.basicTicket + selectedTickets.premiumTicket + selectedTickets.standardTicket;
-  const totalPrice = (selectedTickets.basicTicket * tickets.basicTicket) +
-                     (selectedTickets.premiumTicket * tickets.premiumTicket) +
-                     (selectedTickets.standardTicket * tickets.standardTicket);
+ // Calculate total tickets and price
+ const totalTickets = selectedTickets.basicTicket + selectedTickets.premiumTicket + selectedTickets.standardTicket;
+ const basicTicketPrice = tickets.eventTicketArray?.find(ticket => ticket.ticketType === 'Basic')?.price || 0;
+ const premiumTicketPrice = tickets.eventTicketArray?.find(ticket => ticket.ticketType === 'Premium')?.price || 0;
+ const standardTicketPrice = tickets.eventTicketArray?.find(ticket => ticket.ticketType === 'Standard')?.price || 0;
+ const totalPrice = (selectedTickets.basicTicket * basicTicketPrice) +
+                    (selectedTickets.premiumTicket * premiumTicketPrice) +
+                    (selectedTickets.standardTicket * standardTicketPrice);
 
   return (
     <div className="bg-white h-full w-full">

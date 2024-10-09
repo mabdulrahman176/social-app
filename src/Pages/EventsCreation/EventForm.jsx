@@ -349,9 +349,9 @@ formData.append("eventTicketArray",JSON.stringify(ticketArray));
                 value={selectedType}
               >
                 <option value="">Select Tickets Type</option>
-                <option value="basicTicket">Basic</option>
-                <option value="standardTicket">Standard</option>
-                <option value="premiumTicket">Premium</option>
+                <option value="Basic">Basic</option>
+                <option value="Standard">Standard</option>
+                <option value="Premium">Premium</option>
               </select>
             </div>
 
@@ -362,11 +362,11 @@ formData.append("eventTicketArray",JSON.stringify(ticketArray));
                     key={index}
                     className="my-2 flex justify-between items-center bg-slate-300 rounded-lg w-auto ml-1"
                   >
-                    {ticket.ticketType === "premiumTicket" &&
+                    {ticket.ticketType === "Premium" &&
                       `Premium - ${ticket.price}$ - ${ticket.quantity}`}
-                    {ticket.ticketType === "basicTicket" &&
+                    {ticket.ticketType === "Basic" &&
                       `Basic - ${ticket.price}$ - ${ticket.quantity}`}
-                    {ticket.ticketType === "standardTicket" &&
+                    {ticket.ticketType === "Standard" &&
                       `Standard - ${ticket.price}$ - ${ticket.quantity}`}
 
                     <FaTimes
