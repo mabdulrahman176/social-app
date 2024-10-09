@@ -100,20 +100,22 @@ const EventForm = () => {
 
   // Create an array of ticket objects
 const ticketArray = ticketTypes.map(ticket => ({
-  ticketType: ticket.type,
+  ticketType: ticket.ticketType,
   price: ticket.price,
   quantity: ticket.quantity,
 }));
 
 // Append each ticket object separately to FormData
-ticketArray.forEach((ticket, index) => {
-  formData.append(`eventTicketArray[${index}][ticketType]`, ticket.ticketType);
-  formData.append(`eventTicketArray[${index}][price]`, ticket.price);
-  formData.append(`eventTicketArray[${index}][quantity]`, ticket.quantity);
-});
+formData.append("eventTicketArray",JSON.stringify(ticketArray));
+
+
+// ticketArray.forEach((ticket, index) => {
+//   formData.append(`eventTicketArray[${index}][ticketType]`, ticket.ticketType);
+//   formData.append(`eventTicketArray[${index}][price]`, ticket.price);
+//   formData.append(`eventTicketArray[${index}][quantity]`, ticket.quantity);
+// });
 
 // Log to verify the correct structure
-console.log("Ticket Array:", ticketArray);
 
     // Create an array of speaker IDs
     const speakerIds = speakerState.map((speaker) => speaker.id);
@@ -174,16 +176,17 @@ console.log("Ticket Array:", ticketArray);
   };
 
   const handleTicketChange = (e) => {
+    console.log({ticketTypes})
     const { value } = e.target;
     if (value && ticketPrice && ticketQuantity) {
       const existingTicket = ticketTypes.find(
-        (ticket) => ticket.type === value
+        (ticket) => ticket.ticketType === value
       );
       if (!existingTicket) {
         setTicketTypes((prev) => [
           ...prev,
           {
-            type: value,
+            ticketType: value,
             price: parseFloat(ticketPrice),
             quantity: parseInt(ticketQuantity),
           },
@@ -359,11 +362,11 @@ console.log("Ticket Array:", ticketArray);
                     key={index}
                     className="my-2 flex justify-between items-center bg-slate-300 rounded-lg w-auto ml-1"
                   >
-                    {ticket.type === "premiumTicket" &&
+                    {ticket.ticketType === "premiumTicket" &&
                       `Premium - ${ticket.price}$ - ${ticket.quantity}`}
-                    {ticket.type === "basicTicket" &&
+                    {ticket.ticketType === "basicTicket" &&
                       `Basic - ${ticket.price}$ - ${ticket.quantity}`}
-                    {ticket.type === "standardTicket" &&
+                    {ticket.ticketType === "standardTicket" &&
                       `Standard - ${ticket.price}$ - ${ticket.quantity}`}
 
                     <FaTimes
