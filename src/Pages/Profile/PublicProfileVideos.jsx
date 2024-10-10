@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { deleteVideo } from '../../DeleteAPI';
 
 const AllVideos = (props) => {
-  const [video, setVideo] = useState([]); // State to hold the video list
+  const [videosList, setVideosList] = useState([]); // Renamed state to avoid conflict
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [visibleId, setVisibleId] = useState(null);
@@ -36,7 +36,7 @@ const AllVideos = (props) => {
     if (videoToDelete) {
       try {
         await deleteVideo(videoToDelete);
-        setVideo((prevVideos) => prevVideos.filter((v) => v.data._id !== videoToDelete));
+        setVideosList((prevVideos) => prevVideos.filter((v) => v.data._id !== videoToDelete));
       } catch (error) {
         console.error('Error deleting video:', error);
       }
@@ -49,10 +49,10 @@ const AllVideos = (props) => {
     const fetchVideos = () => {
       // Check if props.videos is defined and is an array
       if (Array.isArray(props.videos)) {
-        setVideo(props.videos);
+        setVideosList(props.videos); // Updated to use renamed state
       } else {
         console.warn("Expected props.videos to be an array, received:", props.videos);
-        setVideo([]);
+        setVideosList([]);
       }
       setLoading(false);
     };
@@ -70,27 +70,27 @@ const AllVideos = (props) => {
         <div className="flex flex-wrap gap-1 bg-white w-[95%] mx-auto">
           {loading ? (
             <p className="text-center w-full">Loading...</p>
-          ) : video.length > 0 ? (
-            video.map((video, ind) => (
+          ) : videosList.length > 0 ? (
+            videosList.map((videoItem, index) => (
               <div
-                key={ind}
+                key={index}
                 className="w-[32%] cursor-pointer grid place-items-center relative h-[30vh] sm:h-[40vh]"
-                onClick={() => navigate(`/video/${encodeURIComponent(video.data._id)}`)}
-                onMouseEnter={() => setVisibleId(video.data._id)}
+                onClick={() => navigate(`/video/${encodeURIComponent(videoItem.data._id)}`, { state: { videos: videosList } })} // Simplified navigation
+                onMouseEnter={() => setVisibleId(videoItem.data._id)}
                 onMouseLeave={() => setVisibleId(null)}
               >
                 <video
-                  src={video.data.videoUrl}
+                  src={videoItem.data.videoUrl}
                   className="w-[100%] h-[100%] overflow-y-hidden object-fill"
                   controls
                 ></video>
                 <CiPlay1 className="absolute text-2xl text-white" />
 
-                {visibleId === video.data._id && (
+                {visibleId === videoItem.data._id && (
                   <div className="absolute top-2 right-2 flex flex-col space-y-2">
                     <CiTrash
                       className="text-red-600 text-3xl cursor-pointer hover:text-red-700"
-                      onClick={(e) => handleIconClick(e, "delete", video)}
+                      onClick={(e) => handleIconClick(e, "delete", videoItem)} // Updated to use videoItem
                     />
                   </div>
                 )}

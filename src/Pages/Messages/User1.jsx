@@ -7,9 +7,9 @@ import { Link, useLocation } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import io from 'socket.io-client';
-
+ 
 function Message2() {
-  const socket = io("http://localhost:5000");
+  const socket = io(process.env.REACT_APP_API_BASE_URL);
   const loc = useLocation();
   const [able, setAble] = useState(false);
   const [schedule, setSchedule] = useState(false);

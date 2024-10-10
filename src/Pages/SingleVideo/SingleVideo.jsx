@@ -131,7 +131,7 @@ const Video = () => {
           <div className="absolute z-10 rounded-lg left-0 top-0 h-full w-full ShadedBG">
             <div
               className="absolute cursor-pointer flex gap-2 items-center ps-4 py-2 text-lg text-white left-0 z-10"
-              onClick={() => navigate("/videos")}
+              onClick={() => navigate(-1)}
             >
               <FaChevronLeft className="text-xs" />
               Videos

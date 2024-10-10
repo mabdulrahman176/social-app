@@ -72,7 +72,7 @@ const Model = (props) => {
     console.log("Sending report data:", reportData);
 
     try {
-      const response = await fetch('http://localhost:5000/reports', {
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/reports`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

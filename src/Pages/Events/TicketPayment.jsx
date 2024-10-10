@@ -41,7 +41,7 @@ function Payment() {
     const payload={
       eventId:loc.state.id,
       buyerId:getUserId(),
-      ticketArray:loc.state.selectedTickets,
+      eventTicketArray:loc.state.selectedTickets,
     }
     console.log({payload})
     

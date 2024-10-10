@@ -58,29 +58,34 @@ function Eventdetails() {
   return (
     <>
       <div className="main h-full w-full bg-white">
-        <h4 className="flex items-center gap-3 ms-4 h-[10%]">
+       <div className="flex justify-between">
+
+       <h4 className="flex items-center gap-3 mt-4 ms-4 text-2xl h-[10%]">
           <FaAngleLeft
             className="cursor-pointer"
             onClick={() => navigate("/events")}
           />
           Event Detail
         </h4>
+{result.user && 
+        <img
+              src={result.user.picUrl  ? result.user.picUrl : "./placeholder.jpg"}
+              alt={result.user ? result.user.name : "Profile"}
+              className="rounded-full w-[70px] h-[70px] mt-2 mx-3 object-cover"
+            />}
+       </div>
         {/* {newcard.map(( data,index)=>( */}
-        <div className="overflow-y-scroll  w-[93%] Podcast_Top_Videos mx-auto h-[90%]">
+        <div className="overflow-y-scroll  w-[93%] Podcast_Top_Videos mx-auto h-[88%]">
           <div className="flex md:flex-wrap">
             <img
               src={event.eventCoverUrl ? event.eventCoverUrl : "/loading.jpg"}
               alt=""
               className="eventimg1"
             />
-            <div className="flex flex-row-reverse justify-between  w-[40%]">
+            <div className="flex flex-row-reverse justify-between  w-[38%]">
 
-            <img
-              src={result.user ? result.user.picUrl : "/placeholder.jpg"}
-              alt={result.user.name}
-              className="rounded-[100px] w-[100px] h-[100px] object-cover"
-            />
-            <div className="w-full   pt-32 ml-6 my-6">
+           
+            <div className="w-full   pt-5 ml-6 my-6">
               <div className="ticketstarting py-3 rounded w-full">
                 <small className="text-gray-500">Tickets starting at</small>
                 <h5 className="text-lg pb-2 font-bold">
