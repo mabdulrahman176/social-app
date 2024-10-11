@@ -15,10 +15,15 @@ function Apply() {
 
   let { JobAppliedStates } = useContext(myContext); 
   let navigate = useNavigate();
+  
+  const getUserId = () => {
+    const str = document.cookie
+    const userKey = str.split('=')[1];
+    return userKey
+  }
   const location = useLocation();
   const jobId = location.state?.id;
-  const userId = location.state?.userId;
-
+  const userId = getUserId()
 
   const handleFileChange = (e) => {
     setResume(e.target.files[0]);
