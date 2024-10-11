@@ -55,6 +55,7 @@ import NotFound from './Components/PageNotFound.jsx';
 import PageNotFound from './Components/PageNotFound.jsx';
 import WishList from './Pages/Settings/WishList.jsx';
 import UserProfile from './Pages/Profile/UserProfile.jsx';
+import ProfileVideos from './Pages/SingleVideo/ProfileVideos.jsx';
 
 
 const App = () => {
@@ -75,6 +76,7 @@ const App = () => {
         <Route path='/search'element={<Search/>} />
           <Route path="/videos" element={<Feed />} />
           <Route path="/video/:src" element={<SingleVideo />} />
+          <Route path="/profilevideos/:src" element={<ProfileVideos />} />
           {/* <Route path="/ProfileVideo/:src" element={<ProfileVideo />} /> */}
           {/* <Route path="/dashboard" element={<Dashboard />} /> */}
           <Route path="/profile" element={<ProfilePublic />} />

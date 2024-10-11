@@ -75,14 +75,16 @@ const AllVideos = (props) => {
               <div
                 key={index}
                 className="w-[32%] cursor-pointer grid place-items-center relative h-[30vh] sm:h-[40vh]"
-                onClick={() => navigate(`/video/${encodeURIComponent(videoItem.data._id)}`, { state: { videos: videosList } })} // Simplified navigation
+                onClick={() => navigate(`/profilevideos/${encodeURIComponent(videosList[index].data._id)}`, { state: { videos: videosList } })} // Simplified navigation
+                // onClick={()=>console.log("video id",videosList[index].data._id)}
+                
                 onMouseEnter={() => setVisibleId(videoItem.data._id)}
                 onMouseLeave={() => setVisibleId(null)}
               >
                 <video
                   src={videoItem.data.videoUrl}
                   className="w-[100%] h-[100%] overflow-y-hidden object-fill"
-                  controls
+                  // controls
                 ></video>
                 <CiPlay1 className="absolute text-2xl text-white" />
 

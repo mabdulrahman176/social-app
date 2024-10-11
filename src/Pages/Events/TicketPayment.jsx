@@ -43,7 +43,7 @@ function Payment() {
       buyerId:getUserId(),
       eventTicketArray:loc.state.selectedTickets,
     }
-    console.log({payload})
+    console.log("this is payload ",{payload})
     
     const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/payment/stripe/`,{
     method:'POST',
@@ -53,7 +53,7 @@ function Payment() {
     body:JSON.stringify(payload)
     })
     const data = await req.json()
-    console.log({data})
+    console.log("this is data ",{data})
       window.location.href=data.url
   }
 

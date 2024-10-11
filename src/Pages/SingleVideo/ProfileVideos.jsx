@@ -11,7 +11,7 @@ import Review from "../Podcast/Review";
 import { ToastContainer, toast } from 'react-toastify'; // Importing Toastify
 import 'react-toastify/dist/ReactToastify.css'; // Import CSS for Toastify
 
-const Video = () => {
+const ProfileVideos = () => {
   let navigate = useNavigate();
   const { src } = useParams();
   const location = useLocation();
@@ -41,15 +41,15 @@ const Video = () => {
     console.log("Current location state:", location.state); // Log the state
     if (location.state && location.state.videos) {
       setVideos(location.state.videos); // Set the videos array from state
-      const currentVideo = location.state.videos.find(v => v._id === videoId);
+      const currentVideo = location.state.videos.find(v => v.data._id === videoId);
       if (currentVideo) {
         setVideo(currentVideo);
-        setVideoIndex(location.state.videos.findIndex(v => v._id === videoId));
+        setVideoIndex(location.state.videos.findIndex(v => v.data._id === videoId));
       }
     }
     getVideo();
   }, [videoId, location.state]);
-
+console.log("single video id array",)
   const useDebounce = (callback, delay) => {
     const timerRef = useRef(null);
   
@@ -72,17 +72,20 @@ const Video = () => {
   };
 
   const handleScroll = (e) => {
+    // console.log("next video id",nextVideoId)
+    console.log("index number",videos)
     if (e.deltaY > 0) {
       // Scroll down
       if (videoIndex < videos.length - 1) {
-        const nextVideoId = videos[videoIndex + 1]._id;
-        navigate(`/video/${encodeURIComponent(nextVideoId)}`, { state: { videos } });
+        const nextVideoId = videos[videoIndex + 1].data._id;
+       
+        navigate(`/profilevideos/${encodeURIComponent(nextVideoId)}`, { state: { videos } }, { replace: true });
       }
     } else {
       // Scroll up
       if (videoIndex > 0) {
-        const prevVideoId = videos[videoIndex - 1]._id;
-        navigate(`/video/${encodeURIComponent(prevVideoId)}`, { state: { videos } });
+        const prevVideoId = videos[videoIndex - 1].data._id;
+        navigate(`/profilevideos/${encodeURIComponent(prevVideoId)}`, { state: { videos } }, { replace: true });
       }
     }
   };
@@ -131,7 +134,7 @@ const Video = () => {
           <div className="absolute z-10 rounded-lg left-0 top-0 h-full w-full ShadedBG">
             <div
               className="absolute cursor-pointer flex gap-2 items-center ps-4 py-2 text-lg text-white left-0 z-10"
-              onClick={() => navigate("/videos")}
+              onClick={() => navigate("/profile")}
             >
               <FaChevronLeft className="text-xs" />
               Videos
@@ -204,4 +207,5 @@ const Video = () => {
   );
 };
 
-export default Video;
+export default ProfileVideos;
+
