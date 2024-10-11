@@ -2,11 +2,12 @@ import React, { Fragment, useContext } from "react";
 import { MdDone } from "react-icons/md";
 import { RxCross2 } from "react-icons/rx";
 import { myContext } from "../../Context/CreateContext";
+import { useNavigate } from "react-router-dom";
 
 
 function JobAppliedSuccess(props) {
-
-  let { JobAppliedStates } = useContext(myContext)
+const navigate = useNavigate()
+  // let { JobAppliedStates } = useContext(myContext)
 
 
   return (
@@ -15,10 +16,10 @@ function JobAppliedSuccess(props) {
         <RxCross2
           className="cursor-pointer  absolute top-5 left-3"
           
-          onClick={() => {
-            console.log("Cross clicked");
-            JobAppliedStates.setJobAppliedSuccess(false);
-          }}
+          onClick={() => 
+          navigate("/appliedjobs")
+      // JobAppliedStates.setJobAppliedSuccess(false)
+}
           
         />
 
