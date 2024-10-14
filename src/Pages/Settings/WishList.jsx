@@ -1,5 +1,6 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import axios from 'axios';
+import { FaAngleLeft } from "react-icons/fa";
 import { CiPlay1 } from "react-icons/ci";
 import { FaRegShareFromSquare } from "react-icons/fa6";
 import { Link, useNavigate } from 'react-router-dom';
@@ -120,7 +121,15 @@ const Wishlist = () => {
             {!hasItems ? (
               <div className="text-center">No items in your wishlist.</div>
             ) : (
+              <div className="sm:ps-6 w-full h-full bg-white overflow-y-scroll"  style={{ WebkitOverflowScrolling: 'touch', WebkitScrollbar: { display: 'none' }, '-msOverflowStyle': 'none', scrollbarWidth: 'none' }}>       <h4 className="flex items-center gap-3 ms-4 h-[10%]">
+              <FaAngleLeft
+                className="cursor-pointer"
+                onClick={() => navigate("/settings")}
+              />{" "}
+             Wish List
+            </h4>
               <div className="flex flex-wrap gap-4 w-full">
+           
                 {/* Render podcasts */}
                 {wishlistpodcast.map((elm, index) => (
                   <div key={index} className="cursor-pointer text-white lg:h-[40vh] h-[25vh] lg:w-[22.33vw] md:w-[33.33vw] sm:w-[33.33vw] w-[32.33vw] flex-shrink-0 rounded-lg relative" onClick={() => navigate(`/podcastdetails`, { state: { id: elm._id } })}>
@@ -196,6 +205,7 @@ const Wishlist = () => {
                     </div>
                   </div>
                 ))}
+              </div>
               </div>
             )}
           </>

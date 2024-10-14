@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaFacebookF } from "react-icons/fa";
 import { FaGithub } from "react-icons/fa";
+import { toast, ToastContainer } from "react-toastify"; // Import Toastify
+import 'react-toastify/dist/ReactToastify.css';
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -12,11 +14,9 @@ const Signup = () => {
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent default form submission behavior
-    setLoading(true); // Start loading
-
-    console.log("Submitting data:", { ...state, role: selectedRole });
-
+    e.preventDefault();
+    setLoading(true);
+  
     try {
       const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/users/`, {
         credentials: "include",
@@ -26,27 +26,33 @@ const Signup = () => {
         },
         body: JSON.stringify({ ...state, role: selectedRole }),
       });
-
+  
       if (!req.ok) {
+        
         throw new Error(`HTTP error! status: ${req.status}`);
       }
-
-      const d = await req.json();
-      console.log("Response data:", d);
-
+  
+      const data = await req.json();
+      console.log("Response data:", data);
+  
       // Check if the response indicates success
-      if (d.success) { // Adjust according to your actual response structure
-        // Clear form fields
+      if (data.success) { // Adjust according to your actual response structure
+        
         setState({});
-        setSelectedRole("viewer"); // Reset role to default
-
-        // Navigate to home page
+        setSelectedRole("viewer"); 
+  
+        
+        toast.success("Sign up successful! Navigating to videos...");
         console.log("Navigating to /videos");
         navigate("/videos");
       } else {
-        console.error("Error from server:", d.message || "Unknown error");
+        setState({});
+        toast.error(data.d || "User already exist");
+        console.error("Error from server:", data.d || "Unknown error");
       }
     } catch (error) {
+     
+      toast.error("Error during sign-up! Please try again.");
       console.error("Error during fetch:", error);
     } finally {
       setLoading(false); // End loading
@@ -74,6 +80,7 @@ const Signup = () => {
 
   return (
     <div className="w-[100vw] h-[100vh] grid place-items-center bg-blue-200">
+      <ToastContainer />
       <div className="w-full h-full md:h-[95vh] md:w-[27rem] bg-white flex flex-col justify-between items-center md:items-center px-10 py-4">
         <section className="flex flex-col gap-2 items-center py-[1px] w-[19rem]">
           <div className="flex justify-center items-center border-[1px] border-gray-300 rounded w-full">

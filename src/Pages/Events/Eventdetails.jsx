@@ -19,7 +19,7 @@ function Eventdetails() {
   // const [newcard, setNewCard] = useState([]);
   const [result, setResult] = useState({});
   const [event, setEvent] = useState({});
-  
+
   useEffect(() => {
     console.log("single event detail");
     console.log(loc.state);
@@ -27,9 +27,9 @@ function Eventdetails() {
       try {
         if (loc.state) {
           const result_ = await getEvent(loc.state.id);
-          console.log("result of single event is ",{ result_ });
+          console.log("result of single event is ", { result_ });
           setResult(result_);
-       
+
           setEvent(() => {
             return {
               ...result_.event,
@@ -58,22 +58,24 @@ function Eventdetails() {
   return (
     <>
       <div className="main h-full w-full bg-white">
-       <div className="flex justify-between">
-
-       <h4 className="flex items-center gap-3 mt-4 ms-4 text-2xl h-[10%]">
-          <FaAngleLeft
-            className="cursor-pointer"
-            onClick={() => navigate("/events")}
-          />
-          Event Detail
-        </h4>
-{result.user && 
-        <img
-              src={result.user.picUrl  ? result.user.picUrl : "./placeholder.jpg"}
+        <div className="flex justify-between">
+          <h4 className="flex items-center gap-3 mt-4 ms-4 text-2xl h-[10%]">
+            <FaAngleLeft
+              className="cursor-pointer"
+              onClick={() => navigate("/events")}
+            />
+            Event Detail
+          </h4>
+          {result.user && (
+            <img
+              src={
+                result.user.picUrl ? result.user.picUrl : "./placeholder.jpg"
+              }
               alt={result.user ? result.user.name : "Profile"}
               className="rounded-full w-[70px] h-[70px] mt-2 mx-3 object-cover"
-            />}
-       </div>
+            />
+          )}
+        </div>
         {/* {newcard.map(( data,index)=>( */}
         <div className="overflow-y-scroll  w-[93%] Podcast_Top_Videos mx-auto h-[88%]">
           <div className="flex md:flex-wrap">
@@ -83,37 +85,33 @@ function Eventdetails() {
               className="eventimg1"
             />
             <div className="flex flex-row-reverse justify-between  w-[38%]">
-
-           
-            <div className="w-full   pt-5 ml-6 my-6">
-              <div className="ticketstarting py-3 rounded w-full">
-                <small className="text-gray-500">Tickets starting at</small>
-                <h5 className="text-lg pb-2 font-bold">
-                  {event.eventTicketArray &&
-                  event.eventTicketArray.length > 0 ? (
-                    event.eventTicketArray
-                      .filter((ticket) => ticket.ticketType === "Basic")
-                      .map((ticket, index) => (
-                        <div key={index}>
-                       
-                          <p>${ticket.price}</p>
-                        
-                        </div>
-                      ))
-                  ) : (
-                    <p>empty</p>
-                  )}
-                </h5>
-                <button
-                  className="buyticket  text-white rounded-lg px-4 py-2 mt-2"
-                  onClick={() =>
-                    navigate("/ticket", { state: { id: event._id } })
-                  }
-                >
-                  <small>Buy Tickets</small>
-                </button>
+              <div className="w-full   pt-5 ml-6 my-6">
+                <div className="ticketstarting py-3 rounded w-full">
+                  <small className="text-gray-500">Tickets starting at</small>
+                  <h5 className="text-lg pb-2 font-bold">
+                    {event.eventTicketArray &&
+                    event.eventTicketArray.length > 0 ? (
+                      event.eventTicketArray
+                        .filter((ticket) => ticket.ticketType === "Basic")
+                        .map((ticket, index) => (
+                          <div key={index}>
+                            <p>${ticket.price}</p>
+                          </div>
+                        ))
+                    ) : (
+                      <p>empty</p>
+                    )}
+                  </h5>
+                  <button
+                    className="buyticket  text-white rounded-lg px-4 py-2 mt-2"
+                    onClick={() =>
+                      navigate("/ticket", { state: { id: event._id } })
+                    }
+                  >
+                    <small>Buy Tickets</small>
+                  </button>
+                </div>
               </div>
-            </div>
             </div>
           </div>
           <div className="sm:flex mt-2">
@@ -147,30 +145,33 @@ function Eventdetails() {
             <div className="participant sm:mt-0 mt-4 w-full sm:w-[33%]">
               <h5 className="text-sm font-bold">Participants</h5>
               <div className="flex items-center">
-                <img
-                  src="https://media.istockphoto.com/id/1476170969/photo/portrait-of-young-man-ready-for-job-business-concept.webp?b=1&s=170667a&w=0&k=20&c=FycdXoKn5StpYCKJ7PdkyJo9G5wfNgmSLBWk3dI35Zw="
-                  alt=""
-                  className="partiimg1 rounded-full border border-black"
-                />
-                <img
-                  src="https://media.istockphoto.com/id/1476170969/photo/portrait-of-young-man-ready-for-job-business-concept.webp?b=1&s=170667a&w=0&k=20&c=FycdXoKn5StpYCKJ7PdkyJo9G5wfNgmSLBWk3dI35Zw="
-                  alt=""
-                  className="partiimg1 rounded-full -ml-[10px] border border-black"
-                />
-                <img
-                  src="https://media.istockphoto.com/id/1476170969/photo/portrait-of-young-man-ready-for-job-business-concept.webp?b=1&s=170667a&w=0&k=20&c=FycdXoKn5StpYCKJ7PdkyJo9G5wfNgmSLBWk3dI35Zw="
-                  alt=""
-                  className="partiimg1 rounded-full -ml-[10px] border border-black"
-                />
-                <img
-                  src="https://media.istockphoto.com/id/1476170969/photo/portrait-of-young-man-ready-for-job-business-concept.webp?b=1&s=170667a&w=0&k=20&c=FycdXoKn5StpYCKJ7PdkyJo9G5wfNgmSLBWk3dI35Zw="
-                  alt=""
-                  className="partiimg1 rounded-full -ml-[10px] border border-black"
-                />
+                {result.participants &&
+                  result.participants.slice(0, 2).map((elm, ind) => (
+                    <Link
+                      to="/userprofile"
+                      state={{ id: elm.Users_PK }}
+                      key={ind}
+                    >
+                      <img
+                        src={elm.picUrl ? elm.picUrl : "/placeholder.jpg"}
+                        alt=""
+                        className="partiimg1 rounded-full border border-black"
+                      />
+                    </Link>
+                  ))}
+
                 {/* Repeat for other participant images */}
-                <div className="parti2 flex items-center justify-center -ml-[10px] border border-black">
-                  <small className="text-gray-500">+5K</small>
-                </div>
+                {result.participants && result.participants.length > 2 && (
+                  <Link
+                    to="/participants"
+                    state={{ id: event._id }}
+                    className="parti2 flex items-center justify-center -ml-[10px] border border-black text-white text-xl cursor-pointer"
+                  >
+                    <small className="text-gray-500">
+                      +{result.participants.length - 2}
+                    </small>
+                  </Link>
+                )}
               </div>
             </div>
             <div className="attention flex w-full sm:mt-0 mt-4 gap-4 sm:w-[33%]">
@@ -193,22 +194,24 @@ function Eventdetails() {
           </p>
 
           <p className="text-xl font-bold mt-6">Speakers:</p>
-        <div className="flex gap-2 md:ps-6 mt-3 w-full overflow-x-scroll Podcast_Top_Videos">
-          {result.speakers && result.speakers.map((elm, ind) => (
-            <Link to="/userprofile"
-            state={{id:elm.Users_PK}}
-              key={ind}
-              className="flex items-center justify-center flex-shrink-0 gap-3 py-2 px-2 my-2 rounded w-auto bg-gray-200"
-            >
-              <img
-                src={elm.picUrl ? elm.picUrl : "/placeholder.jpg"}
-                className="rounded-full h-[35px] w-[35px]"
-                alt=""
-              />
-              <h1 className="text-md">{elm.name}</h1>
-            </Link>
-          ))}
-        </div>
+          <div className="flex gap-2 md:ps-6 mt-3 w-full overflow-x-scroll Podcast_Top_Videos">
+            {result.speakers &&
+              result.speakers.map((elm, ind) => (
+                <Link
+                  to="/userprofile"
+                  state={{ id: elm.Users_PK }}
+                  key={ind}
+                  className="flex items-center justify-center flex-shrink-0 gap-3 py-2 px-2 my-2 rounded w-auto bg-gray-200"
+                >
+                  <img
+                    src={elm.picUrl ? elm.picUrl : "/placeholder.jpg"}
+                    className="rounded-full h-[35px] w-[35px]"
+                    alt=""
+                  />
+                  <h1 className="text-md">{elm.name}</h1>
+                </Link>
+              ))}
+          </div>
 
           <div className="h-[30vh] w-full mt-5">
             <iframe

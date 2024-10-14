@@ -66,7 +66,7 @@ function Blocklist() {
       {blockedUsers.map((user) => (
         <div key={user.id} >
           <div className="flex justify-between  pb-4 pt-4">
-          <div className="flex gap-2">
+          <div className="flex gap-4">
             <img
               src={user.imgSrc}
               alt=""

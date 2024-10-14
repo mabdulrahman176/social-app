@@ -1,107 +1,10 @@
 import axios from "axios";
 import React, { Fragment, useEffect, useState } from "react";
 import { FaAngleLeft } from "react-icons/fa";
-import { TbBrandNeteaseMusic } from "react-icons/tb";
+
 import { Link, useNavigate } from "react-router-dom";
 
-let SearchData = [
-  {
-    id: 1,
-    categ: "Marketing head",
-    ago: "1 week ago",
-    state: "United states(Hybrid)",
-    price: "$80k/yr-$100k/yr",
-    button: "Applied",
-  },
-  {
-    id: 2,
-    categ: "Marketing head",
-    ago: "1 week ago",
-    state: "United states(Hybrid)",
-    price: "$80k/yr-$100k/yr",
-    button: "Applied",
-  },
-  {
-    id: 3,
-    categ: "Brand Designer",
-    ago: "1 week ago",
-    state: "United states(Hybrid)",
-    price: "$80k/yr-$100k/yr",
-    button: "Applied",
-  },
-  {
-    id: 3,
-    categ: "Brand Designer",
-    ago: "1 week ago",
-    state: "United states(Hybrid)",
-    price: "$80k/yr-$100k/yr",
-    button: "Applied",
-  },
-  {
-    id: 3,
-    categ: "Brand Designer",
-    ago: "1 week ago",
-    state: "United states(Hybrid)",
-    price: "$80k/yr-$100k/yr",
-    button: "Applied",
-  },
-  {
-    id: 3,
-    categ: "Brand Designer",
-    ago: "1 week ago",
-    state: "United states(Hybrid)",
-    price: "$80k/yr-$100k/yr",
-    button: "Applied",
-  },
-  {
-    id: 3,
-    categ: "Brand Designer",
-    ago: "1 week ago",
-    state: "United states(Hybrid)",
-    price: "$80k/yr-$100k/yr",
-    button: "Applied",
-  },
-  {
-    id: 3,
-    categ: "Brand Designer",
-    ago: "1 week ago",
-    state: "United states(Hybrid)",
-    price: "$80k/yr-$100k/yr",
-    button: "Applied",
-  },
-  {
-    id: 3,
-    categ: "Brand Designer",
-    ago: "1 week ago",
-    state: "United states(Hybrid)",
-    price: "$80k/yr-$100k/yr",
-    button: "Applied",
-  },
-  {
-    id: 3,
-    categ: "Brand Designer",
-    ago: "1 week ago",
-    state: "United states(Hybrid)",
-    price: "$80k/yr-$100k/yr",
-    button: "Applied",
-  },
-  {
-    id: 3,
-    categ: "Brand Designer",
-    ago: "1 week ago",
-    state: "United states(Hybrid)",
-    price: "$80k/yr-$100k/yr",
-    button: "Applied",
-  },
-  {
-    id: 3,
-    categ: "Brand Designer",
-    ago: "1 week ago",
-    state: "United states(Hybrid)",
-    price: "$80k/yr-$100k/yr",
-    button: "Applied Now",
-  },
-];
+
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 function AppliedJobs() {
 const [appliedjobs ,setAppliedJobs] = useState([])
@@ -173,7 +76,7 @@ const [appliedjobs ,setAppliedJobs] = useState([])
   };
   return (
     <Fragment>
-      <div className="sm:ps-6 w-full h-full bg-white">
+      <div className="sm:ps-6 w-full h-full bg-white" >
         <h4 className="flex items-center gap-3 ms-4 h-[10%]">
           <FaAngleLeft
             className="cursor-pointer"
@@ -245,7 +148,7 @@ const truncatedDescription = isLong
                       to={"/jobdetail"}
                       state={{ id: elm._id }}
                       
-                      className="w-[90%] mx-auto flex text-xs mt-7 justify-center items-center bg-[#EEEEEE] h-10 rounded-3xl hover:bg-[#6166f331] hover:text-[#6165F3]"
+                      className="w-[90%] mx-auto flex text-xs mt-7 cursor-not-allowed justify-center items-center bg-[#EEEEEE] h-10 rounded-3xl hover:bg-[#6166f331] hover:text-[#6165F3]"
                     >
                      Applied
                     </Link>

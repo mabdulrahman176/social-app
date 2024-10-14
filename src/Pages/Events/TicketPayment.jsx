@@ -37,26 +37,44 @@ function Payment() {
     const userKey = str.split('=')[1];
     return userKey;
   };
-  const stripePaymentCheckout=async(id)=>{
-    const payload={
-      eventId:loc.state.id,
-      buyerId:getUserId(),
-      eventTicketArray:loc.state.selectedTickets,
+  const stripePaymentCheckout = async (id) => {
+    const payload = {
+      eventId: loc.state.id,
+      buyerId: getUserId(),
+      eventTicketArray: loc.state.selectedTickets,
+    };
+    console.log("this is payload ", { payload });
+  
+    try {
+      const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/payment/stripe/`, {
+        method: 'POST',
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+  
+      // Check if the response is OK
+      if (!req.ok) {
+        throw new Error(`HTTP error! status: ${req.status}`);
+      }
+  
+      const data = await req.json();
+      console.log("this is data ", { data });
+  
+      // Redirect to the URL returned from the API
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        console.error("No URL found in response data.");
+      }
+    } catch (error) {
+      console.error("Error during payment checkout:", error);
+      // Optionally show a user-friendly message
+      alert("An error occurred while processing your payment. Please try again.");
     }
-    console.log("this is payload ",{payload})
-    
-    const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/payment/stripe/`,{
-    method:'POST',
-    headers:{
-      "Content-type":"application/json"
-    },
-    body:JSON.stringify(payload)
-    })
-    const data = await req.json()
-    console.log("this is data ",{data})
-      window.location.href=data.url
-  }
-
+  };
+  
   useEffect(() => {
     console.log("Component mounted. loc.state:", loc.state);
     if (loc.state) {

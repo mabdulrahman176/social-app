@@ -6,6 +6,12 @@ import { fetchData } from "../../API";
 const CalendarSearch = () => {
   const [data, setData] = useState([]);
 
+  const getUserId = () => {
+    const str = document.cookie;
+    const userKey = str.split('=')[1];
+    return userKey;
+  };
+const currentUser = getUserId()
   useEffect(() => {
     const getData = async () => {
       try {
@@ -126,20 +132,20 @@ const CalendarSearch = () => {
                   <p className="ps-4 text-sm opacity-65 mt-3">
                     {elm.salaryRange}
                   </p>
-                  {elm.jobType === " " ? (
+                  {elm.userId === currentUser ? (
                     <Link
-                      to={"/jobdetail"}
+                      to={"/mycreatedjob"}
                       state={{ id: elm._id }}
-                      className="w-[90%] mx-auto block text-xs mt-7 bg-[#EEEEEE] h-10 rounded-3xl hover:bg-[#6166f331] hover:text-[#6165F3]"
+                      className="w-[90%] flex justify-center items-center mx-auto  text-xs mt-7 bg-[#EEEEEE] h-10 rounded-3xl hover:bg-[#6166f331] hover:text-[#6165F3]"
                     >
-                      Apply Now
+                     View Details
                     </Link>
                   ) : (
                     <div className="text-center flex items-center">
                       <Link
                         to={"/jobdetail"}
                         state={{ id: elm._id }}
-                        className="w-[90%] mx-auto flex text-xs mt-7 justify-center items-center bg-[#EEEEEE] h-10 rounded-3xl hover:bg-[#6166f331] hover:text-[#6165F3]"
+                        className="w-[90%] mx-auto flex  text-xs mt-7 justify-center items-center bg-[#EEEEEE] h-10 rounded-3xl hover:bg-[#6166f331] hover:text-[#6165F3]"
                       >
                        Apply Now
                       </Link>
@@ -207,12 +213,12 @@ const CalendarSearch = () => {
                 <p className="ps-4 text-sm opacity-65 mt-3">
                   {elm.salaryRange}
                 </p>
-                {elm.jobType === " " ? (
+                {elm.userId === currentUser ? (
                   <button
                     className="w-[90%] mx-auto block text-xs mt-7 bg-[#EEEEEE] h-10 rounded-3xl hover:bg-[#6166f331] hover:text-[#6165F3]"
-                    onClick={() => navigate("/jobdetail")}
+                    onClick={() => navigate("/mycreatedjob")}
                   >
-                    Apply Now
+                   View Details
                   </button>
                 ) : (
                   <button
@@ -283,12 +289,12 @@ const CalendarSearch = () => {
                 <p className="ps-4 text-sm opacity-65 mt-3">
                   {elm.salaryRange}
                 </p>
-                {elm.jobType === " " ? (
+                {elm.userId === currentUser ? (
                   <button
                     className="w-[90%] mx-auto block text-xs mt-7 bg-[#EEEEEE] h-10 rounded-3xl hover:bg-[#6166f331] hover:text-[#6165F3]"
-                    onClick={() => navigate("/jobdetail")}
+                    onClick={() => navigate("/mycreatedjob")}
                   >
-                    Apply Now
+                    View Details
                   </button>
                 ) : (
                   <button

@@ -56,6 +56,8 @@ import PageNotFound from './Components/PageNotFound.jsx';
 import WishList from './Pages/Settings/WishList.jsx';
 import UserProfile from './Pages/Profile/UserProfile.jsx';
 import ProfileVideos from './Pages/SingleVideo/ProfileVideos.jsx';
+import Participants from './Pages/Events/Participants.jsx';
+import MyCreatedJob from './Pages/Profile/MyCreatedJob.jsx';
 
 
 const App = () => {
@@ -99,6 +101,7 @@ const App = () => {
           <Route path="/podcastdetails/" element={<SinglePodcastDetails />} />
           <Route path="/events" element={<Event />} />
           <Route path="/eventdetail" element={<Eventdetail />} />
+          <Route path='/participants' element={<Participants />} />
           <Route path="/ticket" element={<Ticket />} />
           <Route path="/createpodcast" element={<PodcastForm />} />
           <Route path="/createevent" element={<EventForm />} />
@@ -108,6 +111,7 @@ const App = () => {
           <Route path="/createjob" element={<JobCreationform />} />
           <Route path="/singlecategory" element={<SingleCategory />} />
           <Route path="/jobdetail" element={<JobDetail />} />
+          <Route  path='/mycreatedjob' element={<MyCreatedJob />}/>
           <Route path="/jobapply" element={<JobApply />} />
           <Route path='/jobapplysuccess' element={<JobAppliedSuccess />}/>
           <Route path="/createVideo" element={<CreateVideo />} />
