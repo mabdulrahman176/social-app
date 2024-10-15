@@ -148,13 +148,45 @@ formData.append("eventTicketArray",JSON.stringify(ticketArray));
     }
   };
 
+  const formatDate = (dateString) => {
+    const options = { weekday: 'short',  month: 'short', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString('en-US', options);
+  };
+
   const onChange = (e) => {
     const { name, value } = e.target;
-    setState((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+  
+    if (name === "startTime" || name === "endTime") {
+      const [hours, minutes] = value.split(':');
+      const date = new Date();
+      date.setHours(hours);
+      date.setMinutes(minutes);
+  
+      // Format the time to 12-hour format with AM/PM
+      const formattedTime = date.toLocaleString('en-US', {
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true
+      });
+  
+      setState((prev) => ({
+        ...prev,
+        [name]: formattedTime,
+      }));
+    } else if (name === "eventDate") {
+      // Format the date if it's the event date input
+      setState((prev) => ({
+        ...prev,
+        [name]: formatDate(value),
+      }));
+    } else {
+      setState((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
   };
+  
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -349,9 +381,9 @@ formData.append("eventTicketArray",JSON.stringify(ticketArray));
                 value={selectedType}
               >
                 <option value="">Select Tickets Type</option>
-                <option value="Basic">Basic</option>
-                <option value="Standard">Standard</option>
-                <option value="Premium">Premium</option>
+                <option value="basicTicket">Basic</option>
+                <option value="standardTicket">Standard</option>
+                <option value="premiumTicket">Premium</option>
               </select>
             </div>
 
@@ -362,11 +394,11 @@ formData.append("eventTicketArray",JSON.stringify(ticketArray));
                     key={index}
                     className="my-2 flex justify-between items-center bg-slate-300 rounded-lg w-auto ml-1"
                   >
-                    {ticket.ticketType === "Premium" &&
+                    {ticket.ticketType === "premiumTicket" &&
                       `Premium - ${ticket.price}$ - ${ticket.quantity}`}
-                    {ticket.ticketType === "Basic" &&
+                    {ticket.ticketType === "basicTicket" &&
                       `Basic - ${ticket.price}$ - ${ticket.quantity}`}
-                    {ticket.ticketType === "Standard" &&
+                    {ticket.ticketType === "standardTicket" &&
                       `Standard - ${ticket.price}$ - ${ticket.quantity}`}
 
                     <FaTimes

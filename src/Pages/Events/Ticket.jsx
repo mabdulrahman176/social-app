@@ -77,15 +77,15 @@ function Ticket() {
   };
 
   const remainingBasic = tickets.eventTicketArray
-  ? tickets.eventTicketArray.find(ticket => ticket.ticketType === 'Basic')?.quantity - add
+  ? tickets.eventTicketArray.find(ticket => ticket.ticketType === 'basicTicket')?.quantity - add
   : 0;
 
 const remainingStandard = tickets.eventTicketArray
-  ? tickets.eventTicketArray.find(ticket => ticket.ticketType === 'Standard')?.quantity - more
+  ? tickets.eventTicketArray.find(ticket => ticket.ticketType === 'standardTicket')?.quantity - more
   : 0;
 
 const remainingPremium = tickets.eventTicketArray
-  ? tickets.eventTicketArray.find(ticket => ticket.ticketType === 'Premium')?.quantity - able
+  ? tickets.eventTicketArray.find(ticket => ticket.ticketType === 'premiumTicket')?.quantity - able
   : 0;
 
   return (
@@ -131,14 +131,14 @@ const remainingPremium = tickets.eventTicketArray
               {tickets.eventTicketArray &&
               tickets.eventTicketArray.length > 0 ? (
                 tickets.eventTicketArray
-                  .filter((ticket) => ticket.ticketType === "Basic")
+                  .filter((ticket) => ticket.ticketType === "basicTicket")
                   .map((ticket, index) => (
                     <div key={index}>
                       <p>${ticket.price}</p>
                     </div>
                   ))
               ) : (
-                <p>empty</p>
+                <p>$0</p>
               )}
             </h5>
             <div className="plusbutton flex items-center">
@@ -165,14 +165,14 @@ disabled = {add === 0}
             <h5 className="text-lg font-bold"> {tickets.eventTicketArray &&
               tickets.eventTicketArray.length > 0 ? (
                 tickets.eventTicketArray
-                  .filter((ticket) => ticket.ticketType === "Standard")
+                  .filter((ticket) => ticket.ticketType === "standardTicket")
                   .map((ticket, index) => (
                     <div key={index}>
                       <p>${ticket.price}</p>
                     </div>
                   ))
               ) : (
-                <p>empty</p>
+                <p>$0</p>
               )}</h5>
             <div className="plusbutton flex items-center">
               <button
@@ -198,14 +198,14 @@ disabled = {add === 0}
             <h5 className="text-lg font-bold"> {tickets.eventTicketArray &&
               tickets.eventTicketArray.length > 0 ? (
                 tickets.eventTicketArray
-                  .filter((ticket) => ticket.ticketType === "Premium")
+                  .filter((ticket) => ticket.ticketType === "premiumTicket")
                   .map((ticket, index) => (
                     <div key={index}>
                       <p>${ticket.price}</p>
                     </div>
                   ))
               ) : (
-                <p>empty</p>
+                <p>$0</p>
               )}</h5>
             <div className="plusbutton flex items-center">
               <button

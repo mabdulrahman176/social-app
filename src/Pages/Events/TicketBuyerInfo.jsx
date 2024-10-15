@@ -41,9 +41,9 @@ function Contactinfo() {
     }, [loc.state]);
 
     // Find prices for each ticket type
-    const basicTicketPrice = tickets.eventTicketArray?.find(ticket => ticket.ticketType === 'Basic')?.price || 0;
-    const standardTicketPrice = tickets.eventTicketArray?.find(ticket => ticket.ticketType === 'Standard')?.price || 0;
-    const premiumTicketPrice = tickets.eventTicketArray?.find(ticket => ticket.ticketType === 'Premium')?.price || 0;
+    const basicTicketPrice = tickets.eventTicketArray?.find(ticket => ticket.ticketType === 'basicTicket')?.price || 0;
+    const standardTicketPrice = tickets.eventTicketArray?.find(ticket => ticket.ticketType === 'standardTicket')?.price || 0;
+    const premiumTicketPrice = tickets.eventTicketArray?.find(ticket => ticket.ticketType === 'premiumTicket')?.price || 0;
 
     // Calculate total tickets and price
     const totalTickets = selectedTickets.basicTicket + selectedTickets.premiumTicket + selectedTickets.standardTicket;

@@ -1,14 +1,14 @@
-import React, { useContext, useState, useEffect } from "react";
-import { CiBookmark, CiCalendar, CiClock1 } from "react-icons/ci";
+import React, { useState, useEffect } from "react";
+import {  CiCalendar, CiClock1 } from "react-icons/ci";
 import { FaAngleLeft, FaBuilding, FaBookReader } from "react-icons/fa";
 import { BsFillBrightnessAltHighFill } from "react-icons/bs";
 import { GiSkills } from "react-icons/gi";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 // import JobAppliedSuccess from "./JobAppliedSuccess";
-import { myContext } from "../../Context/CreateContext";
-import axios from "axios";
-import { ToastContainer, toast } from 'react-toastify'; // Import toast components
-import 'react-toastify/dist/ReactToastify.css'; // Import toast styles
+// import { myContext } from "../../Context/CreateContext";
+// import axios from "axios";
+// import { ToastContainer, toast } from 'react-toastify'; // Import toast components
+// import 'react-toastify/dist/ReactToastify.css'; // Import toast styles
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -16,7 +16,7 @@ function MyCreatedJob() {
   const loc = useLocation();
   const navigate = useNavigate();
   const [job, setJob] = useState(null);
-  const [poster, setPoster] = useState(null);
+  // const [poster, setPoster] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -25,7 +25,7 @@ function MyCreatedJob() {
         try {
           const result_ = await getJob(loc.state.id);
           setJob(result_.job);
-          setPoster(result_.poster);
+          // setPoster(result_.poster);
         } catch (error) {
           console.error("Error fetching job data:", error);
         } finally {
@@ -41,7 +41,7 @@ function MyCreatedJob() {
 
   const getJob = async (id) => {
     const req = await fetch(
-      `${process.env.REACT_APP_API_BASE_URL}/jobs/${id}`,
+      `${API_BASE_URL}/jobs/${id}`,
       { method: "GET" }
     );
 
@@ -53,7 +53,7 @@ function MyCreatedJob() {
     return d;
   };
 
-  const { JobAppliedStates } = useContext(myContext);
+  // const { JobAppliedStates } = useContext(myContext);
 
   if (loading) {
     return <div>Loading...</div>; // Simple loading state
@@ -93,13 +93,13 @@ function MyCreatedJob() {
     return "Invalid date format";
   };
 
-  const getUserId = () => {
-    const str = document.cookie;
-    const userKey = str.split('=')[1];
-    return userKey;
-  };
+  // const getUserId = () => {
+  //   const str = document.cookie;
+  //   const userKey = str.split('=')[1];
+  //   return userKey;
+  // };
 
-  const user_id = getUserId();
+  // const user_id = getUserId();
   
 //   const handleSaveToWishlist = async (jobId) => {
 //     try {
@@ -119,7 +119,7 @@ function MyCreatedJob() {
 
   return (
     <div className="h-full w-full bg-white relative">
-      <ToastContainer /> {/* Include ToastContainer for notifications */}
+      {/* <ToastContainer /> Include ToastContainer for notifications */}
       {/* {JobAppliedStates.jobAppliedSuccess && <JobAppliedSuccess />} */}
       <h4 className="flex items-center gap-3 ms-4 h-[10%]">
         <FaAngleLeft

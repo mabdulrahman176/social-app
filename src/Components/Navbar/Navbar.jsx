@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom"; 
+import { useLocation, useNavigate } from "react-router-dom"; 
 import { faBars, faMicrophone } from "@fortawesome/free-solid-svg-icons";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons/faMagnifyingGlass";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -25,7 +25,8 @@ const Navbar = ({ state }) => {
       console.error("Error fetching user data:", error);
     }
   };
-
+  const location = useLocation()
+  const { id } = location.state || {};
   // Fetch notifications count from the backend
   const fetchNotificationCount = async () => {
     try {
@@ -46,7 +47,7 @@ const Navbar = ({ state }) => {
       const filteredSuggestions = data.filter(user =>
         user.name && user.name.toLowerCase().includes(searchTerm.toLowerCase())
       );
-      console.log("Filtered suggestions:", filteredSuggestions); // Log filtered suggestions
+      console.log("Filtered suggestions:",filteredSuggestions); // Log filtered suggestions
       setSuggestions(filteredSuggestions);
       setShowSuggestions(true);
     } else {
@@ -56,15 +57,17 @@ const Navbar = ({ state }) => {
   }, [searchTerm, data]);
 
   const handleSuggestionClick = (userId) => {
-    navigate(`/user/${userId}`); // Navigate to the user profile based on userId
+    navigate(`/userprofile`,{state:{id:userId}});
+    setShowSuggestions(false); 
   };
 
-  const handleSearchClick = () => {
-    const selectedUser = suggestions[0]; // Select the first suggestion
-    if (selectedUser) {
-      navigate(`/user/${selectedUser._id}`); // Navigate to the user's profile
-    }
-  };
+const handleSearchClick = () => {
+  const selectedUser = suggestions[0]; // Select the first suggestion
+  if (selectedUser) {
+    navigate(`/userprofile`, { state: { id: selectedUser.Users_PK } }); // Navigate to the user's profile
+    setShowSuggestions(false)
+  }
+};
 
   return (
     <nav className="w-full flex justify-between items-center py-2 px-4 bg-white">
@@ -96,24 +99,30 @@ const Navbar = ({ state }) => {
         </div>
       
         {showSuggestions && (
-          <ul className="absolute top-full z-10 w-full bg-white shadow-lg mt-1 rounded-lg">
-            {suggestions.length > 0 ? (
-              suggestions.map((suggestion, index) => (
-                <li
-                  key={index}
-                  className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
-                  onClick={() => handleSuggestionClick(suggestion._id)} // Navigate on suggestion click
-                >
-                  <div>
-                    <p>{suggestion.name}</p>
-                  </div>
-                </li>
-              ))
-            ) : (
-              <li className="px-4 py-2 text-gray-500">No suggestions found</li>
-            )}
-          </ul>
-        )}
+  <ul className="absolute top-full z-10 w-full bg-white shadow-lg mt-1 rounded-lg h-[300px] overflow-y-scroll" style={{ WebkitOverflowScrolling: 'touch', WebkitScrollbar: { display: 'none' }, '-msOverflowStyle': 'none', scrollbarWidth: 'none' }}>
+    {suggestions.length > 0 ? (
+      suggestions.map((suggestion, index) => (
+        <li
+          key={index}
+          className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
+          onClick={() => handleSuggestionClick(suggestion.Users_PK)} // Pass the correct ID
+        >
+        
+          <img 
+                src={suggestion.picUrl || "/placeholder.jpg"} 
+                alt={suggestion.name} 
+                className="inline-block w-8 h-8 rounded-full mr-2" 
+              />
+            {suggestion.name}
+        
+        </li>
+      ))
+    ) : (
+      <li className="px-4 py-2 text-gray-500">No suggestions found</li>
+    )}
+  </ul>
+)}
+
       </div>
 
       <div className="flex gap-4 items-center mx-1 relative">

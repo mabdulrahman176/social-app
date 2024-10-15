@@ -5,7 +5,7 @@ import { FaStar, FaStarHalf } from "react-icons/fa6";
 import { PiApplePodcastsLogoThin } from "react-icons/pi";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { FaPlus } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { fetchProfile } from "../../API";
 import PublicProfileVideos from "./PublicProfileVideos";
 import PublicProfilePodcats from "./PublicProfilePodcats";
@@ -15,6 +15,8 @@ import PublicProfileJobs from "./PublicProfileJobs";
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const ProfilePublic = ({ userId }) => {
+
+  const navigate = useNavigate()
   const [data_, setDATA] = useState({});
   const [activeTab, setActiveTab] = useState("Video");
   const [profile, setProfile] = useState({});
@@ -140,7 +142,7 @@ console.log("user id is ", isCurrentUser)
                       {loading ? 'Uploading...' : 'Save Changes'}
                     </button>
                     <button
-                      onClick={() => console.log(profile)}
+                      onClick={() => navigate('/personaldetail2')}
                       className="px-6 py-2 rounded-2xl text-lg text-white bg-[#6165F3]"
                     >
                       Edit Profile 

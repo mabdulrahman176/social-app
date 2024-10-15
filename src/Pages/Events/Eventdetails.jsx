@@ -92,7 +92,7 @@ function Eventdetails() {
                     {event.eventTicketArray &&
                     event.eventTicketArray.length > 0 ? (
                       event.eventTicketArray
-                        .filter((ticket) => ticket.ticketType === "Basic")
+                        .filter((ticket) => ticket.ticketType === "basicTicket")
                         .map((ticket, index) => (
                           <div key={index}>
                             <p>${ticket.price}</p>

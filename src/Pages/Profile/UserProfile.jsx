@@ -6,15 +6,15 @@ import { FaChevronLeft } from "react-icons/fa";
 import { FaStar, FaStarHalf } from "react-icons/fa6";
 import { PiApplePodcastsLogoThin } from "react-icons/pi";
 import { MdKeyboardArrowRight } from "react-icons/md";
-import { FaPlus } from "react-icons/fa";
+// import { FaPlus } from "react-icons/fa";
 import { fetchProfile } from "../../API";
 import PublicProfileVideos from "./PublicProfileVideos";
 import PublicProfilePodcats from "./PublicProfilePodcats";
 import PublicProfileEvents from "./PublicProfileEvents";
 import PublicProfileJobs from "./PublicProfileJobs";
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 const UserProfile = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -25,12 +25,11 @@ const UserProfile = () => {
   const [data_, setDATA] = useState({});
   const [activeTab, setActiveTab] = useState("Video");
   const [profile, setProfile] = useState({});
-  const [file, setFile] = useState(null);
+  const [isSubscribed, setIsSubscribed] = useState(false);
+
   const [loading, setLoading] = useState(false);
 
-  const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
-  };
+ 
 
   const getUserId = () => {
     const str = document.cookie;
@@ -38,28 +37,65 @@ const UserProfile = () => {
     return userKey;
   };
 
-  const handleSubmit = async () => {
-    setLoading(true);
-    const formData = new FormData();
-    if (file) {
-      formData.append('profilePic', file);
-    }
+  const subscribeUser = async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/users/profilepic/${getUserId()}`, {
-        credentials: 'include',
-        method: "POST",
-        body: formData,
+      const response = await fetch(`${API_BASE_URL}/subscriptions`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ subscriberId: getUserId(), subscribedToId: userId }),
       });
-      const data = await response.json();
-      console.log('Profile updated:', data);
-      await fetchProfileData(userId); // Refresh profile data after upload
+      if (response.ok) {
+        const result = await response.json();
+        setIsSubscribed(true);
+        console.log("user subscribed",result.message);
+      } else {
+        const error = await response.json();
+        console.error('Error subscribing:', error.message);
+      }
     } catch (error) {
-      console.error('Error updating profile:', error);
-    } finally {
-      setLoading(false);
+      console.error('Error subscribing:', error);
     }
   };
-
+  
+  const unsubscribeUser = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/subscriptions/${userId}`, {
+        method: 'DELETE',
+      });
+      if (response.ok) {
+        setIsSubscribed(false);
+        console.log('Unsubscribed successfully');
+      } else {
+        const error = await response.json();
+        console.error('Error unsubscribing:', error.message);
+      }
+    } catch (error) {
+      console.error('Error unsubscribing:', error);
+    }
+  };
+  
+  useEffect(() => {
+    const checkSubscriptionStatus = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/subscriptions/my/${userId}`);
+        if (response.ok) {
+          const subscriptions = await response.json();
+          // Check if current user is in the subscription list
+          const isSubscribed = subscriptions.some(sub => sub.subscriberId === getUserId());
+          setIsSubscribed(isSubscribed);
+        }
+      } catch (error) {
+        console.error('Error fetching subscription status:', error);
+      }
+    };
+  
+    if (userId) {
+      fetchProfileData(userId);
+      checkSubscriptionStatus(); // Check subscription status on mount
+    }
+  }, [userId]);
+  
+  
   const createChatRoom = () => { console.log("creating chatroom"); };
 
   const fetchProfileData = async (id) => {
@@ -110,19 +146,14 @@ const UserProfile = () => {
         <div className="flex flex-col md:flex-row justify-center h-auto md:h-[32%] mt-4 md:mt-0">
           <div className="flex flex-col md:flex-row gap-2 w-full md:w-[75%] items-center">
             <div className="rounded-full flex justify-center md:justify-end w-[60%] md:w-[40%] relative">
-              <input
-                type="file"
-                onChange={handleFileChange}
-                className="hidden"
-                id="fileInput"
-              />
-              <label htmlFor="fileInput" className="cursor-pointer" aria-label="Upload Profile Picture">
+             
+              <label htmlFor="fileInput"  aria-label="Upload Profile Picture">
                 <img
                   className="rounded-full w-[100px] h-[100px] md:w-[120px] md:h-[120px] object-cover"
                   src={profile.picUrl || '/placeholder.jpg'} // Fallback URL
                   alt="Profile"
                 />
-                <FaPlus className="absolute lg:bottom-2 -bottom-3 md:bottom-1 text-white text-xl p-1 bg-blue-700 rounded-full" />
+               
               </label>
             </div>
             <div className="py-3 px-4 md:px-6 w-full md:w-[60%]">
@@ -141,7 +172,7 @@ const UserProfile = () => {
                   <>
                     <button
                       className={`px-6 py-2 rounded-2xl text-lg ${loading ? 'bg-gray-400' : 'bg-[#F6F6FF]'}`}
-                      onClick={handleSubmit}
+                    
                       disabled={loading}
                     >
                       {loading ? 'Uploading...' : 'Save Changes'}
@@ -162,10 +193,12 @@ const UserProfile = () => {
                       Message
                     </button>
                     <button
-                      className="px-6 py-2 rounded-2xl text-lg text-white bg-[#6165F3]"
-                    >
-                      Subscribe
-                    </button>
+  className="px-6 py-2 rounded-2xl text-lg text-white bg-[#6165F3]"
+  onClick={isSubscribed ? unsubscribeUser : subscribeUser}
+>
+  {isSubscribed ? 'Unsubscribe' : 'Subscribe'}
+</button>
+
                   </>
                 )}
               </div>
