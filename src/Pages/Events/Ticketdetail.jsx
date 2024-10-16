@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FaAngleLeft } from "react-icons/fa";
 import { useLocation, useNavigate } from "react-router-dom";
-import img2 from './Img1.png';
+import Barcode from 'react-barcode'; 
 
 function Ticketdetail() {
     const [tickets, setTickets] = useState([]);
@@ -43,7 +43,7 @@ function Ticketdetail() {
     }, [loc.search]);
 
     const selectedTickets = loc.state?.selectedTickets || {};
-
+    const paymentId = tickets._id;
     if (loading) {
         return <div>Loading...</div>; // Optional loading state
     }
@@ -95,11 +95,12 @@ function Ticketdetail() {
                                     </div>
                                 </div>
                                 <div className="h-[1px] w-[100%] border-[1px] border-black opacity-45 border-dashed mt-1"></div>
-                                <img
-                                    src={img2}
-                                    alt=""
-                                    className="h-[11vh] w-[50%] m-auto mt-3"
-                                />
+                                {paymentId && (
+    <div className="m-auto mt-3">
+        <Barcode value={paymentId} className="w-[100%] bg-transparent" />
+    </div>
+)}
+                              
                             </div>
                         </div>
                     </div>

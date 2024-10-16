@@ -124,7 +124,7 @@ function Payment() {
             <h4 className="text-md font-semibold mb-4">Pay With</h4>
             {/* Apple Pay */}
             <div
-            onClick={()=>stripePaymentCheckout(555)}
+            
             className="debit h-[7vh] w-[100%] border rounded p-2 cursor-pointer mt-2 mb-4">
               <label className="flex justify-between cursor-pointer" htmlFor="AP">
                 <div className="flex gap-5 items-center">
@@ -209,7 +209,7 @@ function Payment() {
                 <h6 className="font-semibold text-sm opacity-65">$ {totalPrice.toLocaleString()}</h6>
               </div>
             </div>
-            <Link to="/ticketdetails"
+            <Link onClick={()=>stripePaymentCheckout(555)}
               state={{ id: tickets._id ,selectedTickets}}
               className="buyticket text-center px-4 py-2 block rounded-xl mx-auto mt-2 w-[53%]">Continue</Link>
           </div>
