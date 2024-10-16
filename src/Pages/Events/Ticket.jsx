@@ -72,8 +72,8 @@ function Ticket() {
 
   const selectedTickets = {
     basicTicket: add,
-    premiumTicket: more,
-    standardTicket: able,
+    premiumTicket:able ,
+    standardTicket: more,
   };
 
   const remainingBasic = tickets.eventTicketArray

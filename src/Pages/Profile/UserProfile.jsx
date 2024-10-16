@@ -19,7 +19,7 @@ const UserProfile = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const userId = location.state?.id; 
-  console.log('User ID from state:', userId);
+  console.log('subscriber  ID from state:', userId);
   // Get userId from location state
 
   const [data_, setDATA] = useState({});
@@ -39,7 +39,7 @@ const UserProfile = () => {
 
   const subscribeUser = async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/subscriptions`, {
+      const response = await fetch(`${API_BASE_URL}/subscribe`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ subscriberId: getUserId(), subscribedToId: userId }),
@@ -59,7 +59,7 @@ const UserProfile = () => {
   
   const unsubscribeUser = async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/subscriptions/${userId}`, {
+      const response = await fetch(`${API_BASE_URL}/subscribe/${userId}`, {
         method: 'DELETE',
       });
       if (response.ok) {
@@ -77,7 +77,7 @@ const UserProfile = () => {
   useEffect(() => {
     const checkSubscriptionStatus = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/subscriptions/my/${userId}`);
+        const response = await fetch(`${API_BASE_URL}/subscribe/my/${userId}`);
         if (response.ok) {
           const subscriptions = await response.json();
           // Check if current user is in the subscription list

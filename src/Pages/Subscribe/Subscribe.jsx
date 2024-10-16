@@ -34,7 +34,7 @@ useEffect(() => {
   getMySubscriber()
   getPeopleISubscibedTo()
 }, [])
-
+console.log("my subscribers are ",subscribedTo)
 
   return (
     <Fragment>

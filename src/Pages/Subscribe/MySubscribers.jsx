@@ -19,7 +19,7 @@ function MySubscribers(props) {
         const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/subscribe/my/${getUserId()}`);
         const data = await response.json();
         console.log("subscriber data")
-        console.log(data)
+        console.log("is this ok",data)
 
         setSubscribers(data);
       } catch (error) {
