@@ -3,8 +3,8 @@ import MySubscribers from "./MySubscribers";
 import { useEffect } from "react";
 
 const Subscribe = () => {
-  const [subscribers, setsubscribers] = useState({})
-  const [subscribedTo, setSubscribedTo] = useState({})
+  const [subscribers, setsubscribers] = useState([])
+  const [subscribedTo, setSubscribedTo] = useState([])
 
   const getUserId = () => {
     const str = document.cookie
@@ -34,7 +34,6 @@ useEffect(() => {
   getMySubscriber()
   getPeopleISubscibedTo()
 }, [])
-console.log("my subscribers are ",subscribedTo)
 
   return (
     <Fragment>

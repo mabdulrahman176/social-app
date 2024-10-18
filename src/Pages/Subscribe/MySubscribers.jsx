@@ -12,21 +12,23 @@ function MySubscribers(props) {
     return userKey
   }
 
+  const fetchSubscribers = async () => {
+      
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/subscribe/my/${getUserId()}`);
+      const data = await response.json();
+      // setSubscribers(data);
+      setSubscribers(props.userId);
+     
+    } catch (error) {
+      console.error("Error fetching subscribers:", error);
+    }
+  };
+
+
   useEffect(() => {
    
-    const fetchSubscribers = async () => {
-      try {
-        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/subscribe/my/${getUserId()}`);
-        const data = await response.json();
-        console.log("subscriber data")
-        console.log("is this ok",data)
-
-        setSubscribers(data);
-      } catch (error) {
-        console.error("Error fetching subscribers:", error);
-      }
-    };
-
+    console.log({subscribers:props})
     fetchSubscribers();
   }, [props.userId]);
 
@@ -52,7 +54,7 @@ function MySubscribers(props) {
               scrollbarWidth: "none",
             }}
           >
-            {subscribers.map((subscriber) => (
+            {subscribers && subscribers.map((subscriber) => (
               <div
                 key={subscriber._id}
                 className="flex items-center justify-between py-3 mt-2 border-b"
