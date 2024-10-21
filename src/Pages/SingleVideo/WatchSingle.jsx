@@ -8,11 +8,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import Model from "../ModalReport/Model";
 import Review from "../Podcast/Review";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify'; // Importing Toastify
+import 'react-toastify/dist/ReactToastify.css'; // Import CSS for Toastify
 
-const Video = () => {
+const WatchSingle = () => {
   let navigate = useNavigate();
   const { src } = useParams();
   const location = useLocation();
@@ -21,60 +20,40 @@ const Video = () => {
   const [video, setVideo] = useState();
   const [videos, setVideos] = useState([]);
   const [videoIndex, setVideoIndex] = useState(0);
-  
-  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-
-  const handleProfile = (userId) => {
-    navigate(`/profile/${userId}`);
-  };
+ const [watch ,setWatch] = useState(null)
+//   const handleProfile = (userId) => {
+//     navigate(`/profile/${userId}`); 
+//   };
 
   const videoId = decodeURIComponent(src);
 
   const getVideo = async () => {
-    const req = await fetch(`${API_BASE_URL}/upload/${videoId}`, {
+    const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/upload/${videoId}`, {
       credentials: 'include'
     });
     const data = await req.json();
     setVideo(data);
   };
 
-  const getUserId = () => {
-    const str = document.cookie;
-    return str.split("=")[1]; // Adjust this based on how your user ID is stored
-  };
+  console.log(" watch video array:",location.state.id);
 
-  const recordView = async () => {
-    try {
-      const userId = getUserId();
-      const viewData = {
-        viewItemType: 'video',
-        viewItemId: videoId,
-        viewerId: userId,
-      };
-  
-      // Log the data being sent
-      console.log('Posting view data:', viewData);
-  
-      await axios.post(`${API_BASE_URL}/views`, viewData);
-      console.log('View recorded successfully');
-    } catch (error) {
-      console.error('Error recording view:', error);
-    }
-  };
-  console.log("location state",location.state)
   useEffect(() => {
-    if (location.state && location.state.videos) {
-      setVideos(location.state.videos);
-      const currentVideo = location.state.videos.find(v => v._id === videoId);
+    console.log("Current location state:", location.state); // Log the state
+    if (location.state && location.state.id) {
+      setVideos(location.state.id); // Set the videos array from state
+      const info = location.state.id.map((elm)=> elm.video )
+     
+      setWatch(info)
+      console.log("info from watch history",watch)
+      const currentVideo = info.find(v => v._id === videoId);
       if (currentVideo) {
         setVideo(currentVideo);
-        setVideoIndex(location.state.videos.findIndex(v => v._id === videoId));
-        recordView(); // Record the view when the video is loaded
+        setVideoIndex(info.findIndex(v => v._id === videoId));
       }
     }
     getVideo();
   }, [videoId, location.state]);
-
+console.log("single video id array",)
   const useDebounce = (callback, delay) => {
     const timerRef = useRef(null);
   
@@ -89,7 +68,7 @@ const Video = () => {
   
     useEffect(() => {
       return () => {
-        clearTimeout(timerRef.current);
+        clearTimeout(timerRef.current); // Clean up on unmount
       };
     }, []);
   
@@ -97,20 +76,25 @@ const Video = () => {
   };
 
   const handleScroll = (e) => {
+    // console.log("next video id",nextVideoId)
+    console.log("index number",videos)
     if (e.deltaY > 0) {
-      if (videoIndex < videos.length - 1) {
-        const nextVideoId = videos[videoIndex + 1]._id;
-        navigate(`/video/${encodeURIComponent(nextVideoId)}`, { state: { videos } });
+      // Scroll down
+      if (videoIndex < watch.length - 1) {
+        const nextVideoId = watch[videoIndex + 1]._id;
+       
+        navigate(`/watchhistory/${encodeURIComponent(nextVideoId)}`, { state: { id :location.state.id } }, { replace: true });
       }
     } else {
+      // Scroll up
       if (videoIndex > 0) {
-        const prevVideoId = videos[videoIndex - 1]._id;
-        navigate(`/video/${encodeURIComponent(prevVideoId)}`, { state: { videos } });
+        const prevVideoId = watch[videoIndex - 1]._id;
+        navigate(`/watchhistory/${encodeURIComponent(prevVideoId)}`, { state: { id:location.state.id } }, { replace: true });
       }
     }
   };
 
-  const debouncedHandleScroll = useDebounce(handleScroll, 200);
+  const debouncedHandleScroll = useDebounce(handleScroll, 200); // Adjust the delay as needed
 
   useEffect(() => {
     window.addEventListener('wheel', debouncedHandleScroll, { passive: false });
@@ -123,17 +107,17 @@ const Video = () => {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: video?.data?.videoDesc || 'Check this video!',
+          title: video && video.data ? video.data.videoDesc : 'Check this video!',
           text: 'Watch this video!',
           url: window.location.href,
         });
-        toast.success('Share successful!');
+        toast.success('Share successful!'); // Using toast for success
       } catch (error) {
         console.error('Error sharing:', error);
-        toast.error('Error sharing the video.');
+        toast.error('Error sharing the video.'); // Using toast for error
       }
     } else {
-      toast.warn('Web Share API is not supported in your browser.');
+      toast.warn('Web Share API is not supported in your browser.'); // Using toast for warning
     }
   };
 
@@ -154,40 +138,40 @@ const Video = () => {
           <div className="absolute z-10 rounded-lg left-0 top-0 h-full w-full ShadedBG">
             <div
               className="absolute cursor-pointer flex gap-2 items-center ps-4 py-2 text-lg text-white left-0 z-10"
-              onClick={() => navigate("/videos")}
+              onClick={() => navigate("/watchhistory")}
             >
               <FaChevronLeft className="text-xs" />
               Videos
             </div>
             <div className="absolute z-10 bottom-3 w-[60%] sm:w-[43%] p-3 text-white">
-              <Link to="/userprofile"
-                state={{ id: video?.user?.Users_PK || " " }}
-              >
-                <p className="text-xl font-semibold">
-                  {video?.user?.name || 'NO_NAME'}
-                </p>
-              </Link>
+             <Link to="/userprofile"
+              state={{id :video && video.user ? video.user.Users_PK :" "}}
+             >
+             <p className="text-xl font-semibold">
+                {video && video.user ? video.user.name : 'NO_NAME'}
+              </p>
+             </Link>
               <p className="py-1 w-[80%] text-sm">
-                {video?.data?.videoDesc || 'Loading...'}
+                {video && video.data ? video.data.videoDesc : 'Loading...'}
               </p>
               <p className="py-1 w-[80%] text-sm">
-                {video?.data?.videoTags
+                {video && video.data && video.data.videoTags
                   ? video.data.videoTags.map(tag => `#${tag}`).join(' ')
                   : 'Loading...'}
               </p>
             </div>
             <div className="absolute bottom-3 z-10 right-2 text-white">
-              <div className="relative cursor-pointer rounded-full flex justify-center">
-                <Link to="/userprofile"
-                  state={{ id: video?.user?.Users_PK || " " }}
-                >
-                  <img
-                    src={video?.user?.picUrl || "/placeholder.jpg"}
-                    style={{ height: "40px", width: "40px" }}
-                    className="rounded-full"
-                    alt="User Profile"
-                  />
-                </Link>
+              <div className="relative cursor-pointer rounded-full flex justify-center" >
+               <Link to="/userprofile"
+               state={{id :video && video.user ? video.user.Users_PK :" "}}
+               >
+               <img
+                  src={video && video.user ? video.user.picUrl : "/placeholder.jpg"}
+                  style={{ height: "40px", width: "40px" }}
+                  className="rounded-full"
+                  alt="User Profile "
+                />
+               </Link>
                 <FontAwesomeIcon
                   icon={faPlus}
                   className="absolute -bottom-2 p-1 text-xs bg-blue-700 rounded-full"
@@ -214,7 +198,7 @@ const Video = () => {
             </div>
           </div>
           <video
-            src={video?.data?.videoUrl || ''}
+            src={video && video.data ? video.data.videoUrl : ''}
             autoPlay
             className="h-full relative z-0 rounded-xl w-full bg-slate-300 object-fill"
             controls
@@ -222,9 +206,10 @@ const Video = () => {
         </div>
       </section>
 
-      <ToastContainer />
+      <ToastContainer /> {/* Include ToastContainer for rendering notifications */}
     </Fragment>
   );
 };
 
-export default Video;
+export default WatchSingle;
+

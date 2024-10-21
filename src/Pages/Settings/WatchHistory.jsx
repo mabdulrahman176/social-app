@@ -117,16 +117,16 @@ const newCardData = [
   // Add more card objects here
 ];
 
-const CardComponent = ({ title, videoUrl,videoId, navigate }) => (
+const CardComponent = ({ title, videoUrl, videoId, navigate ,videos}) => (
   <div
     className="lg:h-[30vh] h-[25vh] lg:w-[12vw] md:w-[15vw] sm:w-[20vw] w-[25vw] relative m-0 text-white cursor-pointer"
-    onClick={() => navigate(`/video/${encodeURIComponent(videoId)}`)}
+    onClick={() => navigate(`/watchhistory/${encodeURIComponent(videoId)}`,{state:{id:videos}})}
   >
     <video
       className="h-full w-full rounded-lg object-cover"
       src={videoUrl}
       muted
-      controls 
+      controls
     />
     <div className="absolute inset-0 flex justify-between ShadedBG rounded-lg">
       <h5 className="text-sm ps-3 absolute bottom-2">{title} </h5>
@@ -139,21 +139,24 @@ function WatchHistory() {
   const navigate = useNavigate();
 
   const [videos, setVideos] = useState([]);
-  
+
   const getUserId = () => {
     const str = document.cookie;
-    const userKey = str.split('=')[1];
+    const userKey = str.split("=")[1];
     return userKey;
   };
-console.log("user id in watch",getUserId())
+  console.log("user id in watch", getUserId());
   useEffect(() => {
     const fetchViews = async () => {
       try {
         const response = await fetch(`${API_BASE_URL}/views/${getUserId()}`);
         const data = await response.json();
-        console.log("resonse data is",data)
-        setVideos(data.video); 
-        console.log("watch data is",data.video)
+        console.log("resonse data is", data);
+        const info = data.video;
+       
+        console.log("map info is",videos)
+        setVideos(data.video);
+        console.log("watch data info", info);
       } catch (error) {
         console.error("Error fetching views:", error);
       }
@@ -180,23 +183,27 @@ console.log("user id in watch",getUserId())
             </Link>
           </div>
           <div className="mt-3 flex w-full overflow-x-scroll gap-1 Podcast_Top_Videos">
-            {videos.map((video) => (
+            {videos.map((elm) => (
               <div
-                key={video._id}
+                key={elm._id}
                 // className=""
               >
                 <CardComponent
-                  title={video.viewItemType}
-                  videoUrl={video.videoUrl}
-                  videoId={video._id}
+                  title={elm.video.videoDesc}
+                  videoUrl={elm.video.videoUrl}
+                  videoId={elm.video._id}
                   navigate={navigate}
+                  videos={videos}
                 />
               </div>
             ))}
           </div>
           <div className="mt-3 flex flex-wrap sm:justify-center justify-between sm:gap-1 gap-y-1 w-[93%] mx-auto">
             {newCardData.map((data, i) => (
-              <div key={i} className="m-0 text-white sm:w-[32.4%] w-[49.4%]  h-[45vh] relative">
+              <div
+                key={i}
+                className="m-0 text-white sm:w-[32.4%] w-[49.4%]  h-[45vh] relative"
+              >
                 <img
                   src={data.imgSrc || "/placeholder.jpg"}
                   alt="Card Img2y"

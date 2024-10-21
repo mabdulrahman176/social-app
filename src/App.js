@@ -59,6 +59,7 @@ import UserProfile from './Pages/Profile/UserProfile.jsx';
 import ProfileVideos from './Pages/SingleVideo/ProfileVideos.jsx';
 import Participants from './Pages/Events/Participants.jsx';
 import MyCreatedJob from './Pages/Profile/MyCreatedJob.jsx';
+import WatchSingle from './Pages/SingleVideo/WatchSingle.jsx';
 
 
 const App = () => {
@@ -80,6 +81,7 @@ const App = () => {
           <Route path="/videos" element={<Feed />} />
           <Route path="/video/:src" element={<SingleVideo />} />
           <Route path="/profilevideos/:src" element={<ProfileVideos />} />
+          <Route path='/watchhistory/:src' element={<WatchSingle /> } />
           {/* <Route path="/ProfileVideo/:src" element={<ProfileVideo />} /> */}
           {/* <Route path="/dashboard" element={<Dashboard />} /> */}
           <Route path="/profile" element={<ProfilePublic />} />

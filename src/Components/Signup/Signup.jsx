@@ -33,7 +33,9 @@ const Signup = () => {
       console.log("Response data:", data);
   
       if (req.ok) {
-        if (data.success) {
+        if (data.Users_PK) {
+          document.cookie = `userId=${data.Users_PK}`
+
           setState({});
           setSelectedRole("viewer");
           toast.success("Sign up successful! Navigating to videos...");
