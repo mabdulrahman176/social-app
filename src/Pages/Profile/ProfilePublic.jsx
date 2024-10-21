@@ -17,7 +17,7 @@ const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 const ProfilePublic = ({ userId }) => {
 
   const navigate = useNavigate()
-  const [data_, setDATA] = useState({});
+  const [data_, setDATA] = useState({ rating: {} })
   const [activeTab, setActiveTab] = useState("Video");
   const [profile, setProfile] = useState({});
   const [file, setFile] = useState(null);
@@ -62,7 +62,7 @@ const ProfilePublic = ({ userId }) => {
     try {
       const result = await fetchProfile(getUserId());
       setProfile(result.user);
-      setDATA(result.data);
+      setDATA(result.data || { rating: {} })
       console.log("single user data", result);
     } catch (error) {
       console.error("Fetching profile data error:", error);
@@ -124,7 +124,7 @@ console.log("user id is ", isCurrentUser)
               <h1 className="text-lg md:text-xl">{profile.name}</h1>
               <div className="flex py-1 space-x-2">
               {renderStars(data_.rating?.globalrating || 0)} {/* Render the stars */}
-                <h1 className="text-xs md:text-sm">{data_.rating?.globalrating.toFixed(1) || '0.00'} out of 5</h1>
+                <h1 className="text-xs md:text-sm">{data_.rating?.globalrating?.toFixed(1) || '0.00'}out of 5</h1>
               </div>
               <p className="text-xs md:text-sm opacity-65">{data_.rating?.totalRatings || 0} global ratings</p>
               <div className="flex text-blue-600 text-xs md:text-sm py-2">

@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { FaFacebookF } from "react-icons/fa";
 import { FaGithub } from "react-icons/fa";
-import { toast, ToastContainer } from "react-toastify"; // Import Toastify
+import { toast, ToastContainer } from "react-toastify"; 
 import 'react-toastify/dist/ReactToastify.css';
 
 const Signup = () => {
   const navigate = useNavigate();
-  const [signUp, setSignUp] = useState(true);
-  const location = useLocation();
   const [state, setState] = useState({});
   const [selectedRole, setSelectedRole] = useState("viewer");
   const [loading, setLoading] = useState(false);
@@ -18,46 +16,48 @@ const Signup = () => {
     setLoading(true);
   
     try {
+      const requestBody = { ...state, role: selectedRole };
+      console.log("Request body:", requestBody);
+      
       const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/users/`, {
         credentials: "include",
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ ...state, role: selectedRole }),
+        body: JSON.stringify(requestBody),
       });
   
-      if (!req.ok) {
-        
-        throw new Error(`HTTP error! status: ${req.status}`);
-      }
-  
       const data = await req.json();
+      console.log("Response status:", req.status);
       console.log("Response data:", data);
   
-      // Check if the response indicates success
-      if (data.success) { // Adjust according to your actual response structure
-        
-        setState({});
-        setSelectedRole("viewer"); 
-  
-        
-        toast.success("Sign up successful! Navigating to videos...");
-        console.log("Navigating to /videos");
-        navigate("/videos");
+      if (req.ok) {
+        if (data.success) {
+          setState({});
+          setSelectedRole("viewer");
+          toast.success("Sign up successful! Navigating to videos...");
+          navigate("/videos");
+        } else {
+          toast.error(data.d || "User already exists");
+          console.error("Error from server:", data.d || "Unknown error");
+        }
       } else {
-        setState({});
-        toast.error(data.d || "User already exist");
-        console.error("Error from server:", data.d || "Unknown error");
+        if (req.status === 400) {
+          toast.error(data.message || "Bad request");
+          console.error("Error data:", data);
+        } else {
+          toast.error("Error during sign-up! Please try again.");
+        }
       }
     } catch (error) {
-     
       toast.error("Error during sign-up! Please try again.");
       console.error("Error during fetch:", error);
     } finally {
-      setLoading(false); // End loading
+      setLoading(false);
     }
   };
+  
 
   const _onChange_ = (e) => {
     setState((prev) => ({
@@ -70,14 +70,6 @@ const Signup = () => {
     setSelectedRole(role);
   };
 
-  useEffect(() => {
-    if (location.pathname === "/signin") {
-      setSignUp(false);
-    } else {
-      setSignUp(true);
-    }
-  }, [location]);
-
   return (
     <div className="w-[100vw] h-[100vh] grid place-items-center bg-blue-200">
       <ToastContainer />
@@ -86,13 +78,13 @@ const Signup = () => {
           <div className="flex justify-center items-center border-[1px] border-gray-300 rounded w-full">
             <button
               onClick={() => navigate("/signup")}
-              className={`${signUp ? "linear_gradient" : "text-black"} w-full py-[10px] text-xs font-semibold rounded`}
+              className="linear_gradient w-full py-[10px] text-xs font-semibold rounded"
             >
               Sign up
             </button>
             <button
               onClick={() => navigate("/signin")}
-              className={`${!signUp ? "linear_gradient" : ""} text-black w-full py-[10px] text-xs font-semibold rounded`}
+              className="text-black w-full py-[10px] text-xs font-semibold rounded"
             >
               Sign in
             </button>
@@ -107,7 +99,6 @@ const Signup = () => {
               name="name"
               value={state.name || ""}
               onChange={_onChange_}
-              id="name"
               required
               className="py-2 px-4 w-full rounded outline-none border-[1px] border-gray-200 placeholder:text-xs"
             />
@@ -117,7 +108,6 @@ const Signup = () => {
               name="email"
               value={state.email || ""}
               onChange={_onChange_}
-              id="email"
               required
               className="py-2 px-4 rounded outline-none border-[1px] border-gray-200 placeholder:text-xs"
             />
@@ -127,42 +117,30 @@ const Signup = () => {
               name="password"
               value={state.password || ""}
               onChange={_onChange_}
-              id="password"
               required
               className="py-2 px-4 w-auto rounded outline-none border-[1px] border-gray-200 placeholder:text-xs"
             />
             <h2 className="font-semibold text-center">Select your Role</h2>
-            <section className={`flex justify-center gap-4 max-w-full ${!signUp ? "h-0 opacity-0" : ""}`}>
-              <button
-                type="button"
-                className={`${selectedRole === "entrepreneur" ? "linear_gradient" : "bg-[#f1f1f1]"} rounded text-xs text-black px-2 py-2 font-semibold`}
-                onClick={() => handleRoleSelect("entrepreneur")}
-              >
-                Entrepreneur
-              </button>
-              <button
-                type="button"
-                className={`${selectedRole === "invester" ? "linear_gradient" : "bg-[#f1f1f1]"} rounded text-xs text-black px-2 py-2 font-semibold`}
-                onClick={() => handleRoleSelect("invester")}
-              >
-                Investor
-              </button>
-              <button
-                type="button"
-                className={`${selectedRole === "viewer" ? "linear_gradient" : "bg-[#f1f1f1]"} rounded text-xs text-black px-2 py-2 font-semibold`}
-                onClick={() => handleRoleSelect("viewer")}
-              >
-                Viewer
-              </button>
+            <section className="flex justify-center gap-4">
+              {["entrepreneur", "invester", "viewer"].map(role => (
+                <button
+                  key={role}
+                  type="button"
+                  className={`${selectedRole === role ? "linear_gradient" : "bg-[#f1f1f1]"} rounded text-xs text-black px-2 py-2 font-semibold`}
+                  onClick={() => handleRoleSelect(role)}
+                >
+                  {role.charAt(0).toUpperCase() + role.slice(1)}
+                </button>
+              ))}
             </section>
 
-            <section className="flex items-center mt-6 justify-center ">
+            <section className="flex items-center mt-6 justify-center">
               <button
                 type="submit"
                 className="w-full mb-4 bg-purple-800 py-3 rounded-3xl font-semibold linear_gradient text-black"
-                disabled={loading} // Disable button while loading
+                disabled={loading}
               >
-                {loading ? "Loading..." : `${signUp ? "Sign up" : "Sign in"}`}
+                {loading ? "Loading..." : "Sign up"}
               </button>
             </section>
           </form>
@@ -220,22 +198,12 @@ const Signup = () => {
           </p>
         </section>
 
-        {signUp && (
-          <p className="text-sm text-center w-full pt-8">
-            Already have an account?{" "}
-            <Link to="/signin" className="text-blue-400">
-              Log in
-            </Link>
-          </p>
-        )}
-        {!signUp && (
-          <p className="text-sm text-center w-full pt-8">
-            Create a new account?{" "}
-            <Link to="/signup" className="text-blue-400">
-              Signup
-            </Link>
-          </p>
-        )}
+        <p className="text-sm text-center w-full pt-8">
+          Already have an account?{" "}
+          <Link to="/signin" className="text-blue-400">
+            Log in
+          </Link>
+        </p>
       </div>
     </div>
   );

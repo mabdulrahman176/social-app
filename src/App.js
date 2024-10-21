@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Signup from './Components/Signup/Signup';
+import Signin from './Components/Signin/Signin';
 import Layout from './Pages/Layout/Layout';
 import ProfilePublic from './Pages/Profile/ProfilePublic';
 // import Dashboard from './Pages/Dashboard/Dashboard';
@@ -69,7 +70,7 @@ const App = () => {
         {/* Login and Signup Routes */}
         <Route path="/" element={<Header/>} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/signin" element={<Signup />} />
+        <Route path="/signin" element={<Signin />} />
 <Route path='/notfound' element={<NotFound />} />
 
         {/* Routes with Layout */}

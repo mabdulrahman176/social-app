@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { FaFacebookF, FaGithub } from "react-icons/fa";
 
 const Signin = () => {
   const navigate = useNavigate();
@@ -8,7 +9,6 @@ const Signin = () => {
     password: "",
   });
 
-  // Handle form input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setState((prev) => ({
@@ -17,30 +17,30 @@ const Signin = () => {
     }));
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent default form submission behavior
-
+    e.preventDefault();
     console.log("Submitting data:", state);
 
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/users/login`, { // Update the endpoint if needed
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/users/login`, {
         method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(state)
+        body: JSON.stringify(state),
       });
-      console.log({response})
-
-      // if (response.ok) {
-      //   const data = await response.json();
-      //   console.log("Login successful:", data);
-      //   navigate('/videos');
-      // } else {
-      //   const errorData = await response.json();
-      //   console.error("Login failed:", errorData);
-      // }
+      
+      console.log({response});
+      
+      // Uncomment and handle the response accordingly
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Login successful:", data);
+        navigate('/videos');
+      } else {
+        const errorData = await response.json();
+        console.error("Login failed:", errorData);
+      }
     } catch (error) {
       console.error("Login error:", error);
     }
@@ -48,30 +48,26 @@ const Signin = () => {
 
   return (
     <div className="w-[100vw] h-[100vh] grid place-items-center bg-blue-200">
-      <div className="w-full h-full md:h-[95vh] md:w-[27vw] bg-white flex flex-col justify-between items-center md:items-start px-10 py-4">
-        <section className="flex flex-col gap-2 items-start py-[1px]">
+      <div className="w-full h-full md:h-[95vh] md:w-[27rem] bg-white flex flex-col justify-between items-center md:items-center px-10 py-4">
+        <section className="flex flex-col gap-2 items-center py-[1px] w-[19rem]">
           <div className="flex justify-center items-center border-[1px] border-gray-300 rounded w-full">
             <button
               onClick={() => navigate("/signup")}
-              className={`${
-                false ? "linear_gradient" : "text-black"
-              } w-[15rem] py-[10px] text-xs font-semibold rounded`}
+              className="text-black w-full py-[10px] text-xs font-semibold rounded"
             >
               Sign up
             </button>
             <button
               onClick={() => navigate("/signin")}
-              className={`${
-                true ? "linear_gradient" : ""
-              } text-black w-full py-[10px] text-xs font-semibold rounded`}
+              className="linear_gradient w-full py-[10px] text-xs font-semibold rounded"
             >
               Sign in
             </button>
           </div>
 
-          <h1 className="text font-bold text-start my-4">Welcome Back!</h1>
+          <h1 className="font-bold text-start my-4">Welcome Back!</h1>
 
-          <form className="flex flex-col gap-2" onSubmit={handleSubmit}>
+          <form className="flex flex-col w-[22rem] gap-2" onSubmit={handleSubmit}>
             <input
               type="text"
               placeholder="Email"
@@ -79,7 +75,7 @@ const Signin = () => {
               id="email"
               value={state.email}
               onChange={handleChange}
-              className="py-1 px-2 rounded outline-none w-[280px] border-[1px] border-gray-200 placeholder:text-xs"
+              className="py-2 px-4 rounded outline-none border-[1px] border-gray-200 placeholder:text-xs"
               required
             />
             <input
@@ -89,49 +85,47 @@ const Signin = () => {
               id="password"
               value={state.password}
               onChange={handleChange}
-              className="py-1 px-2 rounded outline-none border-[1px] border-gray-200 placeholder:text-xs"
+              className="py-2 px-4 rounded outline-none border-[1px] border-gray-200 placeholder:text-xs"
               required
             />
             <section className="flex items-center mt-6 justify-center">
               <button
                 type="submit"
-                className="w-full mb-4 bg-purple-800 py-2 rounded-3xl text-xs linear_gradient text-white"
+                 className="w-full mb-4  py-3 rounded-3xl font-semibold linear_gradient text-black"
               >
                 Sign In
               </button>
             </section>
           </form>
         </section>
-
-        <div className="h-[1px] md:my-2 relative bg-black w-full">
-          <p className="absolute -top-[12px] md:left-[77px] left-[99px] px-1 text-black text-sm bg-white">
-            or continue with
-          </p>
+        <div className="flex flex-row w-full items-center">
+          <div className="w-full h-[1px] bg-black"></div>
+          <div className="px-2 text-black text-sm whitespace-nowrap bg-white">or continue with</div>
+          <div className="w-full h-[1px] bg-black"></div>
         </div>
 
         <section className="flex items-center justify-between w-full md:my-2">
           <div
-            className="flex justify-center items-center bg-[#f1f1f1] px-2 py-2 rounded-full"
+            className="flex justify-center items-center bg-[#f1f1f1] w-[4rem] h-[4rem] px-2 py-2 rounded-full cursor-pointer"
             onClick={() => window.open(`${process.env.REACT_APP_API_BASE_URL}/auth/google`)}
           >
-            <img className="w-5 h-5" src="/google.png" alt="Google" />
+            <img className="w-10 h-10" src="/google.png" alt="Google" />
           </div>
-          <div className="flex justify-center items-center bg-[#f1f1f1] px-2 py-2 rounded-full">
-            <img className="w-5 h-5" src="/insta.png" alt="Instagram" />
+          <div
+            className="flex justify-center items-center bg-[#f1f1f1] p-[.3rem] w-[4rem] h-[4rem] rounded-full cursor-pointer"
+            onClick={() => window.open(`${process.env.REACT_APP_API_BASE_URL}/auth/github`)}
+          >
+            <FaGithub className="text- w-8 h-8"/>
           </div>
-          <div className="flex justify-center items-center bg-[#f1f1f1] px-2 py-2 rounded-full">
-            <img className="w-5 h-5" src="insta.png" alt="YouTube" />
+          <div className="flex justify-center items-center bg-[#f1f1f1] w-[4rem] h-[4rem] px-2 py-2 rounded-full cursor-pointer"
+              onClick={() => window.open(`${process.env.REACT_APP_API_BASE_URL}/auth/facebook`)}
+          >
+            <FaFacebookF className="text-blue-800 w-8 h-8"/>
           </div>
-          <div className="flex justify-center items-center bg-[#f1f1f1] px-2 py-2 rounded-full">
-            <img className="w-5 h-5" src="/facebook.png" alt="Facebook" />
-          </div>
-          <div className="flex justify-center items-center bg-[#f1f1f1] px-2 py-2 rounded-full">
-            <img className="w-5 h-5" src="/linkedin.png" alt="LinkedIn" />
-          </div>
-          <div className="flex justify-center items-center bg-[#f1f1f1] px-2 py-2 rounded-full">
+          <div className="flex justify-center items-center bg-[#f1f1f1] w-[4rem] h-[4rem] px-2 py-2 rounded-full cursor-pointer">
             <svg
-              width="24"
-              height="24"
+              width="28"
+              height="28"
               viewBox="0 0 24 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"

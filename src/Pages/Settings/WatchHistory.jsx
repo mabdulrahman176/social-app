@@ -57,6 +57,8 @@ const cardData = [
   // Add more card objects here
 ];
 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 const newCardData = [
   {
     id: 1,
@@ -138,13 +140,20 @@ function WatchHistory() {
 
   const [videos, setVideos] = useState([]);
   
+  const getUserId = () => {
+    const str = document.cookie;
+    const userKey = str.split('=')[1];
+    return userKey;
+  };
+console.log("user id in watch",getUserId())
   useEffect(() => {
     const fetchViews = async () => {
       try {
-        const response = await fetch('http://localhost:5000/views/');
+        const response = await fetch(`${API_BASE_URL}/views/${getUserId()}`);
         const data = await response.json();
-        setVideos(data.data); 
-        console.log("watch data is",data.data)
+        console.log("resonse data is",data)
+        setVideos(data.video); 
+        console.log("watch data is",data.video)
       } catch (error) {
         console.error("Error fetching views:", error);
       }
