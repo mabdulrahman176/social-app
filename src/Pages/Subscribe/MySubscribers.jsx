@@ -95,14 +95,14 @@ function MySubscribers(props) {
                         setAble(able === subscriber._id ? null : subscriber._id)
                       }
                     >
-                      <p className="text-sm md:text-base lg:text-lg xl:text-xl opacity-75 mb-5">
+                      {/* <p className="text-sm md:text-base lg:text-lg xl:text-xl opacity-75 mb-5">
                         Details
+                      </p> */}
+                      <p className="text-sm md:text-base lg:text-lg xl:text-xl opacity-75 mb-5">
+                        Report
                       </p>
                       <p className="text-sm md:text-base lg:text-lg xl:text-xl opacity-75 mb-5">
-                        Hide
-                      </p>
-                      <p className="text-sm md:text-base lg:text-lg xl:text-xl opacity-75 mb-5">
-                        Block and report
+                        Block
                       </p>
                       <p className="text-sm md:text-base lg:text-lg xl:text-xl text-red-500">
                         Delete

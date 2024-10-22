@@ -15,7 +15,7 @@ const Calendar = (props) => {
     const userKey = str.split('=')[1];
     return userKey;
   };
-
+const user_Id = getUserId()
   const [events, setEvents] = useState([]);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteItemId, setDeleteItemId] = useState(null);
@@ -106,7 +106,7 @@ const Calendar = (props) => {
                 className="absolute right-2 top-4 text-2xl cursor-pointer"
                 onClick={() => handleSaveToWishlist(elm._id)} // Save to wishlist on icon click
               />
-              {visibleId === elm._id && (
+              {visibleId === elm._id && elm.userId === user_Id && (
                 <button
                   className="absolute top-14 right-2 text-red-600 text-3xl cursor-pointer"
                   onClick={() => handleDeleteClick(elm._id)}

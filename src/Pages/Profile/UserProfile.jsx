@@ -96,7 +96,7 @@ const UserProfile = () => {
   }, [userId]);
   
   
-  const createChatRoom = () => { console.log("creating chatroom"); };
+  const createChatRoom = () => { navigate('/messages') };
 
   const fetchProfileData = async (id) => {
     try {

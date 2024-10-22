@@ -71,7 +71,9 @@ function Notification() {
                   </div>
                 </div>
                 <div className="relative">
-                  <p className="text-[gray] text-[13px] opacity-75">{notification.createdAt}</p>
+                <p className="text-[gray] text-[13px] opacity-75">
+  {new Date(notification.createdAt).toLocaleString()}
+</p>
                   <CiMenuKebab
                     className="mt-2 ms-2 text-lg cursor-pointer"
                     onClick={() => handleToggleMenu(notification._id)}
