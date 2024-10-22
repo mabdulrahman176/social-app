@@ -85,7 +85,7 @@ return timeString
                       <img
                         // src={''}
                         src={message.sender?.picUrl?message.sender.picUrl:"/placeholder.jpg"}
-                        alt="sender picture"
+                        alt="sender"
                         className="h-[50px] w-[50px] rounded-full"
                       />
                       <div>

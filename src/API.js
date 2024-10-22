@@ -1,16 +1,12 @@
 // src/api.js
 import axios from 'axios';
-export const getUserId = () => {
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${"user"}=`);
-
-  if (parts.length === 2) {
-    return parts.pop().split(';').shift(); // Return the cookie value
-  }
-  return null; // Return null if the cookie is not found
-};
-
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
+export const getUserId = () => {
+  const str = document.cookie
+  const userKey = str.split('=')[1];
+  return userKey
+}
 
 // Function to fetch data (if needed)
 export const fetchData = async () => {
@@ -23,7 +19,6 @@ export const fetchData = async () => {
   }
 };
 
-
 export const fetchProfile = async (id) => {
   try {
     const response = await axios.get(`${API_BASE_URL}/users/${id}`);
@@ -33,6 +28,7 @@ export const fetchProfile = async (id) => {
     throw error;
   }
 };
+
 export const fetchEvent = async () => {
   try {
     const response = await axios.get(`${API_BASE_URL}/events/`);
@@ -52,8 +48,6 @@ export const fetchDetail = async () => {
     throw error;
   }
 };
-
-
 
 export const fetchPodcast = async () => {
   try {

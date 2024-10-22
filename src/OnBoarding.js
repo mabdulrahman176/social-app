@@ -17,20 +17,12 @@ const OnBoarding = () => {
     };
     
     useEffect(() => {
-
-        // Function to parse the query string into an object
         const query = new URLSearchParams(location.search);
-
-        // Access specific query parameters
         const authtoken = query.get('authtoken'); // Get the authtoken query parameter
         const user = query.get('user'); // Get the user query parameter
-        
         localStorage.setItem("jwt", authtoken);
         setCookie('user',user,1)
         navigate('/videos')
-
-
-
     }, [])
 
     return (
