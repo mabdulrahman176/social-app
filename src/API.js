@@ -1,5 +1,14 @@
 // src/api.js
 import axios from 'axios';
+export const getUserId = () => {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${"user"}=`);
+
+  if (parts.length === 2) {
+    return parts.pop().split(';').shift(); // Return the cookie value
+  }
+  return null; // Return null if the cookie is not found
+};
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 

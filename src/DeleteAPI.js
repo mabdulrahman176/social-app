@@ -3,6 +3,8 @@ const getUserId = () => {
     const userKey = str.split('=')[1];
     return userKey
   }
+
+
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const deleteEvent = async(eventId)=>{
