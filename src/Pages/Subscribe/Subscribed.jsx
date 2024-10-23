@@ -2,7 +2,7 @@ import React, { useState, useEffect, Fragment } from "react";
 import { CiMenuKebab } from "react-icons/ci";
 import { Link } from "react-router-dom";
 
-function MySubscribers() {
+function Subscribed() { 
   const [subscriber, setSubscriber] = useState([]);
   const [blockedUsers, setBlockedUsers] = useState([]);
   const [able, setAble] = useState(null);
@@ -15,9 +15,9 @@ function MySubscribers() {
 
   const fetchSubscribers = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/subscribe/my/${getUserId()}`);
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/subscribe/${getUserId()}`);
       const data = await response.json();
-      console.log("Fetched my subscribers:", data); // Log the data
+      console.log("Fetched subscribers:", data);
       setSubscriber(data);
     } catch (error) {
       console.error("Error fetching subscribers:", error);
@@ -29,13 +29,15 @@ function MySubscribers() {
       const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/block?userId=${getUserId()}`);
       const data = await response.json();
       console.log("Blocked users", data);
+      
       setBlockedUsers(Array.isArray(data) ? data : []);
+      console.log("Blocked Users:", blockedUsers);
     } catch (error) {
       console.error("Error fetching blocked users:", error);
       setBlockedUsers([]);
     }
   };
-
+ 
   const blockSubscriber = async (blockedId) => {
     try {
       const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/block`, {
@@ -51,7 +53,7 @@ function MySubscribers() {
       if (response.ok) {
         const result = await response.json();
         console.log("Post for block", result);
-        setBlockedUsers((prev) => [...prev, { blockedId }]); // Update blocked users list
+        setBlockedUsers((prev) => [...prev, { blockedId }]);
       } else {
         console.error('Failed to block user');
       }
@@ -65,7 +67,6 @@ function MySubscribers() {
   };
 
   const deleteSubscriber = async (subscriberId) => {
-    console.log("delte sub id",subscriberId)
     try {
       const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/subscribe/${subscriberId}`, {
         method: 'DELETE',
@@ -94,10 +95,10 @@ function MySubscribers() {
       <div className="h-full w-full bg-white md:h-screen lg:h-screen xl:h-screen">
         <div className="main h-full w-[90%] mx-4 md:w-[80%] lg:w-[60%] xl:w-[70%]">
           <p className="text-lg h-[10%] bg-white font-bold w-full z-10 flex items-center md:text-xl lg:text-xl xl:text-2xl">
-            My Subscribers
+            Subscribed
           </p>
           <div className="flex flex-col justify-between md:flex-row lg:flex-row xl:flex-row text-lg md:text-xl lg:text-lg xl:text-xl font-bold">
-            <h1>Total Subscribers </h1>
+            <h1>Total Subscribed </h1>
             <h2>{subscriber.length}</h2>
           </div>
           <div
@@ -145,7 +146,7 @@ function MySubscribers() {
                       <p
                         className="text-sm md:text-base lg:text-lg xl:text-xl opacity-75 mb-5 cursor-pointer"
                         onClick={() => {
-                          const blockedId = subsc.subscribedToId;
+                          const blockedId = subsc.subscribedToId; 
                           if (!isBlocked(blockedId)) {
                             blockSubscriber(blockedId);
                           }
@@ -171,4 +172,4 @@ function MySubscribers() {
   );
 }
 
-export default MySubscribers;
+export default Subscribed;

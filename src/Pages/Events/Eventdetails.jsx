@@ -208,7 +208,7 @@ function Eventdetails() {
                     className="rounded-full h-[35px] w-[35px]"
                     alt=""
                   />
-                  <h1 className="text-md">{elm.name}</h1>
+                  <h1 className="text-md">{elm.name || elm.userName}</h1>
                 </Link>
               ))}
           </div>

@@ -35,8 +35,8 @@ function PodcastFilters() {
   return (
     <Fragment>
         <div className="flex items-center bg-white h-[10%] px-3">
-          <Link to='/filterpodcast' className="m-0 flex gap-2 items-center">
-            <LuSettings2 /> |{" "}
+          <Link to='/filterpodcast' className="px-4 py-1 ms-2 m-0 rounded-3xl flex items-center relative cursor-pointer ">
+            <LuSettings2 className="text-xl"/> <pre className="text-xl"> |</pre>
           </Link>
           <Link to='/filterpodcast' className="px-4 py-1 m-0  ms-2 rounded-3xl flex items-center relative cursor-pointer Video_Nav_Filters">All</Link>
           <p

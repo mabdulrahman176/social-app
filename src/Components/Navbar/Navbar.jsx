@@ -25,8 +25,10 @@ const Navbar = ({ state }) => {
       console.error("Error fetching user data:", error);
     }
   };
-  const location = useLocation()
+
+  const location = useLocation();
   const { id } = location.state || {};
+
   // Fetch notifications count from the backend
   const fetchNotificationCount = async () => {
     try {
@@ -45,7 +47,8 @@ const Navbar = ({ state }) => {
   useEffect(() => {
     if (searchTerm.length > 0) {
       const filteredSuggestions = data.filter(user =>
-        user.name && user.name.toLowerCase().includes(searchTerm.toLowerCase())
+        (user.name && user.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (user.userName && user.userName.toLowerCase().includes(searchTerm.toLowerCase()))
       );
       console.log("Filtered suggestions:",filteredSuggestions); // Log filtered suggestions
       setSuggestions(filteredSuggestions);
@@ -57,17 +60,48 @@ const Navbar = ({ state }) => {
   }, [searchTerm, data]);
 
   const handleSuggestionClick = (userId) => {
-    navigate(`/userprofile`,{state:{id:userId}});
+    navigate(`/userprofile`, { state: { id: userId } });
     setShowSuggestions(false); 
   };
 
-const handleSearchClick = () => {
-  const selectedUser = suggestions[0]; // Select the first suggestion
-  if (selectedUser) {
-    navigate(`/userprofile`, { state: { id: selectedUser.Users_PK } }); // Navigate to the user's profile
-    setShowSuggestions(false)
-  }
-};
+  const handleSearchClick = () => {
+    const selectedUser = suggestions[0]; // Select the first suggestion
+    if (selectedUser) {
+      navigate(`/userprofile`, { state: { id: selectedUser.Users_PK } }); // Navigate to the user's profile
+      setShowSuggestions(false);
+    }
+  };
+
+  // Function to handle voice search
+  const handleVoiceSearch = () => {
+    if (!('webkitSpeechRecognition' in window)) {
+      alert("Sorry, your browser doesn't support speech recognition.");
+      return;
+    }
+
+    const recognition = new window.webkitSpeechRecognition();
+    recognition.lang = 'en-US';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onstart = () => {
+      console.log('Voice recognition started.');
+    };
+
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript;
+      console.log('Transcript:', transcript);
+      setSearchTerm(transcript); // Set the recognized speech to the search bar
+    };
+
+    recognition.onerror = (event) => {
+      console.error('Error occurred in recognition:', event.error);
+    };
+
+  
+
+    recognition.start(); // Start the voice recognition
+  };
 
   return (
     <nav className="w-full flex justify-between items-center py-2 px-4 bg-white">
@@ -95,34 +129,31 @@ const handleSearchClick = () => {
         </button>
       
         <div className="bg-gray-200 w-12 px-4 py-2 ml-1 grid place-items-center rounded-full">
-          <FontAwesomeIcon icon={faMicrophone} />
+          <FontAwesomeIcon icon={faMicrophone} onClick={handleVoiceSearch} />
         </div>
-      
-        {showSuggestions && (
-  <ul className="absolute top-full z-10 w-full bg-white shadow-lg mt-1 rounded-lg h-[300px] overflow-y-scroll" style={{ WebkitOverflowScrolling: 'touch', WebkitScrollbar: { display: 'none' }, '-msOverflowStyle': 'none', scrollbarWidth: 'none' }}>
-    {suggestions.length > 0 ? (
-      suggestions.map((suggestion, index) => (
-        <li
-          key={index}
-          className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
-          onClick={() => handleSuggestionClick(suggestion.Users_PK)} // Pass the correct ID
-        >
-        
-          <img 
-                src={suggestion.picUrl || "/placeholder.jpg"} 
-                alt={suggestion.name} 
-                className="inline-block w-8 h-8 rounded-full mr-2" 
-              />
-            {suggestion.name}
-        
-        </li>
-      ))
-    ) : (
-      <li className="px-4 py-2 text-gray-500">No suggestions found</li>
-    )}
-  </ul>
-)}
 
+        {showSuggestions && (
+          <ul className="absolute top-full z-10 w-full bg-white shadow-lg mt-1 rounded-lg h-[300px] overflow-y-scroll">
+            {suggestions.length > 0 ? (
+              suggestions.map((suggestion, index) => (
+                <li
+                  key={index}
+                  className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
+                  onClick={() => handleSuggestionClick(suggestion.Users_PK)}
+                >
+                  <img 
+                    src={suggestion.picUrl || "/placeholder.jpg"} 
+                    alt={suggestion.name} 
+                    className="inline-block w-8 h-8 rounded-full mr-2" 
+                  />
+                  {suggestion.name || suggestion.userName}
+                </li>
+              ))
+            ) : (
+              <li className="px-4 py-2 text-gray-500">No suggestions found</li>
+            )}
+          </ul>
+        )}
       </div>
 
       <div className="flex gap-4 items-center mx-1 relative">

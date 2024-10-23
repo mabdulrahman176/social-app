@@ -109,7 +109,7 @@ function SinglePodcastDetails() {
           <h4 className="flex items-center gap-3 md:ms-4 py-3">
             <FaAngleLeft
               className="cursor-pointer"
-              onClick={() => navigate("/podcast")}
+              onClick={() => navigate(-1)}
             />
             Podcast
           </h4>
@@ -165,7 +165,7 @@ function SinglePodcastDetails() {
                 className="rounded-full h-[35px] w-[35px]"
                 alt=""
               />
-              <h1 className="text-md">{elm.name}</h1>
+              <h1 className="text-md">{elm.name || elm.userName}</h1>
             </Link>
           ))}
         </div>

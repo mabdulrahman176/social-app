@@ -49,12 +49,10 @@ function WatchHistory() {
       try {
         const response = await fetch(`${API_BASE_URL}/views/${getUserId()}`);
         const data = await response.json();
-        console.log("resonse data is", data);
-        const info = data.video;
        
-        console.log("map info is",videos)
         setVideos(data.video);
-        console.log("watch data info", info);
+        setRecentData(data.podcast)
+        
       } catch (error) {
         console.error("Error fetching views:", error);
       }
@@ -94,10 +92,12 @@ function WatchHistory() {
         />{" "}
         Watched Content
       </h4>
+      
       <div className="h-[90%] w-full overflow-y-scroll Podcast_Top_Videos">
+      
         <div className="w-[95%] mx-auto">
           <div className=" flex items-center justify-between ">
-            <p>Videos</p>
+          <h1 className="my-2 text-2xl">Videos</h1>
             <Link to="/videos" className="text-blue-400 text-sm">
               See all
             </Link>
@@ -119,14 +119,14 @@ function WatchHistory() {
             ))}
           </div>
           
-     
-      <div className="flex justify-start ps-5 gap-2 flex-wrap w-full overflow-x-auto Podcast_Top_Videos mt-2">
+     <h1 className="my-2 text-2xl">Podcasts</h1>
+      <div className="flex justify-start text-white ps-5 gap-2 flex-wrap w-full overflow-x-auto Podcast_Top_Videos mt-2">
         {recentdata.map((elm, ind) => (
           <div
             key={ind}
             className="cursor-pointer lg:h-[42vh] h-[25vh] lg:w-[22.33vw] md:w-[33.33vw] sm:w-[33.33vw] w-[33.33vw] flex-shrink-0 rounded-lg relative"
             onClick={() =>
-              navigate(`/podcastdetails`, { state: { id: elm._id } })
+              navigate(`/podcastdetails`, { state: { id: elm.data._id } })
             } // Navigate on click
           >
             <div className="absolute h-full w-full ShadedBG rounded-lg">
@@ -134,11 +134,11 @@ function WatchHistory() {
                 className="absolute right-1 top-1 text-2xl cursor-pointer"
                 onClick={(e) => {
                   e.stopPropagation(); // Prevent triggering onClick of parent div
-                  handleSaveToWishlist(elm._id); // Save to wishlist
+                  handleSaveToWishlist(elm.data._id); // Save to wishlist
                 }}
               />
               <div className="absolute bottom-1 left-1">
-                <p className="text-sm">{elm.episodeTitle}</p>
+                <p className="text-sm">{elm.data.episodeTitle}</p>
                 <Link
                   to="/userprofile"
                   state={{ id: elm.userID ? elm.userID : "unknown" }}
@@ -147,12 +147,12 @@ function WatchHistory() {
                   <p className="text-sm">{elm.user ? elm.user.name : ""}</p>
                 </Link>
                 <p className="text-xs flex gap-1 items-center">
-                  <CiPlay1 /> {formatDuration(elm.podcastDuration)}
+                  <CiPlay1 /> {formatDuration(elm.data.podcastDuration)}
                 </p>
               </div>
             </div>
             <img
-              src={elm.picUrl ? elm.picUrl : "/loading.jpg"}
+              src={elm.data.picUrl ? elm.data.picUrl : "/loading.jpg"}
               alt={`Img-${ind}`}
               className="h-full w-full rounded-lg"
             />
