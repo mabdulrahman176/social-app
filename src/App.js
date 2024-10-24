@@ -60,6 +60,7 @@ import ProfileVideos from './Pages/SingleVideo/ProfileVideos.jsx';
 import Participants from './Pages/Events/Participants.jsx';
 import MyCreatedJob from './Pages/Profile/MyCreatedJob.jsx';
 import WatchSingle from './Pages/SingleVideo/WatchSingle.jsx';
+import OnBoarding from './OnBoarding.js';
 
 
 const App = () => {
@@ -71,6 +72,7 @@ const App = () => {
         {/* Login and Signup Routes */}
         <Route path="/" element={<Header/>} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/bording" element={<OnBoarding/>} />
         <Route path="/signin" element={<Signin />} />
 <Route path='/notfound' element={<NotFound />} />
 

@@ -19,6 +19,7 @@ function Message() {
     const roomIds =d.data.map((e) =>e && e._id )
     setRooms(roomIds);
     setChats(d.data)
+    console.log("chatrroms are ",d)
   }
 
   const __Time__= (isoString )=>{
@@ -35,15 +36,12 @@ return timeString
 
   const logger = () => {
     console.log("logger")
-    console.log({ rooms })
     console.log({ chats })
     console.log("in logger")
     chats.map((e)=>console.log(e._id))
   }
   useEffect(() => {
     fetchAllChatrooms()
-    // console.log({chats})
-    // logger()
   }, [])
   let location = useLocation().pathname;
 
@@ -74,30 +72,30 @@ return timeString
               }}
             >
 
+              {/* {chats.map((e)=>(<div className="bg-black w-[10rem] h-[5rem] my-2"> message</div>))} */}
               {/* message lists */}
-              {chats.map((message, ind) => (
-              message?.message &&  <Link to={`user1`} key={ind}
-                  state={{ id: message._id }}
-                >
-              {/* message && message.sender.name &&  <Link to={`user1`} key={ind} */}
+               {chats && chats.map((e, ind) => (
+               e?.messages &&  <Link to={`user1`} key={ind}
+                  state={{ id: e._id }}>
+              
                   <div className="flex justify-between  items-center py-3 border-b px-2 md:px-4 hover:bg-gray-100">
                     <div className="flex items-center gap-2">
                       <img
-                        // src={''}
-                        src={message.sender?.picUrl?message.sender.picUrl:"/placeholder.jpg"}
-                        alt="sender picture"
+                        src={e.sender?.picUrl?e.sender.picUrl:"/placeholder.jpg"}
+                        alt="sender"
                         className="h-[50px] w-[50px] rounded-full"
                       />
                       <div>
-                        <p className="text-md font-medium">{message.sender?message.sender.name:""}</p>
-                        <p className="text-[gray] text-sm">{(message.messages.length>0 && message.messages.at(-1)!=null)?message.messages.at(-1).message.slice(0, 10):''}</p>
+                        <p className="text-md font-medium">{e.sender?e.sender.name:"<No_NAME>"}</p>
+                        {/* <p className="text-[gray] text-sm">{(e.messages.length>0 && e.messages.at(-1)!=null)?e.messages.at(-1).message.slice(0, 10):''}</p> */}
                       </div>
                     </div>
-                    <p className="text-xs">{__Time__(message.updatedAt)}</p>
+                    <p className="text-xs">{__Time__(e.updatedAt)}</p>
                     {/* <p className="text-xs">{message.time}</p> */}
                   </div>
                 </Link>
-              ))}
+               ))}  
+
             </div>
             {/* <button onClick={logger}>logger</button> */}
             {/* message lists */}
