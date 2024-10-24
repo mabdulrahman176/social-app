@@ -4,6 +4,7 @@ import { FaFacebookF, FaGithub } from "react-icons/fa";
 
 const Signin = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const [state, setState] = useState({
     email: "",
     password: "",
@@ -19,8 +20,9 @@ const Signin = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     console.log("Submitting data:", state);
-
+  
     try {
       const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/users/login`, {
         method: "POST",
@@ -29,13 +31,13 @@ const Signin = () => {
         },
         body: JSON.stringify(state),
       });
-      
-      console.log({response});
-      
-      // Uncomment and handle the response accordingly
+  
+      console.log({ response });
+  
       if (response.ok) {
         const data = await response.json();
         console.log("Login successful:", data);
+        // Store any tokens or user info as needed
         navigate('/videos');
       } else {
         const errorData = await response.json();
@@ -43,9 +45,11 @@ const Signin = () => {
       }
     } catch (error) {
       console.error("Login error:", error);
+    } finally {
+      setLoading(false); // Reset loading state here
     }
   };
-
+  
   return (
     <div className="w-[100vw] h-[100vh] grid place-items-center bg-blue-200">
       <div className="w-full h-full md:h-[95vh] md:w-[27rem] bg-white flex flex-col justify-between items-center md:items-center px-10 py-4">
@@ -92,8 +96,9 @@ const Signin = () => {
               <button
                 type="submit"
                  className="w-full mb-4  py-3 rounded-3xl font-semibold linear_gradient text-black"
+                 disabled={loading}
               >
-                Sign In
+                {loading ? "Loading..." : "Sign In"}
               </button>
             </section>
           </form>

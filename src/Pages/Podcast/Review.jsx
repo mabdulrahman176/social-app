@@ -43,8 +43,8 @@ const Review = (props) => {
   const calculateRatingsPercentage = () => {
     const totalReviews = comments.length;
     const ratingCounts = [0, 0, 0, 0, 0]; // Counts for 1-5 stars
-
-    comments.forEach(comment => {
+console.log("coment",comments)
+    comments?.forEach(comment => {
       if (comment.reviewRatings >= 1 && comment.reviewRatings <= 5) {
         ratingCounts[5 - comment.reviewRatings ]++;
       }
@@ -100,7 +100,9 @@ const Review = (props) => {
       const response = await fetch(
         `${process.env.REACT_APP_API_BASE_URL}/reviews/${props.videoId}`
       );
+
       const data = await response.json();
+      console.log("data",response)
       setComments(data);
     } catch (error) {
       console.error("Error fetching comments:", error);
