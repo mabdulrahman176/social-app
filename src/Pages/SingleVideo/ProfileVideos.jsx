@@ -148,12 +148,12 @@ console.log("single video id array",)
               </p>
              </Link>
               <p className="py-1 w-[80%] text-sm">
-                {video && video.data ? video.data.videoDesc : 'Loading...'}
+                {video && video.data ? video.data.videoDesc : 'No Description'}
               </p>
               <p className="py-1 w-[80%] text-sm">
                 {video && video.data && video.data.videoTags
                   ? video.data.videoTags.map(tag => `#${tag}`).join(' ')
-                  : 'Loading...'}
+                  : '#fyp'}
               </p>
             </div>
             <div className="absolute bottom-3 z-10 right-2 text-white">
@@ -168,10 +168,7 @@ console.log("single video id array",)
                   alt="User Profile "
                 />
                </Link>
-                <FontAwesomeIcon
-                  icon={faPlus}
-                  className="absolute -bottom-2 p-1 text-xs bg-blue-700 rounded-full"
-                />
+            
               </div>
               <div className="text-center cursor-pointer mt-5" onClick={() => setRepModOpen(true)}>
                 <p className="text-xs">
@@ -197,7 +194,7 @@ console.log("single video id array",)
             src={video && video.data ? video.data.videoUrl : ''}
             autoPlay
             className="h-full relative z-0 rounded-xl w-full bg-slate-300 object-fill"
-            controls
+            
           ></video>
         </div>
       </section>

@@ -97,7 +97,7 @@ const UserProfile = () => {
   }, [userId]);
   
   
-  const createChatRoom = () => { navigate('/messages') };
+  
 
   const fetchProfileData = async (id) => {
     try {
@@ -136,7 +136,26 @@ const UserProfile = () => {
   }, [userId]); // Depend on userId
 
   const isCurrentUser = getUserId() === userId; // Check if the current user is the same as the profile being viewed
-
+  const __message__ = async (id) => {
+    console.log("texting", id);
+    const req = await fetch(
+      `${process.env.REACT_APP_API_BASE_URL}/chatrooms/${getUserId()}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({ user: id }),
+      }
+    );
+    const data = await req.json();
+    console.log("mess resp",data)
+    if (data.message) { 
+      navigate('/messages');
+  } else {
+      console.error("Failed to create chat room:", data.error);
+  }
+  };
   return (
     <Fragment>
       <div className="bg-white h-full w-full">
@@ -189,7 +208,7 @@ const UserProfile = () => {
                   <>
                     <button
                       className="px-6 py-2 rounded-2xl text-lg bg-[#F6F6FF]"
-                      onClick={createChatRoom}
+                      onClick={() => __message__(profile.Users_PK)}
                     >
                       Message
                     </button>

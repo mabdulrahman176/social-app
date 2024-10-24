@@ -21,6 +21,7 @@ const Video = () => {
   const [video, setVideo] = useState();
   const [videos, setVideos] = useState([]);
   const [videoIndex, setVideoIndex] = useState(0);
+  const [isSubscribed, setIsSubscribed] = useState(false);
   
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -40,7 +41,7 @@ const Video = () => {
 
   const getUserId = () => {
     const str = document.cookie;
-    return str.split("=")[1]; // Adjust this based on how your user ID is stored
+    return str.split("=")[1]; 
   };
 
   const recordView = async () => {
@@ -136,6 +137,75 @@ const Video = () => {
       toast.warn('Web Share API is not supported in your browser.');
     }
   };
+  const subscribeUser = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/subscribe`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ subscriberId: getUserId(), subscribedToId: video?.user?.Users_PK }),
+      });
+      if (response.ok) {
+        const result = await response.json();
+        setIsSubscribed(true);
+        console.log("user subscribed", result.message);
+      } else {
+        const error = await response.json();
+        console.error('Error subscribing:', error.message);
+      }
+    } catch (error) {
+      console.error('Error subscribing:', error);
+    }
+  };
+
+  const unsubscribeUser = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/subscribe/${video?.user?.Users_PK}`, {
+        method: 'DELETE',
+      });
+      if (response.ok) {
+        setIsSubscribed(false);
+        console.log('Unsubscribed successfully');
+      } else {
+        const error = await response.json();
+        console.error('Error unsubscribing:', error.message);
+      }
+    } catch (error) {
+      console.error('Error unsubscribing:', error);
+    }
+  };
+
+  const toggleSubscription = () => {
+    if (isSubscribed) {
+      unsubscribeUser();
+    } else {
+      subscribeUser();
+    }
+  };
+
+  useEffect(() => {
+    getVideo();
+  }, [videoId]);
+
+  // Check if the user is already subscribed when the component mounts
+  useEffect(() => {
+    const checkSubscriptionStatus = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/subscribe/my/${video?.user?.Users_PK}`);
+        if (response.ok) {
+          const subscriptions = await response.json();
+          const currentUserId = getUserId();
+          const isUserSubscribed = subscriptions.some(sub => sub.subscriberId === currentUserId);
+          setIsSubscribed(isUserSubscribed);
+        }
+      } catch (error) {
+        console.error('Error fetching subscription status:', error);
+      }
+    };
+
+    if (video) {
+      checkSubscriptionStatus();
+    }
+  }, [video]);
 
   return (
     <Fragment>
@@ -168,12 +238,12 @@ const Video = () => {
                 </p>
               </Link>
               <p className="py-1 w-[80%] text-sm">
-                {video?.data?.videoDesc || 'Loading...'}
+                {video?.data?.videoDesc || 'No Description'}
               </p>
               <p className="py-1 w-[80%] text-sm">
                 {video?.data?.videoTags
                   ? video.data.videoTags.map(tag => `#${tag}`).join(' ')
-                  : 'Loading...'}
+                  : '#fyp'}
               </p>
             </div>
             <div className="absolute bottom-3 z-10 right-2 text-white">
@@ -188,10 +258,13 @@ const Video = () => {
                     alt="User Profile"
                   />
                 </Link>
-                <FontAwesomeIcon
-                  icon={faPlus}
-                  className="absolute -bottom-2 p-1 text-xs bg-blue-700 rounded-full"
-                />
+                {!isSubscribed && (
+                  <FontAwesomeIcon
+                    icon={faPlus}
+                    className="absolute -bottom-2 p-1 text-xs bg-blue-700 rounded-full cursor-pointer"
+                    onClick={toggleSubscription}
+                  />
+                )}
               </div>
               <div className="text-center cursor-pointer mt-5" onClick={() => setRepModOpen(true)}>
                 <p className="text-xs">
@@ -217,7 +290,7 @@ const Video = () => {
             src={video?.data?.videoUrl || ''}
             autoPlay
             className="h-full relative z-0 rounded-xl w-full bg-slate-300 object-fill"
-            controls
+            
           ></video>
         </div>
       </section>

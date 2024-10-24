@@ -11,6 +11,7 @@ import Review from "../Podcast/Review";
 import { ToastContainer, toast } from 'react-toastify'; 
 import 'react-toastify/dist/ReactToastify.css'; 
 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 const WatchSingle = () => {
   let navigate = useNavigate();
   const { src } = useParams();
@@ -20,10 +21,16 @@ const WatchSingle = () => {
   const [video, setVideo] = useState();
   const [videos, setVideos] = useState([]);
   const [videoIndex, setVideoIndex] = useState(0);
+  const [isSubscribed, setIsSubscribed] = useState(false);
  const [watch ,setWatch] = useState(null)
 
 
   const videoId = decodeURIComponent(src);
+
+  const getUserId = () => {
+    const str = document.cookie;
+    return str.split("=")[1]; 
+  };
 
   const getVideo = async () => {
     const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/upload/${videoId}`, {
@@ -120,7 +127,75 @@ const WatchSingle = () => {
       toast.warn('Web Share API is not supported in your browser.'); // Using toast for warning
     }
   };
+  const subscribeUser = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/subscribe`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ subscriberId: getUserId(), subscribedToId: video?.user?.Users_PK }),
+      });
+      if (response.ok) {
+        const result = await response.json();
+        setIsSubscribed(true);
+        console.log("user subscribed", result.message);
+      } else {
+        const error = await response.json();
+        console.error('Error subscribing:', error.message);
+      }
+    } catch (error) {
+      console.error('Error subscribing:', error);
+    }
+  };
 
+  const unsubscribeUser = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/subscribe/${video?.user?.Users_PK}`, {
+        method: 'DELETE',
+      });
+      if (response.ok) {
+        setIsSubscribed(false);
+        console.log('Unsubscribed successfully');
+      } else {
+        const error = await response.json();
+        console.error('Error unsubscribing:', error.message);
+      }
+    } catch (error) {
+      console.error('Error unsubscribing:', error);
+    }
+  };
+
+  const toggleSubscription = () => {
+    if (isSubscribed) {
+      unsubscribeUser();
+    } else {
+      subscribeUser();
+    }
+  };
+
+  useEffect(() => {
+    getVideo();
+  }, [videoId]);
+
+  // Check if the user is already subscribed when the component mounts
+  useEffect(() => {
+    const checkSubscriptionStatus = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/subscribe/my/${video?.user?.Users_PK}`);
+        if (response.ok) {
+          const subscriptions = await response.json();
+          const currentUserId = getUserId();
+          const isUserSubscribed = subscriptions.some(sub => sub.subscriberId === currentUserId);
+          setIsSubscribed(isUserSubscribed);
+        }
+      } catch (error) {
+        console.error('Error fetching subscription status:', error);
+      }
+    };
+
+    if (video) {
+      checkSubscriptionStatus();
+    }
+  }, [video]);
   return (
     <Fragment>
       <section className="h-full w-full relative flex items-center bg-white">
@@ -172,10 +247,13 @@ const WatchSingle = () => {
                   alt="User Profile "
                 />
                </Link>
-                <FontAwesomeIcon
-                  icon={faPlus}
-                  className="absolute -bottom-2 p-1 text-xs bg-blue-700 rounded-full"
-                />
+               {!isSubscribed && (
+                  <FontAwesomeIcon
+                    icon={faPlus}
+                    className="absolute -bottom-2 p-1 text-xs bg-blue-700 rounded-full cursor-pointer"
+                    onClick={toggleSubscription}
+                  />
+                )}
               </div>
               <div className="text-center cursor-pointer mt-5" onClick={() => setRepModOpen(true)}>
                 <p className="text-xs">
@@ -201,7 +279,7 @@ const WatchSingle = () => {
             src={video && video.data ? video.data.videoUrl : ''}
             autoPlay
             className="h-full relative z-0 rounded-xl w-full bg-slate-300 object-fill"
-            controls
+           
           ></video>
         </div>
       </section>
