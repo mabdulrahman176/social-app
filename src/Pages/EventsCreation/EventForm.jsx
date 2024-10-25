@@ -91,33 +91,19 @@ const EventForm = () => {
     formData.append("eventCreatedBy", getUserId());
     formData.append("eventCatagory", selectedType);
 
-    // // Append tickets as an array instead of separate fields
-    // ticketTypes.forEach((ticket, index) => {
-    //   formData.append(ticket.type, +ticket.price);
-    //   console.log("ticket", ticket.type, +ticket.price);
-    //   // formData.append(`tickets[${index}][price]`, ticket.price);
-    // });
-
-  // Create an array of ticket objects
+    
 const ticketArray = ticketTypes.map(ticket => ({
   ticketType: ticket.ticketType,
   price: ticket.price,
   quantity: ticket.quantity,
 }));
 
-// Append each ticket object separately to FormData
+
 formData.append("eventTicketArray",JSON.stringify(ticketArray));
 
 
-// ticketArray.forEach((ticket, index) => {
-//   formData.append(`eventTicketArray[${index}][ticketType]`, ticket.ticketType);
-//   formData.append(`eventTicketArray[${index}][price]`, ticket.price);
-//   formData.append(`eventTicketArray[${index}][quantity]`, ticket.quantity);
-// });
 
-// Log to verify the correct structure
 
-    // Create an array of speaker IDs
     const speakerIds = speakerState.map((speaker) => speaker.id);
     console.log("speaker idd", speakerIds);
     console.log("speaker state", speakerState);
@@ -129,7 +115,7 @@ formData.append("eventTicketArray",JSON.stringify(ticketArray));
     }
 
     try {
-      // Ensure the URL is correctly defined in the environment variables
+      
       const response = await axios.post(
         `${process.env.REACT_APP_API_BASE_URL}/events/`,
         formData

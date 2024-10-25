@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { IoBookmarkOutline } from "react-icons/io5";
 import EventFilters from "./EventFilters";
-import Image from "./Img2.png";
 import { fetchEvent } from "../../API";
 import RelatedEvent from "./RelatedEvent";
 import axios from "axios";

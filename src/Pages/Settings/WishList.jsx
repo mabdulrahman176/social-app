@@ -20,6 +20,7 @@ const Wishlist = () => {
       try {
         const response = await axios.get(`${API_BASE_URL}/wishlist`);
         const result = response.data;
+        console.log("wishlist result",result)
         const info = result.data;
 
         setWishlistJob(info.job);
@@ -84,9 +85,9 @@ const Wishlist = () => {
 
       // Ensure the date is valid
       if (
-        date.getDate() == day &&
-        date.getMonth() == month &&
-        date.getFullYear() == year
+        date.getDate() === day &&
+        date.getMonth() === month &&
+        date.getFullYear() === year
       ) {
         // Format and return the date in DD/MM/YYYY
         return `${("0" + day).slice(-2)}/${("0" + (month + 1)).slice(

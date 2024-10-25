@@ -12,7 +12,7 @@ import 'react-toastify/dist/ReactToastify.css'; // Import toast styles
 function PodcastTopVideos() {
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
   const [recentdata, setRecentData] = useState([]);
-
+const [recentview,setRecentView] = useState([])
   useEffect(() => {
     const getData = async () => {
       try {
@@ -47,6 +47,24 @@ function PodcastTopVideos() {
 
   const user_id = getUserId();
 
+
+  useEffect(() => {
+    const fetchViews = async () => {
+     
+      try {
+        const response = await fetch(`${API_BASE_URL}/views/${getUserId()}`);
+        const data = await response.json();
+        console.log("response data",data.podcast)
+       
+        setRecentView(data.podcast);
+      } catch (error) {
+        console.error("Error fetching views:", error);
+      }
+    };
+
+    fetchViews();
+  }, []);
+
   const handleSaveToWishlist = async (podcastId) => {
     try {
       const response = await axios.post(`${API_BASE_URL}/wishlist`, {
@@ -69,11 +87,11 @@ function PodcastTopVideos() {
         <h1 className="flex items-center text-xl font-bold my-3 ps-3 text-black">Recently Played</h1>
         <section className="h-[90%] w-full">
           <div className="flex gap-1 w-full overflow-x-scroll Podcast_Top_Videos ps-5">
-            {recentdata.map((elm, ind) => (
+            {recentview.map((elm, ind) => (
               <div
                 key={ind}
                 className="cursor-pointer lg:h-[30vh] h-[25vh] lg:w-[12vw] md:w-[15vw] sm:w-[20vw] w-[22vw] flex-shrink-0 rounded-lg relative"
-                onClick={() => navigate(`/podcastdetails`, { state: { id: elm._id } })}
+                onClick={() => navigate(`/podcastdetails`, { state: { id: elm.data._id } })}
               >
                 <div className="absolute h-full w-full ShadedBG rounded-lg">
                   <div className="absolute right-1 top-1">
@@ -81,25 +99,25 @@ function PodcastTopVideos() {
                       className="text-2xl cursor-pointer"
                       onClick={(e) => {
                         e.stopPropagation(); // Prevent triggering onClick of parent div
-                        handleSaveToWishlist(elm._id);
+                        handleSaveToWishlist(elm.data._id);
                       }}
                     />
                   </div>
                   <div className="absolute bottom-1 left-1">
-                    <p className="text-sm">{elm.episodeTitle}</p>
-                    <Link to="/userprofile" state={{id:elm.userID ? elm.userID :"unknown"}}   onClick={(e) => {
+                    <p className="text-sm">{elm.data.episodeTitle}</p>
+                    <Link to="/userprofile" state={{id:elm.data.userID ? elm.data.userID :"unknown"}}   onClick={(e) => {
                       e.stopPropagation()}}  ><p className="text-sm">{elm.user ? elm.user.name : ""}</p></Link>
                     <p className="text-xs flex gap-1 items-center">
-                      <CiPlay1 /> {formatDuration(elm.podcastDuration)}
+                      <CiPlay1 /> {formatDuration(elm.data.podcastDuration)}
                     </p>
                   </div>
                 </div>
-                <img src={elm.picUrl ? elm.picUrl : "/loading.jpg"} alt={`Img-${ind}`} className="h-full w-full rounded-lg" />
+                <img src={elm.data.picUrl ? elm.data.picUrl : "/loading.jpg"} alt={`Img-${ind}`} className="h-full w-full rounded-lg" />
               </div>
             ))}
           </div>
-
-          {/* Related Podcasts */}
+<h1 className="ps-3 text-xl font-bold my-3 text-black">Related Podcasts</h1>
+          
           <div className="flex justify-start ps-5 gap-2 flex-wrap w-full overflow-x-auto Podcast_Top_Videos mt-2">
             {recentdata.slice(0, 3).map((elm, ind) => (
               <div
