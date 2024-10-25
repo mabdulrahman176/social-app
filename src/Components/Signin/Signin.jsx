@@ -38,7 +38,9 @@ const Signin = () => {
         const data = await response.json();
         console.log("Login successful:", data);
         // Store any tokens or user info as needed
-        navigate('/videos');
+        // navigate('/bording');
+        navigate(`/bording?authtoken=${data.authtoken}&user=${data.user}`);
+
       } else {
         const errorData = await response.json();
         console.error("Login failed:", errorData);
