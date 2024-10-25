@@ -53,7 +53,13 @@ function Subscribed() {
       if (response.ok) {
         const result = await response.json();
         console.log("Post for block", result);
-        setBlockedUsers((prev) => [...prev, { blockedId }]);
+        
+        // Update the UI immediately by removing the blocked user
+        setSubscriber(prevSubscribers => 
+          prevSubscribers.filter(sub => sub.subscribedToId !== blockedId)
+        );
+
+        setBlockedUsers(prev => [...prev, { blockedId }]);
       } else {
         console.error('Failed to block user');
       }

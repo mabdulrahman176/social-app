@@ -161,16 +161,16 @@ const Model = (props) => {
           />
 
           <section className="flex md:flex-nowrap flex-wrap md:items-center w-full h-[100%] font-[450] text-xs">
-            <img className="md:w-[45%] w-full md:h-full h-[45%]" src={props.picUrl || "/placeholder.jpg"} alt="user picture" />
+            <img className="md:w-[45%] w-full md:h-full h-[45%]" src={props.picUrl || "/loading.jpg"} alt="user picture" />
             <div className="flex flex-col md:w-[50%] md:h-full h-[50%] w-full md:p-4">
-              <div className="flex items-center justify-between py-4">
+              <div className="flex items-center justify-center py-4">
                 <h1>{""}</h1>
                 <h1 className="font-semibold">Report</h1>
-                <div className="flex items-center gap-1 text-end float-right">
+                {/* <div className="flex items-center gap-1 text-end float-right">
                   <section className="h-1 w-1 bg-black rounded-full"></section>
                   <section className="h-1 w-1 bg-black rounded-full"></section>
                   <section className="h-1 w-1 bg-black rounded-full"></section>
-                </div>
+                </div> */}
               </div>
               <hr className="bg-gray-300 w-full h-[1px]" />
               <h1 className="text-center font-semibold pt-2 pb-6">
@@ -178,7 +178,7 @@ const Model = (props) => {
               </h1>
               <div className="px-4 flex flex-col justify-between h-full">
                 <textarea
-                  className="w-full outline-none h-20 p-2 border-none bg-gray-100 rounded"
+                  className="w-full outline-none h-[200px] p-2 border-none bg-gray-100 rounded"
                   placeholder="The person is..."
                   value={reportMessage}
                   onChange={(e) => setReportMessage(e.target.value)}

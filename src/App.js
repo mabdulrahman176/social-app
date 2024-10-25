@@ -61,6 +61,7 @@ import Participants from './Pages/Events/Participants.jsx';
 import MyCreatedJob from './Pages/Profile/MyCreatedJob.jsx';
 import WatchSingle from './Pages/SingleVideo/WatchSingle.jsx';
 import OnBoarding from './OnBoarding.js';
+import MyCreatedPodcast from './Pages/Profile/MyCreatedPodcast.jsx';
 
 
 const App = () => {
@@ -104,6 +105,7 @@ const App = () => {
           <Route path="/settings" element={<Settings />} />
           <Route path="/podcast" element={<Podcast />} />
           <Route path="/podcastdetails/" element={<SinglePodcastDetails />} />
+          <Route path="/mypodcasts/" element={<MyCreatedPodcast />} />
           <Route path="/events" element={<Event />} />
           <Route path="/eventdetail" element={<Eventdetail />} />
           <Route path='/participants' element={<Participants />} />

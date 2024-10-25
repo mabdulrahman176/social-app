@@ -128,7 +128,7 @@ const ApplePodcast = (props) => {
                     className="md:h-[45vh] h-[37vh] w-[32.4%] rounded-lg border relative text-white PPPodcast"
                     onMouseEnter={() => setVisibleId(elm._id)}
                     onMouseLeave={() => setVisibleId(null)}
-                    onClick={() => navigate(`/podcastdetails`, { state: { id: elm._id } })}
+                    onClick={() => navigate(`/mypodcasts`, { state: { id: elm._id } })}
                   >
                     <IoBookmarkOutline
                       className="absolute right-2 top-4 text-2xl cursor-pointer"

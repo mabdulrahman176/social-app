@@ -1,14 +1,9 @@
 import React, { useState, useEffect } from "react";
-import {  CiCalendar, CiClock1 } from "react-icons/ci";
+import { CiCalendar, CiClock1 } from "react-icons/ci";
 import { FaAngleLeft, FaBuilding, FaBookReader } from "react-icons/fa";
 import { BsFillBrightnessAltHighFill } from "react-icons/bs";
 import { GiSkills } from "react-icons/gi";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-// import JobAppliedSuccess from "./JobAppliedSuccess";
-// import { myContext } from "../../Context/CreateContext";
-// import axios from "axios";
-// import { ToastContainer, toast } from 'react-toastify'; // Import toast components
-// import 'react-toastify/dist/ReactToastify.css'; // Import toast styles
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -16,7 +11,7 @@ function MyCreatedJob() {
   const loc = useLocation();
   const navigate = useNavigate();
   const [job, setJob] = useState(null);
-  // const [poster, setPoster] = useState(null);
+
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -40,10 +35,7 @@ function MyCreatedJob() {
   }, [loc.state]);
 
   const getJob = async (id) => {
-    const req = await fetch(
-      `${API_BASE_URL}/jobs/${id}`,
-      { method: "GET" }
-    );
+    const req = await fetch(`${API_BASE_URL}/jobs/${id}`, { method: "GET" });
 
     if (!req.ok) {
       throw new Error(`HTTP error! status: ${req.status}`);
@@ -53,14 +45,12 @@ function MyCreatedJob() {
     return d;
   };
 
-  // const { JobAppliedStates } = useContext(myContext);
-
   if (loading) {
-    return <div>Loading...</div>; // Simple loading state
+    return <div>Loading...</div>;
   }
 
   if (!job) {
-    return <div>No job found</div>; // Handle case when job is not found
+    return <div>No job found</div>;
   }
 
   const formatDate = (dateString) => {
@@ -86,46 +76,19 @@ function MyCreatedJob() {
         date.getMonth() === month &&
         date.getFullYear() === parseInt(year)
       ) {
-        return `${("0" + day).slice(-2)}/${("0" + (month + 1)).slice(-2)}/${year}`;
+        return `${("0" + day).slice(-2)}/${("0" + (month + 1)).slice(
+          -2
+        )}/${year}`;
       }
     }
 
     return "Invalid date format";
   };
 
-  // const getUserId = () => {
-  //   const str = document.cookie;
-  //   const userKey = str.split('=')[1];
-  //   return userKey;
-  // };
-
-  // const user_id = getUserId();
-  
-//   const handleSaveToWishlist = async (jobId) => {
-//     try {
-//       const response = await axios.post(`${API_BASE_URL}/wishlist`, {
-//         wishItemType: 'job',
-//         wishItemId: jobId,
-//         userId: user_id,
-//       });
-      
-//       console.log('Wishlist item saved:', response.data);
-//       toast.success('Job saved to wishlist!'); // Use toast for success notification
-//     } catch (error) {
-//       console.error('Error saving to wishlist:', error);
-//       toast.error('Could not save to wishlist. Please try again.'); // Use toast for error notification
-//     }
-//   };
-
   return (
     <div className="h-full w-full bg-white relative">
-      {/* <ToastContainer /> Include ToastContainer for notifications */}
-      {/* {JobAppliedStates.jobAppliedSuccess && <JobAppliedSuccess />} */}
       <h4 className="flex items-center gap-3 ms-4 h-[10%]">
-        <FaAngleLeft
-          className="cursor-pointer"
-          onClick={() => navigate(-1)}
-        />
+        <FaAngleLeft className="cursor-pointer" onClick={() => navigate(-1)} />
         Jobs Details
       </h4>
       <div className="w-[95%] mx-auto h-[90%] overflow-y-scroll Podcast_Top_Videos">
@@ -193,35 +156,16 @@ function MyCreatedJob() {
                     <p>shared with the employer.</p>
                   </div>
                 </div>
-                <Link to="/userprofile"
-                    state={{id:job.userId ? job.userId : "unkown"}}
-                >
-                  {/* <div className="flex items-center gap-1 mt-2">
-                  <img
-                    src={poster.picUrl ? poster.picUrl : "/placeholder.jpg"}
-                    alt=""
-                    className="h-[30px] w-[30px] rounded-full"
-                  />
-                  <p className="text-[gray]">Posted by:</p>
-                  <p className="text-lg font-semibold">
-                    {poster.name ? poster.name : "Unknown"}
-                  </p>
-                </div> */}
-                </Link>
-              
+                <Link
+                  to="/userprofile"
+                  state={{ id: job.userId ? job.userId : "unkown" }}
+                ></Link>
               </div>
             </div>
           </div>
           <div className="about lg:w-[49%] w-[90%] mx-auto lg:mt-0 mt-6">
             <div className="flex justify-between">
               <p className="text-xl font-bold">About the job</p>
-              {/* <CiBookmark
-                className="text-2xl cursor-pointer"
-                onClick={(e) => {
-                  e.stopPropagation(); // Prevent bubbling up to parent elements
-                  handleSaveToWishlist(job._id); // Pass the job ID
-                }}
-              /> */}
             </div>
             <div className="text-[15px] text-[gray] h-auto overflow-y-scroll Podcast_Top_Videos">
               <p className="text-lg font-bold text-black">About The Role</p>
@@ -233,16 +177,6 @@ function MyCreatedJob() {
               <p className="text-lg font-bold">Language</p>
               <div className="text-lg my-2">{job.singleLang}</div>
             </div>
-            {/* <button
-              className="h-[7vh] w-full linear_gradient rounded-3xl mt-6 btn1"
-              onClick={() =>
-                navigate("/jobapply", {
-                  state: { id: job._id, userId: job.userId },
-                })
-              }
-            >
-              Apply Now
-            </button> */}
           </div>
         </div>
         <br />
