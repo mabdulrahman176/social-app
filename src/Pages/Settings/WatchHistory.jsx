@@ -2,120 +2,15 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { IoBookmarkOutline } from "react-icons/io5";
 import { FaAngleLeft } from "react-icons/fa";
-import { FaRegShareFromSquare } from "react-icons/fa6";
+// import { FaRegShareFromSquare } from "react-icons/fa6";
+import { CiPlay1 } from "react-icons/ci";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify"; // Import toast components
+import "react-toastify/dist/ReactToastify.css"; 
 
-const cardData = [
-  {
-    id: 1,
-    title: "Business",
-    imgSrc:
-      "https://images.unsplash.com/photo-1522582324369-2dfc36bd9275?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDV8fHxlbnwwfHx8fHw%3D",
-  },
-  {
-    id: 2,
-    title: "Networking",
-    imgSrc:
-      "https://media.istockphoto.com/id/1649927045/photo/social-media-social-media-marketing-engagement-post-structure.webp?b=1&s=170667a&w=0&k=20&c=si9Ex9etSObs30XVUIKzMJiexUz78p_z2Xw-YLfkwh8=",
-  },
-  {
-    id: 3,
-    title: "Finance",
-    imgSrc:
-      "https://images.unsplash.com/photo-1579621970795-87facc2f976d?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8ZmluYW5jZXxlbnwwfHwwfHx8MA%3D%3D",
-  },
-  {
-    id: 4,
-    title: "Business",
-    imgSrc:
-      "https://media.istockphoto.com/id/1480095869/photo/student-or-man-use-computer-for-elearning-education-online-internet-technology-webinar-online.webp?b=1&s=170667a&w=0&k=20&c=lAFPQOr_Bvjfr1235EcosGYhr4KgUtuBW1jzMqMU05w=",
-  },
-  {
-    id: 5,
-    title: "Finance",
-    imgSrc:
-      "https://plus.unsplash.com/premium_photo-1670213989449-29b83feebe8a?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8ZmluYW5jZXxlbnwwfHwwfHx8MA%3D%3D",
-  },
-  {
-    id: 6,
-    title: "Business",
-    imgSrc:
-      "https://images.unsplash.com/photo-1665686306574-1ace09918530?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGJ1c2luZXNzfGVufDB8fDB8fHww",
-  },
-  {
-    id: 7,
-    title: "Business",
-    imgSrc:
-      "https://images.unsplash.com/photo-1665686306574-1ace09918530?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGJ1c2luZXNzfGVufDB8fDB8fHww",
-  },
-  {
-    id: 8,
-    title: "Business",
-    imgSrc:
-      "https://images.unsplash.com/photo-1665686306574-1ace09918530?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGJ1c2luZXNzfGVufDB8fDB8fHww",
-  },
-
-  // Add more card objects here
-];
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
-const newCardData = [
-  {
-    id: 1,
-    title: "Business",
-    imgSrc:
-      "https://images.unsplash.com/photo-1522582324369-2dfc36bd9275?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDV8fHxlbnwwfHx8fHw%3D",
-  },
-  {
-    id: 2,
-    title: "Networking",
-    imgSrc:
-      "https://plus.unsplash.com/premium_photo-1670213989449-29b83feebe8a?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8ZmluYW5jZXxlbnwwfHwwfHx8MA%3D%3D",
-  },
-  {
-    id: 3,
-    title: "Finance",
-    imgSrc:
-      "https://images.unsplash.com/photo-1665686306574-1ace09918530?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGJ1c2luZXNzfGVufDB8fDB8fHww",
-  },
-  {
-    id: 1,
-    title: "Business",
-    imgSrc:
-      "https://images.unsplash.com/photo-1522582324369-2dfc36bd9275?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDV8fHxlbnwwfHx8fHw%3D",
-  },
-  {
-    id: 2,
-    title: "Networking",
-    imgSrc:
-      "https://plus.unsplash.com/premium_photo-1670213989449-29b83feebe8a?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8ZmluYW5jZXxlbnwwfHwwfHx8MA%3D%3D",
-  },
-  {
-    id: 3,
-    title: "Finance",
-    imgSrc:
-      "https://images.unsplash.com/photo-1665686306574-1ace09918530?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGJ1c2luZXNzfGVufDB8fDB8fHww",
-  },
-  {
-    id: 3,
-    title: "Finance",
-    imgSrc:
-      "https://images.unsplash.com/photo-1665686306574-1ace09918530?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGJ1c2luZXNzfGVufDB8fDB8fHww",
-  },
-  {
-    id: 3,
-    title: "Finance",
-    imgSrc:
-      "https://images.unsplash.com/photo-1665686306574-1ace09918530?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGJ1c2luZXNzfGVufDB8fDB8fHww",
-  },
-  {
-    id: 3,
-    title: "Finance",
-    imgSrc:
-      "https://images.unsplash.com/photo-1665686306574-1ace09918530?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGJ1c2luZXNzfGVufDB8fDB8fHww",
-  },
-  // Add more card objects here
-];
 
 const CardComponent = ({ title, videoUrl, videoId, navigate ,videos}) => (
   <div
@@ -130,7 +25,7 @@ const CardComponent = ({ title, videoUrl, videoId, navigate ,videos}) => (
     />
     <div className="absolute inset-0 flex justify-between ShadedBG rounded-lg">
       <h5 className="text-sm ps-3 absolute bottom-2">{title} </h5>
-      <IoBookmarkOutline className="absolute  right-2 top-4 text-2xl" />
+      
     </div>
   </div>
 );
@@ -139,24 +34,25 @@ function WatchHistory() {
   const navigate = useNavigate();
 
   const [videos, setVideos] = useState([]);
+  const [recentdata, setRecentData] = useState([]);
 
   const getUserId = () => {
     const str = document.cookie;
     const userKey = str.split("=")[1];
     return userKey;
   };
+
+  const user_id = getUserId();
   console.log("user id in watch", getUserId());
   useEffect(() => {
     const fetchViews = async () => {
       try {
         const response = await fetch(`${API_BASE_URL}/views/${getUserId()}`);
         const data = await response.json();
-        console.log("resonse data is", data);
-        const info = data.video;
        
-        console.log("map info is",videos)
         setVideos(data.video);
-        console.log("watch data info", info);
+        setRecentData(data.podcast)
+        
       } catch (error) {
         console.error("Error fetching views:", error);
       }
@@ -165,8 +61,30 @@ function WatchHistory() {
     fetchViews();
   }, []);
 
+  const formatDuration = (duration) => {
+    const seconds = Math.floor(duration / 1000);
+    return seconds < 60
+      ? `${seconds} seconds`
+      : `${Math.floor(seconds / 60)} min${seconds > 60 ? "s" : ""}`;
+  };
+
+  const handleSaveToWishlist = async (podcastId) => {
+    try {
+      const response = await axios.post(`${API_BASE_URL}/wishlist`, {
+        wishItemType: "podcast",
+        wishItemId: podcastId,
+        userId: user_id,
+      });
+      toast.success("Podcast saved to wishlist!"); // Show success toast
+    } catch (error) {
+      console.error("Error saving to wishlist:", error);
+      toast.error("Could not save to wishlist. Please try again."); // Show error toast
+    }
+  };
+
   return (
     <div className="bg-white w-full h-full ">
+       <ToastContainer /> {/* Include the ToastContainer here */}
       <h4 className="flex items-center gap-3 ms-2 h-[10%]">
         <FaAngleLeft
           className="cursor-pointer"
@@ -174,10 +92,12 @@ function WatchHistory() {
         />{" "}
         Watched Content
       </h4>
+      
       <div className="h-[90%] w-full overflow-y-scroll Podcast_Top_Videos">
+      
         <div className="w-[95%] mx-auto">
           <div className=" flex items-center justify-between ">
-            <p>Videos</p>
+          <h1 className="my-2 text-2xl">Videos</h1>
             <Link to="/videos" className="text-blue-400 text-sm">
               See all
             </Link>
@@ -189,49 +109,57 @@ function WatchHistory() {
                 // className=""
               >
                 <CardComponent
-                  title={elm.video.videoDesc}
-                  videoUrl={elm.video.videoUrl}
-                  videoId={elm.video._id}
+                  title={elm.data.videoDesc}
+                  videoUrl={elm.data.videoUrl}
+                  videoId={elm.data._id}
                   navigate={navigate}
                   videos={videos}
                 />
               </div>
             ))}
           </div>
-          <div className="mt-3 flex flex-wrap sm:justify-center justify-between sm:gap-1 gap-y-1 w-[93%] mx-auto">
-            {newCardData.map((data, i) => (
-              <div
-                key={i}
-                className="m-0 text-white sm:w-[32.4%] w-[49.4%]  h-[45vh] relative"
-              >
-                <img
-                  src={data.imgSrc || "/placeholder.jpg"}
-                  alt="Card Img2y"
-                  className="h-full w-full rounded-lg cursor-pointer"
-                  onClick={() => navigate("/eventdetail", { state: { data } })}
-                />
-                <IoBookmarkOutline className="absolute  right-2 top-4 text-2xl" />
-                <div className="w-full absolute  bottom-1">
-                  <div className="SVTBottom w-[95%] mx-auto px-3 py-2 rounded-lg">
-                    <small className="block text-xl">Startup</small>
-                    <p className="text-xs py-2">Fri, May 28, 3:30pm</p>
-                    <p className="text-sm pb-2">NYC, USA</p>
-                    <div className="flex items-center">
-                      <button
-                        className="me-2 w-[70%] py-2 JobButtonBgBlur text-sm text-white rounded-full"
-                        onClick={() => navigate("/ticketdetails")}
-                      >
-                        View tickets
-                      </button>
-                      <button className="w-[20%] flex justify-center py-2  JobButtonBgBlur text-xs text-white  rounded-full">
-                        <FaRegShareFromSquare className="text-lg " />
-                      </button>
-                    </div>
-                  </div>
-                </div>
+          
+     <h1 className="my-2 text-2xl">Podcasts</h1>
+      <div className="flex justify-start text-white ps-5 gap-2 flex-wrap w-full overflow-x-auto Podcast_Top_Videos mt-2">
+        {recentdata.map((elm, ind) => (
+          <div
+            key={ind}
+            className="cursor-pointer lg:h-[42vh] h-[25vh] lg:w-[22.33vw] md:w-[33.33vw] sm:w-[33.33vw] w-[33.33vw] flex-shrink-0 rounded-lg relative"
+            onClick={() =>
+              navigate(`/podcastdetails`, { state: { id: elm.data._id } })
+            } // Navigate on click
+          >
+            <div className="absolute h-full w-full ShadedBG rounded-lg">
+              <IoBookmarkOutline
+                className="absolute right-1 top-1 text-2xl cursor-pointer"
+                onClick={(e) => {
+                  e.stopPropagation(); // Prevent triggering onClick of parent div
+                  handleSaveToWishlist(elm.data._id); // Save to wishlist
+                }}
+              />
+              <div className="absolute bottom-1 left-1">
+                <p className="text-sm">{elm.data.episodeTitle}</p>
+                <Link
+                  to="/userprofile"
+                  state={{ id: elm.userID ? elm.userID : "unknown" }}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <p className="text-sm">{elm.user ? elm.user.name : ""}</p>
+                </Link>
+                <p className="text-xs flex gap-1 items-center">
+                  <CiPlay1 /> {formatDuration(elm.data.podcastDuration)}
+                </p>
               </div>
-            ))}
+            </div>
+            <img
+              src={elm.data.picUrl ? elm.data.picUrl : "/loading.jpg"}
+              alt={`Img-${ind}`}
+              className="h-full w-full rounded-lg"
+            />
           </div>
+        ))}
+      </div>
+  
         </div>
         <br />
       </div>

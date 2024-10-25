@@ -1,40 +1,8 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment } from "react";
 import MySubscribers from "./MySubscribers";
-import { useEffect } from "react";
+import Subscribed from "./Subscribed";
 
 const Subscribe = () => {
-  const [subscribers, setsubscribers] = useState([])
-  const [subscribedTo, setSubscribedTo] = useState([])
-
-  const getUserId = () => {
-    const str = document.cookie
-    const userKey = str.split('=')[1];
-    return userKey
-  }
-  const getMySubscriber = async ()=>{
-    const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/subscribe/my/${getUserId()}`,{
-      method:"GET",
-      credentials:'include'
-      
-    })
-    const data = await req.json()
-     setsubscribers(data)
-  }
-  const getPeopleISubscibedTo = async ()=>{
-    const req = await fetch(`${process.env.REACT_APP_API_BASE_URL}/subscribe/${getUserId()}`,{
-      method:"GET",
-      credentials:'include'
-      
-    })
-    const data = await req.json()
-   setSubscribedTo(data)
-
-  }
-useEffect(() => {
-  getMySubscriber()
-  getPeopleISubscibedTo()
-}, [])
-
   return (
     <Fragment>
       <div
@@ -49,7 +17,7 @@ useEffect(() => {
         }}
       >
         <div
-          className="w-[48%] h-[550px] overflow-y-auto ml-1"
+          className="w-[48%] h-[600px] overflow-y-auto ml-1"
           style={{
             WebkitOverflowScrolling: "touch",
             WebkitScrollbar: {
@@ -59,15 +27,10 @@ useEffect(() => {
             scrollbarWidth: "none",
           }}
         >
-          <MySubscribers
-            name="My Subscribers"
-            sub="Total Subscribers"
-            total={subscribers.length}
-            userId={subscribers}
-          />
+          <Subscribed />
         </div>
         <div
-          className="w-[48%] h-[550px] overflow-y-auto ml-1"
+          className="w-[48%] h-[600px] overflow-y-auto ml-1"
           style={{
             WebkitOverflowScrolling: "touch",
             WebkitScrollbar: {
@@ -77,12 +40,7 @@ useEffect(() => {
             scrollbarWidth: "none",
           }}
         >
-          <MySubscribers
-            name="Subscribed"
-            sub="Total Subscribed"
-            total={subscribedTo.length}
-            userId={subscribedTo}
-          />
+          <MySubscribers />
         </div>
       </div>
     </Fragment>

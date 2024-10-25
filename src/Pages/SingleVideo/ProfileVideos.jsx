@@ -144,7 +144,7 @@ console.log("single video id array",)
               state={{id :video && video.user ? video.user.Users_PK :" "}}
              >
              <p className="text-xl font-semibold">
-                {video && video.user ? video.user.name : 'NO_NAME'}
+             {video?.user?.name || video?.user?.userName || 'NO_NAME'}
               </p>
              </Link>
               <p className="py-1 w-[80%] text-sm">

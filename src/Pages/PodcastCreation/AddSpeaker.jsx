@@ -59,15 +59,18 @@ const AddSpeaker = ({ updateSpeakerData, initialData }) => {
   const filterUsers = (searchTerm) => {
     const lowerCaseTerm = searchTerm.toLowerCase();
     const filtered = allUsers.filter(
-      (user) => user && user.name && user.name.toLowerCase().includes(lowerCaseTerm)
-    );
+      (user) =>   user && 
+      (user.name && user.name.toLowerCase().includes(lowerCaseTerm) || 
+       user.userName && user.userName.toLowerCase().includes(lowerCaseTerm))
+    )
+    
     setFilteredUsers(filtered);
   };
 
   const handleUserSelect = (user) => {
     const newSpeaker = {
       id: user.Users_PK, // User ID
-      name: user.name || "unknown", // Display name
+      name: user.name || user.userName || "unknown", // Display name
       picUrl: user.picUrl || "/placeholder.jpg", 
     };
 
@@ -141,7 +144,7 @@ const AddSpeaker = ({ updateSpeakerData, initialData }) => {
                 alt={user.name} 
                 className="inline-block w-8 h-8 rounded-full mr-2" 
               />
-              {user.name}
+              {user.name || user.userName}
             </li>
           ))}
         </ul>
@@ -195,7 +198,7 @@ const AddSpeaker = ({ updateSpeakerData, initialData }) => {
               />
             )}
             <span className="bg-blue-100 text-blue-800 rounded-full px-3 py-1">
-              {speaker.name}
+              {speaker.name || speaker.userName}
             </span>
             <button
               type="button"

@@ -28,6 +28,7 @@ const ApplePodcast = (props) => {
     const userKey = str.split('=')[1];
     return userKey;
   };
+  const currentUserId = getUserId();
 
   const handleDeleteConfirm = async () => {
     if (deleteItemId) {
@@ -156,7 +157,7 @@ const ApplePodcast = (props) => {
                       alt={`Img-${ind}`}
                       className="h-full w-full rounded-lg"
                     />
-                    {visibleId === elm._id && (
+                    {visibleId === elm._id &&   elm.userId === currentUserId && (
                       <div className="absolute top-14 right-2 flex flex-col space-y-2">
                         <CiTrash
                           className="text-red-600 text-3xl cursor-pointer hover:text-red-600"

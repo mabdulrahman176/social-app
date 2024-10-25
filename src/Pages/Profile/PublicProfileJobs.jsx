@@ -127,20 +127,22 @@ const currentUser = getUserId()
                   ) : (
                     <div className="text-center flex items-center">
                       <Link
-                        to={"/mycreatedjob"}
+                        to={"/jobdetail"}
                         state={{ id: elm._id }}
                         className="w-[90%] mx-auto flex text-xl mt-7 justify-center items-center bg-[#EEEEEE] h-10 rounded-3xl hover:bg-[#6166f331] hover:text-[#6165F3]"
                       >
-                        View Details
+                        Apply job
                       </Link>
                     </div>
                   )}
+                  {elm.userId === currentUser && (
                   <button
                     className="absolute top-2 right-2 text-red-600 text-xl cursor-pointer"
                     onClick={() => handleDeleteClick(elm._id)}
                   >
                     <IoTrashOutline />
                   </button>
+                )}
                 </div>
               </div>
             ))

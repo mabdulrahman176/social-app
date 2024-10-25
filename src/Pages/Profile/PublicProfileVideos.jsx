@@ -64,6 +64,12 @@ const AllVideos = (props) => {
     };
   }, [props.videos]);
 
+  const getUserId = () => {
+    const str = document.cookie;
+    const userKey = str.split('=')[1];
+    return userKey;
+  };
+  const currentUserId = getUserId();
   return (
     <React.Fragment>
       <div className="bg-white px-2 h-full w-full">
@@ -88,7 +94,7 @@ const AllVideos = (props) => {
                 ></video>
                 <CiPlay1 className="absolute text-2xl text-white" />
 
-                {visibleId === videoItem.data._id && (
+                {visibleId === videoItem.data._id &&  videoItem.data.userId === currentUserId &&  (
                   <div className="absolute top-2 right-2 flex flex-col space-y-2">
                     <CiTrash
                       className="text-red-600 text-3xl cursor-pointer hover:text-red-700"

@@ -8,8 +8,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import Model from "../ModalReport/Model";
 import Review from "../Podcast/Review";
-import { ToastContainer, toast } from 'react-toastify'; // Importing Toastify
-import 'react-toastify/dist/ReactToastify.css'; // Import CSS for Toastify
+import { ToastContainer, toast } from 'react-toastify'; 
+import 'react-toastify/dist/ReactToastify.css'; 
 
 const WatchSingle = () => {
   let navigate = useNavigate();
@@ -21,9 +21,7 @@ const WatchSingle = () => {
   const [videos, setVideos] = useState([]);
   const [videoIndex, setVideoIndex] = useState(0);
  const [watch ,setWatch] = useState(null)
-//   const handleProfile = (userId) => {
-//     navigate(`/profile/${userId}`); 
-//   };
+
 
   const videoId = decodeURIComponent(src);
 
@@ -38,14 +36,15 @@ const WatchSingle = () => {
   console.log(" watch video array:",location.state.id);
 
   useEffect(() => {
-    console.log("Current location state:", location.state); // Log the state
+    console.log("Current location state:", location.state.id); // Log the state
     if (location.state && location.state.id) {
       setVideos(location.state.id); // Set the videos array from state
-      const info = location.state.id.map((elm)=> elm.video )
-     
+      const info = location.state.id.map((elm)=> elm.data )
+      console.log("info from watch history",info)
       setWatch(info)
-      console.log("info from watch history",watch)
+     
       const currentVideo = info.find(v => v._id === videoId);
+      console.log("single video current",currentVideo)
       if (currentVideo) {
         setVideo(currentVideo);
         setVideoIndex(info.findIndex(v => v._id === videoId));
@@ -53,7 +52,7 @@ const WatchSingle = () => {
     }
     getVideo();
   }, [videoId, location.state]);
-console.log("single video id array",)
+ 
   const useDebounce = (callback, delay) => {
     const timerRef = useRef(null);
   
@@ -76,13 +75,14 @@ console.log("single video id array",)
   };
 
   const handleScroll = (e) => {
-    // console.log("next video id",nextVideoId)
-    console.log("index number",videos)
+
+   
     if (e.deltaY > 0) {
       // Scroll down
       if (videoIndex < watch.length - 1) {
         const nextVideoId = watch[videoIndex + 1]._id;
-       
+        console.log("next video id",nextVideoId)
+        console.log("index number",videoIndex)
         navigate(`/watchhistory/${encodeURIComponent(nextVideoId)}`, { state: { id :location.state.id } }, { replace: true });
       }
     } else {
@@ -148,7 +148,7 @@ console.log("single video id array",)
               state={{id :video && video.user ? video.user.Users_PK :" "}}
              >
              <p className="text-xl font-semibold">
-                {video && video.user ? video.user.name : 'NO_NAME'}
+             {video?.user?.name || video?.user?.userName || 'NO_NAME'}
               </p>
              </Link>
               <p className="py-1 w-[80%] text-sm">

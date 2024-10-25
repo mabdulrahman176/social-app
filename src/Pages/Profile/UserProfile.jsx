@@ -80,6 +80,7 @@ const UserProfile = () => {
         const response = await fetch(`${API_BASE_URL}/subscribe/my/${userId}`);
         if (response.ok) {
           const subscriptions = await response.json();
+          console.log("resoonse ",response)
           // Check if current user is in the subscription list
           const isSubscribed = subscriptions.some(sub => sub.subscriberId === getUserId());
           setIsSubscribed(isSubscribed);
@@ -96,7 +97,7 @@ const UserProfile = () => {
   }, [userId]);
   
   
-  const createChatRoom = () => { console.log("creating chatroom"); };
+  const createChatRoom = () => { navigate('/messages') };
 
   const fetchProfileData = async (id) => {
     try {
@@ -157,7 +158,7 @@ const UserProfile = () => {
               </label>
             </div>
             <div className="py-3 px-4 md:px-6 w-full md:w-[60%]">
-              <h1 className="text-lg md:text-xl">{profile.name}</h1>
+              <h1 className="text-lg md:text-xl">{profile.name || profile.userName}</h1>
               <div className="flex py-1 space-x-2">
                 {renderStars(data_.rating?.globalrating || 0)} {/* Render the stars */}
                 <h1 className="text-xs md:text-sm">{data_.rating?.globalrating.toFixed(1) || '0.00'} out of 5</h1>
