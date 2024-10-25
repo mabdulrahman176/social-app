@@ -12,10 +12,16 @@ function MyTickets() {
   const navigate = useNavigate();
   const [tickets, setTickets] = useState([]);
 
+  const getUserId = () => {
+    const str = document.cookie;
+    const userKey = str.split("=")[1];
+    return userKey;
+  };
+
   useEffect(() => {
     const fetchTickets = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/tickets/user/c7fc9b44-f841-49a5-b079-7b33ae6896e4`); // Replace with your user ID or context
+        const response = await axios.get(`${API_BASE_URL}/tickets/user/${getUserId()}`); 
         setTickets(response.data.data);
       } catch (error) {
         console.error("Error fetching tickets:", error);
@@ -59,11 +65,7 @@ function MyTickets() {
     }
   };
 
-  const getUserId = () => {
-    const str = document.cookie;
-    const userKey = str.split("=")[1];
-    return userKey;
-  };
+
 
   return (
     <div className="bg-white w-full h-full ">
@@ -78,7 +80,7 @@ function MyTickets() {
       <div className="h-[90%] w-full overflow-y-scroll Podcast_Top_Videos">
         <div className="w-[95%] mx-auto">
           <div className="flex flex-wrap justify-start gap-2 ">
-            {tickets.map((ticket) => (
+            {tickets.length > 0 ? ( tickets.map((ticket) => (
               <div key={ticket._id} className="m-0 text-white md:w-[32.4%] w-[49.4%] sm:h-[45vh] h-[37vh] relative">
                 <img
                   src={ticket.event.eventCoverUrl}
@@ -112,7 +114,8 @@ function MyTickets() {
                   </div>
                 </div>
               </div>
-            ))}
+            ))): "No Ticket Bought "}
+           
           </div>
         </div>
         <br />

@@ -1,7 +1,7 @@
 import React, {useState, Fragment } from 'react'
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { Link } from 'react-router-dom';
-// import FilterName from '../PodcastFilter/FilterName';
+
 import { FaAngleDown } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom';
 import JobFilterName from './JobFilterName';
@@ -67,7 +67,7 @@ const FilterJob = () => {
   if(activeFilter === 'Subscribed') return (
       navigate('/videos')
   )
-  // Add more filter logic as needed
+  
   return true;
 });
  
@@ -117,6 +117,14 @@ const FilterJob = () => {
           ))}
         </div>
       </div>
+      <div className="fixed lg:bottom-0 bottom-[3rem] right-2 lg:right-[11rem] p-4  w-full flex justify-end gap-4">
+          <button className="px-8 py-3 flex-shrink-0 w-auto rounded-2xl border-2 text-[16px] md:text-[18px] linear_gradient_text">
+            Reset Filters
+          </button>
+          <button className="px-8 py-3 flex-shrink-0 w-auto rounded-3xl text-white text-[16px] md:text-[18px] linear_gradient">
+            Apply Filters
+          </button>
+        </div>
     </div>
     </Fragment>
   )

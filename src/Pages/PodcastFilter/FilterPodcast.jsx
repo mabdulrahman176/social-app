@@ -7,10 +7,11 @@ const FilterPodcast = () => {
     const subscirbe = ['All', 'Subscribe', 'Popular', 'Latest Podcast', 'Other'];
     const review = ['ALL', 'Top Reviews', 'Others'];
     const duration = ['15min', '30min', '1hour', '+1hours', 'Other'];
+    const entrepreneurs = ["All" ,"Tech Entrepreneur","Art","Tech & Investor","Teamwork", "Finance", "Networking","Government", "Charity","Investors","Language learning","Politics","Fashion","History","Hobbies","Career ,& Business","Travel & Outdoor","News","Technology","True Crime","Comedy","Music & dancing","Sports" ,"Science","Leadership","Education","Sustainability","Fiction","Interviews","Business and Finance ","Health ,and Wellness","Self - Imporvement" ,"Music","Religion & Spirituality","Pop Culture","Environment","Parenting","Gaming","Food and Cooking" ,"Pet & Animal","Relationship & Books","Personal Stories","TV & Film","Social Activities","Subscribes","Language","Others"];
     const [durationFilter, setDurationFilter] = useState("15min");
     const [activeFilter, setActiveFilter] = useState("All");
     const [reviewFilter, setReviewFilter] = useState("All");
-
+    const [selectedIndex, setSelectedIndex] = useState("All");
     return (
         <Fragment>
             <PodcastFilterNav activeFilter={activeFilter} setActiveFilter={setActiveFilter} />
@@ -22,7 +23,21 @@ const FilterPodcast = () => {
                 '-msOverflowStyle': 'none',
                 'scrollbarWidth': 'none'
             }}>
-                <FilterName activeFilter={activeFilter} name="Categories" />
+                {/* <FilterName activeFilter={activeFilter} name="Categories" /> */}
+                <div className='my-3'>
+                    <h1 className='text-2xl font-bold ms-4 md:ms-10'>Categories</h1>
+                    <div className="flex flex-wrap gap-2 ms-2 md:gap-4 mt-4 md:mt-8">
+                        {entrepreneurs.map((filter) => (
+                            <p
+                                key={filter}
+                                onClick={() => setSelectedIndex(filter)}
+                                className={`text-sm sm:text-lg text-nowrap px-2  sm:px-3 rounded-full py-1 bg-[#F1F1F1] w-auto ${selectedIndex === filter ? 'linear_gradient' : 'hover:linear_gradient'}`}
+                            >
+                                {filter}
+                            </p>
+                        ))}
+                    </div>
+                </div>
                 <div className='my-3'>
                     <h1 className='text-2xl font-bold ms-4 md:ms-10'>Subscribed</h1>
                     <div className="flex flex-wrap gap-2 md:gap-4 mt-4 md:mt-8">

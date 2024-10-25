@@ -50,18 +50,18 @@ const Model = (props) => {
 
   const handleReportSubmit = async () => {
     const selectedReportType = Object.keys(clickedItems).find((id) => clickedItems[id]);
-
+  
     if (!selectedReportType) {
       toast.error("Please select a report reason."); // Show error toast
       return;
     }
-
+  
     const getUserId = () => {
       const str = document.cookie;
       const userKey = str.split('=')[1];
       return userKey;
     };
-
+  
     const reportData = {
       userId: getUserId(), 
       reportItemId: reportItemId,
@@ -70,7 +70,7 @@ const Model = (props) => {
     };
     
     console.log("Sending report data:", reportData);
-
+  
     try {
       const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/reports`, {
         method: 'POST',
@@ -79,12 +79,17 @@ const Model = (props) => {
         },
         body: JSON.stringify(reportData),
       });
-
+  
       const result = await response.json();
-      console.log(result);
+      console.log("report msg",result);
       if (result.message === "success") {
         toast.success("Report submitted successfully!"); // Show success toast
         setIsReportModalOpen(false);
+       // Close the modal
+      
+        setClickedItems({});
+        setReportMessage("");
+        props.setRepModOpen(false)
       } else {
         toast.error("Error submitting report."); // Show error toast
       }
@@ -93,10 +98,11 @@ const Model = (props) => {
       toast.error("Error submitting report."); // Show error toast
     }
   };
+  
 
   return (
     <React.Fragment>
-      <ToastContainer /> {/* Include ToastContainer for notifications */}
+        <ToastContainer />
       <section>
         <FontAwesomeIcon
           className="absolute w-4 h-4 rounded-full left-2 cursor-pointer"
@@ -178,7 +184,7 @@ const Model = (props) => {
               </h1>
               <div className="px-4 flex flex-col justify-between h-full">
                 <textarea
-                  className="w-full outline-none h-[200px] p-2 border-none bg-gray-100 rounded"
+                  className="w-full outline-none h-[300px] p-2 border-none bg-gray-100 rounded"
                   placeholder="The person is..."
                   value={reportMessage}
                   onChange={(e) => setReportMessage(e.target.value)}
@@ -194,6 +200,7 @@ const Model = (props) => {
           </section>
         </div>
       )}
+     
     </React.Fragment>
   );
 };

@@ -14,7 +14,8 @@ const FilterEvent = () => {
   const [ratingFilter, setRatingFilter] = useState("All");
   const [netFilter, setNetFilter] = useState("Speed Networking");
   const [durFilter, setDurFilter] = useState("Half Day");
-
+  const [selectedIndex, setSelectedIndex] = useState("All");
+  
   const date = ['All Upcoming', 'Starting Soon', 'Today', 'Tomorrow', 'This Week', 'This Weekend', 'Next Week', 'Choose a Date'];
   const location = ['USA,NYC', 'Pakistan,Karachi', 'India,Delhi'];
   const price = ['Free', 'Less than $20', 'Less than $50', '+$50', 'Other'];
@@ -25,11 +26,11 @@ const FilterEvent = () => {
   const rating = ['All', 'Top Review'];
   const net = ['Speed Networking', 'Roundtable discussions', 'Social Mixers', 'Panel discussions', 'Q & A Session', 'Ongoing Registration', 'Other'];
   const dur = ['Half Day', 'Full Day', 'Morning Events', 'Multiple Days', 'Afternoon Events', 'Evening Events', 'Quick Sessions (1-2 hours)', 'Other'];
-
+  const entrepreneurs = ["All" ,"Tech Entrepreneur","Art","Tech & Investor","Teamwork", "Finance", "Networking","Government", "Charity","Investors","Language learning","Politics","Fashion","History","Hobbies","Career ,& Business","Travel & Outdoor","News","Technology","True Crime","Comedy","Music & dancing","Sports" ,"Science","Leadership","Education","Sustainability","Fiction","Interviews","Business and Finance ","Health ,and Wellness","Self - Imporvement" ,"Music","Religion & Spirituality","Pop Culture","Environment","Parenting","Gaming","Food and Cooking" ,"Pet & Animal","Relationship & Books","Personal Stories","TV & Film","Social Activities","Subscribes","Language","Others"];
   return (
     <Fragment>
       <FilterEventNav activeFilter={activeFilter} setActiveFilter={setActiveFilter} />
-      <div className="h-[73%] bg-white overflow-y-auto" style={{
+      <div className="h-[75%] bg-white overflow-y-auto" style={{
         WebkitOverflowScrolling: 'touch',
         WebkitScrollbar: {
           display: 'none'
@@ -37,8 +38,22 @@ const FilterEvent = () => {
         msOverflowStyle: 'none',
         scrollbarWidth: 'none'
       }}>
-        <FilterName activeFilter={activeFilter} name="Categories" />
+        {/* <FilterName activeFilter={activeFilter} name="Categories" /> */}
         <div className="flex flex-wrap px-4">
+        <div className="my-3 w-full ">
+            <h1 className="text-2xl font-bold mb-2">Categories</h1>
+            <div className="flex flex-wrap whitespace-nowrap gap-2">
+              {entrepreneurs.map((filter) => (
+                <p
+                key={filter}
+                onClick={() => setSelectedIndex(filter)}
+                className={`text-sm sm:text-lg text-nowrap px-2  sm:px-3 rounded-full py-1 bg-[#F1F1F1] w-auto ${selectedIndex === filter ? 'linear_gradient' : 'hover:linear_gradient'}`}
+                >
+                  {filter}
+                </p>
+              ))}
+            </div>
+          </div>
           <div className="my-3 w-full sm:w-1/2">
             <h1 className="text-2xl font-bold mb-2">Date</h1>
             <div className="flex flex-wrap whitespace-nowrap gap-2">

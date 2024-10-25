@@ -57,7 +57,7 @@ function Ticketdetail() {
           <FaAngleLeft
             className="cursor-pointer"
             onClick={() =>
-              navigate("/ticketpayment", {
+              navigate("/events", {
                 state: { id: tickets._id, selectedTickets },
               })
             }
