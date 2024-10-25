@@ -102,7 +102,7 @@ const AllVideos = () => {
               src={video.videoUrl}
               className="w-[100%] h-[100%] overflow-y-hidden object-fill"
               muted
-              controls
+              
             ></video>
             <CiPlay1 className="absolute text-2xl text-white" />
           </div>

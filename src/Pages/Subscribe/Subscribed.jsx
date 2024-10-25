@@ -158,7 +158,7 @@ function Subscribed() {
                         className="text-sm md:text-base lg:text-lg xl:text-xl text-red-500 mb-5 cursor-pointer"
                         onClick={() => deleteSubscriber(subsc._id)} // Call deleteSubscriber with the subscriber's ID
                       >
-                        Delete
+                        UnSubscribe
                       </p>
                     </div>
                   )}

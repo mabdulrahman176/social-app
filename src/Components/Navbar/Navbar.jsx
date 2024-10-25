@@ -15,20 +15,6 @@ const Navbar = ({ state }) => {
   const [notificationCount, setNotificationCount] = useState(0);
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
-  // Fetch users from the backend
-  const fetchUsers = async () => {
-    try {
-      const response = await axios.get(`${API_BASE_URL}/users`);
-      setData(response.data.data || []);
-      console.log("Fetched users:", response.data.data); // Log fetched users
-    } catch (error) {
-      console.error("Error fetching user data:", error);
-    }
-  };
-
-  const location = useLocation();
-  const { id } = location.state || {};
-
   // Fetch notifications count from the backend
   const fetchNotificationCount = async () => {
     try {
@@ -40,17 +26,36 @@ const Navbar = ({ state }) => {
   };
 
   useEffect(() => {
-    fetchUsers();
     fetchNotificationCount();
   }, []);
 
   useEffect(() => {
     if (searchTerm.length > 0) {
+      // Fetch users based on the search term
+      const fetchUsers = async () => {
+        try {
+          const response = await axios.get(`${API_BASE_URL}/users?search=${searchTerm}`);
+          setData(response.data.data || []);
+          console.log("Fetched users:", response.data.data); // Log fetched users
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+        }
+      };
+
+      fetchUsers();
+    } else {
+      setData([]); // Clear data when search term is empty
+      setShowSuggestions(false);
+    }
+  }, [searchTerm]);
+
+  useEffect(() => {
+    if (searchTerm.length > 0) {
       const filteredSuggestions = data.filter(user =>
         (user.name && user.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
-      (user.userName && user.userName.toLowerCase().includes(searchTerm.toLowerCase()))
+        (user.userName && user.userName.toLowerCase().includes(searchTerm.toLowerCase()))
       );
-      console.log("Filtered suggestions:",filteredSuggestions); // Log filtered suggestions
+      console.log("Filtered suggestions:", filteredSuggestions); // Log filtered suggestions
       setSuggestions(filteredSuggestions);
       setShowSuggestions(true);
     } else {
@@ -98,9 +103,11 @@ const Navbar = ({ state }) => {
       console.error('Error occurred in recognition:', event.error);
     };
 
-  
-
     recognition.start(); // Start the voice recognition
+  };
+
+  const handleNavigate = () => {
+    navigate('/notifications');
   };
 
   return (
@@ -156,7 +163,7 @@ const Navbar = ({ state }) => {
         )}
       </div>
 
-      <div className="flex gap-4 items-center mx-1 relative">
+      <div className="flex gap-4 items-center mx-1 relative cursor-pointer" onClick={handleNavigate}>
         <div className="relative">
           <RiNotification2Line className="text-xl" />
           {notificationCount > 0 && (
