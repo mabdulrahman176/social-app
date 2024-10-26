@@ -6,6 +6,7 @@ import RelatedEvent from "./RelatedEvent";
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify'; // Import toast components
 import 'react-toastify/dist/ReactToastify.css'; // Import toast styles
+import { useLocation } from "react-router-dom";
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -28,19 +29,28 @@ const CardComponent = ({ title, imgSrc, onSave }) => (
 
 function Event() {
   const [newcard, setNewCard] = useState([]);
+const location = useLocation()
+const filteredData = location.state?.filteredData
+console.log("filter from state",filteredData)
+useEffect(() => {
+  const getData = async () => {
+    try {
+      const result = await fetchEvent();
+      console.log("events results", result);
+      setNewCard(result.data);
+    } catch (error) {
+      console.error("Fetching data error", error);
+    }
+  };
 
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const result = await fetchEvent(); // Use the function from api.js
-        console.log("events results", result);
-        setNewCard(result.data);
-      } catch (error) {
-        console.error("Fetching data error", error);
-      }
-    };
-    getData();
-  }, []);
+  if (filteredData && filteredData.length > 0) {
+    setNewCard(filteredData); 
+  } else {
+    getData(); 
+  }
+}, [filteredData]);
+
+
 
   const handleSaveToWishlist = async (eventId) => {
     const user_id = getUserId(); // Function to get user ID from cookies
@@ -76,7 +86,7 @@ function Event() {
         </h3>
         <div className="h-full w-[95%] mx-auto">
           <div className="flex w-full overflow-x-scroll gap-1 Podcast_Top_Videos">
-            {newcard.map((data, i) => (
+         {newcard.length > 0 ?    (newcard.map((data, i) => (
               <CardComponent
                 key={i}
                 title={data.eventTitle}
@@ -86,7 +96,7 @@ function Event() {
                   handleSaveToWishlist(data._id); // Pass the event ID
                 }}
               />
-            ))}
+            ))) : "No Filter Result Match"}
           </div>
           <RelatedEvent />
           <br />

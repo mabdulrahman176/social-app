@@ -3,7 +3,7 @@ import { CiPlay1 } from "react-icons/ci";
 import { IoBookmarkOutline } from "react-icons/io5";
 // import img from './img2.jpeg';
 import RelatedPodcast from './RelatedPodcast';
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { fetchPodcast } from "../../API";
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify'; // Import toast components
@@ -13,7 +13,29 @@ function PodcastTopVideos() {
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
   const [recentdata, setRecentData] = useState([]);
 const [recentview,setRecentView] = useState([])
+const location = useLocation()
+const filteredData = location.state?.filteredData;
+console.log("podcast filter state",filteredData)
+
+useEffect(() => {
+ 
+
+  
+}, []);
+
   useEffect(() => {
+    const fetchViews = async () => {
+   
+      try {
+        const response = await fetch(`${API_BASE_URL}/views/${getUserId()}`);
+        const data = await response.json();
+        console.log("response data",data.podcast)
+       
+        setRecentView(data.podcast);
+      } catch (error) {
+        console.error("Error fetching views:", error);
+      }
+    };
     const getData = async () => {
       try {
         const result = await fetchPodcast();
@@ -23,8 +45,16 @@ const [recentview,setRecentView] = useState([])
         console.error("Fetching data error", error);
       }
     };
-    getData();
-  }, []);
+    if(filteredData && filteredData.length > 0){
+      setRecentData(filteredData)
+      
+    }else{
+      fetchViews();
+      getData()
+     
+    }
+    
+  }, [filteredData]);
 
   const navigate = useNavigate();
 
@@ -48,22 +78,7 @@ const [recentview,setRecentView] = useState([])
   const user_id = getUserId();
 
 
-  useEffect(() => {
-    const fetchViews = async () => {
-     
-      try {
-        const response = await fetch(`${API_BASE_URL}/views/${getUserId()}`);
-        const data = await response.json();
-        console.log("response data",data.podcast)
-       
-        setRecentView(data.podcast);
-      } catch (error) {
-        console.error("Error fetching views:", error);
-      }
-    };
-
-    fetchViews();
-  }, []);
+ 
 
   const handleSaveToWishlist = async (podcastId) => {
     try {

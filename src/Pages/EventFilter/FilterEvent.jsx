@@ -1,15 +1,13 @@
-import React, { useState, Fragment, useEffect } from 'react';
-import FilterEventNav from './FilterEventNav';
+import React, { useState, Fragment, useEffect } from "react";
+import FilterEventNav from "./FilterEventNav";
 import { fetchEvent } from "../../API";
-import { useNavigate } from 'react-router-dom';
-
-
+import { useNavigate } from "react-router-dom";
 
 const FilterEvent = () => {
   const [activeFilter, setActiveFilter] = useState("All");
-  const [subFilter, setSubFilter] = useState('All');
-  const [locFilter, setLocFilter] = useState('Any');
-  const [priceFilter, setPriceFilter] = useState('Any');
+  const [subFilter, setSubFilter] = useState("All");
+  const [locFilter, setLocFilter] = useState("Any");
+  const [priceFilter, setPriceFilter] = useState("Any");
   const [disFilter, setDisFilter] = useState();
   const [eventFilter, setEventFilter] = useState();
   const [peopleFilter, setPeopleFilter] = useState();
@@ -20,18 +18,98 @@ const FilterEvent = () => {
   const [selectedCatagory, setSelectedCatagory] = useState();
   const [newcard, setNewCard] = useState([]);
 
-  const navigate = useNavigate()
-  const date = ['All Upcoming', 'Starting Soon', 'Today', 'Tomorrow', 'This Week', 'This Weekend', 'Next Week', 'Choose a Date'];
-  const location = ['USA,NYC', 'Lahore, Pakistan ', 'India,Delhi'];
-  const price = ['Free', 'Less than $20', 'Less than $50', '+$50', 'Other'];
-  const distance = ['2mi', '5mi', '10mi', '25mi', '50mi', '100mi', 'Other'];
-  const event = ['In Person', 'Virtual', 'Hybrid', 'Pre-recorded content', 'Other'];
-  const people = ['Less than 20', 'Less than 50', 'Above 50', 'Other'];
-  const type = ['Conference', 'Seminar', 'Workshop', 'Tradeshow', 'Other'];
-  const rating = ['All', 'Top Review'];
-  const net = ['Speed Networking', 'Roundtable discussions', 'Social Mixers', 'Panel discussions', 'Q&A Sessions', 'Ongoing Registration', 'Other'];
-  const dur = ['Half Day', 'Full Day', 'Morning Events', 'Multiple Days', 'Afternoon Events', 'Evening Events', 'Quick Sessions (1-2 hours)', 'Other'];
-  const entrepreneurs = ["All" ,"Tech & Entrepreneurship","Art","Tech & Investor","Teamwork", "Finance", "Networking","Government", "Charity","Investors","Language learning","Politics","Fashion","History","Hobbies","Career ,& Business","Travel & Outdoor","News","Technology","True Crime","Comedy","Music & dancing","Sports" ,"Science","Leadership","Education","Sustainability","Fiction","Interviews","Business and Finance ","Health ,and Wellness","Self - Imporvement" ,"Music","Religion & Spirituality","Pop Culture","Environment","Parenting","Gaming","Food and Cooking" ,"Pet & Animal","Relationship & Books","Personal Stories","TV & Film","Social Activities","Subscribes","Language","Others"];
+  const navigate = useNavigate();
+  const date = [
+    "All Upcoming",
+    "Starting Soon",
+    "Today",
+    "Tomorrow",
+    "This Week",
+    "This Weekend",
+    "Next Week",
+    "Choose a Date",
+  ];
+  const location = ["USA,NYC", "Lahore, Pakistan ", "India,Delhi"];
+  const price = ["Free", "Less than $20", "Less than $50", "+$50", "Other"];
+  const distance = ["2mi", "5mi", "10mi", "25mi", "50mi", "100mi", "Other"];
+  const event = [
+    "In Person",
+    "Virtual",
+    "Hybrid",
+    "Pre-recorded content",
+    "Other",
+  ];
+  const people = ["Less than 20", "Less than 50", "Above 50", "Other"];
+  const type = ["Conference", "Seminar", "Workshop", "Tradeshow", "Other"];
+  const rating = ["All", "Top Review"];
+  const net = [
+    "Speed Networking",
+    "Roundtable discussions",
+    "Social Mixers",
+    "Panel discussions",
+    "Q&A Sessions",
+    "Ongoing Registration",
+    "Other",
+  ];
+  const dur = [
+    "Half Day",
+    "Full Day",
+    "Morning Events",
+    "Multiple Days",
+    "Afternoon Events",
+    "Evening Events",
+    "Quick Sessions (1-2 hours)",
+    "Other",
+  ];
+  const entrepreneurs = [
+    "All",
+    "Tech & Entrepreneurship",
+    "Art",
+    "Tech & Investor",
+    "Teamwork",
+    "Finance",
+    "Networking",
+    "Government",
+    "Charity",
+    "Investors",
+    "Language learning",
+    "Politics",
+    "Fashion",
+    "History",
+    "Hobbies",
+    "Career ,& Business",
+    "Travel & Outdoor",
+    "News",
+    "Technology",
+    "True Crime",
+    "Comedy",
+    "Music & dancing",
+    "Sports",
+    "Science",
+    "Leadership",
+    "Education",
+    "Sustainability",
+    "Fiction",
+    "Interviews",
+    "Business and Finance ",
+    "Health ,and Wellness",
+    "Self - Imporvement",
+    "Music",
+    "Religion & Spirituality",
+    "Pop Culture",
+    "Environment",
+    "Parenting",
+    "Gaming",
+    "Food and Cooking",
+    "Pet & Animal",
+    "Relationship & Books",
+    "Personal Stories",
+    "TV & Film",
+    "Social Activities",
+    "Subscribes",
+    "Language",
+    "Others",
+  ];
 
   useEffect(() => {
     const getData = async () => {
@@ -47,48 +125,61 @@ const FilterEvent = () => {
   }, []);
 
   const applyFilters = () => {
-    return newcard.filter(item => item.eventCatagory === selectedCatagory 
-      && item.eventType === typeFilter  && item.eventFormat === eventFilter && item.eventNetworkOps === netFilter && item.eventLocation === locFilter && peopleFilter == (item.eventNO_of_People <= 50 ? "less then 50" : "Above 50")
-      // 500 >= 50 ? "above 50" :
-
+    return newcard.filter(
+      (item) =>
+        item.eventCatagory === selectedCatagory &&
+        item.eventType === typeFilter &&
+        item.eventFormat === eventFilter &&
+        item.eventNetworkOps === netFilter &&
+        item.eventLocation === locFilter &&  (item.eventNO_of_People < 20 
+        ? "less than 20" 
+        : item.eventNO_of_People < 50 
+        ? "less than 50" 
+        : "Above 50" ) === peopleFilter
     );
   };
 
-   const fun = ()=>{
-
-   }
-  
   const handleSearch = () => {
-   
-  
     const filteredData = applyFilters();
-    console.log("filetered",filteredData)
-    console.log("apply filters",applyFilters())
-    // navigate('/events', { state: { filteredData } });
+    console.log("filetered", filteredData);
+    console.log("apply filters", applyFilters());
+    navigate('/events', { state: { filteredData } });
   };
-  
+
+  const resetFilter = ()=>{
+    navigate('/events')
+  }
 
   return (
     <Fragment>
-      <FilterEventNav activeFilter={activeFilter} setActiveFilter={setActiveFilter} />
-      <div className="h-[75%] bg-white overflow-y-auto" style={{
-        WebkitOverflowScrolling: 'touch',
-        WebkitScrollbar: {
-          display: 'none'
-        },
-        msOverflowStyle: 'none',
-        scrollbarWidth: 'none'
-      }}>
-      
+      <FilterEventNav
+        activeFilter={activeFilter}
+        setActiveFilter={setActiveFilter}
+      />
+      <div
+        className="h-[77%] bg-white overflow-y-auto"
+        style={{
+          WebkitOverflowScrolling: "touch",
+          WebkitScrollbar: {
+            display: "none",
+          },
+          msOverflowStyle: "none",
+          scrollbarWidth: "none",
+        }}
+      >
         <div className="flex flex-wrap px-4">
-        <div className="my-3 w-full ">
+          <div className="my-3 w-full ">
             <h1 className="text-2xl font-bold mb-2">Categories</h1>
             <div className="flex flex-wrap whitespace-nowrap gap-2">
               {entrepreneurs.map((filter) => (
                 <p
-                key={filter}
-                onClick={() => setSelectedCatagory(filter)}
-                className={`text-sm sm:text-lg text-nowrap px-2  sm:px-3 rounded-full py-1 bg-[#F1F1F1] w-auto ${selectedCatagory === filter ? 'linear_gradient text-white' : 'hover:linear_gradient'}`}
+                  key={filter}
+                  onClick={() => setSelectedCatagory(filter)}
+                  className={`text-sm sm:text-lg text-nowrap px-2 cursor-pointer sm:px-3 rounded-full py-1 bg-[#F1F1F1] w-auto ${
+                    selectedCatagory === filter
+                      ? "linear_gradient text-white"
+                      : "hover:linear_gradient"
+                  }`}
                 >
                   {filter}
                 </p>
@@ -103,7 +194,9 @@ const FilterEvent = () => {
                   key={filter}
                   onClick={() => setSubFilter(filter)}
                   className={`px-3 py-2 flex-shrink-0 rounded-lg cursor-pointer bg-[#F1F1F1] text-sm md:text-base ${
-                    subFilter === filter ? 'linear_gradient text-white' : 'hover:linear_gradient'
+                    subFilter === filter
+                      ? "linear_gradient text-white"
+                      : "hover:linear_gradient"
                   }`}
                 >
                   {filter}
@@ -119,7 +212,9 @@ const FilterEvent = () => {
                   key={loc}
                   onClick={() => setLocFilter(loc)}
                   className={`px-3 py-2 flex-shrink-0 rounded-lg cursor-pointer bg-[#F1F1F1] text-sm md:text-base ${
-                    locFilter === loc ? 'linear_gradient text-white' : 'hover:linear_gradient'
+                    locFilter === loc
+                      ? "linear_gradient text-white"
+                      : "hover:linear_gradient"
                   }`}
                 >
                   {loc}
@@ -135,7 +230,9 @@ const FilterEvent = () => {
                   key={range}
                   onClick={() => setPriceFilter(range)}
                   className={`px-3 py-2 flex-shrink-0 rounded-lg cursor-pointer bg-[#F1F1F1] text-sm md:text-base ${
-                    priceFilter === range ? 'linear_gradient text-white' : 'hover:linear_gradient'
+                    priceFilter === range
+                      ? "linear_gradient text-white"
+                      : "hover:linear_gradient"
                   }`}
                 >
                   {range}
@@ -151,7 +248,9 @@ const FilterEvent = () => {
                   key={key}
                   onClick={() => setDisFilter(key)}
                   className={`px-3 py-2 flex-shrink-0 rounded-lg cursor-pointer bg-[#F1F1F1] text-sm md:text-base ${
-                    disFilter === key ? 'linear_gradient text-white' : 'hover:linear_gradient'
+                    disFilter === key
+                      ? "linear_gradient text-white"
+                      : "hover:linear_gradient"
                   }`}
                 >
                   {key}
@@ -167,7 +266,9 @@ const FilterEvent = () => {
                   key={format}
                   onClick={() => setEventFilter(format)}
                   className={`px-3 py-2 flex-shrink-0 rounded-lg cursor-pointer bg-[#F1F1F1] text-sm md:text-base ${
-                    eventFilter === format ? 'linear_gradient text-white' : 'hover:linear_gradient'
+                    eventFilter === format
+                      ? "linear_gradient text-white"
+                      : "hover:linear_gradient"
                   }`}
                 >
                   {format}
@@ -176,14 +277,18 @@ const FilterEvent = () => {
             </div>
           </div>
           <div className="my-3 w-full sm:w-1/2">
-            <h1 className="text-2xl font-bold mb-2">Number of People Attending</h1>
+            <h1 className="text-2xl font-bold mb-2">
+              Number of People Attending
+            </h1>
             <div className="flex flex-wrap whitespace-nowrap gap-2">
               {people.map((attend) => (
                 <p
                   key={attend}
                   onClick={() => setPeopleFilter(attend)}
                   className={`px-3 py-2 flex-shrink-0 rounded-lg cursor-pointer bg-[#F1F1F1] text-sm md:text-base ${
-                    peopleFilter === attend ? 'linear_gradient text-white' : 'hover:linear_gradient'
+                    peopleFilter === attend
+                      ? "linear_gradient text-white"
+                      : "hover:linear_gradient"
                   }`}
                 >
                   {attend}
@@ -199,7 +304,9 @@ const FilterEvent = () => {
                   key={event}
                   onClick={() => setTypeFilter(event)}
                   className={`px-3 py-2 flex-shrink-0 rounded-lg cursor-pointer bg-[#F1F1F1] text-sm md:text-base ${
-                    typeFilter === event ? 'linear_gradient text-white' : 'hover:linear_gradient'
+                    typeFilter === event
+                      ? "linear_gradient text-white"
+                      : "hover:linear_gradient"
                   }`}
                 >
                   {event}
@@ -215,7 +322,9 @@ const FilterEvent = () => {
                   key={top}
                   onClick={() => setRatingFilter(top)}
                   className={`px-3 py-2 flex-shrink-0 rounded-lg cursor-pointer bg-[#F1F1F1] text-sm md:text-base ${
-                    ratingFilter === top ? 'linear_gradient text-white' : 'hover:linear_gradient'
+                    ratingFilter === top
+                      ? "linear_gradient text-white"
+                      : "hover:linear_gradient"
                   }`}
                 >
                   {top}
@@ -224,14 +333,18 @@ const FilterEvent = () => {
             </div>
           </div>
           <div className="my-3 w-full sm:w-1/2">
-            <h1 className="text-2xl font-bold mb-2">Networking Opportunities</h1>
+            <h1 className="text-2xl font-bold mb-2">
+              Networking Opportunities
+            </h1>
             <div className="flex flex-wrap whitespace-nowrap gap-2">
               {net.map((social) => (
                 <p
                   key={social}
                   onClick={() => setNetFilter(social)}
                   className={`px-3 py-2 flex-shrink-0 rounded-lg cursor-pointer bg-[#F1F1F1] text-sm md:text-base ${
-                    netFilter === social ? 'linear_gradient text-white' : 'hover:linear_gradient'
+                    netFilter === social
+                      ? "linear_gradient text-white"
+                      : "hover:linear_gradient"
                   }`}
                 >
                   {social}
@@ -247,7 +360,9 @@ const FilterEvent = () => {
                   key={half}
                   onClick={() => setDurationFilter(half)}
                   className={`px-3 py-2 flex-shrink-0 rounded-lg cursor-pointer bg-[#F1F1F1] text-sm md:text-base ${
-                    durationFilter === half ? 'linear_gradient text-white' : 'hover:linear_gradient'
+                    durationFilter === half
+                      ? "linear_gradient text-white"
+                      : "hover:linear_gradient"
                   }`}
                 >
                   {half}
@@ -257,12 +372,12 @@ const FilterEvent = () => {
           </div>
         </div>
         <div className="fixed lg:bottom-0 bottom-[3rem] right-2 lg:right-[11rem] p-4 w-full flex justify-end gap-4">
-          <button className="px-8 py-3 flex-shrink-0 w-auto rounded-2xl border-2 text-[16px] md:text-[18px] linear_gradient_text">
+          <button className="px-8 py-3 flex-shrink-0 w-auto rounded-2xl border-2 text-[16px] md:text-[18px] linear_gradient_text" onClick={resetFilter}>
             Reset Filters
           </button>
-          <button 
+          <button
             className="px-8 py-3 flex-shrink-0 w-auto rounded-3xl text-white text-[16px] md:text-[18px] linear_gradient"
-            onClick={handleSearch} 
+            onClick={handleSearch}
           >
             Apply Filters
           </button>

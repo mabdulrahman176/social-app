@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { fetchPodcast } from "../../API";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 // import img from "./img2.jpeg";
 import { CiPlay1 } from "react-icons/ci";
 import { IoBookmarkOutline } from "react-icons/io5";
@@ -12,7 +12,8 @@ const RelatedPodcast = () => {
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
   const [recentdata, setRecentData] = useState([]);
   const navigate = useNavigate();
-
+const location = useLocation()
+const filteredData = location.state?.filteredData
   useEffect(() => {
     const getData = async () => {
       try {
@@ -22,8 +23,13 @@ const RelatedPodcast = () => {
         console.error("Fetching data error", error);
       }
     };
-    getData();
-  }, []);
+    if(filteredData && filteredData.length > 0){
+      setRecentData(filteredData)
+    }else(
+      getData()
+    )
+    
+  }, [filteredData]);
 
   const formatDuration = (duration) => {
     const seconds = Math.floor(duration / 1000);

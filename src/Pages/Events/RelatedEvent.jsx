@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { IoBookmarkOutline } from "react-icons/io5";
 // import Image from './Img2.png';
 import { FaRegShareFromSquare } from "react-icons/fa6";
@@ -12,7 +12,8 @@ const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const RelatedEvent = () => {
   const [newcard, setNewCard] = useState([]);
-
+const location = useLocation()
+const filteredData = location.state?.filteredData
   useEffect(() => {
     const getData = async () => {
       try {
@@ -23,8 +24,13 @@ const RelatedEvent = () => {
         console.error("Fetching data error", error);
       }
     };
-    getData();
-  }, []);
+    if(filteredData && filteredData.length > 0){
+      setNewCard(filteredData)
+    }else(
+      getData()
+    )
+  
+  }, [filteredData]);
 
   const handleShare = async (e) => {
     e.stopPropagation();

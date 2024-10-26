@@ -16,7 +16,7 @@ const JobFilterName = ({ name }) => {
                             <p
                                 key={filter}
                                 onClick={() => setSelectedIndex(filter)}
-                                className={`text-sm sm:text-lg text-nowrap px-2  sm:px-3 rounded-full py-1 bg-[#F1F1F1] w-auto ${selectedIndex === filter ? 'linear_gradient' : 'hover:linear_gradient'}`}
+                                className={`text-sm sm:text-lg cursor-pointer text-nowrap px-2  sm:px-3 rounded-full py-1 bg-[#F1F1F1] w-auto ${selectedIndex === filter ? 'linear_gradient' : 'hover:linear_gradient'}`}
                             >
                                 {filter}
                             </p>

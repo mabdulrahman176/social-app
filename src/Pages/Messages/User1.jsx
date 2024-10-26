@@ -25,6 +25,8 @@ function Message2() {
   const [acessToken, setToken] = useState(''); // Access token for Zoom
 
   const cardRef = useRef(null);
+  const meetingRef = useRef(null);
+  
   const messagesEndRef = useRef(null); // Reference for scrolling to bottom
 
   // Function to format timestamp
@@ -39,10 +41,24 @@ function Message2() {
 
   // Handle click outside the card to close it
   const handleClickOutside = (event) => {
+    console.log("resd",cardRef.current)
     if (cardRef.current && !cardRef.current.contains(event.target)) {
+
       setShowCard(false);
+      setAble(false)
+      setSchedule(false);
+    setMeeting(false); 
+    setShowCalendar(false);
     }
   };
+
+  useEffect(() => {
+    // Add event listener for clicks outside
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   // Function to get user ID from cookies
   const getUserId = () => {
@@ -56,6 +72,7 @@ function Message2() {
     let url = `${process.env.REACT_APP_API_BASE_URL}/chatrooms/room/${id}`;
     const req = await fetch(url);
     const d = await req.json();
+    console.log("schma",d)
     let sender = d.users.filter((e) => e !== getUserId());
     getSenderName(sender[0]);
     setRoomId(id);
@@ -102,12 +119,16 @@ function Message2() {
     fetchChatroom(loc.state.id); // Fetch chatroom on mount
     joinRoom(loc.state.id); // Join the chat room
     socket.on('receiveMessage', (message) => {
+      console.log("receive msg ",message)
       setChatroom((prevMessages) => [...prevMessages, message]); // Update chatroom with new messages
     });
+
+   
+
     socket.on('previousMessages', (previousMessages) => {
       setChatroom(previousMessages); // Load previous messages
     });
-
+console.log("pre msg",chatroom)
     return () => {
       socket.off('receiveMessage');
       socket.off('previousMessages');
@@ -166,8 +187,11 @@ function Message2() {
 
   const toggleCard = () => {
     setShowCard(!showCard);
+    setSchedule(!schedule);
+    setMeeting(!meeting); 
+    setShowCalendar(!showCalendar);
   };
-
+console.log("msg recived",chatroom)
   return (
     <div className="main h-full w-[100%] ">
       <div className="div h-full w-[100%] bg-[#f5f3f3] p-5 relative">
@@ -181,7 +205,7 @@ function Message2() {
               onClick={() => setAble((prevAble) => !prevAble)}
             />
             {able && (
-              <div
+              <div ref={cardRef} 
                 className="absolute w-[200px] cursor-pointer right-4 top-14 px-3 py-2 z-30 bg-white shadow-lg border"
                 onClick={() => setAble(false)}
               >
@@ -198,11 +222,11 @@ function Message2() {
                 className="absolute w-[200px] cursor-pointer right-4 top-14 px-3 py-1 z-30 bg-white shadow-lg border"
                 onClick={(e) => e.stopPropagation()}
               >
-                <p className="text-lg opacity-75" onClick={handleMeeting}>
+                <p ref={cardRef}  className="text-lg opacity-75" onClick={handleMeeting}>
                   Schedule a meeting
                 </p>
                 {meeting && (
-                  <div
+                  <div ref={cardRef} 
                     className="absolute w-[200px] cursor-pointer right-0 top-12 px-3 py-1 text-md z-30 bg-white shadow-lg border"
                     onClick={(e) => {
                       e.stopPropagation();
@@ -216,7 +240,7 @@ function Message2() {
                 )}
               </div>
             )}
-            <CiCalendar
+            <CiCalendar ref={cardRef} 
               className="text-2xl cursor-pointer"
               onClick={handleCalendar}
             />

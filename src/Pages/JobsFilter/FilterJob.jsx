@@ -81,7 +81,7 @@ const FilterJob = () => {
           <h1 className='text-xl md:text-2xl font-bold'>Filters</h1>
         </div>
       </div>
-    <div className='h-[86%] bg-white overflow-y-auto mt-1'style={{
+    <div className='h-[89%] bg-white overflow-y-auto mt-1'style={{
     'WebkitOverflowScrolling': 'touch',
     'WebkitScrollbar': {
       display: 'none'
@@ -117,7 +117,7 @@ const FilterJob = () => {
           ))}
         </div>
       </div>
-      <div className="fixed lg:bottom-0 bottom-[3rem] right-2 lg:right-[11rem] p-4  w-full flex justify-end gap-4">
+      <div className="fixed lg:bottom-0 bottom-[3rem] right-2 lg:right-[12rem] p-4  w-full flex justify-end gap-4">
           <button className="px-8 py-3 flex-shrink-0 w-auto rounded-2xl border-2 text-[16px] md:text-[18px] linear_gradient_text">
             Reset Filters
           </button>
