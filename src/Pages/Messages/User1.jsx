@@ -3,11 +3,12 @@ import { CiMenuKebab, CiVideoOn, CiCalendar } from "react-icons/ci";
 import { GrGallery } from "react-icons/gr";
 import { FaMicrophone, FaPaperPlane } from "react-icons/fa";
 import { FaCamera, FaPaperclip, FaSmile } from 'react-icons/fa';
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import io from 'socket.io-client';
- 
+import {deleteChatroom} from '../../DeleteAPI.js' 
+
 function Message2() {
   const socket = io(process.env.REACT_APP_API_BASE_URL);
   const loc = useLocation();
@@ -25,8 +26,8 @@ function Message2() {
   const [acessToken, setToken] = useState(''); // Access token for Zoom
 
   const cardRef = useRef(null);
-  const meetingRef = useRef(null);
-  
+ 
+  const navigate = useNavigate()
   const messagesEndRef = useRef(null); // Reference for scrolling to bottom
 
   // Function to format timestamp
@@ -191,12 +192,17 @@ console.log("pre msg",chatroom)
     setMeeting(!meeting); 
     setShowCalendar(!showCalendar);
   };
+  const handleDelete =async () => {
+   await deleteChatroom(roomId);
+    window.location.href='http://localhost:5173/messages'
+  };
 console.log("msg recived",chatroom)
   return (
     <div className="main h-full w-[100%] ">
       <div className="div h-full w-[100%] bg-[#f5f3f3] p-5 relative">
         <div className="flex justify-between items-center mb-8">
-          <div>
+          <div className="flex gap-2">
+          <img src={sender.picUrl || '/placeholder.jpg'} alt=""  className="h-[40px] w-[40px] rounded-full"/>
             <p className="text-base font-medium whitespace-nowrap">{sender.name}</p>
           </div>
           <div className="flex gap-5">
@@ -212,7 +218,7 @@ console.log("msg recived",chatroom)
                 <p className="text-[15px] opacity-75 mb-5">Details</p>
                 <p className="text-[15px] opacity-75 mb-5">Hide</p>
                 <p className="text-[15px] opacity-75 mb-5">Block and report</p>
-                <p className="text-[15px] opacity-75 text-[red]">Delete</p>
+                <p className="text-[15px] opacity-75 text-[red]" onClick={handleDelete}>Delete</p>
               </div>
             )}
             <CiVideoOn className="text-2xl cursor-pointer" onClick={handleSchedule} />
@@ -259,11 +265,12 @@ console.log("msg recived",chatroom)
           {chatroom && chatroom.map((e, i) => (
             <div key={i} className="flex items-end justify-between py-2">
               <div className="flex gap-2">
-                <img
-                  src={(getUserId() !== e.sender) ? sender.picUrl : receiver && receiver.picUrl}
-                  alt=""
-                  className="h-[40px] w-[40px] rounded-full"
-                />
+              <img
+  src={getUserId() !== e.sender ? sender.picUrl || '/placeholder.jpg' : receiver ? receiver.picUrl || '/placeholder.jpg' : '/placeholder.jpg'}
+  alt="profile"
+  className="h-[40px] w-[40px] rounded-full"
+/>
+
                 <div className="flex">
                   <div className="max-w-[70%]">
                     <p className="text-sm font-medium">{e.sender !== getUserId() ? sender.name : "You"}</p>
