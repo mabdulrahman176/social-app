@@ -278,7 +278,7 @@ console.log("msg recived",chatroom)
                   </div>
                 </div>
               </div>
-              <button onClick={()=>deleteMessage(e.messageId)} >Delete</button>
+              {/* <button onClick={()=>deleteMessage(e.messageId)} >Delete</button> */}
               <p className="text-[gray] text-[10px] break-words">{__Time__(e.timestamp)}</p>
             </div>
           ))}
