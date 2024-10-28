@@ -100,7 +100,7 @@ const AllVideos = () => {
           >
             <video
               src={video.videoUrl}
-              className="w-[100%] h-[100%] overflow-y-hidden object-fill"
+              className="w-[100%] h-[100%] overflow-y-hidden object-cover"
               muted
               
             ></video>
