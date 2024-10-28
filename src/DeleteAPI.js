@@ -1,4 +1,5 @@
 const token = localStorage.getItem('jwtToken'); // Retrieve the token from local storage
+
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 
