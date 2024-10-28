@@ -73,8 +73,8 @@ const deleteReview = async (id) => {
     console.log({ data })
 }
 const deleteChatroom = async (id) => {
-    const req = await fetch(`${API_BASE_URL}/chatrooms/${id}`, {
-        method: "DELETE",
+    const req = await fetch(`${API_BASE_URL}/chatrooms/delete/${id}`, {
+        method: "POST",
         credentials: 'include',
         headers: {
             'Authorization': `Bearer ${token}`,
